@@ -1,5 +1,92 @@
 # python_django_team34
 
+<hr>
+
+- [Настройка БД PostgreSQL](Настройка базы данных PostgreSQL)
+- [Создание базы данных](Создание базы данных и пользователя)
+- [Настраиваем settings.py](Настраиваем settings.py)
+
+## Настройка базы данных PostgreSQL
+
+Установка компонентов из репозиториев Ubuntu.
+Сначала обновим кэш менеджера пакетов с помощью apt:
+```html
+sudo apt update
+```
+Затем установим Postgres и связанные с ним библиотеки:
+```html
+sudo apt install python3-pip python3-dev libpq-dev postgresql postgresql-contrib
+
+```
+## Создание базы данных и пользователя
+
+Во время установки Postgres в ОС был создан пользователь postgres, который соответствует пользователю postgres (администратору PostgreSQL). Этого пользователя необходимо использовать для выполнения административных задач.
+```html
+sudo -i -u postgres psql
+```
+Затем создадим базу данных для проекта Django. Также обращаем внимание на то, что важно не забывать заканчивать команды в командной строке SQL точкой с запятой — ; 
+```html
+CREATE DATABASE megano_db;
+```
+Создадим пользователя базы данных и зададим пароль:
+```html
+CREATE USER megano WITH PASSWORD '123456';
+```
+После изменим несколько параметров подключения для созданного пользователя. Это позволит ускорить операции с базой данных
+
+Сначала установим кодировку по умолчанию на UTF-8:
+```html
+ALTER ROLE myproject_user SET client_encoding TO 'utf8';
+```
+Затем установим схему изоляции транзакций по умолчанию на чтение с фиксацией, блокирующее чтение из незафиксированных транзакций:
+```html
+ALTER ROLE myproject_user SET default_transaction_isolation TO 'read committed';
+```
+Установим часовой пояс. По умолчанию в проекте Django настроено использование UTC:
+```html
+ALTER ROLE myproject_user SET timezone TO 'UTC';
+```
+И предоставим пользователю права доступа к созданной базе данных:
+```html
+GRANT ALL PRIVILEGES ON DATABASE myproject TO myproject_user;
+```
+Выход из командной строки SQL
+```html
+\q
+```
+## Здесь будет руководство по установке и созданию PostgreSQL в Windows
+
+### Настройка и миграции в Django
+
+Настраиваем settings.py:
+```html
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'megano_db',
+        'USER': 'megano',
+        'PASSWORD': '123456',
+        'HOST': 'localhost',
+    }
+}
+```
+Также необходимо настроить директиву ALLOWED_HOSTS. Она определяет список адресов или доменных имен, разрешённых для подключения к инстансу Django.
+```html
+ALLOWED_HOSTS = [
+    "0.0.0.0",
+    "127.0.0.1",
+]
+```
+Затем применим миграцию:
+```html
+python manage.py migrate
+```
+После создания структуры базы данных создадим учётную запись администратора:
+```html
+python manage.py createsuperuser
+```
+
+
 
 
 ## Getting started

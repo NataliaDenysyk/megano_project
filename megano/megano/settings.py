@@ -24,7 +24,10 @@ SECRET_KEY = 'django-insecure-)cvl#qs&@0o5dur4+6_57!fxflvf0+0q$cu@+1a&33s+ix+om$
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "0.0.0.0",
+    "127.0.0.1"
+]
 
 # Application definition
 
@@ -81,8 +84,12 @@ WSGI_APPLICATION = 'megano.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'megano_db',
+        'USER': 'megano',
+        'PASSWORD': '123456',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
