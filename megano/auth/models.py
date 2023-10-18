@@ -6,9 +6,9 @@ from megano.store.models import Product, Orders
 
 class Profile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    bio = models.CharField(max_length=100)
+    description = models.CharField(max_length=100)
     sale = models.IntegerField()
-    avatar_store = models.ImageField()
+    avatar = models.ImageField()
     name_store = models.CharField(max_length=50)
     address = models.CharField(max_length=100)
     orders = models.ForeignKey(Orders, on_delete=models.CASCADE)
