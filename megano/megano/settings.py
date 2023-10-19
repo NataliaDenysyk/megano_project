@@ -10,35 +10,37 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
-import environ
+from dotenv import load_dotenv
 
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-env = environ.Env(
-    DEBUG=(bool, False)
-)
 
-env.read_env(os.path.join(BASE_DIR, '.env'))
-SECRET_KEY = env('SECRET_KEY')
-DEBUG = env('DEBUG')
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
+load_dotenv()
+
+DEBUG = True if os.getenv('DEBUG').capitalize() == "True" else False
+
+SECRET_KEY = os.getenv('SECRET_KEY')
+
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',')
+
 
 DATABASES = {
     'default': {
-        'ENGINE': env('DB_ENGINE'),
-        'NAME': env('DB_NAME'),
-        'USER': env('DB_USER'),
-        'PASSWORD': env('DB_PASSWORD'),
-        'HOST': env('DB_HOST'),
-        'PORT': env('DB_PORT'),
-    } if not DEBUG else {
-        'ENGINE': env('DB_ENGINE_SQLITE'),
-        'NAME': env('DB_NAME_SQLITE')
+        'ENGINE': os.getenv('DB_ENGINE_SQLITE'),
+        'NAME': BASE_DIR / os.getenv('DB_NAME_SQLITE'),
+    } if DEBUG else {
+        'ENGINE': os.getenv('DB_ENGINE'),
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
+
     }
 }
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
