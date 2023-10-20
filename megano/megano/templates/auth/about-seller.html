@@ -7,8 +7,10 @@
   <div class="Middle-top">
     <div class="wrap">
       <div class="Middle-header">
+        {% cache 86400 seller-name user.id %}
         <h1 class="Middle-title">About {{ seller.name_store }}
         </h1>
+        {% endcache %}
         <ul class="breadcrumbs Middle-breadcrumbs">
           <li class="breadcrumbs-item"><a href="{% url 'megano: home' %}">Home</a>
           </li>
@@ -23,6 +25,7 @@
       <div class="Section-content">
         <article class="Article">
           <div class="Article-section">
+            {% cache 86400 seller-info user.id %}
             <div class="row row_verticalCenter row_maxHalf">
               <div class="row-block">
                 <h2>Why Choose {{ seller.name_store }}?
@@ -37,17 +40,20 @@
                 </div>
               </div>
             </div>
+            {% endcache %}
           </div>
           <div class="Article-section">
             <div class="row row_verticalCenter row_maxHalf">
               <div div class="row-block">
                 <h2>Our contacts
                 </h2>
+                {% cache 86400 seller-contacts user.id %}
                 <ul>
                   <li>Phone: {{ seller.phone }}</li>
                   <li>Address: {{ seller.address }}</li>
                   <li>Email: {{ seller.email }}</li>
                 </ul>
+                {% endcache %}
               </div>
               <div>
                 <h2>Our products</h2>
