@@ -40,16 +40,13 @@ DATABASES = {
     }
 }
 
+CACHE_ROOT = os.path.join(BASE_DIR, "cache/")
 CACHES = {
     "default": {
-        # "BACKEND": "django.core.cache.backends.Dummy.DummyCache",
         "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
-        "LOCATION": BASE_DIR/"caching_file",
-        "TIMEOUT": 86400
+        "LOCATION": CACHE_ROOT,
     }
 }
-
-CACHE_MIDDLEWARE_SECONDS = 86400
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -70,7 +67,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.cache.FetchFromCacheMiddleware',
 ]
 
 ROOT_URLCONF = 'megano.urls'
