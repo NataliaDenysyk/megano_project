@@ -1,93 +1,290 @@
-# python_django_team34
+# Добро пожаловать в MEGANO 
+
+## Руководство пользователя
+
+### Содержание
+
+* [Подготовка проекта](#подготовка-проекта)
+* [Переменные окружения](#установка-и-настройка-переменных-окружения)
+* [Установка PostrgreSQL](#установка-postrgresql)
+* [Подключение базы к Django](#подключение-базы-к-django)
+* [Путеводитель](#getting-started)
 
 <hr>
 
-- [Настройка БД PostgreSQL](Настройка базы данных PostgreSQL)
-- [Создание базы данных](Создание базы данных и пользователя)
-- [Настраиваем settings.py](Настраиваем settings.py)
+## Подготовка проекта
 
-## Настройка базы данных PostgreSQL
+* Ссылка для скачивания проекта доступна в [репозитории](https://gitlab.skillbox.ru/kurator_skillbox/python_django_team34.git)
 
-Установка компонентов из репозиториев Ubuntu.
-Сначала обновим кэш менеджера пакетов с помощью apt:
+* В кансоли, перейдите к проекту и установите виртуальное окружение командой
+    - Структура проекта
+    ```python
+        Work_dir
+          |____progect_name
+          |____my_venv
+          |____.gitignore
+          |____README.md
+
+    ```
+```html
+    pythom -m venv (your_name_env)
+```
+
+* После установки активируйте виртуальное окружение
+    - <b>в Windows</b>
+    ```html
+        venv\Scripts\activate
+    ```
+    - <b>в UNIX system</b>
+    ```html
+        source venv/bin/activate
+    ```
+* Установите все зависимости для запуска проекта
+```html
+    pip install -r requirements.txt
+```
+* Что бы посмотреть какие зависимости установлены, поможет команда
+```html
+    pip freeze
+```
+
+* <b>Проект готов к запуску</b>
+
+<b>[↑ Содержание](#содержание)</b>
+
+## Установка и настройка переменных окружения
+
+Воспользуемся пакетом <u>[python-dotenv](#https://github.com/theskumar/python-dotenv)</u>. Он позволяет загружать переменные окружения из файла ***<u>.env</u>*** в корневом каталоге приложения.
+Устанавливаем пакет:
+
+```html
+pip install python-dotenv
+```
+Теперь можно создать файл .env со всеми переменными среды, которые необходимы вашему приложению. 
+
+<hr>
+
+<img src="./related_docs/warning-xxl.png" alt="11" width="21"> ВАЖНО!
+Назначение файла <u>.env</u> заключается в том, чтобы вынести конфиденциальные данные за пределы вашего проекта. Поэтому следует добавить <u>.env-файл</u> в <u>.gitignore</u>, что бы не хранить его в системе контроля версий.
+<hr>
+
+Надпомню **Файл <u>.env</u> должен находиться в корневом каталоге проекта**
+
+* Пример содержания файла <u>.env</u>
+    ```python
+    API_KEY='very_secret_password'
+    SECRET_KEY='your_secret_key'
+    TOKEN='token'
+    ```
+* В <u>settings.py</u> импортируем библиотеку и настраиваем переменные
+    
+    ```python
+    import os
+    from dotenv import load_dotenv
+    
+    # поиск файла .env и загрузки из него переменных среды
+    load_dotenv()
+
+    # сохраняем в переменные значения из словаря по ключу
+    DEBUG = True if os.getenv('DEBUG') == "True" else False
+    SECRET_KEY = os.getenv('SECRET_KEY')
+    ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',')
+    DATABASES = {
+        'default': {
+            'ENGINE': os.getenv('DB_ENGINE_SQLITE'),
+            'NAME': BASE_DIR / os.getenv('DB_NAME_SQLITE'),
+        } if DEBUG else { # если DEBUG=True, то устанавливается база sqlite3 
+            'ENGINE': os.getenv('DB_ENGINE'),
+            'NAME': os.getenv('DB_NAME'),
+            'USER': os.getenv('DB_USER'),
+            'PASSWORD': os.getenv('DB_PASSWORD'),
+            'HOST': os.getenv('DB_HOST'),
+        }
+    }
+    ```
+<b>[↑ Содержание](#содержание)</b>
+
+## Установка PostrgreSQL
+* [Windows](#установка-и-создание-бд-в-windows)
+* [Linux](#установка-и-создание-бд-в-linux)
+* [Mac OS](#установка-в-mac-os)
+
+* Для установки перейдите на <u>[официальный сайт](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads)</u> и загрузите установщик, скачивайте последнюю версию.
+
+    <img src="./related_docs/version_psql.PNG" alt="version_psql" width="600">
+
+________
+
+### Установка  и создание БД в Windows
+* Запустите скачанный файл установщика. Все оставляем по умолчанию.
+    -  По пути установите "мастер пароль" для сервера базы данных.
+    - В поле "Stack Builder" (опционально) можно снять галочку.
+
+    <img src="./related_docs/mastr_password.png" alt="master_pass_psql" width="500">
+    <img src="./related_docs/select+components.PNG" alt="version_psql" width="500">
+
+* После завершения установки PostgreSQL вы можете использовать его для создания и управления базами данных, которые будут использоваться в вашем проекте Django.
+
+* Добавляем путь в среду переменных Windows
+    - <b>Открываем свойства Системы</b>
+
+    <img src="./related_docs/env_veriable.png" alt="version_psql" width="500">
+
+    - <b>Кликаем "Создать" в полях прописываем название перем енной и вставляем путь как на скрине</b>
+    <img src="./related_docs/path_to_veriable.png" alt="version_psql" width="500">
+
+* Открываем приложение <u>pgAdmin4</u>. В меню "Пуск - PostgreSQL - pgAdmin"
+    - По умолчанию создается база данных "postghres" с пользователем "postgres"
+
+    - <b>Создаем нашего пользователя</b>
+    <img src="./related_docs/created_user.png" alt="version_psql" width="500">
+    
+    - <b>Устанавливаем пароль</b>
+    <img src="./related_docs/password.png" alt="version_psql" width="500">
+    
+    - <b>Раздаем привелегии и сохраняем кнопкой <u>SAVE</u></b>
+    <img src="./related_docs/rolle_save.png" alt="version_psql" width="500">
+
+    - <b>Создаем базу данных</b>
+    <img src="./related_docs/created_db.png" alt="version_psql" width="500">
+
+    - <b>Вписываем имя БД, выбираем нашего пользователя и сохраняем кнопкой <u>SAVE</u></b>
+    <img src="./related_docs/created_db.png" alt="version_psql" width="500">
+
+    - <b>База данных создана и готова к использованию. Перехоидите к [Подключению базы к Django](#подключение-базы-к-django)</b>
+
+<b>[↑ Содержание](#содержание)</b>
+
+__________
+
+### Установка и создание бд в Linux
+
+* Установка компонентов из репозиториев Linux Ubuntu.
+  Сначала обновим кэш менеджера пакетов с помощью apt:
+
 ```html
 sudo apt update
 ```
-Затем установим Postgres и связанные с ним библиотеки:
+
+* Затем установим Postgres и связанные с ним библиотеки:
+
 ```html
 sudo apt install python3-pip python3-dev libpq-dev postgresql postgresql-contrib
-
 ```
-## Создание базы данных и пользователя
 
-Во время установки Postgres в ОС был создан пользователь postgres, который соответствует пользователю postgres (администратору PostgreSQL). Этого пользователя необходимо использовать для выполнения административных задач.
+* Во время установки Postgres в ОС был создан пользователь postgres, который соответствует пользователю postgres (администратору PostgreSQL). Этого пользователя необходимо использовать для выполнения административных задач. Перехоидим в консоль PostrgreSQL командой:
+
 ```html
 sudo -i -u postgres psql
 ```
-Затем создадим базу данных для проекта Django. Также обращаем внимание на то, что важно не забывать заканчивать команды в командной строке SQL точкой с запятой — ; 
+
+* Затем создадим базу данных для проекта Django. Также обращаем внимание на то, что важно не забывать заканчивать команды в командной строке SQL точкой с запятой — ; 
+
 ```html
 CREATE DATABASE megano_db;
 ```
-Создадим пользователя базы данных и зададим пароль:
+
+* Создадим пользователя базы данных и зададим пароль:
+
 ```html
 CREATE USER megano WITH PASSWORD '123456';
 ```
-После изменим несколько параметров подключения для созданного пользователя. Это позволит ускорить операции с базой данных
 
-Сначала установим кодировку по умолчанию на UTF-8:
+* Установим кодировку по умолчанию на UTF-8:
 ```html
 ALTER ROLE myproject_user SET client_encoding TO 'utf8';
 ```
-Затем установим схему изоляции транзакций по умолчанию на чтение с фиксацией, блокирующее чтение из незафиксированных транзакций:
+* Затем установим схему изоляции транзакций по умолчанию на чтение с фиксацией, блокирующее чтение из незафиксированных транзакций:
+
 ```html
 ALTER ROLE myproject_user SET default_transaction_isolation TO 'read committed';
 ```
-Установим часовой пояс. По умолчанию в проекте Django настроено использование UTC:
+
+* Установим часовой пояс. По умолчанию в проекте Django настроено использование UTC:
+
 ```html
 ALTER ROLE myproject_user SET timezone TO 'UTC';
 ```
-И предоставим пользователю права доступа к созданной базе данных:
+
+* И предоставим пользователю права доступа к созданной базе данных:
+
 ```html
 GRANT ALL PRIVILEGES ON DATABASE myproject TO myproject_user;
 ```
+
 Выход из командной строки SQL
+
 ```html
 \q
 ```
-## Здесь будет руководство по установке и созданию PostgreSQL в Windows
 
-### Настройка и миграции в Django
+<b>[↑ Содержание](#содержание)</b>
+__________
 
-Настраиваем settings.py:
+### Установка в Mac OS
+
 ```html
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'megano_db',
-        'USER': 'megano',
-        'PASSWORD': '123456',
-        'HOST': 'localhost',
-    }
-}
-```
-Также необходимо настроить директиву ALLOWED_HOSTS. Она определяет список адресов или доменных имен, разрешённых для подключения к инстансу Django.
-```html
-ALLOWED_HOSTS = [
-    "0.0.0.0",
-    "127.0.0.1",
-]
-```
-Затем применим миграцию:
-```html
-python manage.py migrate
-```
-После создания структуры базы данных создадим учётную запись администратора:
-```html
-python manage.py createsuperuser
+# TODO Дописать инструкцию по установке БД под Mac OS
 ```
 
+<b>[↑ Содержание](#содержание)</b>
 
+## Подключение базы к Django
 
+* После установки PostgreSQL необходимо настроить Django проект для связи с базой данных. Для этого нужно внести изменения в файл настроек проекта – settings.py. Откройте этот файл и найдите раздел DATABASES
+
+    - ENGINE – указать, что используется база данных PostgreSQL;
+    - NAME – имя базы данных, которую вы создали;
+    - USER – имя пользователя базы данных;
+    - PASSWORD – пароль пользователя;
+    - HOST – адрес базы данных (обычно 127.0.0.1 для локальной базы данных);
+    - PORT – порт на котором работает база данных (обычно 5432).
+
+    ```python
+        DATABASES	=	{
+        ‘default’:	{
+            ‘ENGINE’: ‘django.db.backends.postgresql’,	
+            ‘NAME’: ‘mydatabase’,	
+            ‘USER’: ‘mydatabaseuser’,	
+            ‘PASSWORD’: ‘mypassword’,	
+            ‘HOST’: ‘localhost’,	
+            ‘PORT’: ‘5432’,	
+            }	
+        }
+    ```
+
+* Установка драйвера <b>psycorg2</b>
+
+```html
+    pip install psycopg2
+    # альтернатива
+    pip install psycopg2-binary
+```
+* После успешной установки psycopg2 его можно использовать в Django. Перед запуском миграций создайте [переменные окружения](#установка-и-настройка-переменных-окружения)
+
+* Применяем миграции 
+    * Перейдите в "progect_name" и воспользуйтесь командой
+    - Структура проекта:
+
+        ```python
+        Work_dir
+          |____progect_name
+          |      |_____progect_name
+          |      |_____manage.py
+          |____my_venv
+          |____.gitignore
+          |____README.md
+        ```
+
+    ```html
+        pip manage.py makemigrations
+        pip manage.py migrate
+    ```
+
+#### Поздравляем вы установили проект и базу данных!
+
+<b>[↑ Содержание](#содержание)</b>
+__________
 
 ## Getting started
 
@@ -177,3 +374,5 @@ For open source projects, say how it is licensed.
 
 ## Project status
 If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+
+<b>[↑ Содержание](#содержание)</b>
