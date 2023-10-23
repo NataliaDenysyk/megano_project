@@ -1,16 +1,19 @@
+{% load static %}
 {% load banners_tags %}
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'store/css/normalize.css' %}">
+    <link rel="stylesheet" href="{% static 'store/css/stiles.css' %}">
     <title>{{ title }}</title>
 </head>
 <body>
 
 {% block header %}
     <div>
-        {% banner_main_page %} {# Вызов метода для отображения баннера  Размер 900 Х 350 #}
+        {% banner_main_page %} {# Вызов метода для отображения баннера  Размер 500 Х 300 #}
     </div>
 {% endblock %}
 
