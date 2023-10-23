@@ -1,0 +1,13 @@
+{% for banner in banners %}
+    {% if banner.is_active %}
+        <div class="col-xs-12">
+            <div class="banner">
+                <a href="{{ banner.link }}">
+                    <img  width="900px" height="350px" src="{{ banner.image.url }}" alt="Product Banner">
+                </a>
+            </div>
+        </div>
+        {% else %}
+            <p>Здесь могла быть ваша реклама!</p> # TODO for mode Development. Insert an ad image
+    {% endif %}
+{% endfor %}
