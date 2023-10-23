@@ -6,6 +6,6 @@ register = template.Library()
 
 
 @register.inclusion_tag('banner/banner_tpl_main.html')
-def banner_center() -> dict:
+def banner_main_page() -> dict:
     banners = Banners.objects.all()
     return {'banners': banners}
