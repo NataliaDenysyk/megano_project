@@ -9,8 +9,64 @@ class Orders(models.Model):
     pass
 
 
+def product_media_path(instance: 'Product', filename: str) -> str:
+    """
+    Функция генерирует путь для сохранения изображений товаров.
+
+    :param instance: Product instance
+    :param filename: filename
+    :return: string
+    """
+    return 'products/product_{slug}/{filename}'.format(
+        pk=instance.slug,
+        filename=filename,
+    )
+
+
 class Product(models.Model):
-    pass
+
+    name = models.CharField('Название товара', max_length=150, null=False, db_index=True)
+    slug = models.SlugField(max_length=150)
+    category = models.ForeignKey('store.Category', on_delete=models.CASCADE, verbose_name='Категория')
+    description = models.TextField('Описание', null=False, blank=True)
+    feature = models.TextField('Характеристика', null=False, blank=True)
+    tags = models.ManyToManyField('store.Tag', related_name='products', verbose_name='Теги')
+    images = models.ImageField('Изображение', null=True, upload_to=product_media_path)
+    availability = models.BooleanField(default=True)
+    created_at = models.DateTimeField('Создан', auto_now_add=True)
+    update_at = models.DateTimeField('Отредактирован', auto_now=True)
+
+    def __str__(self) -> str:
+        return f"{self.name}"
+
+    class Meta:
+        db_table = 'Products'
+        ordering = ['id', 'name']
+        verbose_name = 'Товар'
+        verbose_name_plural = 'Товары'
+
+
+class Offer(models.Model):
+    unit_price = models.DecimalField('Цена', default=1, max_digits=8, decimal_places=2)
+    amount = models.PositiveIntegerField('Количество')
+    seller = models.ForeignKey('auth.Profile', on_delete=models.CASCADE)
+    product = models.ForeignKey('store.Product', on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = 'Price'
+        ordering = ['id', 'unit_price']
+        verbose_name = 'Цена'
+        verbose_name_plural = 'Цены'
+
+
+class Tag(models.Model):
+    name = models.CharField('Название', max_length=50, null=False, blank=False)
+
+    class Meta:
+        db_table = 'Tags'
+        ordering = ['id', 'name']
+        verbose_name = 'Тег'
+        verbose_name_plural = 'Теги'
 
 
 class Banners(models.Model):
@@ -47,3 +103,5 @@ class Banners(models.Model):
         ordering = ["title", ]
         verbose_name = 'баннер'
         verbose_name_plural = 'баннеры'
+
+
