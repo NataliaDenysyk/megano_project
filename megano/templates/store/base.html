@@ -1,0 +1,25 @@
+{% load banners_tags %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+</head>
+<body>
+
+{% block header %}
+    <div>
+        {% banner_main_page %} {# Вызов метода для отображения баннера  Размер 900 Х 350 #}
+    </div>
+{% endblock %}
+
+
+{% block content %}
+{% endblock %}
+
+{% block footer %}
+{% endblock %}
+
+</body>
+</html>
