@@ -1,0 +1,84 @@
+{% extends 'base_generic.html' %}
+{% load cache %}
+
+
+{% block content %}
+<div class="Middle Middle_top">
+  <div class="Middle-top">
+    <div class="wrap">
+      <div class="Middle-header">
+        {% cache 86400 seller-name user.id %}
+        <h1 class="Middle-title">About {{ seller.name_store }}
+        </h1>
+        {% endcache %}
+        <ul class="breadcrumbs Middle-breadcrumbs">
+          <li class="breadcrumbs-item"><a href="{% url 'megano: home' %}">Home</a>
+          </li>
+          <li class="breadcrumbs-item breadcrumbs-item_current"><span>About Us</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="Section Section_column Section_columnLeft Section_columnWide">
+    <div class="wrap">
+      <div class="Section-content">
+        <article class="Article">
+          <div class="Article-section">
+            {% cache 86400 seller-info user.id %}
+            <div class="row row_verticalCenter row_maxHalf">
+              <div class="row-block">
+                <h2>Why Choose {{ seller.name_store }}?
+                </h2>
+                <p>{{ seller.description }}
+                </p>
+                <div><a class="btn btn_primary" href="#">Get Started</a>
+                </div>
+              </div>
+              <div class="row-block">
+                <div class="pict"><img src='{{ MEDIA_URL }}{{ seller.avatar.url }}'>
+                </div>
+              </div>
+            </div>
+            {% endcache %}
+          </div>
+          <div class="Article-section">
+            <div class="row row_verticalCenter row_maxHalf">
+              <div div class="row-block">
+                <h2>Our contacts
+                </h2>
+                {% cache 86400 seller-contacts user.id %}
+                <ul>
+                  <li>Phone: {{ seller.phone }}</li>
+                  <li>Address: {{ seller.address }}</li>
+                  <li>Email: {{ seller.email }}</li>
+                </ul>
+                {% endcache %}
+              </div>
+              <div>
+                <h2>Our products</h2>
+                {% cache 3600 top-products user.id %}
+                <ul>
+                  {% for product in object_list %}
+                  <li>
+                    {% if product.image }}
+                    <img src='{{ MEDIA_URL }}{{ product.image.url }}'>
+                    {% endif %}
+                    <p>
+                      <a href='{% url "megano:product_detail" %}'>{{ product.name }}</a>
+                    </p>
+                    <p>{{ product.price }}</p>
+                    <a href='#'>Buy</a>
+                  </li>
+                  {% endfor %}
+                </ul>
+                {% endcache %}
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
