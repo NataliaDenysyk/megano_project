@@ -4,6 +4,7 @@ from django.utils.safestring import mark_safe
 
 # Create your models here.
 # TODO models Orders, Product, Discount, Category
+# TODO раскомментировать или исправить связи в моделях
 
 class Orders(models.Model):
     pass
@@ -24,13 +25,17 @@ def product_media_path(instance: 'Product', filename: str) -> str:
 
 
 class Product(models.Model):
+    """
+    Модель товаров магазина
 
-    name = models.CharField('Название товара', max_length=150, null=False, db_index=True)
-    slug = models.SlugField(max_length=150)
-    category = models.ForeignKey('store.Category', on_delete=models.CASCADE, verbose_name='Категория')
-    description = models.TextField('Описание', null=False, blank=True)
-    feature = models.TextField('Характеристика', null=False, blank=True)
-    tags = models.ManyToManyField('store.Tag', related_name='products', verbose_name='Теги')
+    """
+
+    name = models.CharField('Название товара', default='', max_length=150, null=False, db_index=True)
+    slug = models.SlugField(max_length=150, default='')
+    # category = models.ForeignKey('store.Category', on_delete=models.CASCADE, verbose_name='Категория')
+    description = models.TextField('Описание', default='', null=False, blank=True)
+    feature = models.TextField('Характеристика', default='', null=False, blank=True)
+    # tags = models.ManyToManyField('store.Tag', related_name='products', verbose_name='Теги')
     images = models.ImageField('Изображение', null=True, upload_to=product_media_path)
     availability = models.BooleanField(default=True)
     created_at = models.DateTimeField('Создан', auto_now_add=True)
@@ -47,10 +52,15 @@ class Product(models.Model):
 
 
 class Offer(models.Model):
+    """
+    Модель предложений продавцов, содержит цену и кол-во предлагаемого товара
+
+    """
+
     unit_price = models.DecimalField('Цена', default=1, max_digits=8, decimal_places=2)
     amount = models.PositiveIntegerField('Количество')
-    seller = models.ForeignKey('auth.Profile', on_delete=models.CASCADE)
-    product = models.ForeignKey('store.Product', on_delete=models.CASCADE)
+    # seller = models.ForeignKey('auth.Profile', on_delete=models.CASCADE)
+    # product = models.ForeignKey('store.Product', on_delete=models.CASCADE)
 
     class Meta:
         db_table = 'Price'
@@ -60,7 +70,12 @@ class Offer(models.Model):
 
 
 class Tag(models.Model):
-    name = models.CharField('Название', max_length=50, null=False, blank=False)
+    """
+    Модель тегов
+
+    """
+
+    name = models.CharField('Название', default='', max_length=50, null=False, blank=False)
 
     class Meta:
         db_table = 'Tags'
