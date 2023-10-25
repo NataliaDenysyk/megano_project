@@ -1,17 +1,18 @@
+from random import choices
+
 from django import template
+from django.core.cache import caches
 
 from megano.store.models import Banners
-
-from random import choice
 
 register = template.Library()
 
 
 @register.inclusion_tag('banner/banner_tpl_main.html')
 def banner_main_page() -> dict:
-    banners = Banners.objects.all()
-    if banners.all().count() > 3:
-        random_banners = [choice(banners) for _ in range(3)]
-        return {'banners': random_banners[0]}
+    """
+    Caching of random three banners is created.
+    """
+    banners = caches.get_or_set('banners', choices(Banners.objects.all(), k=3))
 
     return {'banners': banners}
