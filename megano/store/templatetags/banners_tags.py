@@ -3,7 +3,7 @@ from random import choices
 from django import template
 from django.core.cache import caches
 
-from megano.store.models import Banners
+from ..models import Banners
 
 register = template.Library()
 
