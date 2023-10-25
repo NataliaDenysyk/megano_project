@@ -10,20 +10,6 @@ class Orders(models.Model):
     pass
 
 
-def product_media_path(instance: 'Product', filename: str) -> str:
-    """
-    Функция генерирует путь для сохранения изображений товаров.
-
-    :param instance: Product instance
-    :param filename: filename
-    :return: string
-    """
-    return 'products/product_{slug}/{filename}'.format(
-        pk=instance.slug,
-        filename=filename,
-    )
-
-
 class Product(models.Model):
     """
     Модель товаров магазина
@@ -36,13 +22,13 @@ class Product(models.Model):
     description = models.TextField('Описание', default='', null=False, blank=True)
     feature = models.TextField('Характеристика', default='', null=False, blank=True)
     # tags = models.ManyToManyField('store.Tag', related_name='products', verbose_name='Теги')
-    images = models.ImageField('Изображение', null=True, upload_to=product_media_path)
-    availability = models.BooleanField(default=True)
+    images = models.ImageField('Изображение', upload_to="products/product/%y/%m/%d/")
+    availability = models.BooleanField('Доступность', default=True)
     created_at = models.DateTimeField('Создан', auto_now_add=True)
     update_at = models.DateTimeField('Отредактирован', auto_now=True)
 
     def __str__(self) -> str:
-        return f"{self.name}"
+        return f"{self.name} (id:{self.pk})"
 
     class Meta:
         db_table = 'Products'

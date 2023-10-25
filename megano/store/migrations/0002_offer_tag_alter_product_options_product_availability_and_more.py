@@ -45,7 +45,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='product',
             name='availability',
-            field=models.BooleanField(default=True),
+            field=models.BooleanField(default=True, verbose_name='Доступность'),
         ),
         migrations.AddField(
             model_name='product',
@@ -66,7 +66,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='product',
             name='images',
-            field=models.ImageField(null=True, upload_to=store.models.product_media_path, verbose_name='Изображение'),
+            field=models.ImageField(upload_to="products/product/%y/%m/%d/", verbose_name='Изображение'),
         ),
         migrations.AddField(
             model_name='product',
