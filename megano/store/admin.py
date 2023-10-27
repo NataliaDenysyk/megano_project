@@ -53,4 +53,7 @@ class AdminProduct(admin.ModelAdmin):
 
 @admin.register(Discount)
 class AdminProduct(admin.ModelAdmin):
-    pass
+    list_display = 'pk', 'name', 'description', 'sum_discount', 'valid_from', 'valid_to', 'is_active'
+    list_display_links = 'pk', 'name'
+    ordering = 'pk', 'name', 'valid_to', 'is_active'
+    search_fields = 'name', 'description'
