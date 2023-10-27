@@ -9,9 +9,12 @@ def category_image_directory_path(instance: "Category", filename: str) -> str:
 
 
 class Category(models.Model):
+    """Модель хранения категорий товара"""
     class Meta:
 
         ordering = ["sort_index"]
+        verbose_name = "Category"
+        verbose_name_plural = "Categories"
 
     name = models.CharField(max_length=100)
     image = models.ImageField(upload_to=category_image_directory_path)
