@@ -13,6 +13,28 @@ class Product(models.Model):
     pass
 
 
+class Discount(models.Model):
+    """
+    Модель скидок
+
+    """
+
+    name = models.CharField('Название', default='', max_length=70, null=False, blank=True)
+    description = models.TextField('Описание', default='', null=False, blank=True)
+    sum_discount = models.FloatField('Сумма скидки', null=False, blank=True)
+    total_products = models.IntegerField('Количество товаров', blank=True)
+    valid_from = models.DateTimeField('Действует с', blank=False)
+    valid_to = models.DateTimeField('Действует до', blank=True)
+    is_active = models.BooleanField('Активно', default=False)
+    created_at = models.DateTimeField('Создана', auto_now_add=True)
+
+    class Meta:
+        db_table = 'Discounts'
+        ordering = ['id', 'name']
+        verbose_name = 'Скидка'
+        verbose_name_plural = 'Скидки'
+
+
 class Banners(models.Model):
     """
 

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Banners
+from .models import Banners, Discount
 
 
 class AdminBanner(admin.ModelAdmin):
@@ -12,3 +12,7 @@ class AdminBanner(admin.ModelAdmin):
 
 admin.site.register(Banners, AdminBanner)
 
+
+@admin.register(Discount)
+class AdminProduct(admin.ModelAdmin):
+    pass
