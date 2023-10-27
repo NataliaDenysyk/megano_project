@@ -103,7 +103,7 @@ class Tag(models.Model):
 
 class Banners(models.Model):
     """
-
+    The model displays banners for products.
     """
     title = models.CharField(u"Название баннера", max_length=150, db_index=True)
     slug = models.SlugField(u"URL", max_length=150, db_index=True)
