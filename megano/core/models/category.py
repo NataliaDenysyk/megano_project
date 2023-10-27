@@ -16,10 +16,10 @@ class Category(models.Model):
         verbose_name = "Category"
         verbose_name_plural = "Categories"
 
-    name = models.CharField(max_length=100)
-    image = models.ImageField(upload_to=category_image_directory_path)
+    name = models.CharField(max_length=100,verbose_name="Название категории")
+    image = models.ImageField(upload_to=category_image_directory_path, verbose_name="Изображение")
     parent = models.ForeignKey("self", on_delete=models.CASCADE)
-    activity = models.BooleanField(default=True)
-    sort_index = models.IntegerField(max_length=11)
+    activity = models.BooleanField(default=True, verbose_name="Активация")
+    sort_index = models.IntegerField(max_length=11, verbose_name="Индекс сортировки")
 
 
