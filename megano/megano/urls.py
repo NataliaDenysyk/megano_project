@@ -22,5 +22,6 @@ from .views import func1
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
+    # path testing apps
     path('', func1, name='test'),
 ]
