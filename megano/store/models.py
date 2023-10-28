@@ -4,18 +4,106 @@ from django.utils.safestring import mark_safe
 
 # Create your models here.
 # TODO models Orders, Product, Discount, Category
+# TODO раскомментировать или исправить связи в моделях
+
+
+def category_image_directory_path(instance: "Category", filename: str) -> str:
+    """
+    Функция coздания пути к картинке категории
+    """
+    return "category/category_{pk}/image/{filename}".format(
+        pk=instance.pk,
+        filename=filename,
+    )
+
+
+class Category(models.Model):
+    """
+    Модель хранения категорий товара
+    """
+    class Meta:
+
+        ordering = ["sort_index"]
+        verbose_name = "Category"
+        verbose_name_plural = "Categories"
+
+    name = models.CharField(max_length=100,verbose_name="Название категории")
+    image = models.ImageField(upload_to=category_image_directory_path, verbose_name="Изображение")
+    parent = models.ForeignKey("self", on_delete=models.CASCADE)
+    activity = models.BooleanField(default=True, verbose_name="Активация")
+    sort_index = models.IntegerField(max_length=11, verbose_name="Индекс сортировки")
+
+    def __str__(self) -> str:
+        return f"{self.name}"
+
 
 class Orders(models.Model):
     pass
 
 
 class Product(models.Model):
-    pass
+    """
+    Модель товаров магазина
+
+    """
+
+    name = models.CharField('Название товара', default='', max_length=150, null=False, db_index=True)
+    slug = models.SlugField(max_length=150, default='')
+    # category = models.ForeignKey('store.Category', on_delete=models.CASCADE, verbose_name='Категория')
+    description = models.TextField('Описание', default='', null=False, blank=True)
+    feature = models.TextField('Характеристика', default='', null=False, blank=True)
+    # tags = models.ManyToManyField('store.Tag', related_name='products', verbose_name='Теги')
+    images = models.ImageField('Изображение', upload_to="products/product/%y/%m/%d/")
+    availability = models.BooleanField('Доступность', default=True)
+    created_at = models.DateTimeField('Создан', auto_now_add=True)
+    update_at = models.DateTimeField('Отредактирован', auto_now=True)
+
+    def __str__(self) -> str:
+        return f"{self.name} (id:{self.pk})"
+
+    class Meta:
+        db_table = 'Products'
+        ordering = ['id', 'name']
+        verbose_name = 'Товар'
+        verbose_name_plural = 'Товары'
+
+
+class Offer(models.Model):
+    """
+    Модель предложений продавцов, содержит цену и кол-во предлагаемого товара
+
+    """
+
+    unit_price = models.DecimalField('Цена', default=1, max_digits=8, decimal_places=2)
+    amount = models.PositiveIntegerField('Количество')
+    # seller = models.ForeignKey('auth.Profile', on_delete=models.CASCADE)
+    # product = models.ForeignKey('store.Product', on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = 'Price'
+        ordering = ['id', 'unit_price']
+        verbose_name = 'Цена'
+        verbose_name_plural = 'Цены'
+
+
+class Tag(models.Model):
+    """
+    Модель тегов
+
+    """
+
+    name = models.CharField('Название', default='', max_length=50, null=False, blank=False)
+
+    class Meta:
+        db_table = 'Tags'
+        ordering = ['id', 'name']
+        verbose_name = 'Тег'
+        verbose_name_plural = 'Теги'
 
 
 class Banners(models.Model):
     """
-
+    The model displays banners for products.
     """
     title = models.CharField(u"Название баннера", max_length=150, db_index=True)
     slug = models.SlugField(u"URL", max_length=150, db_index=True)
@@ -47,3 +135,5 @@ class Banners(models.Model):
         ordering = ["title", ]
         verbose_name = 'баннер'
         verbose_name_plural = 'баннеры'
+
+
