@@ -137,3 +137,5 @@ class Banners(models.Model):
         verbose_name_plural = 'баннеры'
 
 
+class Comparison(models.Model):
+    pass

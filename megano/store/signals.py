@@ -6,7 +6,7 @@ from .models import Banners
 
 
 @receiver(post_save, sender=Banners)
-def cache_deleted_banners() -> None:
+def cache_deleted_banners(**kwargs) -> None:
     """
     ПWhen changing the Banners model, caching of random banners is removed.
     """
