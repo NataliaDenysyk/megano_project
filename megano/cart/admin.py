@@ -21,17 +21,16 @@ class CartAdmin(admin.ModelAdmin):
 
     product_name.short_description = 'Товары'
 
-    # TODO: доработать вывод иконки товаров
-    # def icon_image(self, obj):
-    #     """
-    #     Returns an image as an icon.
-    #
-    #     :rtype: str
-    #     """
-    #     print(obj.products.images)
-    #     return mark_safe(f"<img src='{obj.products.images.url}' width=50>")
-    #
-    # icon_image.short_description = 'Иконка'
+    # TODO: доработать вывод иконки товаров для PostreSQL
+    def icon_image(self, obj):
+        """
+        Returns an image as an icon.
+
+        :rtype: str
+        """
+        return mark_safe(f"<img src='{obj.products.images.url}' width=50>")
+
+    icon_image.short_description = 'Иконка'
 
 
 admin.site.register(Cart, CartAdmin)
