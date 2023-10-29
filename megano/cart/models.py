@@ -1,6 +1,5 @@
 from django.contrib.auth.models import User
 from django.db import models
-from django.template.defaultfilters import slugify
 from django.urls import reverse
 
 from store.models import Product
@@ -14,8 +13,7 @@ class Cart(models.Model):
     Product - :model:`store.Product`
     """
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
-    products = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Продукты', null=True, blank=True)
-    slug = models.SlugField(max_length=200, unique=True, verbose_name='URL', db_index=True)
+    products = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Продукты')
     quantity = models.IntegerField(default=1, verbose_name='Количество')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания', db_index=True)
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Дата изменения')
@@ -26,8 +24,7 @@ class Cart(models.Model):
 
         :rtype: str
         """
-        return f'{self.user.username}: {self.products.title}'
-        # TODO После добавления модели продуктов определить поле с названием (title or name)
+        return f'{self.user.username}: {self.products.name}'
 
     def get_absolute_url(self) -> str:
         """
@@ -35,17 +32,10 @@ class Cart(models.Model):
 
         :rtype: str
         """
-        return reverse('detail', kwargs={'slug': self.slug})
-
-    def save(self, *args, **kwargs):
-        """
-        Override the save method to generate a unique slug for the object.
-        """
-        self.slug = slugify(self.products.title)
-        return super(Cart, self).save(*args, **kwargs)
+        return reverse('detail', kwargs={'id': self.id})
 
     class Meta:
         db_table = 'carts'
-        ordering = ['slug', '-created_at']
+        ordering = ['-created_at']
         verbose_name = 'cart'
         verbose_name_plural = 'carts'

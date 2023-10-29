@@ -8,24 +8,30 @@ class CartAdmin(admin.ModelAdmin):
     """
     Description of the basket admin model.
     """
-    list_display = ('user', 'products', 'quantity', 'icon_image', 'created_at', 'updated_at')
-    list_filter = ('created_at', 'products')
-    search_fields = ('user__username', 'products__title')
-    list_editable = ('quantity',)
-    list_per_page = 15
-    # prepopulated_fields = {'slug': ('products',)}
-    # TODO После добавления модели продуктов раскомментировать
+    list_display = ['user', 'product_name', 'quantity', 'created_at', 'updated_at']
+    list_filter = ['created_at', 'products']
+    search_fields = ['user', 'products']
+    list_editable = ['quantity',]
+    list_per_page = 20
 
-    # TODO После добавления модели продуктов отредактировать поле с изображением (photo or image)
-    def icon_image(self, request) -> str:
-        """
-        Returns an image as an icon.
+    def product_name(self, obj: Cart) -> str:
+        if len(obj.products.name) > 20:
+            return f"{obj.products.name[:20]}..."
+        return f"{obj.products.name}"
 
-        :rtype: str
-        """
-        return mark_safe(f'<img src="{request.product.get(id=request.id).image.url}" width="40"/>')
+    product_name.short_description = 'Товары'
 
-    icon_image.short_description = 'Иконка'
+    # TODO: доработать вывод иконки товаров
+    # def icon_image(self, obj):
+    #     """
+    #     Returns an image as an icon.
+    #
+    #     :rtype: str
+    #     """
+    #     print(obj.products.images)
+    #     return mark_safe(f"<img src='{obj.products.images.url}' width=50>")
+    #
+    # icon_image.short_description = 'Иконка'
 
 
 admin.site.register(Cart, CartAdmin)
