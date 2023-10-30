@@ -52,8 +52,10 @@ class Product(models.Model):
     description = models.TextField('Описание', default='', null=False, blank=True)
     feature = models.TextField('Характеристика', default='', null=False, blank=True)
     tags = models.ManyToManyField('Tag', related_name='products', verbose_name='Теги')
-    images = models.ImageField('Изображение', upload_to="products/product/%y/%m/%d/")
-    availability = models.BooleanField('Доступность', default=True)
+    images = models.ImageField(
+        'Изображение', upload_to="products/product/%y/%m/%d/", blank=True, null=True
+    )
+    availability = models.BooleanField('Доступность', default=False)
     created_at = models.DateTimeField('Создан', auto_now_add=True)
     update_at = models.DateTimeField('Отредактирован', auto_now=True)
     discount = models.ManyToManyField('Discount', related_name='discounts', verbose_name='Скидка')
@@ -74,7 +76,7 @@ class Offer(models.Model):
 
     """
 
-    unit_price = models.DecimalField('Цена', default=1, max_digits=8, decimal_places=2)
+    unit_price = models.DecimalField('Цена', default=0, max_digits=8, decimal_places=2)
     amount = models.PositiveIntegerField('Количество')
     seller = models.ForeignKey('authorization.Profile', on_delete=models.CASCADE, verbose_name='Продавец')
     product = models.ForeignKey('store.Product', on_delete=models.CASCADE, verbose_name='Товар')
@@ -84,6 +86,9 @@ class Offer(models.Model):
         ordering = ['id', 'unit_price']
         verbose_name = 'Предложение'
         verbose_name_plural = 'Предложения'
+
+    def __str__(self) -> str:
+        return f"Предложение от {self.seller.name_store}"
 
 
 class Tag(models.Model):
@@ -99,6 +104,9 @@ class Tag(models.Model):
         ordering = ['id', 'name']
         verbose_name = 'Тег'
         verbose_name_plural = 'Теги'
+
+    def __str__(self) -> str:
+        return f"{self.name}"
 
 
 class Banners(models.Model):
@@ -146,8 +154,8 @@ class Discount(models.Model):
     name = models.CharField('Название', default='', max_length=70, null=False, blank=False)
     description = models.TextField('Описание', default='', null=False, blank=True)
     sum_discount = models.FloatField('Сумма скидки', null=False, blank=False)
-    total_products = models.IntegerField('Количество товаров', blank=True)
-    valid_from = models.DateTimeField('Действует с', blank=True)
+    total_products = models.IntegerField('Количество товаров', null=True, blank=True)
+    valid_from = models.DateTimeField('Действует с', null=True, blank=True)
     valid_to = models.DateTimeField('Действует до', blank=False)
     is_active = models.BooleanField('Активно', default=False)
     created_at = models.DateTimeField('Создана', auto_now_add=True)
@@ -158,3 +166,5 @@ class Discount(models.Model):
         verbose_name = 'Скидка'
         verbose_name_plural = 'Скидки'
 
+    def __str__(self) -> str:
+        return f"{self.name}"

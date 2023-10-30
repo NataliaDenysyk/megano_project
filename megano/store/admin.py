@@ -1,8 +1,6 @@
 from django.contrib import admin
 
-from .models import Banners, Product, Discount
-
-# TODO добавить инлайны в товары
+from .models import Banners, Product, Discount, Offer
 
 
 class AdminBanner(admin.ModelAdmin):
@@ -15,14 +13,35 @@ class AdminBanner(admin.ModelAdmin):
 admin.site.register(Banners, AdminBanner)
 
 
+class TagInline(admin.TabularInline):
+    model = Product.tags.through
+    verbose_name = 'Тег'
+    verbose_name_plural = 'Теги'
+
+
+class OfferInline(admin.TabularInline):
+    model = Offer
+
+
+class DiscountInline(admin.TabularInline):
+    model = Product.discount.through
+    verbose_name = 'Скидка'
+    verbose_name_plural = 'Скидки'
+
+
 @admin.register(Product)
 class AdminProduct(admin.ModelAdmin):
-
-    list_display = 'pk', 'name', 'description_short', 'availability'
+    inlines = [
+        OfferInline,
+        DiscountInline,
+        TagInline,
+    ]
+    list_display = 'pk', 'name', 'category', 'description_short', 'created_time', 'update_time', 'availability'
     list_display_links = 'pk', 'name'
-    ordering = 'pk', 'name', 'created_at', 'availability'
+    ordering = 'pk', 'name', 'created_at'
     search_fields = 'name', 'description'
     prepopulated_fields = {'slug': ('name',)}
+    readonly_fields = ('created_time', 'update_time')
 
     fieldsets = [
         (None, {
@@ -32,9 +51,12 @@ class AdminProduct(admin.ModelAdmin):
             'fields': ('images',),
         }),
         ('Extra options', {
-            'fields': ('availability', 'slug'),
+            'fields': ('availability', 'slug', 'category'),
         }),
     ]
+
+    def get_queryset(self, request):
+        return Product.objects.select_related('category').prefetch_related('discount', 'tags')
 
     def description_short(self, obj: Product) -> str:
         """
@@ -48,11 +70,44 @@ class AdminProduct(admin.ModelAdmin):
             return obj.description
         return obj.description[:50] + '...'
 
+    def created_time(self, obj: Product):
+        return obj.created_at.strftime("%d %B %Y")
+
+    def update_time(self, obj: Product):
+        return obj.update_at.strftime("%d %B %Y")
+
     description_short.short_description = 'Описание'
+    created_time.short_description = 'Создан'
+    update_time.short_description = 'Отредактирован'
+
+
+@admin.register(Offer)
+class OfferAdmin(admin.ModelAdmin):
+    list_display = 'pk', 'product', 'seller_verbose', 'unit_price', 'amount'
+    list_display_links = 'pk', 'product'
+    ordering = 'pk', 'unit_price', 'amount'
+    search_fields = 'product', 'seller_verbose', 'unit_price', 'amount'
+
+    def get_queryset(self, request):
+        return Offer.objects.select_related('seller', 'product')
+
+    def seller_verbose(self, obj: Offer) -> str:
+        return obj.seller.name_store
+
+    seller_verbose.short_description = 'Продавец'
+
+
+class ProductInline(admin.TabularInline):
+    model = Discount.discounts.through
+    verbose_name = 'Товар'
+    verbose_name_plural = 'Товары'
 
 
 @admin.register(Discount)
 class AdminProduct(admin.ModelAdmin):
+    inlines = [
+        ProductInline,
+    ]
     list_display = 'pk', 'name', 'description', 'sum_discount', 'valid_from', 'valid_to', 'is_active'
     list_display_links = 'pk', 'name'
     ordering = 'pk', 'name', 'valid_to', 'is_active'
