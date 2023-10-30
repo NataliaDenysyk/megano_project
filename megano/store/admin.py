@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Banners, Product
+from .models import Banners, Product, Discount
 
 # TODO добавить инлайны в товары
 
@@ -49,3 +49,11 @@ class AdminProduct(admin.ModelAdmin):
         return obj.description[:50] + '...'
 
     description_short.short_description = 'Описание'
+
+
+@admin.register(Discount)
+class AdminProduct(admin.ModelAdmin):
+    list_display = 'pk', 'name', 'description', 'sum_discount', 'valid_from', 'valid_to', 'is_active'
+    list_display_links = 'pk', 'name'
+    ordering = 'pk', 'name', 'valid_to', 'is_active'
+    search_fields = 'name', 'description'
