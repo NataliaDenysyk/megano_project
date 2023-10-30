@@ -4,6 +4,7 @@ from django.utils.safestring import mark_safe
 
 # Create your models here.
 # TODO models Orders, Product, Discount, Category
+# TODO раскомментировать или исправить связи в моделях
 
 
 def category_image_directory_path(instance: "Category", filename: str) -> str:
@@ -168,3 +169,6 @@ class Discount(models.Model):
 
     def __str__(self) -> str:
         return f"{self.name}"
+
+class Comparison(models.Model):
+    pass
