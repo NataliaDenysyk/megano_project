@@ -56,7 +56,7 @@ class AdminProduct(admin.ModelAdmin):
     ]
 
     def get_queryset(self, request):
-        return Product.objects.select_related('category').prefetch_related('discount', 'tags')
+        return Product.objects.select_related('category').prefetch_related('discount', 'tags', 'offer_set')
 
     def description_short(self, obj: Product) -> str:
         """
@@ -98,13 +98,13 @@ class OfferAdmin(admin.ModelAdmin):
 
 
 class ProductInline(admin.TabularInline):
-    model = Discount.discounts.through
+    model = Discount.products.through
     verbose_name = 'Товар'
     verbose_name_plural = 'Товары'
 
 
 @admin.register(Discount)
-class AdminProduct(admin.ModelAdmin):
+class DiscountAdmin(admin.ModelAdmin):
     inlines = [
         ProductInline,
     ]
@@ -112,3 +112,6 @@ class AdminProduct(admin.ModelAdmin):
     list_display_links = 'pk', 'name'
     ordering = 'pk', 'name', 'valid_to', 'is_active'
     search_fields = 'name', 'description'
+
+    def get_queryset(self, request):
+        return Discount.objects.prefetch_related('products')

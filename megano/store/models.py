@@ -59,7 +59,7 @@ class Product(models.Model):
     availability = models.BooleanField('Доступность', default=False)
     created_at = models.DateTimeField('Создан', auto_now_add=True)
     update_at = models.DateTimeField('Отредактирован', auto_now=True)
-    discount = models.ManyToManyField('Discount', related_name='discounts', verbose_name='Скидка')
+    discount = models.ManyToManyField('Discount', related_name='products', verbose_name='Скидка')
 
     def __str__(self) -> str:
         return f"{self.name} (id:{self.pk})"
@@ -168,7 +168,7 @@ class Discount(models.Model):
         verbose_name_plural = 'Скидки'
 
     def __str__(self) -> str:
-        return f"{self.name}"
+        return f'{self.name}'
 
 
 class Comparison(models.Model):
