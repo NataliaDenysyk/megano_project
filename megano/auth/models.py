@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 
-from megano.store.models import Product, Orders
+from store.models import Product, Orders
 
 
 class Profile(models.Model):
