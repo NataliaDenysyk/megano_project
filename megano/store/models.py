@@ -48,7 +48,7 @@ class Product(models.Model):
 
     name = models.CharField('Название товара', default='', max_length=150, null=False, db_index=True)
     slug = models.SlugField(max_length=150, default='')
-    # category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Категория')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Категория')
     description = models.TextField('Описание', default='', null=False, blank=True)
     feature = models.TextField('Характеристика', default='', null=False, blank=True)
     tags = models.ManyToManyField('Tag', related_name='products', verbose_name='Теги')
