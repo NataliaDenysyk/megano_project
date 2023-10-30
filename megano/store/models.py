@@ -76,14 +76,14 @@ class Offer(models.Model):
 
     unit_price = models.DecimalField('Цена', default=1, max_digits=8, decimal_places=2)
     amount = models.PositiveIntegerField('Количество')
-    seller = models.ForeignKey('authorization.Profile', on_delete=models.CASCADE)
-    product = models.ForeignKey('store.Product', on_delete=models.CASCADE)
+    seller = models.ForeignKey('authorization.Profile', on_delete=models.CASCADE, verbose_name='Продавец')
+    product = models.ForeignKey('store.Product', on_delete=models.CASCADE, verbose_name='Товар')
 
     class Meta:
-        db_table = 'Price'
+        db_table = 'Offer'
         ordering = ['id', 'unit_price']
-        verbose_name = 'Цена'
-        verbose_name_plural = 'Цены'
+        verbose_name = 'Предложение'
+        verbose_name_plural = 'Предложения'
 
 
 class Tag(models.Model):
