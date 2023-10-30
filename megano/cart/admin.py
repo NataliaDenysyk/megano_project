@@ -8,7 +8,7 @@ class CartAdmin(admin.ModelAdmin):
     """
     Description of the basket admin model.
     """
-    list_display = ['user', 'product_name', 'quantity', 'created_at', 'updated_at']
+    list_display = ['user', 'product_name', 'quantity', 'icon_image', 'created_at', 'updated_at']
     list_filter = ['created_at', 'products']
     search_fields = ['user', 'products']
     list_editable = ['quantity',]
