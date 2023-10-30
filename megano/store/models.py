@@ -170,5 +170,6 @@ class Discount(models.Model):
     def __str__(self) -> str:
         return f"{self.name}"
 
+
 class Comparison(models.Model):
     pass
