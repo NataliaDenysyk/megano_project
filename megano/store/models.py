@@ -158,3 +158,5 @@ class Discount(models.Model):
         verbose_name = 'Скидка'
         verbose_name_plural = 'Скидки'
 
+class Comparison(models.Model):
+    pass
