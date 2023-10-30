@@ -55,9 +55,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'store.apps.StoreConfig',
+    'cart.apps.CartConfig',
 ]
 
 MIDDLEWARE = [
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -84,6 +86,8 @@ TEMPLATES = [
         },
     },
 ]
+
+CART_SESSION_ID = 'cart'
 
 WSGI_APPLICATION = 'megano.wsgi.application'
 
