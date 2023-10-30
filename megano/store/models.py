@@ -137,5 +137,26 @@ class Banners(models.Model):
         verbose_name_plural = 'баннеры'
 
 
+class Discount(models.Model):
+    """
+    Модель скидок
+
+    """
+
+    name = models.CharField('Название', default='', max_length=70, null=False, blank=False)
+    description = models.TextField('Описание', default='', null=False, blank=True)
+    sum_discount = models.FloatField('Сумма скидки', null=False, blank=False)
+    total_products = models.IntegerField('Количество товаров', blank=True)
+    valid_from = models.DateTimeField('Действует с', blank=True)
+    valid_to = models.DateTimeField('Действует до', blank=False)
+    is_active = models.BooleanField('Активно', default=False)
+    created_at = models.DateTimeField('Создана', auto_now_add=True)
+
+    class Meta:
+        db_table = 'Discounts'
+        ordering = ['id', 'name']
+        verbose_name = 'Скидка'
+        verbose_name_plural = 'Скидки'
+
 class Comparison(models.Model):
     pass

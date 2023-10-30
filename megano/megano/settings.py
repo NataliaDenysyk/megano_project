@@ -39,7 +39,7 @@ DATABASES = {
     }
 }
 
-CACHE_ROOT = os.path.join(BASE_DIR, "cache/")
+CACHE_ROOT = os.path.join(BASE_DIR, "cache")
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
