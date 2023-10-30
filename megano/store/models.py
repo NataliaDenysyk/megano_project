@@ -4,7 +4,6 @@ from django.utils.safestring import mark_safe
 
 # Create your models here.
 # TODO models Orders, Product, Discount, Category
-# TODO раскомментировать или исправить связи в моделях
 
 
 def category_image_directory_path(instance: "Category", filename: str) -> str:
@@ -31,7 +30,7 @@ class Category(models.Model):
     image = models.ImageField(upload_to=category_image_directory_path, verbose_name="Изображение")
     parent = models.ForeignKey("self", on_delete=models.CASCADE)
     activity = models.BooleanField(default=True, verbose_name="Активация")
-    sort_index = models.IntegerField(max_length=11, verbose_name="Индекс сортировки")
+    sort_index = models.IntegerField(verbose_name="Индекс сортировки")
 
     def __str__(self) -> str:
         return f"{self.name}"
@@ -49,14 +48,15 @@ class Product(models.Model):
 
     name = models.CharField('Название товара', default='', max_length=150, null=False, db_index=True)
     slug = models.SlugField(max_length=150, default='')
-    # category = models.ForeignKey('store.Category', on_delete=models.CASCADE, verbose_name='Категория')
+    # category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Категория')
     description = models.TextField('Описание', default='', null=False, blank=True)
     feature = models.TextField('Характеристика', default='', null=False, blank=True)
-    # tags = models.ManyToManyField('store.Tag', related_name='products', verbose_name='Теги')
+    tags = models.ManyToManyField('Tag', related_name='products', verbose_name='Теги')
     images = models.ImageField('Изображение', upload_to="products/product/%y/%m/%d/")
     availability = models.BooleanField('Доступность', default=True)
     created_at = models.DateTimeField('Создан', auto_now_add=True)
     update_at = models.DateTimeField('Отредактирован', auto_now=True)
+    discount = models.ManyToManyField('Discount', related_name='discounts', verbose_name='Скидка')
 
     def __str__(self) -> str:
         return f"{self.name} (id:{self.pk})"
@@ -76,8 +76,8 @@ class Offer(models.Model):
 
     unit_price = models.DecimalField('Цена', default=1, max_digits=8, decimal_places=2)
     amount = models.PositiveIntegerField('Количество')
-    # seller = models.ForeignKey('auth.Profile', on_delete=models.CASCADE)
-    # product = models.ForeignKey('store.Product', on_delete=models.CASCADE)
+    seller = models.ForeignKey('authorization.Profile', on_delete=models.CASCADE)
+    product = models.ForeignKey('store.Product', on_delete=models.CASCADE)
 
     class Meta:
         db_table = 'Price'
