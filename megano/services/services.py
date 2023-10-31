@@ -13,7 +13,7 @@ class AddReview:
     pass
 
 
-class SalesProduct:
+class DiscountProduct:
     pass
 
 
