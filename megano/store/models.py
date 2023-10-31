@@ -22,8 +22,9 @@ class Category(models.Model):
     Модель хранения категорий товара
     """
     class Meta:
-        db_table = 'Category'
+
         ordering = ["sort_index"]
+        db_table = 'Category'
         verbose_name = "Категория"
         verbose_name_plural = "Категории"
 
@@ -31,7 +32,7 @@ class Category(models.Model):
     image = models.ImageField(upload_to=category_image_directory_path, verbose_name="Изображение")
     parent = models.ForeignKey("self", on_delete=models.CASCADE)
     activity = models.BooleanField(default=True, verbose_name="Активация")
-    sort_index = models.IntegerField(verbose_name="Индекс сортировки")
+    sort_index = models.IntegerField(max_length=11, verbose_name="Индекс сортировки")
 
     def __str__(self) -> str:
         return f"{self.name}"
