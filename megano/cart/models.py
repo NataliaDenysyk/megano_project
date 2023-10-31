@@ -7,7 +7,7 @@ from store.models import Product
 
 class Cart(models.Model):
     """
-    Description of the basket model.
+    Описание модели Корзины
 
     User    - :model:`User`\n
     Product - :model:`store.Product`
@@ -20,17 +20,14 @@ class Cart(models.Model):
 
     def __str__(self) -> str:
         """
-        Return a string representation of the model.
-
-        :rtype: str
+        Возвращает имя пользователя и название продукта в виде:
+        username: product_name
         """
         return f'{self.user.username}: {self.products.name}'
 
     def get_absolute_url(self) -> str:
         """
-        Return the URL to access the detail view of the object.
-
-        :rtype: str
+        Возвращает путь на детальную страницу товаров корзины.
         """
         return reverse('detail', kwargs={'id': self.id})
 
