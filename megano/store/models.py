@@ -31,7 +31,7 @@ class Category(models.Model):
     image = models.ImageField(upload_to=category_image_directory_path, verbose_name="Изображение")
     parent = models.ForeignKey("self", on_delete=models.CASCADE)
     activity = models.BooleanField(default=True, verbose_name="Активация")
-    sort_index = models.IntegerField(max_length=11, verbose_name="Индекс сортировки")
+    sort_index = models.IntegerField(verbose_name="Индекс сортировки")
 
     def __str__(self) -> str:
         return f"{self.name}"
@@ -49,14 +49,17 @@ class Product(models.Model):
 
     name = models.CharField('Название товара', default='', max_length=150, null=False, db_index=True)
     slug = models.SlugField(max_length=150, default='')
-    # category = models.ForeignKey('store.Category', on_delete=models.CASCADE, verbose_name='Категория')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Категория')
     description = models.TextField('Описание', default='', null=False, blank=True)
     feature = models.TextField('Характеристика', default='', null=False, blank=True)
-    # tags = models.ManyToManyField('store.Tag', related_name='products', verbose_name='Теги')
-    images = models.ImageField('Изображение', upload_to="products/product/%y/%m/%d/")
-    availability = models.BooleanField('Доступность', default=True)
+    tags = models.ManyToManyField('Tag', related_name='products', verbose_name='Теги')
+    images = models.ImageField(
+        'Изображение', upload_to="products/product/%y/%m/%d/", blank=True, null=True
+    )
+    availability = models.BooleanField('Доступность', default=False)
     created_at = models.DateTimeField('Создан', auto_now_add=True)
     update_at = models.DateTimeField('Отредактирован', auto_now=True)
+    discount = models.ManyToManyField('Discount', related_name='products', verbose_name='Скидка')
 
     def __str__(self) -> str:
         return f"{self.name} (id:{self.pk})"
@@ -74,16 +77,19 @@ class Offer(models.Model):
 
     """
 
-    unit_price = models.DecimalField('Цена', default=1, max_digits=8, decimal_places=2)
+    unit_price = models.DecimalField('Цена', default=0, max_digits=8, decimal_places=2)
     amount = models.PositiveIntegerField('Количество')
-    # seller = models.ForeignKey('auth.Profile', on_delete=models.CASCADE)
-    # product = models.ForeignKey('store.Product', on_delete=models.CASCADE)
+    seller = models.ForeignKey('authorization.Profile', on_delete=models.CASCADE, verbose_name='Продавец')
+    product = models.ForeignKey('store.Product', on_delete=models.CASCADE, verbose_name='Товар')
 
     class Meta:
-        db_table = 'Price'
+        db_table = 'Offer'
         ordering = ['id', 'unit_price']
-        verbose_name = 'Цена'
-        verbose_name_plural = 'Цены'
+        verbose_name = 'Предложение'
+        verbose_name_plural = 'Предложения'
+
+    def __str__(self) -> str:
+        return f"Предложение от {self.seller.name_store}"
 
 
 class Tag(models.Model):
@@ -99,6 +105,9 @@ class Tag(models.Model):
         ordering = ['id', 'name']
         verbose_name = 'Тег'
         verbose_name_plural = 'Теги'
+
+    def __str__(self) -> str:
+        return f"{self.name}"
 
 
 class Banners(models.Model):
@@ -146,8 +155,8 @@ class Discount(models.Model):
     name = models.CharField('Название', default='', max_length=70, null=False, blank=False)
     description = models.TextField('Описание', default='', null=False, blank=True)
     sum_discount = models.FloatField('Сумма скидки', null=False, blank=False)
-    total_products = models.IntegerField('Количество товаров', blank=True)
-    valid_from = models.DateTimeField('Действует с', blank=True)
+    total_products = models.IntegerField('Количество товаров', null=True, blank=True)
+    valid_from = models.DateTimeField('Действует с', null=True, blank=True)
     valid_to = models.DateTimeField('Действует до', blank=False)
     is_active = models.BooleanField('Активно', default=False)
     created_at = models.DateTimeField('Создана', auto_now_add=True)
@@ -157,6 +166,10 @@ class Discount(models.Model):
         ordering = ['id', 'name']
         verbose_name = 'Скидка'
         verbose_name_plural = 'Скидки'
+
+    def __str__(self) -> str:
+        return f'{self.name}'
+
 
 class Comparison(models.Model):
     pass
