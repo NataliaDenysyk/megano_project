@@ -22,10 +22,10 @@ class Category(models.Model):
     Модель хранения категорий товара
     """
     class Meta:
-
+        db_table = 'Category'
         ordering = ["sort_index"]
-        verbose_name = "Category"
-        verbose_name_plural = "Categories"
+        verbose_name = "Категория"
+        verbose_name_plural = "Категории"
 
     name = models.CharField(max_length=100,verbose_name="Название категории")
     image = models.ImageField(upload_to=category_image_directory_path, verbose_name="Изображение")
@@ -35,10 +35,6 @@ class Category(models.Model):
 
     def __str__(self) -> str:
         return f"{self.name}"
-
-
-class Orders(models.Model):
-    pass
 
 
 class Product(models.Model):
@@ -173,3 +169,27 @@ class Discount(models.Model):
 
 class Comparison(models.Model):
     pass
+
+
+class Orders(models.Model):
+    """
+    Модель хранения заказов
+    """
+
+    class Meta:
+        db_table = "Orders"
+        verbose_name = "Заказ"
+        verbose_name_plural = "Заказы"
+
+    delivery_type = models.CharField(
+        max_length=100,
+        blank=False,
+        default='pickup',
+        verbose_name="Тип доставки")
+    address = models.CharField(max_length=150, null=True, verbose_name="Адрес")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Создан")
+    products = models.ManyToManyField(Product, related_name='orders')
+
+    def __str__(self) -> str:
+        return f"Order(pk = {self.pk}"
+

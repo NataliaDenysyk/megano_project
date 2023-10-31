@@ -1,6 +1,13 @@
 from django.contrib import admin
 
-from .models import Banners, Product, Discount, Offer
+from .models import (
+    Banners,
+    Product,
+    Discount,
+    Offer,
+    Orders,
+    Category,
+)
 
 
 class AdminBanner(admin.ModelAdmin):
@@ -11,6 +18,30 @@ class AdminBanner(admin.ModelAdmin):
 
 
 admin.site.register(Banners, AdminBanner)
+
+
+class ProductInline(admin.TabularInline):
+    model = Orders.products.through
+
+
+@admin.register(Orders)
+class AdminOrders(admin.ModelAdmin):
+    inlines = [
+        ProductInline,
+    ]
+    list_display = 'pk', 'delivery_type', 'address', 'created_at'
+    list_display_links = 'pk', 'delivery_type'
+    ordering = 'pk', 'created_at', 'address'
+    search_fields = 'delivery_type', 'address', 'created_at'
+
+
+@admin.register(Category)
+class AdminCategory(admin.ModelAdmin):
+    list_display = 'pk', 'name', 'image', 'parent', 'activity'
+    list_display_links = 'pk', 'name'
+    ordering = 'pk', 'name', 'activity'
+    list_filter = ['activity']
+    search_fields = ['name']
 
 
 class TagInline(admin.TabularInline):
