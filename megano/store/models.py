@@ -60,6 +60,7 @@ class Product(models.Model):
     created_at = models.DateTimeField('Создан', auto_now_add=True)
     update_at = models.DateTimeField('Отредактирован', auto_now=True)
     discount = models.ManyToManyField('Discount', related_name='products', verbose_name='Скидка')
+    reviews = models.ForeignKey('Reviews', on_delete=models.CASCADE, verbose_name='Отзывы')
 
     def __str__(self) -> str:
         return f"{self.name} (id:{self.pk})"
@@ -144,6 +145,24 @@ class Banners(models.Model):
         ordering = ["title", ]
         verbose_name = 'баннер'
         verbose_name_plural = 'баннеры'
+
+
+class Reviews(models.Model):
+    """
+    Модель отзывов товара
+    """
+
+    comment_text = models.TextField(' Отзыв', default='', null=False, blank=True)
+    author = models.ForeignKey('authorization.Profile', on_delete=models.CASCADE)
+    created_at = models.DateTimeField('Создан', auto_now_add=True)
+
+    class Meta:
+        db_table = 'Reviews'
+        verbose_name = 'Отзыв'
+        verbose_name_plural = 'Отзывы'
+
+    def __str__(self) -> str:
+        return f"{self.comment_text[:25]}"
 
 
 class Discount(models.Model):
