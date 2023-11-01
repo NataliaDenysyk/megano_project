@@ -1,9 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
+from django.http import HttpRequest
 
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DeleteView
 
-from store.models import Comparison
+from store.models import Comparison, Category, Product
 
 
 # Create your views here.
@@ -56,3 +57,24 @@ class ComparisonDeleteView(DeleteView):
 
     model = Comparison
     success_url = reverse_lazy('')
+
+
+def product_list(request: HttpRequest):
+    """
+    Отображает категории и продукты
+    """
+    categories = Category.objects.all()
+    products = Product.objects.filter(availability=True).order_by('name')
+    category = get_object_or_404(Category)
+    sub_categories = category.get_descendants(include_self=True)
+    products = products.filter(category__in=sub_categories)
+    template_name = 'templates/product/product_list.html'
+    context = {
+        'product': category,
+        'categories': categories,
+        'products': products,
+    }
+
+    return render(request, template_name, context)
+
+
