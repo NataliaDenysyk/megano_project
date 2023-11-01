@@ -11,7 +11,6 @@ class Profile(models.Model):
     avatar = models.ImageField()
     name_store = models.CharField(max_length=50)
     address = models.CharField(max_length=100)
-    # orders = models.ForeignKey(Orders, on_delete=models.CASCADE)
     viewed_orders = models.ForeignKey('store.Product', on_delete=models.CASCADE)
     role = models.CharField(max_length=50, default='user')
 

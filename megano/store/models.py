@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.safestring import mark_safe
-
+from authorization.models import Profile
 
 # Create your models here.
 # TODO models Orders, Product, Discount, Category
@@ -206,6 +206,7 @@ class Orders(models.Model):
         blank=False,
         default='pickup',
         verbose_name="Тип доставки")
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     address = models.CharField(max_length=150, null=True, verbose_name="Адрес")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Создан")
     products = models.ManyToManyField(Product, related_name='orders')

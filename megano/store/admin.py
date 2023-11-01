@@ -7,6 +7,7 @@ from .models import (
     Offer,
     Orders,
     Category,
+    Reviews,
 )
 
 
@@ -29,10 +30,13 @@ class AdminOrders(admin.ModelAdmin):
     inlines = [
         ProductInline,
     ]
-    list_display = 'pk', 'delivery_type', 'address', 'created_at'
+    list_display = 'pk', 'delivery_type', 'address', 'created_at', 'profile'
     list_display_links = 'pk', 'delivery_type'
     ordering = 'pk', 'created_at', 'address'
     search_fields = 'delivery_type', 'address', 'created_at'
+
+    def get_queryset(self, request):
+        return Product.objects.select_related('profile').prefetch_related('products')
 
 
 @admin.register(Category)
@@ -60,12 +64,17 @@ class DiscountInline(admin.TabularInline):
     verbose_name_plural = 'Скидки'
 
 
+class OrderInline(admin.TabularInline):
+    model = Product.orders.through
+
+
 @admin.register(Product)
 class AdminProduct(admin.ModelAdmin):
     inlines = [
         OfferInline,
         DiscountInline,
         TagInline,
+        OrderInline,
     ]
     list_display = 'pk', 'name', 'category', 'description_short', 'created_time', 'update_time', 'availability'
     list_display_links = 'pk', 'name'
