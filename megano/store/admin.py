@@ -81,6 +81,9 @@ class AdminProduct(admin.ModelAdmin):
         ('Images', {
             'fields': ('images',),
         }),
+        ('Reviews', {
+            'fields': ('reviews',),
+        }),
         ('Extra options', {
             'fields': ('availability', 'slug', 'category'),
         }),
@@ -132,6 +135,11 @@ class ProductInline(admin.TabularInline):
     model = Discount.products.through
     verbose_name = 'Товар'
     verbose_name_plural = 'Товары'
+
+
+@admin.register(Reviews)
+class ReviewsProduct(admin.ModelAdmin):
+    list_display = 'comment_text', 'created_at', 'author'
 
 
 @admin.register(Discount)

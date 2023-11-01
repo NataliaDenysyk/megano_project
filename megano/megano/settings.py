@@ -19,7 +19,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 load_dotenv()
 
-DEBUG = True if os.getenv('DEBUG').capitalize() == "True" else False
+DEBUG = os.getenv('DEBUG', True)
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 
@@ -27,9 +27,6 @@ ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',')
 
 DATABASES = {
     'default': {
-        'ENGINE': os.getenv('DB_ENGINE_SQLITE'),
-        'NAME': BASE_DIR / os.getenv('DB_NAME_SQLITE'),
-    } if DEBUG else {
         'ENGINE': os.getenv('DB_ENGINE'),
         'NAME': os.getenv('DB_NAME'),
         'USER': os.getenv('DB_USER'),
@@ -100,16 +97,16 @@ WSGI_APPLICATION = 'megano.wsgi.application'
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.authorization.password_validation.UserAttributeSimilarityValidator',
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
-        'NAME': 'django.contrib.authorization.password_validation.MinimumLengthValidator',
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
     },
     {
-        'NAME': 'django.contrib.authorization.password_validation.CommonPasswordValidator',
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
     },
     {
-        'NAME': 'django.contrib.authorization.password_validation.NumericPasswordValidator',
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
 
