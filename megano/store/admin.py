@@ -1,6 +1,12 @@
 from django.contrib import admin
 
-from .models import Banners, Product, Discount, Reviews, Offer
+from .models import (Banners,
+                     Product,
+                     Discount,
+                     Reviews,
+                     Offer,
+                     Category, )
+
 
 # TODO добавить инлайны в товары
 
@@ -38,7 +44,7 @@ class AdminProduct(admin.ModelAdmin):
         DiscountInline,
         TagInline,
     ]
-    list_display = 'pk', 'name', 'category', 'description_short', 'created_time', 'update_time', 'availability'
+    list_display = 'pk', 'name', 'category', 'description_short', 'created_time', 'update_time', 'availability', 'is_view'
     list_display_links = 'pk', 'name'
     ordering = 'pk', 'name', 'created_at'
     search_fields = 'name', 'description'
@@ -125,3 +131,10 @@ class DiscountAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         return Discount.objects.prefetch_related('products')
+
+
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ['pk', 'name']
+    ordering = ['name', 'activity']
+    search_fields = ['name']

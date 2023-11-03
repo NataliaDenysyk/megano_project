@@ -21,13 +21,13 @@ class Category(models.Model):
     """
     Модель хранения категорий товара
     """
-    class Meta:
 
+    class Meta:
         ordering = ["sort_index"]
         verbose_name = "Category"
         verbose_name_plural = "Categories"
 
-    name = models.CharField(max_length=100,verbose_name="Название категории")
+    name = models.CharField(max_length=100, verbose_name="Название категории")
     image = models.ImageField(upload_to=category_image_directory_path, verbose_name="Изображение")
     parent = models.ForeignKey("self", on_delete=models.CASCADE)
     activity = models.BooleanField(default=True, verbose_name="Активация")
@@ -49,9 +49,9 @@ class Product(models.Model):
 
     name = models.CharField('Название товара', default='', max_length=150, null=False, db_index=True)
     slug = models.SlugField(max_length=150, default='')
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Категория')
-    description = models.TextField('Описание', default='', null=False, blank=True)
-    feature = models.TextField('Характеристика', default='', null=False, blank=True)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Категория', default='Без категории')
+    description = models.TextField('Описание', default='Без описания', null=False, blank=True)
+    feature = models.TextField('Характеристика', default='Харектиристики не указаны', null=False, blank=True)
     tags = models.ManyToManyField('Tag', related_name='products', verbose_name='Теги')
     images = models.ImageField(
         'Изображение', upload_to="products/product/%y/%m/%d/", blank=True, null=True
@@ -60,7 +60,8 @@ class Product(models.Model):
     created_at = models.DateTimeField('Создан', auto_now_add=True)
     update_at = models.DateTimeField('Отредактирован', auto_now=True)
     discount = models.ManyToManyField('Discount', related_name='products', verbose_name='Скидка')
-    reviews = models.ForeignKey('Reviews', on_delete=models.CASCADE, verbose_name='Отзывы')
+    reviews = models.ForeignKey('Reviews', on_delete=models.CASCADE, verbose_name='Отзывы', blank=True)
+    is_view = models.BooleanField('Просмотрен', default=False)
 
     def __str__(self) -> str:
         return f"{self.name} (id:{self.pk})"
