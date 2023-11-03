@@ -16,7 +16,18 @@ class AddReview:
 
 
 class DiscountProduct:
-    pass
+    """
+    Сервис получения скидок на товары и группы товаров
+    """
+
+    def _get_all_discounts(self) -> List:
+        pass
+
+    def _get_priority_discount(self):
+        pass
+
+    def _calculate_price_with_discount(self, price) -> float:
+        pass
 
 
 class Payment:
