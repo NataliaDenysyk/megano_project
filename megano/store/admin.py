@@ -36,7 +36,7 @@ class AdminOrders(admin.ModelAdmin):
     search_fields = 'delivery_type', 'address', 'created_at'
 
     def get_queryset(self, request):
-        return Product.objects.select_related('profile').prefetch_related('products')
+        return Orders.objects.select_related('profile').prefetch_related('products')
 
 
 @admin.register(Category)

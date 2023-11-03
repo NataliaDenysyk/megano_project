@@ -207,7 +207,7 @@ class Orders(models.Model):
         default='pickup',
         verbose_name="Тип доставки")
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    address = models.CharField(max_length=150, null=True, verbose_name="Адрес")
+    address = models.TextField(max_length=150, null=True, verbose_name="Адрес")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Создан")
     products = models.ManyToManyField(Product, related_name='orders')
 
