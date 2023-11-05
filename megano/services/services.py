@@ -1,6 +1,7 @@
 from typing import List
 
-from store.models import Product, Comparison
+from cart.models import Cart
+from store.models import Reviews, Product, Discount
 
 
 class GetAdminSettings:
@@ -83,4 +84,25 @@ class ComparisonViewed:
         pass
 
     def _delete_product_from_comparison(self) -> bool:
+        pass
+
+
+class ReviewsProduct:
+    """
+    Сервис для добавления отзыва к товару
+    """
+    def _add_review_to_product(self, reviews: Reviews, product: Product) -> None:
+        # добавить отзыв к товару
+        pass
+
+    def _get_list_of_product_reviews(self, product: Product) -> List:
+        # получить список отзывов к товару
+        pass
+
+    def _get_discount_on_cart(self, cart: Cart) -> Discount:
+        # получить скидку на корзину
+        pass
+
+    def _get_number_of_reviews_for_product(self, product: Product) -> int:
+        # получить количество отзывов для товара
         pass
