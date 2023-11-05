@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django_mptt_admin.admin import DjangoMpttAdmin
 
 from .models import (
     Banners,
@@ -16,6 +17,17 @@ class AdminBanner(admin.ModelAdmin):
     list_display_links = ['title']
     list_filter = ['is_active']
     prepopulated_fields = {'slug': ('title',)}
+
+    fieldsets = [
+        (None, {
+            "fields": ('title', 'link', 'images',),
+        }),
+        ("Extra options", {
+            "fields": ("is_active",),
+            "classes": ("collapse",),
+            "description": "Extra options. Field 'archived' is for soft delete",
+        })
+    ]
 
 
 admin.site.register(Banners, AdminBanner)
@@ -35,17 +47,36 @@ class AdminOrders(admin.ModelAdmin):
     ordering = 'pk', 'created_at', 'address'
     search_fields = 'delivery_type', 'address', 'created_at'
 
+    fieldsets = [
+        (None, {
+            "fields": ('profile', 'delivery_type', 'address',),
+        }),
+
+    ]
+
     def get_queryset(self, request):
         return Orders.objects.select_related('profile').prefetch_related('products')
 
 
 @admin.register(Category)
-class AdminCategory(admin.ModelAdmin):
-    list_display = 'pk', 'name', 'image', 'parent', 'activity'
+class AdminCategory(DjangoMpttAdmin):
+    list_display = 'pk', 'name', 'image', 'parent', 'activity', 'sort_index'
     list_display_links = 'pk', 'name'
     ordering = 'pk', 'name', 'activity'
     list_filter = ['activity']
     search_fields = ['name']
+    repopulated_fields = {'slug': ('name',)}
+
+    fieldsets = [
+        (None, {
+            "fields": ('name', 'parent', 'sort_index',),
+        }),
+        ("Extra options", {
+            "fields": ("activity",),
+            "classes": ("collapse",),
+            "description": "Extra options. Field 'archived' is for soft delete",
+        })
+    ]
 
 
 class TagInline(admin.TabularInline):
@@ -78,6 +109,7 @@ class AdminProduct(admin.ModelAdmin):
     ]
     list_display = 'pk', 'name', 'category', 'description_short', 'created_time', 'update_time', 'availability'
     list_display_links = 'pk', 'name'
+    list_filter = ['availability']
     ordering = 'pk', 'name', 'created_at'
     search_fields = 'name', 'description'
     prepopulated_fields = {'slug': ('name',)}
@@ -92,9 +124,11 @@ class AdminProduct(admin.ModelAdmin):
         }),
         ('Reviews', {
             'fields': ('reviews',),
+            "classes": ("collapse",),
         }),
         ('Extra options', {
             'fields': ('availability', 'slug', 'category'),
+            "classes": ("collapse",),
         }),
     ]
 
