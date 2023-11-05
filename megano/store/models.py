@@ -221,6 +221,8 @@ class Orders(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     address = models.TextField(max_length=150, null=True, verbose_name="Адрес")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Создан")
+    status = models.BooleanField(default=False, verbose_name='Оплачен')
+    total = models.IntegerField(verbose_name='Количество')
     products = models.ManyToManyField(Product, related_name='orders')
 
     def __str__(self) -> str:

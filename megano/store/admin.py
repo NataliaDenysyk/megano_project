@@ -20,12 +20,11 @@ class AdminBanner(admin.ModelAdmin):
 
     fieldsets = [
         (None, {
-            "fields": ('title', 'link', 'images',),
+            "fields": ('title', 'link', 'images', 'slug'),
         }),
         ("Extra options", {
             "fields": ("is_active",),
             "classes": ("collapse",),
-            "description": "Extra options. Field 'archived' is for soft delete",
         })
     ]
 
@@ -42,16 +41,19 @@ class AdminOrders(admin.ModelAdmin):
     inlines = [
         ProductInline,
     ]
-    list_display = 'pk', 'delivery_type', 'address', 'created_at', 'profile'
+    list_display = 'pk', 'delivery_type', 'address', 'created_at', 'profile', 'total',
     list_display_links = 'pk', 'delivery_type'
     ordering = 'pk', 'created_at', 'address'
     search_fields = 'delivery_type', 'address', 'created_at'
 
     fieldsets = [
         (None, {
-            "fields": ('profile', 'delivery_type', 'address',),
+            "fields": ('profile', 'delivery_type', 'address', 'products', 'total'),
         }),
-
+        ('Extra options', {
+            'fields': ('status',),
+            'classes': ('collapse',),
+        })
     ]
 
     def get_queryset(self, request):
@@ -74,7 +76,7 @@ class AdminCategory(DjangoMpttAdmin):
         ("Extra options", {
             "fields": ("activity",),
             "classes": ("collapse",),
-            "description": "Extra options. Field 'archived' is for soft delete",
+            "description": "Extra options. Field 'activity' is for soft delete",
         })
     ]
 
