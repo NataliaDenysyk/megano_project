@@ -1,6 +1,6 @@
 from typing import List
+from store.models import Product, Comparison
 
-from megano.store.models import Product
 
 
 class GetAdminSettings:
@@ -16,7 +16,18 @@ class AddReview:
 
 
 class DiscountProduct:
-    pass
+    """
+    Сервис получения скидок на товары и группы товаров
+    """
+
+    def _get_all_discounts(self) -> List:
+        pass
+
+    def _get_priority_discount(self):
+        pass
+
+    def _calculate_price_with_discount(self, price) -> float:
+        pass
 
 
 class Payment:
@@ -70,3 +81,22 @@ class ProductService:
         Получить количество просмотренных продуктов
         """
         return int(len(self._get_viewed_product_list()))
+
+
+class ComparisonViewed:
+    """
+    Сервис по работе списка сравнений
+    """
+
+    def _add_product_to_comparison(self) -> bool:
+        pass
+
+    def _get_comparison_list(self) -> List[str]:
+        pass
+
+    def _get_amount_from_comparison(self) -> int:
+        pass
+
+    def _delete_product_from_comparison(self) -> bool:
+        pass
+
