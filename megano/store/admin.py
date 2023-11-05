@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from .models import Banners, Product, Discount, Reviews, Offer
 
-# TODO добавить инлайны в товары
+# TODO добавить теги
 
 
 class AdminBanner(admin.ModelAdmin):
