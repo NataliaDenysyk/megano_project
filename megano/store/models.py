@@ -1,5 +1,8 @@
 from django.db import models
 from django.utils.safestring import mark_safe
+from authorization.models import Profile
+from django.urls import reverse
+from mptt.models import MPTTModel, TreeForeignKey
 
 
 # Create your models here.
@@ -7,38 +10,43 @@ from django.utils.safestring import mark_safe
 # TODO раскомментировать или исправить связи в моделях
 
 
-def category_image_directory_path(instance: "Category", filename: str) -> str:
+def category_image_directory_path(instance) -> str:
     """
     Функция coздания пути к картинке категории
     """
-    return "category/category_{pk}/image/{filename}".format(
-        pk=instance.pk,
-        filename=filename,
-    )
+    return f'assets/img/icons/departments/{instance.pk}.svg'
 
 
-class Category(models.Model):
+class Category(MPTTModel):
     """
     Модель хранения категорий товара
     """
+    name = models.CharField(max_length=50, unique=True, verbose_name='Название')
+    parent = TreeForeignKey('self', on_delete=models.PROTECT,
+                            null=True, blank=True, related_name='children',
+                            db_index=True, verbose_name='Родительская категория')
+    image = models.ImageField(null=True, blank=True,
+                              upload_to=category_image_directory_path,
+                              verbose_name='Изображение')
+    slug = models.SlugField()
+    activity = models.BooleanField(default=True, verbose_name='Активация')
+    sort_index = models.IntegerField(verbose_name='Индекс сортировки')
+
     class Meta:
-
+        unique_together = [['parent', 'slug']]
         ordering = ["sort_index"]
-        verbose_name = "Category"
-        verbose_name_plural = "Categories"
-
-    name = models.CharField(max_length=100,verbose_name="Название категории")
-    image = models.ImageField(upload_to=category_image_directory_path, verbose_name="Изображение")
-    parent = models.ForeignKey("self", on_delete=models.CASCADE)
-    activity = models.BooleanField(default=True, verbose_name="Активация")
-    sort_index = models.IntegerField(verbose_name="Индекс сортировки")
+        db_table = 'Category'
+        verbose_name = 'Категория'
+        verbose_name_plural = 'Категории'
 
     def __str__(self) -> str:
-        return f"{self.name}"
+        return f'{self.name}'
 
+    class MPTTMeta:
+        order_insertion_by = ['name']
 
-class Orders(models.Model):
-    pass
+    def get_absolute_url(self):
+        return reverse('product-by-category', args=[str(self.slug)])
 
 
 class Product(models.Model):
@@ -49,7 +57,8 @@ class Product(models.Model):
 
     name = models.CharField('Название товара', default='', max_length=150, null=False, db_index=True)
     slug = models.SlugField(max_length=150, default='')
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Категория')
+    category = TreeForeignKey('Category', on_delete=models.PROTECT, related_name='products', verbose_name='Категория')
+    # category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Категория')
     description = models.TextField('Описание', default='', null=False, blank=True)
     feature = models.TextField('Характеристика', default='', null=False, blank=True)
     tags = models.ManyToManyField('Tag', related_name='products', verbose_name='Теги')
@@ -60,7 +69,7 @@ class Product(models.Model):
     created_at = models.DateTimeField('Создан', auto_now_add=True)
     update_at = models.DateTimeField('Отредактирован', auto_now=True)
     discount = models.ManyToManyField('Discount', related_name='products', verbose_name='Скидка')
-    reviews = models.ForeignKey('Reviews', on_delete=models.CASCADE, verbose_name='Отзывы')
+    reviews = models.ForeignKey('Reviews', blank=True, null=True, on_delete=models.CASCADE, verbose_name='Отзывы')
 
     def __str__(self) -> str:
         return f"{self.name} (id:{self.pk})"
@@ -192,3 +201,30 @@ class Discount(models.Model):
 
 class Comparison(models.Model):
     pass
+
+
+class Orders(models.Model):
+    """
+    Модель хранения заказов
+    """
+
+    class Meta:
+        db_table = "Orders"
+        verbose_name = "Заказ"
+        verbose_name_plural = "Заказы"
+
+    delivery_type = models.CharField(
+        max_length=100,
+        blank=False,
+        default='pickup',
+        verbose_name="Тип доставки")
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    address = models.TextField(max_length=150, null=True, verbose_name="Адрес")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Создан")
+    status = models.BooleanField(default=False, verbose_name='Оплачен')
+    total = models.IntegerField(verbose_name='Количество')
+    products = models.ManyToManyField(Product, related_name='orders')
+
+    def __str__(self) -> str:
+        return f"Order(pk = {self.pk}"
+

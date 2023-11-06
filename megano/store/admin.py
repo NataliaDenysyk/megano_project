@@ -1,8 +1,15 @@
 from django.contrib import admin
+from django_mptt_admin.admin import DjangoMpttAdmin
 
-from .models import Banners, Product, Discount, Reviews, Offer
-
-# TODO добавить инлайны в товары
+from .models import (
+    Banners,
+    Product,
+    Discount,
+    Offer,
+    Orders,
+    Category,
+    Reviews,
+)
 
 
 class AdminBanner(admin.ModelAdmin):
@@ -11,8 +18,67 @@ class AdminBanner(admin.ModelAdmin):
     list_filter = ['is_active']
     prepopulated_fields = {'slug': ('title',)}
 
+    fieldsets = [
+        (None, {
+            "fields": ('title', 'link', 'images', 'slug'),
+        }),
+        ("Extra options", {
+            "fields": ("is_active",),
+            "classes": ("collapse",),
+        })
+    ]
+
 
 admin.site.register(Banners, AdminBanner)
+
+
+class ProductInline(admin.TabularInline):
+    model = Orders.products.through
+
+
+@admin.register(Orders)
+class AdminOrders(admin.ModelAdmin):
+    inlines = [
+        ProductInline,
+    ]
+    list_display = 'pk', 'delivery_type', 'address', 'created_at', 'profile', 'total',
+    list_display_links = 'pk', 'delivery_type'
+    ordering = 'pk', 'created_at', 'address'
+    search_fields = 'delivery_type', 'address', 'created_at'
+
+    fieldsets = [
+        (None, {
+            "fields": ('profile', 'delivery_type', 'address', 'products', 'total'),
+        }),
+        ('Extra options', {
+            'fields': ('status',),
+            'classes': ('collapse',),
+        })
+    ]
+
+    def get_queryset(self, request):
+        return Orders.objects.select_related('profile').prefetch_related('products')
+
+
+@admin.register(Category)
+class AdminCategory(DjangoMpttAdmin):
+    list_display = 'pk', 'name', 'image', 'parent', 'activity', 'sort_index'
+    list_display_links = 'pk', 'name'
+    ordering = 'pk', 'name', 'activity'
+    list_filter = ['activity']
+    search_fields = ['name']
+    repopulated_fields = {'slug': ('name',)}
+
+    fieldsets = [
+        (None, {
+            "fields": ('name', 'parent', 'sort_index',),
+        }),
+        ("Extra options", {
+            "fields": ("activity",),
+            "classes": ("collapse",),
+            "description": "Extra options. Field 'activity' is for soft delete",
+        })
+    ]
 
 
 class TagInline(admin.TabularInline):
@@ -31,15 +97,21 @@ class DiscountInline(admin.TabularInline):
     verbose_name_plural = 'Скидки'
 
 
+class OrderInline(admin.TabularInline):
+    model = Product.orders.through
+
+
 @admin.register(Product)
 class AdminProduct(admin.ModelAdmin):
     inlines = [
         OfferInline,
         DiscountInline,
         TagInline,
+        OrderInline,
     ]
     list_display = 'pk', 'name', 'category', 'description_short', 'created_time', 'update_time', 'availability'
     list_display_links = 'pk', 'name'
+    list_filter = ['availability']
     ordering = 'pk', 'name', 'created_at'
     search_fields = 'name', 'description'
     prepopulated_fields = {'slug': ('name',)}
@@ -54,9 +126,11 @@ class AdminProduct(admin.ModelAdmin):
         }),
         ('Reviews', {
             'fields': ('reviews',),
+            "classes": ("collapse",),
         }),
         ('Extra options', {
             'fields': ('availability', 'slug', 'category'),
+            "classes": ("collapse",),
         }),
     ]
 
