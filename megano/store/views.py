@@ -19,12 +19,11 @@ def product_by_category(request, category_slug=None):
     if category_slug:
         category = get_object_or_404(Category, slug=category_slug)
         products = products.filter(category=category)
-    template_name = 'product/category_product.html',
+    template_name = 'store/category_product.html',
     context = {
         'category': category,
         'categories': categories,
         'products': products}
-    print('context', context)
     return render(request, template_name, context=context)
 
 
@@ -51,6 +50,7 @@ def catalog(request: HttpRequest) -> HttpResponse:
                 }
                 for i_offer in list(filter_offers)
             ]
+            print(products_data)
             context = {
                 'products_data': products_data,
                 'form': form,

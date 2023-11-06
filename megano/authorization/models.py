@@ -25,3 +25,8 @@ class Profile(models.Model):
             ('buyer', 'only buys goods'),
             ('admin', 'manages the site'),
         )
+
+    def __str__(self) -> str:
+        if self.role == 'store':
+            return self.name_store
+        return f"{self.user.username}"
