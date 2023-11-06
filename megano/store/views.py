@@ -1,13 +1,34 @@
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render
 
 from store.forms import FilterForm
-from store.models import Product, Offer
+
+from store.models import Category, Product, Offer
+
+
+# Create your views here.
+
+
+def product_by_category(request, category_slug=None):
+    """"
+    Функция получения товаров категорий и подкатегорий
+    """
+    category = None
+    categories = Category.objects.all()
+    products = Product.objects.filter(availability=True)
+    if category_slug:
+        category = get_object_or_404(Category, slug=category_slug)
+        products = products.filter(category=category)
+    template_name = 'product/category_product.html',
+    context = {
+        'category': category,
+        'categories': categories,
+        'products': products}
+    print('context', context)
+    return render(request, template_name, context=context)
 
 
 # TODO: дописать отображение найденных после фильтрации товаров
-
-
 def catalog(request: HttpRequest) -> HttpResponse:
     """
     Вьюшка отображает страницу каталога

@@ -30,8 +30,21 @@ class DiscountProduct:
         pass
 
 
-class Payment:
-    pass
+class PaymentService:
+    """
+    Сервис оплаты
+    """
+
+    def _get_payment_status(self, order) -> str:
+        if order.is_paid == True:
+            return 'Оплаченый заказ'
+        else:
+            return 'Заказ не оплачен'
+
+    def _pay_order(self, order) -> bool:
+        order.is_paid = True
+        order.save()
+        return 'Оплачено'
 
 
 class ProductViewed:

@@ -54,6 +54,9 @@ INSTALLED_APPS = [
     'store.apps.StoreConfig',
     'cart.apps.CartConfig',
     'authorization.apps.AuthConfig',
+
+    'mptt',
+    'django_mptt_admin',
 ]
 
 MIDDLEWARE = [
