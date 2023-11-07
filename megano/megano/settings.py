@@ -25,6 +25,8 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',')
 
+CART_ID = os.getenv('CART_ID')
+
 DATABASES = {
     'default': {
         'ENGINE': os.getenv('DB_ENGINE'),
