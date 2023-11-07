@@ -11,7 +11,6 @@ class FilterForm(forms.Form):
         (False, 'Нет'),
         (None, 'Не учитывать')
     )
-
     range = forms.CharField(
         widget=forms.TextInput(attrs={
             'class': 'range-line',

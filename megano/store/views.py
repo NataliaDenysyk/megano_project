@@ -1,42 +1,15 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpRequest, HttpResponse
 
 from store.forms import FilterForm
 
 from store.models import Category, Product, Offer
 
 
-# Create your views here.
-
-
+# TODO: дописать отображение найденных после фильтрации товаров
 def product_by_category(request, category_slug=None):
     """"
     Функция получения товаров категорий и подкатегорий
     """
-    category = None
-    categories = Category.objects.all()
-    products = Product.objects.filter(availability=True)
-    if category_slug:
-        category = get_object_or_404(Category, slug=category_slug)
-        products = products.filter(category=category)
-    template_name = 'store/category_product.html',
-    context = {
-        'category': category,
-        'categories': categories,
-        'products': products}
-    print('context', context)
-    return render(request, template_name, context=context)
-
-
-# TODO: дописать отображение найденных после фильтрации товаров
-def catalog(request: HttpRequest) -> HttpResponse:
-    """
-    Вьюшка отображает страницу каталога
-
-    :param request:
-    :return:
-    """
-
     if request.method == 'POST':
         form = FilterForm(request.POST)
         if form.is_valid():
@@ -55,16 +28,25 @@ def catalog(request: HttpRequest) -> HttpResponse:
                 'products_data': products_data,
                 'form': form,
             }
-            return render(request, 'store/catalog.html', context=context)
+            return render(request, 'store/category_product.html', context=context)
 
     else:
         form = FilterForm()
 
+    category = None
+    categories = Category.objects.all()
+    products = Product.objects.filter(availability=True)
+    if category_slug:
+        category = get_object_or_404(Category, slug=category_slug)
+        products = products.filter(category=category)
+    template_name = 'store/category_product.html',
     context = {
+        'category': category,
+        'categories': categories,
+        'products': products,
         'form': form,
     }
-
-    return render(request, 'store/catalog.html', context=context)
+    return render(request, template_name, context=context)
 
 
 # TODO дописать фильтрацию по доставке
