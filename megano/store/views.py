@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpRequest, HttpResponse
-
+from django.urls import reverse_lazy
+from django.views.generic import DeleteView, ListView
 
 from store.models import Comparison, Category, Product, Tag, Discount
 
