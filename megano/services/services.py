@@ -72,7 +72,7 @@ class ProductViewed:
         pass
 
 
-class ComparisonViewed:
+class ComparisonServices:
     """
     Сервис по работе списка сравнений
     """
@@ -111,8 +111,20 @@ class CatalogServices:
     """
     Сервис по работе фильтра
     """
+    #TODO добавить контекст или удалить и перенести во вьюшку
+    def _get_context(self, context):
+        context['filter'] = FilterForm()
+        return context
 
-    def _get_context(self, request) -> HttpResponse:
+    #TODO дописать обработку других post-запросов
+    def _get_context_from_post(self, request) -> HttpResponse:
+        """
+        Функция обрабатывает post-запросы
+
+        :param request:
+        :return:
+        """
+
         if 'filter-button' in request.POST:
             filter_data = FilterForm(request.POST)
             if filter_data.is_valid():
