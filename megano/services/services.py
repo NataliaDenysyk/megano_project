@@ -1,7 +1,9 @@
-from typing import List
+from typing import List, Dict
 
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 
+from store.forms import FilterForm
 from store.models import Product, Comparison, Offer, Category
 
 
@@ -105,19 +107,35 @@ class ComparisonViewed:
     #     return render(request, template_name, context=context)
 
 
-class CatalogFilterServices:
+class CatalogServices:
     """
     Сервис по работе фильтра
     """
 
+    def _get_context(self, request) -> HttpResponse:
+        if 'filter-button' in request.POST:
+            filter_data = FilterForm(request.POST)
+            if filter_data.is_valid():
+                offers, saved_form = self._filter_products(filter_data)
+                products_list = self._get_filtered_products(offers)
+
+                context = {
+                    'filter': saved_form,
+                    'products_list': products_list,
+                }
+                print(products_list)
+
+                return (context)
+
     # TODO дописать фильтрацию по доставке
-    @classmethod
-    def _filter_products(cls, form):
+    def _filter_products(self, form):
         """
         Функция фильтрует товары по полученным из post-запроса данным
 
         :param form: объект FilterForm
-        :return: products_data - список объектов Product
+        :return:
+            offers - объекты Offer
+            form - фильтр с сохраненными параметрами
         """
 
         range_list = form.cleaned_data['range'].split(';')
@@ -148,13 +166,13 @@ class CatalogFilterServices:
         return offers, form
 
     #  TODO Добавить расчет усредненной цены по продавцам, корректное выведение тегов
-    @classmethod
-    def _get_filtered_products(cls, offers) -> List:
+
+    def _get_filtered_products(self, offers) -> List[Dict]:
         """
         Функция создает и возвращает список из отфильтрованных товаров
 
         :param offers:
-        :return: products_data - список товаров
+        :return: products_data - список словарей с данными товаров
         """
 
         products_data = [
@@ -168,4 +186,3 @@ class CatalogFilterServices:
         ]
 
         return products_data
-

@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.views import View
 from django.views.generic import TemplateView
 
-from services.services import CatalogFilterServices
+from services.services import CatalogServices
 from store.forms import FilterForm
 
 
@@ -66,6 +66,7 @@ class CatalogView(TemplateView):
         :param kwargs:
         :return:
         """
+
         context = super().get_context_data(**kwargs)
         context['filter'] = FilterForm()
 
@@ -80,16 +81,7 @@ class CatalogView(TemplateView):
         :param kwargs:
         :return:
         """
-        if 'filter-button' in request.POST:
-            filter_data = FilterForm(self.request.POST)
-            if filter_data.is_valid():
-                offers, saved_form = CatalogFilterServices()._filter_products(filter_data)
-                products_list = CatalogFilterServices()._get_filtered_products(offers)
 
-                context = {
-                    'filter': saved_form,
-                    'products_list': products_list,
-                }
-                print(products_list)
+        context = CatalogServices()._get_context(request)
 
-                return self.render_to_response(context)
+        return self.render_to_response(context)
