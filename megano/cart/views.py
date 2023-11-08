@@ -1,20 +1,23 @@
 from django.core.handlers.wsgi import WSGIRequest
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect
 from django.http import HttpResponseRedirect, HttpResponse
+from django.views import generic
 
 from .cart import Cart
 from store.models import Product
 
 
-def cart_view(request: WSGIRequest) -> HttpResponse:
-    """
-    Страница отображения всех товаров в корзине
+class CartListView(generic.TemplateView):
+    template_name = 'cart/index.html'
 
-    :param request: запрос
-    :return: HttpResponse - страница корзины
-    """
-    cart = Cart(request)
-    return render(request, 'cart/index.html', {'carts': cart})
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update(
+            {
+                'carts': Cart(self.request)
+            }
+        )
+        return context
 
 
 def add_product_to_cart(request: WSGIRequest, slug: Product) -> HttpResponse:
