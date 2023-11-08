@@ -2,4 +2,4 @@
   <label class="toggle"{% if widget.attrs.id %} for="{{ widget.attrs.id }}"{% endif %}>
 {% endif %}
 {% include "store/custom-input-for-widgets.html" %}
-{% if widget.wrap_label %} {{ widget.value.instance.name_store }}</label>{% endif %}
+{% if widget.wrap_label %} {{ widget.label }}</label>{% endif %}

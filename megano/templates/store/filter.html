@@ -8,7 +8,7 @@
       {% csrf_token %}
       <div class="form-group">
         <div class="range Section-columnRange">
-          {{ form.range }}
+          {{ filter.range }}
           <div class="range-price">Цена:&#32;
             <div class="rangePrice">
             </div>
@@ -16,25 +16,26 @@
         </div>
       </div>
       <div class="form-group">
-        {{ form.name }}
+        {{ filter.name }}
       </div>
       <div class="form-group">
-        {{ form.availability.label}}
-        {{ form.availability }}
+        {{ filter.availability.label}}
+        {{ filter.availability }}
       </div>
       <div class="form-group">
-        {{ form.delivery_free.label }}
-        {{ form.delivery_free }}
+        {{ filter.delivery_free.label }}
+        {{ filter.delivery_free }}
       </div>
       <div class="form-group">
         <h3>Продавцы:</h3>
-      {{ form.stores }}
+      {{ filter.stores }}
       </div>
       <div class="form-group">
-        {{ form.another_feature }}
+        {{ filter.another_feature }}
       </div>
       <div class="form-group">
-        <div type="submit" class="buttons"><button class="btn btn_square btn_dark btn_narrow">Фильтр</button>
+        <div class="buttons">
+          <button type="submit" class="btn btn_square btn_dark btn_narrow" name="filter-button">Фильтр</button>
         </div>
       </div>
     </form>

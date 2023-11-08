@@ -20,7 +20,7 @@ class FilterForm(forms.Form):
             'data-type': 'double',
             'data-min': '0',
             'data-max': '1000',
-            'data-from': '7',
+            'data-from': '0',
             'data-to': '27',
         }),
     )
