@@ -4,7 +4,7 @@
     {% if banner.is_active %}
         <div class="container_slider_css">
             <a href="{{ banner.link }}">
-                <img class="photo_slider_css" src="{{ banner.image.url }}" alt="Product Banner">
+                <img class="photo_slider_css" src="{{ banner.product.photos.url }}" width="350" alt="{{ banner.name }}">
             </a>
         </div>
     {% else %}
