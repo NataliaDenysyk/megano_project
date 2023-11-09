@@ -20,7 +20,7 @@ class DiscountProduct:
     Сервис получения скидок на товары и группы товаров
     """
 
-    def _get_all_discounts(self) -> List:
+    def _get_all_discounts(self):
         pass
 
     def _get_priority_discount(self):
@@ -41,7 +41,7 @@ class PaymentService:
         else:
             return 'Заказ не оплачен'
 
-    def _pay_order(self, order) -> bool:
+    def _pay_order(self, order) -> str:
         order.is_paid = True
         order.save()
         return 'Оплачено'
@@ -58,17 +58,17 @@ class ProductService:
         """
         return Product.objects.all()
 
-    def _get_viewed_product_list(self) -> List[str]:
+    def _get_viewed_product_list(self):
         """
         Получить список просмотренных продуктов
         """
-        return list(Product.objects.filter(is_viewed=True))
+        return self._get_all_products().filter(is_viewed=True)
 
-    def _add_product_to_viewed(self, prod_id):
+    def _add_product_to_viewed(self, prod_slug):
         """
         Добавить продукт в список просмотренных продуктов
         """
-        product = Product.objects.get(id=prod_id)
+        product = Product.objects.get(slug=prod_slug)
         product.is_viewed = True
         product.save()
 
@@ -101,15 +101,15 @@ class ComparisonViewed:
     Сервис по работе списка сравнений
     """
 
-    def _add_product_to_comparison(self) -> bool:
+    def _add_product_to_comparison(self):
         pass
 
-    def _get_comparison_list(self) -> List[str]:
+    def _get_comparison_list(self):
         pass
 
     def _get_amount_from_comparison(self) -> int:
         pass
 
-    def _delete_product_from_comparison(self) -> bool:
+    def _delete_product_from_comparison(self):
         pass
 
