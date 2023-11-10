@@ -1,14 +1,13 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpRequest, HttpResponse
 from django.urls import reverse_lazy
-from django.views.generic import DeleteView, ListView
+from django.views import generic
 
 from store.models import Comparison, Category, Product, Tag, Discount
 
 
-# Create your views here.
 
-class ComparisonListView(ListView):
+class ComparisonListView(generic.ListView):
     """
     Отображает список товаров, добавленных к сравнению
 
@@ -48,7 +47,7 @@ def get_amount_from_comparison(request) -> int:
     return amount_products
 
 
-class ComparisonDeleteView(DeleteView):
+class ComparisonDeleteView(generic.DeleteView):
     """
     Удаление одного товара из сравнения
 

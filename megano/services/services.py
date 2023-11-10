@@ -1,7 +1,7 @@
 from typing import List
 
 from cart.models import Cart
-from store.models import Reviews, Product, Discount
+from store.models import Reviews, Product, Discount, Comparison
 
 
 class GetAdminSettings:
@@ -21,7 +21,7 @@ class DiscountProduct:
     Сервис получения скидок на товары и группы товаров
     """
 
-    def _get_all_discounts(self) -> List:
+    def _get_all_discounts(self):
         pass
 
     def _get_priority_discount(self):
@@ -42,31 +42,59 @@ class PaymentService:
         else:
             return 'Заказ не оплачен'
 
-    def _pay_order(self, order) -> bool:
+    def _pay_order(self, order) -> str:
         order.is_paid = True
         order.save()
         return 'Оплачено'
 
 
-class ProductViewed:
+class ProductService:
     """
     Сервис по работе с просмотренными продуктами
     """
 
-    def _add_product_to_viewed(self) -> Bool:
-        pass
+    def _get_all_products(self):
+        """
+        Получить все продукты
+        """
+        return Product.objects.all()
 
-    def _remove_product_from_viewed(self) -> Bool:
-        pass
+    def _get_viewed_product_list(self):
+        """
+        Получить список просмотренных продуктов
+        """
+        return self._get_all_products().filter(is_viewed=True)
 
-    def _is_product_in_viewed_list(self) -> Bool:
-        pass
+    def _add_product_to_viewed(self, prod_slug):
+        """
+        Добавить продукт в список просмотренных продуктов
+        """
+        product = Product.objects.get(slug=prod_slug)
+        product.is_viewed = True
+        product.save()
 
-    def _get_viewed_product_list(self) -> List[str]:
-        pass
+    def _remove_product_from_viewed(self, prod_id):
+        """
+        Удалить продукт из списка просмотренных продуктов
+        """
+        product = Product.objects.get(id=prod_id)
+        product.is_viewed = False
+        product.save()
+
+    def _is_product_in_viewed_list(self, prod_id):
+        """
+        Проверить есть ли продукт в списке просмотренных продуктов
+        """
+        if prod_id in self._get_viewed_product_list():
+            return True
+        else:
+            return False
 
     def _count_viewed_product(self) -> int:
-        pass
+        """
+        Получить количество просмотренных продуктов
+        """
+        return int(len(self._get_viewed_product_list()))
 
 
 class ComparisonViewed:
@@ -74,16 +102,16 @@ class ComparisonViewed:
     Сервис по работе списка сравнений
     """
 
-    def _add_product_to_comparison(self) -> bool:
+    def _add_product_to_comparison(self):
         pass
 
-    def _get_comparison_list(self) -> List[str]:
+    def _get_comparison_list(self):
         pass
 
     def _get_amount_from_comparison(self) -> int:
         pass
 
-    def _delete_product_from_comparison(self) -> bool:
+    def _delete_product_from_comparison(self):
         pass
 
 

@@ -1,5 +1,9 @@
 from django.contrib import admin
+from django.utils.safestring import mark_safe
 from django_mptt_admin.admin import DjangoMpttAdmin
+
+
+# TODO добавить инлайны в товары
 
 from .models import (
     Banners,
@@ -12,8 +16,9 @@ from .models import (
 )
 
 
+@admin.register(Banners)
 class AdminBanner(admin.ModelAdmin):
-    list_display = ['title', 'link', 'images', 'is_active', 'update_at']
+    list_display = ['title', 'link', 'get_html_images', 'is_active', 'update_at']
     list_display_links = ['title']
     list_filter = ['is_active']
     prepopulated_fields = {'slug': ('title',)}
@@ -28,8 +33,17 @@ class AdminBanner(admin.ModelAdmin):
         })
     ]
 
+    def get_html_images(self, obj: Banners):
+        """
+        В панели администратора,
+        ссылка на изображение отображается в виде картинки размером 60х 60.
+        """
+        if obj.product:
+            return mark_safe(f'<img src="{obj.product.photos.url}" alt=""width="60">')
+        else:
+            return 'not url'
 
-admin.site.register(Banners, AdminBanner)
+    get_html_images.short_description = "Изображение"
 
 
 class ProductInline(admin.TabularInline):
@@ -114,7 +128,7 @@ class AdminProduct(admin.ModelAdmin):
         OrderInline,
         ReviewsInline,
     ]
-    list_display = 'pk', 'name', 'category', 'description_short', 'created_time', 'update_time', 'availability'
+    list_display = 'pk', 'name', 'category', 'description_short', 'created_time', 'update_time', 'availability', 'is_view'
     list_display_links = 'pk', 'name'
     list_filter = ['availability']
     ordering = 'pk', 'name', 'created_at'
@@ -203,3 +217,10 @@ class DiscountAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         return Discount.objects.prefetch_related('products')
+
+
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ['pk', 'name']
+    ordering = ['name', 'activity']
+    search_fields = ['name']
