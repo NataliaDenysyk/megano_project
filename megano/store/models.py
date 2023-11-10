@@ -24,7 +24,7 @@ def product_images_directory_path(instance: 'ProductImage', filename: str) -> st
     :param filename: имя файла
     :return: str - путь для сохранения
     """
-    return f'products/product_{instance.pk}/{filename}'
+    return f'products/product_{instance.product_id}/{filename}'
 
 
 class Category(MPTTModel):
