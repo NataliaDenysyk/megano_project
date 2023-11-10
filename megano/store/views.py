@@ -1,12 +1,9 @@
-from django.http import HttpResponse, HttpRequest
-from django.shortcuts import render, get_object_or_404
+from django.http import HttpRequest, HttpResponse
 from django.views.generic import TemplateView
 
 from services.services import CatalogServices
-from store.models import Product
 
 
-# TODO: дописать отображение найденных после фильтрации товаров
 class CatalogView(TemplateView):
     """
     Вьюшка каталога
