@@ -16,6 +16,17 @@ def category_image_directory_path(instance) -> str:
     return f'assets/img/icons/departments/{instance.pk}.svg'
 
 
+def product_images_directory_path(instance: 'ProductImage', filename: str) -> str:
+    """
+    Функция генерирует путь сохранения изображений с привязкой к id товара
+
+    :param instance: объект ProductImage
+    :param filename: имя файла
+    :return: str - путь для сохранения
+    """
+    return f'products/product_{instance.pk}/{filename}'
+
+
 class Category(MPTTModel):
     """
     Модель хранения категорий товара
@@ -58,11 +69,10 @@ class Product(models.Model):
     name = models.CharField('Название товара', default='', max_length=150, null=False, db_index=True)
     slug = models.SlugField(max_length=150, default='')
     category = TreeForeignKey('Category', on_delete=models.PROTECT, related_name='products', verbose_name='Категория')
-    # category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Категория')
     description = models.TextField('Описание', default='', null=False, blank=True)
     feature = models.TextField('Характеристика', default='', null=False, blank=True)
     tags = models.ManyToManyField('Tag', related_name='products', verbose_name='Теги')
-    images = models.ImageField(
+    preview = models.ImageField(
         'Изображение', upload_to="products/product/%y/%m/%d/", blank=True, null=True
     )
     availability = models.BooleanField('Доступность', default=False)
@@ -71,7 +81,6 @@ class Product(models.Model):
     discount = models.ManyToManyField('Discount', related_name='products', verbose_name='Скидка')
     is_view = models.BooleanField('Просмотрен', default=False)
     reviews = models.ForeignKey('Reviews', blank=True, null=True, on_delete=models.CASCADE, verbose_name='Отзывы')
-    
 
     def __str__(self) -> str:
         return f"{self.name} (id:{self.pk})"
@@ -81,6 +90,24 @@ class Product(models.Model):
         ordering = ['id', 'name']
         verbose_name = 'Товар'
         verbose_name_plural = 'Товары'
+
+
+class ProductImage(models.Model):
+    """
+    Модель хранит изображения товаров
+    """
+
+    product = models.ForeignKey('Product', on_delete=models.CASCADE, related_name='images')
+    image = models.ImageField(upload_to=product_images_directory_path)
+
+    def __str__(self) -> str:
+        return f"{self.pk})"
+
+    class Meta:
+        db_table = 'Images'
+        ordering = ['id',]
+        verbose_name = 'Изображение'
+        verbose_name_plural = 'Изображения'
 
 
 class Offer(models.Model):
