@@ -1,5 +1,4 @@
 from typing import List
-<<<<<<< megano/services/services.py
 
 from cart.models import Cart
 from store.models import Reviews, Product, Discount, Comparison
