@@ -6,7 +6,6 @@ from django.views import generic
 from store.models import Comparison, Category, Product, Tag, Discount
 
 
-# Create your views here.
 
 class ComparisonListView(generic.ListView):
     """
