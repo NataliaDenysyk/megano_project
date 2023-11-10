@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.utils.safestring import mark_safe
 from django_mptt_admin.admin import DjangoMpttAdmin
 
 
@@ -15,8 +16,9 @@ from .models import (
 )
 
 
+@admin.register(Banners)
 class AdminBanner(admin.ModelAdmin):
-    list_display = ['title', 'link', 'images', 'is_active', 'update_at']
+    list_display = ['title', 'link', 'get_html_images', 'is_active', 'update_at']
     list_display_links = ['title']
     list_filter = ['is_active']
     prepopulated_fields = {'slug': ('title',)}
@@ -31,8 +33,17 @@ class AdminBanner(admin.ModelAdmin):
         })
     ]
 
+    def get_html_images(self, obj: Banners):
+        """
+        В панели администратора,
+        ссылка на изображение отображается в виде картинки размером 60х 60.
+        """
+        if obj.product:
+            return mark_safe(f'<img src="{obj.product.photos.url}" alt=""width="60">')
+        else:
+            return 'not url'
 
-admin.site.register(Banners, AdminBanner)
+    get_html_images.short_description = "Изображение"
 
 
 class ProductInline(admin.TabularInline):

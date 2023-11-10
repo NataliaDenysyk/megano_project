@@ -3,11 +3,9 @@ from django.http import HttpRequest, HttpResponse
 from django.urls import reverse_lazy
 from django.views import generic
 
-
 from store.models import Comparison, Category, Product, Tag, Discount
 
 
-# Create your views here.
 
 class ComparisonListView(generic.ListView):
     """
