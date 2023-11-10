@@ -81,7 +81,6 @@ class Product(models.Model):
     discount = models.ManyToManyField('Discount', related_name='products', verbose_name='Скидка')
     is_view = models.BooleanField('Просмотрен', default=False)
 
-
     def __str__(self) -> str:
         return f"{self.name} (id:{self.pk})"
 

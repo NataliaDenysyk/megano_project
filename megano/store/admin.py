@@ -145,10 +145,6 @@ class AdminProduct(admin.ModelAdmin):
         ('Главное фото', {
             'fields': ('preview',),
         }),
-        ('Отзывы', {
-            'fields': ('reviews',),
-            "classes": ("collapse",),
-        }),
         ('Другие опции', {
             'fields': ('availability', 'slug', 'category'),
             "classes": ("collapse",),
