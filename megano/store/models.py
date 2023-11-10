@@ -80,7 +80,7 @@ class Product(models.Model):
     update_at = models.DateTimeField('Отредактирован', auto_now=True)
     discount = models.ManyToManyField('Discount', related_name='products', verbose_name='Скидка')
     is_view = models.BooleanField('Просмотрен', default=False)
-    reviews = models.ForeignKey('Reviews', blank=True, null=True, on_delete=models.CASCADE, verbose_name='Отзывы')
+
 
     def __str__(self) -> str:
         return f"{self.name} (id:{self.pk})"
@@ -180,6 +180,7 @@ class Reviews(models.Model):
     comment_text = models.TextField(' Отзыв', default='', null=False, blank=True)
     author = models.ForeignKey('authorization.Profile', on_delete=models.CASCADE)
     created_at = models.DateTimeField('Создан', auto_now_add=True)
+    product = models.ForeignKey('store.Product', on_delete=models.CASCADE, verbose_name='Товары')
 
     def __str__(self) -> str:
         return f"{self.comment_text[:25]}"

@@ -1,4 +1,3 @@
-from typing import List
 from store.models import Product, Comparison
 from typing import List, Dict
 
@@ -6,8 +5,9 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 
 from store.forms import FilterForm
-from store.models import Product, Comparison, Offer, Category
+from store.models import Product, Comparison, Offer, Category, Reviews, Discount
 
+from cart.models import Cart
 
 
 class GetAdminSettings:
@@ -230,3 +230,24 @@ class CatalogServices:
         ]
 
         return products_data
+
+class ReviewsProduct:
+    """
+    Сервис для добавления отзыва к товару
+    """
+    def _add_review_to_product(self, reviews: Reviews, product: Product) -> None:
+        # добавить отзыв к товару
+        pass
+
+    def _get_list_of_product_reviews(self, product: Product) -> List:
+        # получить список отзывов к товару
+        pass
+
+    def _get_discount_on_cart(self, cart: Cart) -> Discount:
+        # получить скидку на корзину
+        pass
+
+    def _get_number_of_reviews_for_product(self, product: Product) -> int:
+        # получить количество отзывов для товара
+        pass
+

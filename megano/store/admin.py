@@ -102,6 +102,10 @@ class OfferInline(admin.TabularInline):
     model = Offer
 
 
+class ReviewsInline(admin.TabularInline):
+    model = Reviews
+
+
 class DiscountInline(admin.TabularInline):
     model = Product.discount.through
     verbose_name = 'Скидка'
@@ -124,6 +128,7 @@ class AdminProduct(admin.ModelAdmin):
         TagInline,
         OrderInline,
         ProductInlineImages,
+        ReviewsInline,
     ]
     list_display = 'pk', 'name', 'category', 'description_short', 'created_time', 'update_time', 'availability'
     list_display_links = 'pk', 'name'
@@ -200,7 +205,10 @@ class ProductInline(admin.TabularInline):
 
 @admin.register(Reviews)
 class ReviewsProduct(admin.ModelAdmin):
-    list_display = 'comment_text', 'created_at', 'author'
+    list_display = 'author', 'created_at', 'comment'
+
+    def comment(self, obj: Reviews):
+        return obj.comment_text[:100]
 
 
 @admin.register(Discount)

@@ -33,3 +33,6 @@ class Profile(models.Model):
             ('buyer', 'only buys goods'),
             ('admin', 'manages the site'),
         )
+
+    def __str__(self) -> str:
+        return f"{self.user}"
