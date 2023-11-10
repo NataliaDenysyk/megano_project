@@ -21,6 +21,7 @@ class Category(MPTTModel):
     """
     Модель хранения категорий товара
     """
+
     name = models.CharField(max_length=50, unique=True, verbose_name='Название')
     parent = TreeForeignKey('self', on_delete=models.PROTECT,
                             null=True, blank=True, related_name='children',
@@ -69,6 +70,8 @@ class Product(models.Model):
     created_at = models.DateTimeField('Создан', auto_now_add=True)
     update_at = models.DateTimeField('Отредактирован', auto_now=True)
     discount = models.ManyToManyField('Discount', related_name='products', verbose_name='Скидка')
+    is_view = models.BooleanField('Просмотрен', default=False)
+
 
     def __str__(self) -> str:
         return f"{self.name} (id:{self.pk})"
