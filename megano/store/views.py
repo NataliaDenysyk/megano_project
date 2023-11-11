@@ -3,78 +3,28 @@ from django.http import HttpRequest, HttpResponse
 from django.urls import reverse_lazy
 from django.views import generic
 
+from django.views.generic import TemplateView
+
 from store.models import Comparison, Category, Product, Tag, Discount
+from store.services import CategoryServices
 
 
-
-class ComparisonListView(generic.ListView):
-    """
-    Отображает список товаров, добавленных к сравнению
-
-    """
-
-    template_name = ''
-    context_object_name = 'comparisons'
-    paginate_by = 3
-
-    def get_queryset(self):
-        """
-        Отбирает объекты в зависимости от текущего пользователя
-
-        :return: queryset
-        """
-
-        return Comparison.objects.filter(user=self.request.user)
-
-
-def add_product_to_comparison(request):
-    """
-    Добавляет товар в список сравнения
-
-    :param request: объект запроса
-    """
-    Comparison.objects.create()
-
-
-def get_amount_from_comparison(request) -> int:
-    """
-    Получение количества товаров в списке сравнения текущего пользователя
-
-    :param request: объект запроса
-    :return: int
-    """
-    amount_products = Comparison.objects.filter(user=request.user).count()
-    return amount_products
-
-
-class ComparisonDeleteView(generic.DeleteView):
-    """
-    Удаление одного товара из сравнения
-
-    """
-
-    model = Comparison
-    success_url = reverse_lazy('')
-
-
-def product_by_category(request, category_slug=None):
+class CategoryView(TemplateView):
     """"
-    Функция получения товаров категорий и подкатегорий
+    Класс получения категорий и подкатегорий
     """
-    category = None
-    categories = Category.objects.all()
-    products = Product.objects.filter(availability=True)
-    if category_slug:
-        category = get_object_or_404(Category, slug=category_slug)
-        products = products.filter(category=category)
-    template_name = 'product/category_product.html',
-    context = {
-        'category': category,
-        'categories': categories,
-        'products': products}
-    print('context', context)
-    return render(request, template_name, context=context)
+    template_name = 'store/category_product.html'
 
+    def get_context_data(self, **kwargs):
+        """"
+        Функция отображает переданный шаблон
+        """
+        context = super().get_context_data()
+        if self.request.GET.get('category_slug'):
+            category_slug = self.request.GET['category_slug']
+            context = CategoryServices()._product_by_category(category_slug)
 
-
-
+        else:
+            context = CategoryServices()._sorting_products(self.request)
+        print('qwerty', self.request.GET)
+        return context

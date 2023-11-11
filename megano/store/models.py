@@ -21,7 +21,6 @@ class Category(MPTTModel):
     """
     Модель хранения категорий товара
     """
-
     name = models.CharField(max_length=50, unique=True, verbose_name='Название')
     parent = TreeForeignKey('self', on_delete=models.PROTECT,
                             null=True, blank=True, related_name='children',
@@ -33,6 +32,12 @@ class Category(MPTTModel):
     activity = models.BooleanField(default=True, verbose_name='Активация')
     sort_index = models.IntegerField(verbose_name='Индекс сортировки')
 
+    def __str__(self) -> str:
+        return f'{self.name}'
+
+    def get_absolute_url(self):
+        return reverse('product-by-category', args=[str(self.slug)])
+
     class Meta:
         unique_together = [['parent', 'slug']]
         ordering = ["sort_index"]
@@ -40,15 +45,8 @@ class Category(MPTTModel):
         verbose_name = 'Категория'
         verbose_name_plural = 'Категории'
 
-    def __str__(self) -> str:
-        return f'{self.name}'
-
     class MPTTMeta:
         order_insertion_by = ['name']
-
-    def get_absolute_url(self):
-        return reverse('product-by-category', args=[str(self.slug)])
-
 
 class Product(models.Model):
     """
@@ -198,11 +196,6 @@ class Orders(models.Model):
     Модель хранения заказов
     """
 
-    class Meta:
-        db_table = "Orders"
-        verbose_name = "Заказ"
-        verbose_name_plural = "Заказы"
-
     delivery_type = models.CharField(
         max_length=100,
         blank=False,
@@ -218,3 +211,7 @@ class Orders(models.Model):
     def __str__(self) -> str:
         return f"Order(pk = {self.pk}"
 
+    class Meta:
+        db_table = "Orders"
+        verbose_name = "Заказ"
+    verbose_name_plural = "Заказы"
