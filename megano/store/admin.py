@@ -2,9 +2,6 @@ from django.contrib import admin
 from django.utils.safestring import mark_safe
 from django_mptt_admin.admin import DjangoMpttAdmin
 
-
-# TODO добавить инлайны в товары
-
 from .models import (
     Banners,
     Product,
@@ -113,6 +110,10 @@ class OfferInline(admin.TabularInline):
     model = Offer
 
 
+class ReviewsInline(admin.TabularInline):
+    model = Reviews
+
+
 class DiscountInline(admin.TabularInline):
     model = Product.discount.through
     verbose_name = 'Скидка'
@@ -123,6 +124,10 @@ class OrderInline(admin.TabularInline):
     model = Product.orders.through
 
 
+class ProductInlineImages(admin.TabularInline):
+    model = ProductImage
+
+
 @admin.register(Product)
 class AdminProduct(admin.ModelAdmin):
     inlines = [
@@ -130,8 +135,10 @@ class AdminProduct(admin.ModelAdmin):
         DiscountInline,
         TagInline,
         OrderInline,
+        ProductInlineImages,
+        ReviewsInline,
     ]
-    list_display = 'pk', 'name', 'category', 'description_short', 'created_time', 'update_time', 'availability', 'is_view'
+    list_display = 'pk', 'name', 'category', 'description_short', 'created_time', 'update_time', 'availability'
     list_display_links = 'pk', 'name'
     list_filter = ['availability']
     ordering = 'pk', 'name', 'created_at'
@@ -143,14 +150,10 @@ class AdminProduct(admin.ModelAdmin):
         (None, {
             'fields': ('name', 'description', 'feature'),
         }),
-        ('Images', {
-            'fields': ('images',),
+        ('Главное фото', {
+            'fields': ('preview',),
         }),
-        ('Reviews', {
-            'fields': ('reviews',),
-            "classes": ("collapse",),
-        }),
-        ('Extra options', {
+        ('Другие опции', {
             'fields': ('availability', 'slug', 'category'),
             "classes": ("collapse",),
         }),
@@ -206,7 +209,10 @@ class ProductInline(admin.TabularInline):
 
 @admin.register(Reviews)
 class ReviewsProduct(admin.ModelAdmin):
-    list_display = 'comment_text', 'created_at', 'author'
+    list_display = 'author', 'created_at', 'comment'
+
+    def comment(self, obj: Reviews):
+        return obj.comment_text[:100]
 
 
 @admin.register(Discount)

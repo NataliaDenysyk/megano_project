@@ -1,7 +1,5 @@
-from django.shortcuts import render, get_object_or_404
 from django.http import HttpRequest, HttpResponse
-from django.urls import reverse_lazy
-from django.views import generic
+from django.views.generic import TemplateView
 
 from django.views.generic import TemplateView
 
