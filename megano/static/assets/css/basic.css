@@ -930,9 +930,9 @@ select + select {
     margin-left: 0;
 }
 
-[type="radio"] {
-    border-radius: 100px;
-}
+/*[type="radio"] {*/
+/*    border-radius: 100px;*/
+/*}*/
 
 /*-----------  Формы  -----------*/
 .form {
@@ -1194,13 +1194,13 @@ label.toggle {
     visibility: visible;
 }
 
-.toggle [type="radio"] + .toggle-box {
-    border-radius: 100px;
-}
+/*.toggle [type="radio"] + .toggle-box {*/
+/*    border-radius: 100px;*/
+/*}*/
 
-.toggle [type="radio"] + .toggle-box:after {
-    border-radius: 100px;
-}
+/*.toggle [type="radio"] + .toggle-box:after {*/
+/*    border-radius: 100px;*/
+/*}*/
 
 ::-webkit-input-placeholder {
     color: #777;

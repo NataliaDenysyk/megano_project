@@ -1,80 +1,39 @@
-from django.shortcuts import render, get_object_or_404
 from django.http import HttpRequest, HttpResponse
-from django.urls import reverse_lazy
-from django.views import generic
+from django.views.generic import TemplateView
 
-from store.models import Comparison, Category, Product, Tag, Discount
-
+from services.services import CatalogServices
 
 
-class ComparisonListView(generic.ListView):
+class CatalogView(TemplateView):
     """
-    Отображает список товаров, добавленных к сравнению
-
+    Вьюшка каталога
     """
 
-    template_name = ''
-    context_object_name = 'comparisons'
-    paginate_by = 3
+    template_name = 'store/category_product.html'
 
-    def get_queryset(self):
+    def get_context_data(self, **kwargs) -> HttpResponse:
         """
-        Отбирает объекты в зависимости от текущего пользователя
+        Функция отображает переданный шаблон
 
-        :return: queryset
+        :param kwargs:
+        :return:
         """
 
-        return Comparison.objects.filter(user=self.request.user)
+        context = super().get_context_data(**kwargs)
+        context = CatalogServices()._get_context(context)
 
+        return context
 
-def add_product_to_comparison(request):
-    """
-    Добавляет товар в список сравнения
+    def post(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
+        """
+        Функция обрабатывает post-запросы на странице каталога
 
-    :param request: объект запроса
-    """
-    Comparison.objects.create()
+        :param request: объект запроса
+        :param args:
+        :param kwargs:
+        :return:
+        """
 
+        context = CatalogServices()._get_context_from_post(request)
 
-def get_amount_from_comparison(request) -> int:
-    """
-    Получение количества товаров в списке сравнения текущего пользователя
-
-    :param request: объект запроса
-    :return: int
-    """
-    amount_products = Comparison.objects.filter(user=request.user).count()
-    return amount_products
-
-
-class ComparisonDeleteView(generic.DeleteView):
-    """
-    Удаление одного товара из сравнения
-
-    """
-
-    model = Comparison
-    success_url = reverse_lazy('')
-
-
-def product_by_category(request, category_slug=None):
-    """"
-    Функция получения товаров категорий и подкатегорий
-    """
-    category = None
-    categories = Category.objects.all()
-    products = Product.objects.filter(availability=True)
-    if category_slug:
-        category = get_object_or_404(Category, slug=category_slug)
-        products = products.filter(category=category)
-    template_name = 'product/category_product.html',
-    context = {
-        'category': category,
-        'categories': categories,
-        'products': products}
-    print('context', context)
-    return render(request, template_name, context=context)
-
-
-
-
+        return self.render_to_response(context)
