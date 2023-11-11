@@ -7,7 +7,6 @@ from mptt.models import MPTTModel, TreeForeignKey
 
 # Create your models here.
 # TODO models Orders, Product, Discount, Category
-# TODO раскомментировать или исправить связи в моделях
 
 
 def category_image_directory_path(instance) -> str:
@@ -15,6 +14,17 @@ def category_image_directory_path(instance) -> str:
     Функция coздания пути к картинке категории
     """
     return f'assets/img/icons/departments/{instance.pk}.svg'
+
+
+def product_images_directory_path(instance: 'ProductImage', filename: str) -> str:
+    """
+    Функция генерирует путь сохранения изображений с привязкой к id товара
+
+    :param instance: объект ProductImage
+    :param filename: имя файла
+    :return: str - путь для сохранения
+    """
+    return f'products/product_{instance.product_id}/{filename}'
 
 
 class Category(MPTTModel):
@@ -32,13 +42,6 @@ class Category(MPTTModel):
     activity = models.BooleanField(default=True, verbose_name='Активация')
     sort_index = models.IntegerField(verbose_name='Индекс сортировки')
 
-    class Meta:
-        unique_together = [['parent', 'slug']]
-        ordering = ["sort_index"]
-        db_table = 'Category'
-        verbose_name = 'Категория'
-        verbose_name_plural = 'Категории'
-
     def __str__(self) -> str:
         return f'{self.name}'
 
@@ -47,6 +50,13 @@ class Category(MPTTModel):
 
     def get_absolute_url(self):
         return reverse('product-by-category', args=[str(self.slug)])
+
+    class Meta:
+        unique_together = [['parent', 'slug']]
+        ordering = ["sort_index"]
+        db_table = 'Category'
+        verbose_name = 'Категория'
+        verbose_name_plural = 'Категории'
 
 
 class Product(models.Model):
@@ -58,11 +68,10 @@ class Product(models.Model):
     name = models.CharField('Название товара', default='', max_length=150, null=False, db_index=True)
     slug = models.SlugField(max_length=150, default='')
     category = TreeForeignKey('Category', on_delete=models.PROTECT, related_name='products', verbose_name='Категория')
-    # category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Категория')
     description = models.TextField('Описание', default='', null=False, blank=True)
     feature = models.TextField('Характеристика', default='', null=False, blank=True)
     tags = models.ManyToManyField('Tag', related_name='products', verbose_name='Теги')
-    images = models.ImageField(
+    preview = models.ImageField(
         'Изображение', upload_to="products/product/%y/%m/%d/", blank=True, null=True
     )
     availability = models.BooleanField('Доступность', default=False)
@@ -81,6 +90,24 @@ class Product(models.Model):
         verbose_name_plural = 'Товары'
 
 
+class ProductImage(models.Model):
+    """
+    Модель хранит изображения товаров
+    """
+
+    product = models.ForeignKey('Product', on_delete=models.CASCADE, related_name='images')
+    image = models.ImageField(upload_to=product_images_directory_path)
+
+    def __str__(self) -> str:
+        return f"{self.pk})"
+
+    class Meta:
+        db_table = 'Images'
+        ordering = ['id',]
+        verbose_name = 'Изображение'
+        verbose_name_plural = 'Изображения'
+
+
 class Offer(models.Model):
     """
     Модель предложений продавцов, содержит цену и кол-во предлагаемого товара
@@ -92,14 +119,14 @@ class Offer(models.Model):
     seller = models.ForeignKey('authorization.Profile', on_delete=models.CASCADE, verbose_name='Продавец')
     product = models.ForeignKey('store.Product', on_delete=models.CASCADE, verbose_name='Товар')
 
+    def __str__(self) -> str:
+        return f"Предложение от {self.seller.name_store}"
+
     class Meta:
         db_table = 'Offer'
         ordering = ['id', 'unit_price']
         verbose_name = 'Предложение'
         verbose_name_plural = 'Предложения'
-
-    def __str__(self) -> str:
-        return f"Предложение от {self.seller.name_store}"
 
 
 class Tag(models.Model):
@@ -110,14 +137,14 @@ class Tag(models.Model):
 
     name = models.CharField('Название', default='', max_length=50, null=False, blank=False)
 
+    def __str__(self) -> str:
+        return f"{self.name}"
+
     class Meta:
         db_table = 'Tags'
         ordering = ['id', 'name']
         verbose_name = 'Тег'
         verbose_name_plural = 'Теги'
-
-    def __str__(self) -> str:
-        return f"{self.name}"
 
 
 class Banners(models.Model):
@@ -153,13 +180,13 @@ class Reviews(models.Model):
     created_at = models.DateTimeField('Создан', auto_now_add=True)
     product = models.ForeignKey('store.Product', on_delete=models.CASCADE, verbose_name='Товары')
 
+    def __str__(self) -> str:
+        return f"{self.comment_text[:25]}"
+
     class Meta:
         db_table = 'Reviews'
         verbose_name = 'Отзыв'
         verbose_name_plural = 'Отзывы'
-
-    def __str__(self) -> str:
-        return f"{self.comment_text[:25]}"
 
 
 class Discount(models.Model):
@@ -177,14 +204,14 @@ class Discount(models.Model):
     is_active = models.BooleanField('Активно', default=False)
     created_at = models.DateTimeField('Создана', auto_now_add=True)
 
+    def __str__(self) -> str:
+        return f'{self.name}'
+
     class Meta:
         db_table = 'Discounts'
         ordering = ['id', 'name']
         verbose_name = 'Скидка'
         verbose_name_plural = 'Скидки'
-
-    def __str__(self) -> str:
-        return f'{self.name}'
 
 
 class Comparison(models.Model):
@@ -195,11 +222,6 @@ class Orders(models.Model):
     """
     Модель хранения заказов
     """
-
-    class Meta:
-        db_table = "Orders"
-        verbose_name = "Заказ"
-        verbose_name_plural = "Заказы"
 
     delivery_type = models.CharField(
         max_length=100,
@@ -215,4 +237,9 @@ class Orders(models.Model):
 
     def __str__(self) -> str:
         return f"Order(pk = {self.pk}"
+
+    class Meta:
+        db_table = "Orders"
+        verbose_name = "Заказ"
+        verbose_name_plural = "Заказы"
 

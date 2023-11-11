@@ -2,9 +2,6 @@ from django.contrib import admin
 from django.utils.safestring import mark_safe
 from django_mptt_admin.admin import DjangoMpttAdmin
 
-
-# TODO добавить инлайны в товары
-
 from .models import (
     Banners,
     Product,
@@ -12,7 +9,7 @@ from .models import (
     Offer,
     Orders,
     Category,
-    Reviews,
+    Reviews, ProductImage,
 )
 
 
@@ -119,6 +116,10 @@ class OrderInline(admin.TabularInline):
     model = Product.orders.through
 
 
+class ProductInlineImages(admin.TabularInline):
+    model = ProductImage
+
+
 @admin.register(Product)
 class AdminProduct(admin.ModelAdmin):
     inlines = [
@@ -126,9 +127,10 @@ class AdminProduct(admin.ModelAdmin):
         DiscountInline,
         TagInline,
         OrderInline,
+        ProductInlineImages,
         ReviewsInline,
     ]
-    list_display = 'pk', 'name', 'category', 'description_short', 'created_time', 'update_time', 'availability', 'is_view'
+    list_display = 'pk', 'name', 'category', 'description_short', 'created_time', 'update_time', 'availability'
     list_display_links = 'pk', 'name'
     list_filter = ['availability']
     ordering = 'pk', 'name', 'created_at'
@@ -140,10 +142,10 @@ class AdminProduct(admin.ModelAdmin):
         (None, {
             'fields': ('name', 'description', 'feature'),
         }),
-        ('Images', {
-            'fields': ('images',),
+        ('Главное фото', {
+            'fields': ('preview',),
         }),
-        ('Extra options', {
+        ('Другие опции', {
             'fields': ('availability', 'slug', 'category'),
             "classes": ("collapse",),
         }),
@@ -217,10 +219,3 @@ class DiscountAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         return Discount.objects.prefetch_related('products')
-
-
-@admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
-    list_display = ['pk', 'name']
-    ordering = ['name', 'activity']
-    search_fields = ['name']
