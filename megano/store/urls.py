@@ -1,10 +1,12 @@
 from django.urls import path
 
 from store.views import (
-    CatalogView,
+    CatalogListView,
 )
 
 app_name = 'store'
+
 urlpatterns = [
-    path('category/products/', CatalogView.as_view(), name='category_product'),
-]
+    path('catalog/', CatalogListView.as_view(), name='catalog'),
+    ]
+
