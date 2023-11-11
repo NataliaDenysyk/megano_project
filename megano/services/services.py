@@ -165,7 +165,7 @@ class CatalogServices:
 
                 context = {
                     'filter': saved_form,
-                    'products_list': products_list,
+                    'products': products_list,
                 }
                 print(products_list)
 
@@ -221,10 +221,10 @@ class CatalogServices:
 
         products_data = [
             {
-                "images": i_offer.product.images,
+                "preview": i_offer.product.preview,
                 "name": i_offer.product.name,
                 "price": i_offer.unit_price,
-                "tags": i_offer.product.tags,
+                "category": i_offer.product.category,
             }
             for i_offer in list(offers)
         ]

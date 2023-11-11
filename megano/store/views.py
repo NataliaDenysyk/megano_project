@@ -37,9 +37,6 @@ class CatalogListView(ListView):
         """
 
         context = CatalogServices()._get_context_from_post(request)
+        self.object_list = self.context_object_name
+
         return self.render_to_response(context)
-
-
-
-
-
