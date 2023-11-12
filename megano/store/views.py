@@ -1,8 +1,11 @@
+from django.db.models import Avg
+from django.db.models.functions import Round
 from django.http import HttpRequest, HttpResponse
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 
+from store.forms import FilterForm
 from store.models import Product
-from services.services import CatalogServices
+from services.services import CatalogService, ProductService
 
 
 class CatalogListView(ListView):
@@ -21,8 +24,11 @@ class CatalogListView(ListView):
         :param kwargs:
         :return:
         """
+
         context = super().get_context_data(**kwargs)
-        context = CatalogServices()._get_context(context)
+        context['filter'] = FilterForm()
+        for i_product in context['products']:
+            i_product.price = ProductService(i_product)._get_average_price()
 
         return context
 
@@ -31,12 +37,33 @@ class CatalogListView(ListView):
         Функция обрабатывает post-запросы на странице каталога
 
         :param request: объект запроса
-        :param args:
+        """
+
+        self.object_list = self.context_object_name
+        context = super().get_context_data(**kwargs)
+        context.update(CatalogService(request.POST)._get_context_from_post())
+
+        return self.render_to_response(context)
+
+
+# TODO добавить кэширование страницы
+class ProductDetailView(DetailView):
+    """
+    Вьюшка детальной страницы товара
+    """
+    template_name = 'store/product/product-detail.html'
+    model = Product
+    context_object_name = 'product'
+
+    def get_context_data(self, **kwargs) -> HttpResponse:
+        """
+        Функция отображает переданный шаблон
+
         :param kwargs:
         :return:
         """
 
-        context = CatalogServices()._get_context_from_post(request)
-        self.object_list = self.context_object_name
+        context = super().get_context_data(**kwargs)
+        context.update(ProductService(context['product'])._get_context())
 
-        return self.render_to_response(context)
+        return context
