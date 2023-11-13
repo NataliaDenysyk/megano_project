@@ -152,7 +152,7 @@ class ProductService:
                 key, value = feature.split('-')
                 new_feature[key] = value
         except Exception as error:
-            print(error)
+            return {}
 
         return new_feature
 
@@ -171,7 +171,6 @@ class ProductService:
             }
 
         except Exception as error:
-            print(error)
             return {}
 
     def _get_images(self) -> ProductImage.objects:
