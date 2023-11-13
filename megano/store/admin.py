@@ -9,7 +9,8 @@ from .models import (
     Offer,
     Orders,
     Category,
-    Reviews, ProductImage,
+    Reviews,
+    ProductImage,
 )
 
 

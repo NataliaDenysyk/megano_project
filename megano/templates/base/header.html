@@ -73,11 +73,11 @@
                     <nav class="row-block">
                         <div class="row ControlPanel-rowSplit">
                             <div class="row-block">
-                                {% if not user.is_authenticated %}
+                                {% if user.is_authenticated %}
+                                    <a class="ControlPanel-title" href="">Личный кабинет</a>
+                                {% else %}
                                     <a class="ControlPanel-title" href="login.html">Вход</a>
                                     <a class="ControlPanel-title" href="registr.html">Регистрация</a>
-                                {% else %}
-                                    <a class="ControlPanel-title" href="">Личный кабинет</a>
                                 {% endif %}
                             </div>
                         </div>
@@ -114,13 +114,13 @@
                 <div class="row-block">
 
                     <div class="CartBlock">
-                        {% if user.user.is_authenticated %}
+                        {% if user.is_authenticated %}
                             <div class="dropdown">
                                 <button class="dropbtn"><img class="CartBlock-img" src="{% static 'assets/img/icons/loon-icon.svg' %}" alt="loon-icon.svg}" /></button>
                                 <div class="dropdown-content">
                                     <a class="dropdown-content-a" href="account.html">Личный кабинет</a>
                                     {% if user.is_superuser %}
-                                        <a class="dropdown-content-a" href="account.html">Административный раздел</a>
+                                        <a class="dropdown-content-a" href="/admin/">Административный раздел</a>
                                     {% endif %}
                                     <a class="dropdown-content-a" href="account.html">Выход</a>
                                 </div>

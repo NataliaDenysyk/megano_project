@@ -15,7 +15,7 @@
                         </li>
                         <li class="menu-item"><a class="menu-link" href="comparison.html">Сравнение</a>
                         </li>
-                        {% if user.user.is_authenticated %}
+                        {% if user.is_authenticated %}
                             <li class="menu-item"><a class="menu-link" href="account.html">Профиль</a></li>
                         {% endif %}
 
