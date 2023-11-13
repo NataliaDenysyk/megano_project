@@ -241,7 +241,6 @@ class CatalogService:
                     'filter': saved_form,
                     'products': products,
                 }
-                print(products)
 
                 return (context)
 
