@@ -1,0 +1,35 @@
+.flex {
+    display: flex;
+}
+
+.container {
+    max-width: 800px;
+    padding-bottom: 25px;
+    flex-direction: column;
+}
+
+.cache-link {
+    margin-bottom: 25px;
+    justify-content: space-between;
+}
+
+.clear-cache {
+
+}
+
+.setup-time-cache {
+    padding: 20px 20px 0 20px;
+    font-size: 15px;
+}
+
+.setup {
+    margin-bottom: 20px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.span-default {
+    padding-left: 35px;
+    color: yellow;
+    font-size: 20px;
+}
