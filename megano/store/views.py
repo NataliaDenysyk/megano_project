@@ -1,3 +1,4 @@
+import re
 from typing import Any
 
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
@@ -124,7 +125,7 @@ class ClearCacheCart(ChangeListMixin, generic.TemplateView):
 
 class ClearCacheProductDetail(ChangeListMixin, generic.TemplateView):
     """
-
+    Класс ClearCacheProductDetail позволяет очистить кеш детализации продуктов
     """
     template_name = 'admin/settings.html'
 
@@ -179,11 +180,11 @@ class CacheSetupBannerView(ChangeListMixin, generic.TemplateView):
 
     def post(self, request):
         cache_time_banner = request.POST.get('cache_time_banner')
-        if cache_time_banner:
+        if re.findall(r'[0-9]', cache_time_banner):
             settings.set_cache_banner(cache_time_banner)
             messages.success(self.request, 'Время кеширование Баннера установлено')
         else:
-            messages.error(self.request, 'Поле не должно быть пустым')
+            messages.error(self.request, 'Поле не должно быть пустым и содержать только цифры')
         return HttpResponseRedirect(reverse_lazy('store:settings'))
 
 
@@ -202,11 +203,11 @@ class CacheSetupCartView(ChangeListMixin, generic.TemplateView):
 
     def post(self, request):
         cache_time_cart = request.POST.get('cache_time_cart')
-        if cache_time_cart:
+        if re.findall(r'[0-9]', cache_time_cart):
             settings.set_cache_cart(cache_time_cart)
             messages.success(self.request, 'Время кеширование Корзины установлено')
         else:
-            messages.error(self.request, 'Поле не должно быть пустым')
+            messages.error(self.request, 'Поле не должно быть пустым и содержать только цифры')
         return HttpResponseRedirect(reverse_lazy('store:settings'))
 
 
@@ -225,9 +226,9 @@ class CacheSetupBProdDetailView(ChangeListMixin, generic.TemplateView):
 
     def post(self, request):
         cache_time_prod_detail = request.POST.get('cache_time_prod_detail')
-        if cache_time_prod_detail:
+        if re.findall(r'[0-9]', cache_time_prod_detail):
             settings.set_cache_product_detail(cache_time_prod_detail)
             messages.success(self.request, 'Время кеширование детализации продукта установлено')
         else:
-            messages.error(self.request, 'Поле не должно быть пустым')
+            messages.error(self.request, 'Поле не должно быть пустым и содержать только цифры')
         return HttpResponseRedirect(reverse_lazy('store:settings'))

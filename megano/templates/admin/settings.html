@@ -36,7 +36,7 @@
             <label for="title_site"> Название магазина:
                 <span class="span-default">{{ title_site }}</span>
             </label>
-            <input type="text" name="title_site" id="title_site">
+            <input type="text" name="title_site" id="title_site" placeholder="Укажите новое название">
             <input type="submit" value="Сменить">
         </form>
         <form class="flex setup"  action="{% url 'store:cache_time_banner' %}" method="post">
@@ -44,7 +44,7 @@
             <label for="cache_time_banner">Время кеширование Баннера:
                 <span class="span-default">{{ cache_banner }} мин.</span>
             </label>
-            <input type="text" name="cache_time_banner" id="cache_time_banner">
+            <input type="text" name="cache_time_banner" id="cache_time_banner" placeholder="Указывать в мин">
             <input type="submit" value="Задать">
         </form>
         <form class="flex setup"  action="{% url 'store:cache_time_cart' %}" method="post">
@@ -52,7 +52,7 @@
             <label for="cache_time_cart">Время кеширование Корзины:
                 <span class="span-default">{{ cache_cart }} мин.</span>
             </label>
-            <input type="text" name="cache_time_cart" id="cache_time_cart">
+            <input type="text" name="cache_time_cart" id="cache_time_cart" placeholder="Указывать в мин">
             <input type="submit" value="Задать">
         </form>
         <form class="flex setup"  action="{% url 'store:cache_time_prod_detail' %}" method="post">
@@ -60,7 +60,7 @@
             <label for="cache_time_prod_detail">Время кеширование деталей продукта:
                 <span class="span-default">{{ cache_prod_detail }} мин.</span>
             </label>
-            <input type="text" name="cache_time_prod_detail" id="cache_time_prod_detail">
+            <input type="text" name="cache_time_prod_detail" id="cache_time_prod_detail" placeholder="Указывать в мин">
             <input type="submit" value="Задать">
         </form>
     </div>
