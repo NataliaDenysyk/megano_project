@@ -1,11 +1,12 @@
-from store.models import Product, Comparison
+from django.db.models import Avg
+
 from typing import List, Dict
 
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404
 
+from authorization.models import Profile
 from store.forms import FilterForm
-from store.models import Product, Comparison, Offer, Category, Reviews, Discount
+from store.models import Product, Offer, Category, Reviews, Discount, ProductImage
 
 from cart.models import Cart
 
@@ -54,10 +55,15 @@ class PaymentService:
         return 'Оплачено'
 
 
+# TODO Добавить расчет цены с учетом скидки
+# TODO Добавить отображение отзывов и продавцов на страницу товара
 class ProductService:
     """
-    Сервис по работе с просмотренными продуктами
+    Сервис по работе с продуктами
     """
+
+    def __init__(self, product):
+        self._product = product
 
     def _get_all_products(self):
         """
@@ -102,6 +108,88 @@ class ProductService:
         """
         return int(len(self._get_viewed_product_list()))
 
+    def _get_context(self) -> Dict:
+        """
+        Функция собирает контекст для рендера шаблона
+
+        :param product: объект Product
+        :return: context - контекст для рендера шаблона
+        """
+
+        context = {
+            'feature': self._get_features(),
+            'description': self._get_description(),
+            'images': self._get_images(),
+            'price_avg': self._get_average_price(),
+            'offers': self._get_offers(),
+        }
+
+        return context
+
+    def _get_average_price(self) -> float:
+        """
+        Функция возвращает среднюю цену товара по всем продавцам
+        """
+
+        return round(
+            Offer.objects.filter(
+                product=self._product,
+            ).aggregate(
+                Avg('unit_price')
+            ).get('unit_price__avg')
+        )
+
+    def _get_features(self) -> Dict:
+        """
+        Приводит строку характеристик в формат словаря
+
+        :param product:
+        :return: dict - словарь характеристик и их описаний
+        """
+
+        new_feature = dict()
+        try:
+            features_list = self._product.feature.split('\r\n')
+            for feature in features_list:
+                key, value = feature.split('-')
+                new_feature[key] = value
+        except Exception as error:
+            return {}
+
+        return new_feature
+
+    def _get_description(self) -> Dict:
+        """
+        Приводит строку описания в формат словаря
+        """
+
+        try:
+            description_list = self._product.description.split('\r\n\r\n')
+            return {
+                'title': description_list[0],
+                'description': description_list[1],
+                'cart_text': description_list[2].split('\r\n'),
+                'description_ul': description_list[3].split('\r\n'),
+            }
+
+        except Exception as error:
+            return {}
+
+    def _get_images(self) -> ProductImage.objects:
+        """
+        Функция возвращает все изображения товара
+        """
+
+        return ProductImage.objects.filter(product=self._product)
+
+    def _get_offers(self):
+        """
+        Функция возвращает всех продавцов товара
+
+        """
+
+        return Offer.objects.filter(product=self._product)
+
 
 class ComparisonServices:
     """
@@ -121,51 +209,46 @@ class ComparisonServices:
         pass
 
 
-
 # class CategoryServices:
-    # def _product_by_category(request, category_slug=None):
-    #     category = None
-    #     categories = Category.objects.all()
-    #     products = Product.objects.filter(availability=True)
-    #     if category_slug:
-    #         category = get_object_or_404(Category, slug=category_slug)
-    #         products = products.filter(category=category)
-    #     template_name = 'store/category_product.html',
-    #     context = {
-    #         'category': category,
-    #         'categories': categories,
-    #         'products': products,
-    #     }
-    #     return render(request, template_name, context=context)
+# def _product_by_category(request, category_slug=None):
+#     category = None
+#     categories = Category.objects.all()
+#     products = Product.objects.filter(availability=True)
+#     if category_slug:
+#         category = get_object_or_404(Category, slug=category_slug)
+#         products = products.filter(category=category)
+#     template_name = 'store/category_product.html',
+#     context = {
+#         'category': category,
+#         'categories': categories,
+#         'products': products,
+#     }
+#     return render(request, template_name, context=context)
 
 
-class CatalogServices:
+class CatalogService:
     """
     Сервис по работе фильтра
     """
-    #TODO добавить контекст или удалить и перенести во вьюшку
-    def _get_context(self, context):
-        context['filter'] = FilterForm()
-        return context
 
-    #TODO дописать обработку других post-запросов
-    def _get_context_from_post(self, request) -> HttpResponse:
+    def __init__(self, post_data):
+        self._post_data = post_data
+
+    def _get_context_from_post(self) -> HttpResponse:
         """
         Функция обрабатывает post-запросы
 
-        :param request:
-        :return:
         """
 
-        if 'filter-button' in request.POST:
-            filter_data = FilterForm(request.POST)
+        if 'filter-button' in self._post_data:
+            filter_data = FilterForm(self._post_data)
             if filter_data.is_valid():
                 offers, saved_form = self._filter_products(filter_data)
-                products_list = self._get_filtered_products(offers)
+                products = self._get_filtered_products(offers)
 
                 context = {
                     'filter': saved_form,
-                    'products': products_list,
+                    'products': products,
                 }
 
                 return (context)
@@ -208,32 +291,35 @@ class CatalogServices:
 
         return offers, form
 
-    #  TODO Добавить расчет усредненной цены по продавцам, корректное выведение тегов
-
-    def _get_filtered_products(self, offers) -> List[Dict]:
+    def _get_filtered_products(self, offers: Offer.objects) -> List[Dict]:
         """
         Функция создает и возвращает список из отфильтрованных товаров
 
-        :param offers:
+        :param offers: queryset объектов Offer
         :return: products_data - список словарей с данными товаров
         """
+        products_data = Product.objects.filter(
+            id__in=offers.values_list('product_id', flat=True),
+        )
 
-        products_data = [
+        products_list = [
             {
-                "preview": i_offer.product.preview,
-                "name": i_offer.product.name,
-                "price": i_offer.unit_price,
-                "category": i_offer.product.category,
+                "preview": product.preview,
+                "name": product.name,
+                "price": ProductService(product)._get_average_price(),
+                "category": product.category,
             }
-            for i_offer in list(offers)
+            for product in list(products_data)
         ]
 
-        return products_data
+        return products_list
+
 
 class ReviewsProduct:
     """
     Сервис для добавления отзыва к товару
     """
+
     def _add_review_to_product(self, reviews: Reviews, product: Product) -> None:
         # добавить отзыв к товару
         pass
@@ -249,4 +335,3 @@ class ReviewsProduct:
     def _get_number_of_reviews_for_product(self, product: Product) -> int:
         # получить количество отзывов для товара
         pass
-
