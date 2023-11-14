@@ -1,0 +1,45 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+{% load i18n admin_urls %}
+
+<title>{% block title %}{{ title }}{% endblock %}</title>
+
+{% block branding %}
+<h1><a href="{% url 'admin:index' %}">{{ title_site }} Settings</a></h1>
+{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">{% translate 'Home' %}</a>
+
+</div>
+{{ block.super }}
+{% endblock %}
+
+{% block content %}
+<div style="display: flex; flex-direction: column; margin-bottom: 50px;">
+    <a style=" padding-bottom: 25px" href="{% url 'store:clear_all_cache' %}">
+        <input type="submit" value="Очистить весь кеш">
+    </a>
+    <a style=" padding-bottom: 25px" href="{% url 'store:clear_banner_cache' %}">
+        <input type="submit" value="Очистить кеш Баннера">
+    </a>
+    <a style=" padding-bottom: 25px" href="{% url 'store:clear_cart_cache' %}">
+        <input type="submit" value="Очистить кеш Корзины">
+    </a>
+</div>
+<hr>
+<div style="display: flex;">
+    <form id="changelist-form" action="{% url 'store:site_name' %}" method="post">
+        Название магазина: <h2>{{ title_site }}</h2>
+        {% csrf_token %}
+        {% for f in form %}
+        <p><label class="form-label" for="{{ f.id_for_label}}">{{ f.label }}</label> {{ f }}</p>
+        <div class="form-error">{{ f.errors}}</div>
+        {% endfor %}
+        <input type="submit" value="Сменить">
+    </form>
+</div>
+{{ block.super }}
+{% endblock %}
+ 

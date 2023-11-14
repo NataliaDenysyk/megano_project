@@ -2,6 +2,9 @@ from django.contrib import admin
 from django.utils.safestring import mark_safe
 from django_mptt_admin.admin import DjangoMpttAdmin
 
+from django.db.models import QuerySet
+from django.http import HttpRequest
+
 from .models import (
     Banners,
     Product,
@@ -13,16 +16,30 @@ from .models import (
 )
 
 
+@admin.action(description='Archive')
+def mark_archived(modeladmin: admin.ModelAdmin, request: HttpRequest, queryset: QuerySet):
+    queryset.update(archived=True)
+
+
+@admin.action(description='Unarchive')
+def mark_unarchived(modeladmin: admin.ModelAdmin, request: HttpRequest, queryset: QuerySet):
+    queryset.update(archived=False)
+
+
 @admin.register(Banners)
 class AdminBanner(admin.ModelAdmin):
+    actions = [
+        mark_archived, mark_unarchived
+    ]
     list_display = ['title', 'link', 'get_html_images', 'is_active', 'update_at']
     list_display_links = ['title']
     list_filter = ['is_active']
     prepopulated_fields = {'slug': ('title',)}
+    save_on_top = True
 
     fieldsets = [
         (None, {
-            "fields": ('title', 'link', 'images', 'slug'),
+            "fields": ('title', 'link', 'get_html_images', 'slug'),
         }),
         ("Extra options", {
             "fields": ("is_active",),
@@ -49,6 +66,9 @@ class ProductInline(admin.TabularInline):
 
 @admin.register(Orders)
 class AdminOrders(admin.ModelAdmin):
+    actions = [
+        mark_archived, mark_unarchived
+    ]
     inlines = [
         ProductInline,
     ]
@@ -56,13 +76,14 @@ class AdminOrders(admin.ModelAdmin):
     list_display_links = 'pk', 'delivery_type'
     ordering = 'pk', 'created_at', 'address'
     search_fields = 'delivery_type', 'address', 'created_at'
+    save_on_top = True
 
     fieldsets = [
         (None, {
             "fields": ('profile', 'delivery_type', 'address', 'products', 'total'),
         }),
         ('Extra options', {
-            'fields': ('status',),
+            'fields': ('status', 'archived'),
             'classes': ('collapse',),
         })
     ]
@@ -70,15 +91,28 @@ class AdminOrders(admin.ModelAdmin):
     def get_queryset(self, request):
         return Orders.objects.select_related('profile').prefetch_related('products')
 
+    def get_actions(self, request):
+        """"
+        Функкция удаляет 'delete_selected' из actions(действие) в панели администратора
+        """
+        actions = super(self.__class__, self).get_actions(request)
+        if 'delete_selected' in actions:
+            del actions['delete_selected']
+        return actions
+
 
 @admin.register(Category)
 class AdminCategory(DjangoMpttAdmin):
+    actions = [
+        mark_archived, mark_unarchived
+    ]
     list_display = 'pk', 'name', 'image', 'parent', 'activity', 'sort_index'
     list_display_links = 'pk', 'name'
     ordering = 'pk', 'name', 'activity'
     list_filter = ['activity']
     search_fields = ['name']
     repopulated_fields = {'slug': ('name',)}
+    save_on_top = True
 
     fieldsets = [
         (None, {
@@ -90,6 +124,15 @@ class AdminCategory(DjangoMpttAdmin):
             "description": "Extra options. Field 'activity' is for soft delete",
         })
     ]
+
+    def get_actions(self, request):
+        """"
+        Функкция удаляет 'delete_selected' из actions(действие) в панели администратора
+        """
+        actions = super(self.__class__, self).get_actions(request)
+        if 'delete_selected' in actions:
+            del actions['delete_selected']
+        return actions
 
 
 class TagInline(admin.TabularInline):
@@ -122,6 +165,9 @@ class ProductInlineImages(admin.TabularInline):
 
 @admin.register(Product)
 class AdminProduct(admin.ModelAdmin):
+    actions = [
+        mark_archived, mark_unarchived
+    ]
     inlines = [
         OfferInline,
         DiscountInline,
@@ -137,16 +183,17 @@ class AdminProduct(admin.ModelAdmin):
     search_fields = 'name', 'description'
     prepopulated_fields = {'slug': ('name',)}
     readonly_fields = ('created_time', 'update_time')
+    save_on_top = True
 
     fieldsets = [
         (None, {
-            'fields': ('name', 'description', 'feature'),
+            'fields': ('name', 'description', 'feature', 'category'),
         }),
         ('Главное фото', {
             'fields': ('preview',),
         }),
         ('Другие опции', {
-            'fields': ('availability', 'slug', 'category'),
+            'fields': ('availability', 'slug'),
             "classes": ("collapse",),
         }),
     ]
@@ -175,6 +222,15 @@ class AdminProduct(admin.ModelAdmin):
     description_short.short_description = 'Описание'
     created_time.short_description = 'Создан'
     update_time.short_description = 'Отредактирован'
+
+    def get_actions(self, request):
+        """"
+        Функкция удаляет 'delete_selected' из actions(действие) в панели администратора
+        """
+        actions = super(self.__class__, self).get_actions(request)
+        if 'delete_selected' in actions:
+            del actions['delete_selected']
+        return actions
 
 
 @admin.register(Offer)
@@ -209,6 +265,9 @@ class ReviewsProduct(admin.ModelAdmin):
 
 @admin.register(Discount)
 class DiscountAdmin(admin.ModelAdmin):
+    actions = [
+        mark_archived, mark_unarchived
+    ]
     inlines = [
         ProductInline,
     ]
@@ -216,6 +275,7 @@ class DiscountAdmin(admin.ModelAdmin):
     list_display_links = 'pk', 'name'
     ordering = 'pk', 'name', 'valid_to', 'is_active'
     search_fields = 'name', 'description'
+    save_on_top = True
 
     def get_queryset(self, request):
         return Discount.objects.prefetch_related('products')

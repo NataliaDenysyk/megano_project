@@ -52,6 +52,14 @@ class Category(MPTTModel):
     def get_absolute_url(self):
         return reverse('product-by-category', args=[str(self.slug)])
 
+    def delete(self, *arg, **kwargs):
+        """"
+       Функция, меняющая поведение delete на мягкое удаление
+       """
+        self.activity = False
+        self.save()
+        return self
+
     class Meta:
         unique_together = [['parent', 'slug']]
         ordering = ["sort_index"]
@@ -83,6 +91,14 @@ class Product(models.Model):
 
     def __str__(self) -> str:
         return f"{self.name} (id:{self.pk})"
+
+    def delete(self, *arg, **kwargs):
+        """"
+       Функция, меняющая поведение delete на мягкое удаление
+       """
+        self.availability = False
+        self.save()
+        return self
 
     class Meta:
         db_table = 'Products'
@@ -234,10 +250,19 @@ class Orders(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Создан")
     status = models.BooleanField(default=False, verbose_name='Оплачен')
     total = models.IntegerField(verbose_name='Количество')
+    archived = models.BooleanField(default=True, verbose_name='Архивация')
     products = models.ManyToManyField(Product, related_name='orders')
 
     def __str__(self) -> str:
         return f"Order(pk = {self.pk}"
+
+    def delete(self, *arg, **kwargs):
+        """"
+       Функция, меняющая поведение delete на мягкое удаление
+       """
+        self.archived = False
+        self.save()
+        return self
 
     class Meta:
         db_table = "Orders"

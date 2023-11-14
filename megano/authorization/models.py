@@ -2,9 +2,25 @@ from django.contrib.auth.models import User
 from django.db import models
 
 
+class BaseModel(models.Model):
+    """"
+    Базовый класс модели
+    """
+    def delete(self, *arg, **kwargs):
+        """"
+        Функция, меняющая поведение delete на мягкое удаление
+        """
+        self.archived = False
+        self.save()
+        return self
+
+    class Meta:
+        abstract = True
+
 # TODO добавить связь с заказами
 
-class Profile(models.Model):
+
+class Profile(BaseModel):
     """
     Модель профиля всех пользователей
 
@@ -14,8 +30,9 @@ class Profile(models.Model):
     description = models.CharField(max_length=100)
     sale = models.IntegerField(blank=True, null=True)
     avatar = models.ImageField()
-    name_store = models.CharField(max_length=50)
+    name_store = models.CharField(max_length=50, null=True, blank=True)
     address = models.CharField(max_length=100)
+    archived = models.BooleanField(default=True, verbose_name='Архивация')
     viewed_orders = models.ForeignKey('store.Product', blank=True, null=True, on_delete=models.CASCADE)
     role = models.CharField(max_length=50, default='user')
 
@@ -36,3 +53,4 @@ class Profile(models.Model):
 
     def __str__(self) -> str:
         return f"{self.user}"
+

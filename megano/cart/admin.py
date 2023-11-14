@@ -8,11 +8,18 @@ class CartAdmin(admin.ModelAdmin):
     """
     Регистрация модели корзины в админ панели.
     """
-    list_display = ['user', 'product_name', 'quantity', 'icon_image', 'created_at', 'updated_at']
+    list_display = ['user', 'products', 'quantity', 'created_at', 'updated_at']
     list_filter = ['created_at', 'products']
     search_fields = ['user', 'products']
     list_editable = ['quantity',]
     list_per_page = 20
+    readonly_fields = ['created_at', 'updated_at']
+
+    fieldsets = [
+        (None, {
+            "fields": ('user', 'products', 'quantity'),
+        }),
+    ]
 
     def product_name(self, obj: Cart) -> str:
         """
@@ -26,13 +33,7 @@ class CartAdmin(admin.ModelAdmin):
 
     product_name.short_description = 'Товары'
 
-    def icon_image(self, obj: Cart) -> str:
-        """
-        Возвращает ссылку на изображение товара в виде иконки.
-        """
-        return mark_safe(f"<img src='{obj.products.images.url}' width=50>")
 
-    icon_image.short_description = 'Иконка'
 
 
 admin.site.register(Cart, CartAdmin)
