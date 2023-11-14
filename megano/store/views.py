@@ -1,5 +1,3 @@
-from django.db.models import Avg
-from django.db.models.functions import Round
 from django.http import HttpRequest, HttpResponse
 from django.views.generic import ListView, DetailView
 
@@ -51,6 +49,7 @@ class ProductDetailView(DetailView):
     """
     Вьюшка детальной страницы товара
     """
+
     template_name = 'store/product/product-detail.html'
     model = Product
     context_object_name = 'product'

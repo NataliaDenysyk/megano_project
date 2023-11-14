@@ -4,6 +4,7 @@ from typing import List, Dict
 
 from django.http import HttpResponse
 
+from authorization.models import Profile
 from store.forms import FilterForm
 from store.models import Product, Offer, Category, Reviews, Discount, ProductImage
 
@@ -107,7 +108,6 @@ class ProductService:
         """
         return int(len(self._get_viewed_product_list()))
 
-
     def _get_context(self) -> Dict:
         """
         Функция собирает контекст для рендера шаблона
@@ -121,6 +121,7 @@ class ProductService:
             'description': self._get_description(),
             'images': self._get_images(),
             'price_avg': self._get_average_price(),
+            'offers': self._get_offers(),
         }
 
         return context
@@ -129,6 +130,7 @@ class ProductService:
         """
         Функция возвращает среднюю цену товара по всем продавцам
         """
+
         return round(
             Offer.objects.filter(
                 product=self._product,
@@ -179,6 +181,14 @@ class ProductService:
         """
 
         return ProductImage.objects.filter(product=self._product)
+
+    def _get_offers(self):
+        """
+        Функция возвращает всех продавцов товара
+
+        """
+
+        return Offer.objects.filter(product=self._product)
 
 
 class ComparisonServices:
