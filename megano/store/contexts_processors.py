@@ -3,6 +3,13 @@ from datetime import datetime
 from store.configs import settings
 
 
+def time_today(request):
+    """
+
+    """
+    return {'today': datetime.today().strftime("%Y-%m-%b ")}
+
+
 def name_shop(request) -> dict:
     """
     Контекстный процессор позволяет воспользоваться переменной "title_site"

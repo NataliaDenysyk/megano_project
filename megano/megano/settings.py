@@ -90,6 +90,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'cart.context_processors.cart',
+                'store.contexts_processors.time_today',
                 'store.contexts_processors.name_shop',
                 'store.contexts_processors.time_cache_banner',
                 'store.contexts_processors.time_cache_сart',
