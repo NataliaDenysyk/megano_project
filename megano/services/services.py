@@ -160,18 +160,23 @@ class ProductService:
         """
         Приводит строку описания в формат словаря
         """
+        description_data = {}
 
         try:
             description_list = self._product.description.split('\r\n\r\n')
-            return {
-                'title': description_list[0],
-                'description': description_list[1],
-                'cart_text': description_list[2].split('\r\n'),
-                'description_ul': description_list[3].split('\r\n'),
-            }
+            if description_list[0]:
+                description_data['title'] = description_list[0]
+            if description_list[1]:
+                description_data['description'] = description_list[1]
+            if description_list[2]:
+                description_data['cart_text'] = description_list[2].split('\r\n')
+            if description_list[3]:
+                description_data['description_ul'] = description_list[3].split('\r\n')
+
+            return description_data
 
         except Exception as error:
-            return {}
+            return description_data
 
     def _get_images(self) -> ProductImage.objects:
         """
