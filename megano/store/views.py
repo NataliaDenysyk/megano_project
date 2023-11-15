@@ -64,7 +64,7 @@ class SettingsView(ChangeListMixin, ListView):
         return dict(list(context.items()) + list(change_list.items()))
 
 
-class ClearCacheAll(ChangeListMixin, generic.TemplateView):
+class ClearCacheAll(ChangeListMixin, TemplateView):
     """
     Класс ClearCacheAll позволяет очистить весь кеш сайта
     """
@@ -83,7 +83,7 @@ class ClearCacheAll(ChangeListMixin, generic.TemplateView):
         return HttpResponseRedirect(reverse_lazy("store:settings"))
 
 
-class ClearCacheBanner(ChangeListMixin, generic.TemplateView):
+class ClearCacheBanner(ChangeListMixin, TemplateView):
     """
     Класс ClearCacheBanner позволяет очистить кеш Баннера
     """
@@ -102,7 +102,7 @@ class ClearCacheBanner(ChangeListMixin, generic.TemplateView):
         return HttpResponseRedirect(reverse_lazy("store:settings"))
 
 
-class ClearCacheCart(ChangeListMixin, generic.TemplateView):
+class ClearCacheCart(ChangeListMixin, TemplateView):
     """
     Класс ClearCacheCart позволяет очистить кеш Корзины
     """
@@ -121,7 +121,7 @@ class ClearCacheCart(ChangeListMixin, generic.TemplateView):
         return HttpResponseRedirect(reverse_lazy("store:settings"))
 
 
-class ClearCacheProductDetail(ChangeListMixin, generic.TemplateView):
+class ClearCacheProductDetail(ChangeListMixin, TemplateView):
     """
     Класс ClearCacheProductDetail позволяет очистить кеш детализации продуктов
     """
@@ -140,7 +140,7 @@ class ClearCacheProductDetail(ChangeListMixin, generic.TemplateView):
         return HttpResponseRedirect(reverse_lazy("store:settings"))
 
 
-class SiteName(ChangeListMixin, generic.TemplateView):
+class SiteName(ChangeListMixin, TemplateView):
     """
     Класс SiteName позволяет задать новое название интернет магазина
     """
@@ -163,7 +163,7 @@ class SiteName(ChangeListMixin, generic.TemplateView):
         return HttpResponseRedirect(reverse_lazy('store:settings'))
 
 
-class CacheSetupBannerView(ChangeListMixin, generic.TemplateView):
+class CacheSetupBannerView(ChangeListMixin, TemplateView):
     """
     Класс CacheSetupBannerView позволяет задать или обновить время кеширования Баннера
     """
@@ -186,7 +186,7 @@ class CacheSetupBannerView(ChangeListMixin, generic.TemplateView):
         return HttpResponseRedirect(reverse_lazy('store:settings'))
 
 
-class CacheSetupCartView(ChangeListMixin, generic.TemplateView):
+class CacheSetupCartView(ChangeListMixin, TemplateView):
     """
     Класс CacheSetupCartView позволяет задать или обновить время кеширования Корзины
     """
@@ -209,7 +209,7 @@ class CacheSetupCartView(ChangeListMixin, generic.TemplateView):
         return HttpResponseRedirect(reverse_lazy('store:settings'))
 
 
-class CacheSetupBProdDetailView(ChangeListMixin, generic.TemplateView):
+class CacheSetupBProdDetailView(ChangeListMixin, TemplateView):
     """
     Класс CacheSetupBProdDetailView позволяет задать или обновить время кеширования детальной информации продукта
     """
@@ -230,5 +230,4 @@ class CacheSetupBProdDetailView(ChangeListMixin, generic.TemplateView):
         else:
             messages.error(self.request, 'Поле не должно быть пустым и содержать только цифры')
         return HttpResponseRedirect(reverse_lazy('store:settings'))
-=======
->>>>>>> megano/store/views.py
+        
