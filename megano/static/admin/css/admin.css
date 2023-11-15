@@ -13,10 +13,6 @@
     justify-content: space-between;
 }
 
-.clear-cache {
-
-}
-
 .setup-time-cache {
     padding: 20px 20px 0 20px;
     font-size: 15px;
@@ -28,8 +24,12 @@
     justify-content: space-between;
 }
 
-.span-default {
+.span-default, .time_today {
     padding-left: 35px;
     color: yellow;
     font-size: 20px;
+}
+
+.time_today {
+    font-size: 15px;
 }
