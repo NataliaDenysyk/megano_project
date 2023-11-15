@@ -92,7 +92,6 @@ TEMPLATES = [
                 'cart.context_processors.cart',
                 'store.contexts_processors.time_today',
                 'store.contexts_processors.name_shop',
-                'store.contexts_processors.time_cache_banner',
                 'store.contexts_processors.time_cache_сart',
                 'store.contexts_processors.time_cache_prod_detail',
                 'megano.context_processors.get_static_template_category',
