@@ -6,7 +6,7 @@ from django.core.cache import cache
 
 from store.filters import ProductFilter
 from store.models import Product
-from services.services import CatalogService, ProductService, CategoryServices
+from services.services import ProductService, CategoryServices
 import re
 from typing import Any
 

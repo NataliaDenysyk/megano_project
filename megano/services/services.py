@@ -1,11 +1,8 @@
 from typing import List, Dict, Any
 from django.db.models import Avg, Count
 
-from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 
-from authorization.models import Profile
-from store.forms import FilterForm
 from store.models import Product, Offer, Category, Reviews, Discount, ProductImage
 
 from cart.models import Cart
