@@ -19,14 +19,6 @@ def name_shop(request) -> dict:
     return {'title_site': settings.get_site_name()}
 
 
-def time_cache_banner(request) -> dict:
-    """
-    Контекстный процессор позволяет воспользоваться переменной "cache_banner"
-    для использования установки времени кеширования баннера.
-    """
-    return {'cache_banner': settings.get_cache_banner()}
-
-
 def time_cache_сart(request) -> dict:
     """
     Контекстный процессор позволяет воспользоваться переменной "cache_cart"
