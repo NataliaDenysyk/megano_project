@@ -1,12 +1,11 @@
 from django.db import models
-from django.utils.safestring import mark_safe
+
+from imagekit.models import ProcessedImageField
+from imagekit.processors import ResizeToFill
+
 from authorization.models import Profile
 from django.urls import reverse
 from mptt.models import MPTTModel, TreeForeignKey
-
-
-# Create your models here.
-# TODO models Orders, Product, Discount, Category
 
 
 def category_image_directory_path(instance) -> str:
@@ -24,6 +23,7 @@ def product_images_directory_path(instance: 'ProductImage', filename: str) -> st
     :param filename: имя файла
     :return: str - путь для сохранения
     """
+
     return f'products/product_{instance.product_id}/{filename}'
 
 
@@ -70,8 +70,13 @@ class Product(models.Model):
     description = models.TextField('Описание', default='', null=False, blank=True)
     feature = models.TextField('Характеристика', default='', null=False, blank=True)
     tags = models.ManyToManyField('Tag', related_name='products', verbose_name='Теги')
-    preview = models.ImageField(
-        'Изображение', upload_to="products/product/%y/%m/%d/", blank=True, null=True
+    preview = ProcessedImageField(
+        verbose_name='Основное фото',
+        upload_to="products/product/%y/%m/%d/",
+        options={"quality": 80},
+        processors=[ResizeToFill(200, 200)],
+        blank=True,
+        null=True
     )
     availability = models.BooleanField('Доступность', default=False)
     created_at = models.DateTimeField('Создан', auto_now_add=True)
@@ -95,7 +100,12 @@ class ProductImage(models.Model):
     """
 
     product = models.ForeignKey('Product', on_delete=models.CASCADE, related_name='images')
-    image = models.ImageField(upload_to=product_images_directory_path)
+    image = ProcessedImageField(
+        verbose_name='Фотография товара',
+        upload_to=product_images_directory_path,
+        options={"quality": 80},
+        processors=[ResizeToFill(200, 200)],
+    )
 
     def __str__(self) -> str:
         return f"{self.pk})"
