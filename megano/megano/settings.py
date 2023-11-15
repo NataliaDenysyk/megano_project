@@ -95,6 +95,7 @@ TEMPLATES = [
                 'store.contexts_processors.time_cache_banner',
                 'store.contexts_processors.time_cache_сart',
                 'store.contexts_processors.time_cache_prod_detail',
+                'megano.context_processors.get_static_template_category',
             ],
         },
     },
