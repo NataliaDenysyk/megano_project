@@ -1,13 +1,9 @@
 from django.http import HttpRequest, HttpResponse
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, TemplateView
 
-from django.views.generic import TemplateView
 from store.forms import FilterForm
 from store.models import Product
-from services.services import CatalogService, ProductService
-
-from store.models import Comparison, Category, Product, Tag, Discount
-from services.services import CategoryServices
+from services.services import CatalogService, ProductService, CategoryServices
 
 
 class CategoryView(TemplateView):
@@ -73,6 +69,7 @@ class ProductDetailView(DetailView):
     """
     Вьюшка детальной страницы товара
     """
+
     template_name = 'store/product/product-detail.html'
     model = Product
     context_object_name = 'product'

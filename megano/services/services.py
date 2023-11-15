@@ -1,13 +1,8 @@
-from store.models import Product, Comparison
 from typing import List, Dict, Any
-from django.db.models import Avg
-
-from typing import List, Dict
+from django.db.models import Avg, Count
 
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
-
-from django.db.models import Count
 
 from store.forms import FilterForm
 from store.models import Product, Offer, Category, Reviews, Discount, ProductImage
@@ -410,4 +405,3 @@ class ReviewsProduct:
     def _get_number_of_reviews_for_product(self, product: Product) -> int:
         # получить количество отзывов для товара
         pass
-
