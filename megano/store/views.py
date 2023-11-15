@@ -1,42 +1,27 @@
 from django.http import HttpRequest, HttpResponse
 from django.views.generic import ListView
 
-from store.models import Product
-from services.services import CatalogServices
+from django.views.generic import TemplateView
+
+from store.models import Comparison, Category, Product, Tag, Discount
+from services.services import CategoryServices
 
 
-class CatalogListView(ListView):
+class CategoryView(TemplateView):
+    """"
+    Класс получения категорий и подкатегорий
     """
-    Вьюшка каталога
-    """
-    template_name = 'store/catalog/catalog.html'
-    model = Product
-    context_object_name = 'products'
-    paginate_by = 8
+    template_name = 'store/category_product.html'
 
-    def get_context_data(self, **kwargs) -> HttpResponse:
-        """
+    def get_context_data(self, **kwargs):
+        """"
         Функция отображает переданный шаблон
-
-        :param kwargs:
-        :return:
         """
-        context = super().get_context_data(**kwargs)
-        context = CatalogServices()._get_context(context)
+        context = super().get_context_data()
+        if self.request.GET.get('category_slug'):
+            category_slug = self.request.GET['category_slug']
+            context = CategoryServices()._product_by_category(category_slug)
 
+        else:
+            context = CategoryServices()._sorting_products(self.request)
         return context
-
-    def post(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
-        """
-        Функция обрабатывает post-запросы на странице каталога
-
-        :param request: объект запроса
-        :param args:
-        :param kwargs:
-        :return:
-        """
-
-        context = CatalogServices()._get_context_from_post(request)
-        self.object_list = self.context_object_name
-
-        return self.render_to_response(context)
