@@ -45,9 +45,6 @@ class Category(MPTTModel):
     def __str__(self) -> str:
         return f'{self.name}'
 
-    class MPTTMeta:
-        order_insertion_by = ['name']
-
     def get_absolute_url(self):
         return reverse('product-by-category', args=[str(self.slug)])
 
@@ -58,6 +55,8 @@ class Category(MPTTModel):
         verbose_name = 'Категория'
         verbose_name_plural = 'Категории'
 
+    class MPTTMeta:
+        order_insertion_by = ['name']
 
 class Product(models.Model):
     """
@@ -251,5 +250,4 @@ class Orders(models.Model):
     class Meta:
         db_table = "Orders"
         verbose_name = "Заказ"
-        verbose_name_plural = "Заказы"
-
+    verbose_name_plural = "Заказы"

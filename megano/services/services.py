@@ -1,7 +1,11 @@
-from django.db.models import Avg
+from typing import List, Dict, Any
+from django.db.models import Avg, Count
 
-from typing import List, Dict
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
 
+from authorization.models import Profile
+from store.forms import FilterForm
 from store.models import Product, Offer, Category, Reviews, Discount, ProductImage
 
 from cart.models import Cart
@@ -159,18 +163,23 @@ class ProductService:
         """
         Приводит строку описания в формат словаря
         """
+        description_data = {}
 
         try:
             description_list = self._product.description.split('\r\n\r\n')
-            return {
-                'title': description_list[0],
-                'description': description_list[1],
-                'cart_text': description_list[2].split('\r\n'),
-                'description_ul': description_list[3].split('\r\n'),
-            }
+            if description_list[0]:
+                description_data['title'] = description_list[0]
+            if description_list[1]:
+                description_data['description'] = description_list[1]
+            if description_list[2]:
+                description_data['cart_text'] = description_list[2].split('\r\n')
+            if description_list[3]:
+                description_data['description_ul'] = description_list[3].split('\r\n')
+
+            return description_data
 
         except Exception as error:
-            return {}
+            return description_data
 
     def _get_images(self) -> ProductImage.objects:
         """
@@ -206,21 +215,96 @@ class ComparisonServices:
         pass
 
 
-# class CategoryServices:
-# def _product_by_category(request, category_slug=None):
-#     category = None
-#     categories = Category.objects.all()
-#     products = Product.objects.filter(availability=True)
-#     if category_slug:
-#         category = get_object_or_404(Category, slug=category_slug)
-#         products = products.filter(category=category)
-#     template_name = 'store/category_product.html',
-#     context = {
-#         'category': category,
-#         'categories': categories,
-#         'products': products,
-#     }
-#     return render(request, template_name, context=context)
+
+class CategoryServices:
+    """
+    Сервис по работе категорий
+    """
+    def _product_by_category(self, category_slug=None):
+        """"
+        Функция отбирает продукты по категориям
+        """
+        category = None
+        categories = Category.objects.all()
+        products = Product.objects.filter(availability=True)
+        if category_slug:
+            category = get_object_or_404(Category, slug=category_slug)
+            sub_categories = category.get_descendants(include_self=True)
+            products = products.filter(category__in=sub_categories)
+        context = {
+            'category': category,
+            'categories': categories,
+            'products': products,
+        }
+        return context
+
+    def _sorting_products(self, request):# -> dict[str, Any]:
+        """"
+        Функция сортировки товаров по  'Популярности'
+        """
+        offer = Offer.objects.filter(product__availability=True)
+        if request.GET.get('popular'):
+            offer = self._sort_by_popularity(request, offer=offer)
+            context = {
+                'offer': self._sort_by_popularity(request, offer=offer)
+            }
+        elif request.GET.get('price'):
+            context = {
+                'offer': self._sort_by_price(request, offer=offer)
+            }
+        elif request.GET.get('reviews'):
+            context = {
+                'offer': self._sort_by_reviews(request, offer=offer)
+            }
+        elif request.GET.get('novetly'):
+            context = {
+                'offer': self._sort_by_novelty(request, offer=offer)
+            }
+        else:
+            context = {
+                'offer': offer
+            }
+
+        return context
+
+    def _sort_by_popularity(self, request, offer) -> Any:
+        if 'up' in request.GET:
+            offer = offer.annotate(cnt=Count('order__total', filter='products').order_by('cnt'))
+        elif 'down' in request.GET:
+            offer = offer.annotate(cnt=Count('order__total', filter='products').order_by('-cnt'))
+        else:
+            offer = offer
+
+        return offer
+
+    def _sort_by_price(self, request, offer) -> Any:
+        if 'up' in request.GET:
+            offer = offer.order_by('unit_price')
+        elif 'down' in request.GET:
+            offer = offer.order_by('-unit_price')
+        else:
+            offer = offer
+        return offer
+
+    def _sort_by_reviews(self, request, offer) -> Any:
+        if 'up' in request.GET:
+            offer = offer.annotate(cnt=Count('product__reviews', distinct=True).order_by('cnt'))
+        elif 'down' in request.GET:
+            offer = offer.annotate(cnt=Count('product__reviews', distinct=True).order_by('-cnt'))
+        else:
+            offer = offer
+
+        return offer
+
+    def _sort_by_novelty(self, request, offer) -> Any:
+        if 'up' in request.GET:
+            offer = offer.order_by('product__update_at')
+        elif 'down' in request.GET:
+            offer = offer.order_by('-product__update_at')
+        else:
+            offer = offer
+
+        return offer
 
 
 class CatalogService:
