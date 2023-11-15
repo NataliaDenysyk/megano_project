@@ -1,8 +1,6 @@
-from django.http import HttpRequest, HttpResponse
 from django.views.generic import ListView, DetailView, TemplateView
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, ListView
 from django.contrib import messages
 from django.core.cache import cache
 
@@ -14,7 +12,6 @@ from typing import Any
 
 from .configs import settings
 from .mixins import ChangeListMixin
-from .models import Product
 
 
 class CategoryView(TemplateView):

@@ -18,7 +18,7 @@ app_name = 'store'
 
 urlpatterns = [
     path('catalog/', CatalogListView.as_view(), name='catalog'),
-    path('product/<slug:slug>/', ProductDetailView.as_view(), name='product-detail')
+    path('product/<slug:slug>/', ProductDetailView.as_view(), name='product-detail'),
 
     path('settings/', SettingsView.as_view(), name='settings'),
     path('clear-all/', ClearCacheAll.as_view(), name='clear_all_cache'),
@@ -29,4 +29,4 @@ urlpatterns = [
     path('cache-time-banner/', CacheSetupBannerView.as_view(), name='cache_time_banner'),
     path('cache-time-cart/', CacheSetupCartView.as_view(), name='cache_time_cart'),
     path('cache-time-prod-detail/', CacheSetupBProdDetailView.as_view(), name='cache_time_prod_detail'),
-    ]
+]
