@@ -4,7 +4,7 @@ from django.views.generic import ListView
 from django.views.generic import TemplateView
 
 from store.models import Comparison, Category, Product, Tag, Discount
-from store.services import CategoryServices
+from services.services import CategoryServices
 
 
 class CategoryView(TemplateView):
@@ -24,5 +24,4 @@ class CategoryView(TemplateView):
 
         else:
             context = CategoryServices()._sorting_products(self.request)
-        print('qwerty', self.request.GET)
         return context
