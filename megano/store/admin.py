@@ -10,8 +10,16 @@ from .models import (
     Orders,
     Category,
     Reviews,
+    Tag,
     ProductImage,
 )
+
+
+@admin.register(Tag)
+class AdminTag(admin.ModelAdmin):
+    list_display = ['name']
+    list_display_links = ['name']
+    search_fields = ['name']
 
 
 @admin.register(Banners)
@@ -74,7 +82,7 @@ class AdminOrders(admin.ModelAdmin):
 
 @admin.register(Category)
 class AdminCategory(DjangoMpttAdmin):
-    list_display = 'pk', 'name', 'image', 'parent', 'activity', 'sort_index'
+    list_display = 'pk', 'name', 'image', 'parent', 'activity', 'sort_index', 'slug'
     list_display_links = 'pk', 'name'
     ordering = 'pk', 'name', 'activity'
     list_filter = ['activity']
@@ -83,7 +91,7 @@ class AdminCategory(DjangoMpttAdmin):
 
     fieldsets = [
         (None, {
-            "fields": ('name', 'parent', 'sort_index',),
+            "fields": ('name', 'parent', 'sort_index', 'slug'),
         }),
         ("Extra options", {
             "fields": ("activity",),
@@ -220,3 +228,5 @@ class DiscountAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         return Discount.objects.prefetch_related('products')
+
+
