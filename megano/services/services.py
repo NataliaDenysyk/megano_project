@@ -2,10 +2,6 @@ from django.db.models import Avg
 
 from typing import List, Dict
 
-from django.http import HttpResponse
-
-from authorization.models import Profile
-from store.forms import FilterForm
 from store.models import Product, Offer, Category, Reviews, Discount, ProductImage
 
 from cart.models import Cart
@@ -56,13 +52,14 @@ class PaymentService:
 
 
 # TODO Добавить расчет цены с учетом скидки
-# TODO Добавить отображение отзывов и продавцов на страницу товара
+# TODO Добавить отображение отзывов на страницу товара
 class ProductService:
     """
     Сервис по работе с продуктами
+
     """
 
-    def __init__(self, product):
+    def __init__(self, product: Product):
         self._product = product
 
     def _get_all_products(self):
@@ -231,88 +228,83 @@ class CatalogService:
     Сервис по работе фильтра
     """
 
-    def __init__(self, post_data):
-        self._post_data = post_data
-
-    def _get_context_from_post(self) -> HttpResponse:
+    def _filter_products_by_name(self, queryset: Product.objects, name: str, value: str) -> Product.objects:
         """
-        Функция обрабатывает post-запросы
+        Функция фильтрует товары по имени
 
-        """
-
-        if 'filter-button' in self._post_data:
-            filter_data = FilterForm(self._post_data)
-            if filter_data.is_valid():
-                offers, saved_form = self._filter_products(filter_data)
-                products = self._get_filtered_products(offers)
-
-                context = {
-                    'filter': saved_form,
-                    'products': products,
-                }
-
-                return (context)
-
-    # TODO дописать фильтрацию по доставке
-    def _filter_products(self, form):
-        """
-        Функция фильтрует товары по полученным из post-запроса данным
-
-        :param form: объект FilterForm
-        :return:
-            offers - объекты Offer
-            form - фильтр с сохраненными параметрами
+        :param queryset: Product objects
+        :param name: имя поля фильтра
+        :param value: значения поля
         """
 
-        range_list = form.cleaned_data['range'].split(';')
+        return queryset.filter(name__icontains=value)
+
+    def _filter_by_price(self, queryset: Product.objects, name: str, value: str) -> Product.objects:
+        """
+        Функция фильтрует товары по цене
+
+        :param queryset: Product objects
+        :param name: имя поля фильтра
+        :param value: значения поля
+        """
+
+        range_list = value.split(';')
         min_price, max_price = int(range_list[0]), int(range_list[1])
-
-        stores_list = form.cleaned_data['stores']
-        availability = form.cleaned_data['availability']
-        delivery_free = form.cleaned_data['delivery_free']
-
         offers = Offer.objects.filter(
             unit_price__range=(min_price, max_price),
-            product__name__icontains=form.cleaned_data['name'],
-            product__feature__icontains=form.cleaned_data['another_feature'],
         )
 
-        if stores_list:
-            offers = offers.filter(seller__in=stores_list)
+        return queryset.filter(id__in=offers.values_list('product_id', flat=True))
 
-        if availability:
-            offers = offers.filter(product__availability=availability)
-
-        if delivery_free:
-            pass
-
-        form.fields['range'].widget.attrs['data-from'] = min_price
-        form.fields['range'].widget.attrs['data-to'] = max_price
-
-        return offers, form
-
-    def _get_filtered_products(self, offers: Offer.objects) -> List[Dict]:
+    def _filter_by_availability(self, queryset: Product.objects, name: str, value: str) -> Product.objects:
         """
-        Функция создает и возвращает список из отфильтрованных товаров
+        Функция фильтрует по доступности продукта
 
-        :param offers: queryset объектов Offer
-        :return: products_data - список словарей с данными товаров
+        :param queryset: Product objects
+        :param name: имя поля фильтра
+        :param value: значения поля
         """
-        products_data = Product.objects.filter(
-            id__in=offers.values_list('product_id', flat=True),
-        )
 
-        products_list = [
-            {
-                "preview": product.preview,
-                "name": product.name,
-                "price": ProductService(product)._get_average_price(),
-                "category": product.category,
-            }
-            for product in list(products_data)
-        ]
+        return queryset.filter(availability=value)
 
-        return products_list
+    # TODO дописать фильтрацию по доставке
+    def _filter_by_delivery(self, queryset: Product.objects, name: str, value: str):
+        """
+        Функция фильтрует товары по способу доставки
+
+        :param queryset: Product objects
+        :param name: имя поля фильтра
+        :param value: значения поля
+        """
+
+        pass
+
+    def _filter_by_stores(self, queryset: Product.objects, name: str, value: str) -> Product.objects:
+        """
+        Функция фильтрует товары по продавцу
+
+        :param queryset: Product objects
+        :param name: имя поля фильтра
+        :param value: значения поля
+        """
+
+        if value:
+            offers = Offer.objects.filter(seller__in=value)
+
+            return queryset.filter(id__in=offers.values_list('product_id', flat=True))
+
+        return queryset
+
+    def _filter_by_feature(self, queryset: Product.objects, name: str, value: str) -> Product.objects:
+        """
+        Функция фильтрует товары по характеристикам
+
+        :param queryset: Product objects
+        :param name: имя поля фильтра
+        :param value: значения поля
+        """
+
+        return queryset.filter(feature__icontains=value)
 
 
 class ReviewsProduct:
