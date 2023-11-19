@@ -1,7 +1,8 @@
-from random import choices
-
 from django import template
-from django.core.cache import caches
+from django.http import HttpResponse
+from django.core.cache import cache
+
+from random import choices
 
 from ..models import Banners
 
@@ -13,6 +14,9 @@ def banner_main_page() -> dict:
     """
     Caching of random three banners is created.
     """
-    banners = caches.get_or_set('banners', choices(Banners.objects.all(), k=3))
+    try:
+        banners = cache.get_or_set('banners', choices(Banners.objects.all(), k=3))
+        return {'banners': banners}
+    except Exception as err:
+        HttpResponse('Not Banners', err)  # TODO заменить заглушку на файл с логами
 
-    return {'banners': banners}

@@ -1,8 +1,14 @@
+{% load i18n static %}
+{% load banners_tags %}
 {% include 'base/header.html' %}
 
 <div class="content">
-    {% block content %}CONTENT{% endblock %}
+    {% block banner %}
+        {% banner_main_page %}
+    {% endblock %}
 
+    {% block content %}
+    {% endblock %}
 </div>
 
 {% include 'base/footer.html' %}
