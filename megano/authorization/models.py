@@ -2,8 +2,6 @@ from django.contrib.auth.models import User
 from django.db import models
 
 
-# TODO добавить связь с заказами
-
 class Profile(models.Model):
     """
     Модель профиля всех пользователей
@@ -20,7 +18,7 @@ class Profile(models.Model):
     role = models.CharField(max_length=50, default='user')
 
     def __str__(self) -> str:
-        return f"{self.user.username}"
+        return f"{self.user}"
 
     class Meta:
         db_table = 'Profiles'
@@ -34,5 +32,3 @@ class Profile(models.Model):
             ('admin', 'manages the site'),
         )
 
-    def __str__(self) -> str:
-        return f"{self.user}"

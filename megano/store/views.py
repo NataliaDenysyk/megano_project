@@ -1,37 +1,23 @@
 from django.views.generic import ListView, DetailView, TemplateView
-from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.core.cache import cache
 
-from store.filters import ProductFilter
 from store.models import Product
-from services.services import ProductService, CategoryServices
+from services.services import (
+    ProductService,
+    CatalogService,
+    CategoryServices,
+    GetParamService,
+)
+
 import re
 from typing import Any
 
 from .configs import settings
+from .filters import ProductFilter
 from .mixins import ChangeListMixin
-
-
-class CategoryView(TemplateView):
-    """"
-    Класс получения категорий и подкатегорий
-    """
-    template_name = 'store/category_product.html'
-
-    def get_context_data(self, **kwargs):
-        """"
-        Функция отображает переданный шаблон
-        """
-        context = super().get_context_data()
-        if self.request.GET.get('category_slug'):
-            category_slug = self.request.GET['category_slug']
-            context = CategoryServices()._product_by_category(category_slug)
-
-        else:
-            context = CategoryServices()._sorting_products(self.request)
-        return context
 
 
 class CatalogListView(ListView):
@@ -52,21 +38,31 @@ class CatalogListView(ListView):
         """
 
         queryset = super().get_queryset()
-        self.filterset = ProductFilter(self.request.GET, queryset=queryset)
 
-        return self.filterset.qs
+        if self.request.resolver_match.captured_kwargs.get('slug'):
+            queryset = CategoryServices().product_by_category(
+                self.request.resolver_match.captured_kwargs['slug']
+            )
+
+        self.filterset = ProductFilter(self.request.GET, queryset=queryset)
+        self.filterset = CatalogService().catalog_processing(self.request, self.filterset)
+
+        return self.filterset.queryset
 
     def get_context_data(self, **kwargs) -> HttpResponse:
         """
         Функция возвращает контекст
-
         """
 
         context = super().get_context_data(**kwargs)
+
         context['filter'] = self.filterset.form
+        context['tags'] = CatalogService().get_popular_tags()
 
         for i_product in context['products']:
-            i_product.price = ProductService(i_product)._get_average_price()
+            i_product.price = ProductService(i_product).get_average_price()
+
+        context['full_path'] = GetParamService(self.request.get_full_path()).remove_param('sorting').get_url()
 
         return context
 

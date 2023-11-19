@@ -18,6 +18,7 @@ app_name = 'store'
 
 urlpatterns = [
     path('catalog/', CatalogListView.as_view(), name='catalog'),
+    path('catalog/<slug:slug>/', CatalogListView.as_view(), name='category'),
     path('product/<slug:slug>/', ProductDetailView.as_view(), name='product-detail'),
 
     path('settings/', SettingsView.as_view(), name='settings'),
