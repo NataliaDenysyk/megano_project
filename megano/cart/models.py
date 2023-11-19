@@ -1,18 +1,17 @@
-from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
 
-from store.models import Product
+from store.models import Product, Orders
 
 
 class Cart(models.Model):
     """
     Описание модели Корзины
 
-    User    - :model:`User`\n
+    Orders  - :model:`store.Orders`\n
     Product - :model:`store.Product`
     """
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
+    order = models.ForeignKey(Orders, on_delete=models.CASCADE, verbose_name='Заказ')
     products = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Продукты')
     quantity = models.IntegerField(default=1, verbose_name='Количество')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания', db_index=True)
@@ -23,7 +22,7 @@ class Cart(models.Model):
         Возвращает имя пользователя и название продукта в виде:
         username: product_name
         """
-        return f'{self.user.username}: {self.products.name}'
+        return f'Заказ №_{self.order.id}'
 
     def get_absolute_url(self) -> str:
         """
@@ -34,5 +33,5 @@ class Cart(models.Model):
     class Meta:
         db_table = 'carts'
         ordering = ['-created_at']
-        verbose_name = 'cart'
-        verbose_name_plural = 'carts'
+        verbose_name = 'корзину'
+        verbose_name_plural = 'корзины'
