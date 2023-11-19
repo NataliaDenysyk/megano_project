@@ -12,8 +12,9 @@ from .views import (
     SiteName,
     CacheSetupBannerView,
     CacheSetupCartView,
+    CacheSetupSellerView,
     CacheSetupProdDetailView,
-    CacheSetupSellerView
+    MainPage,
 )
 
 app_name = 'store'
@@ -21,7 +22,7 @@ app_name = 'store'
 urlpatterns = [
     path('catalog/', CatalogListView.as_view(), name='catalog'),
     path('product/<slug:slug>/', ProductDetailView.as_view(), name='product-detail'),
-
+    path('index.html', MainPage.as_view(), name='index'),
     path('settings/', SettingsView.as_view(), name='settings'),
     path('clear-all/', ClearCacheAll.as_view(), name='clear_all_cache'),
     path('clear-banner/', ClearCacheBanner.as_view(), name='clear_banner_cache'),
