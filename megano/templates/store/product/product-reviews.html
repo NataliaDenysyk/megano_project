@@ -1,0 +1,53 @@
+<div class="Tabs-block" id="reviews">
+    <header class="Section-header">
+      <h3 class="Section-title">{{ num_reviews }} отзыв
+      </h3>
+    </header>
+    <div class="Comments">
+        {% for review in reviews %}
+          <div class="Comment">
+            <div class="Comment-column Comment-column_pict">
+              <div class="Comment-avatar">
+              </div>
+            </div>
+            <div class="Comment-column">
+              <header class="Comment-header">
+                <div>
+                  <strong class="Comment-title">{{ review.author }}
+                  </strong><span class="Comment-date">{{ review.created_at }}</span>
+                </div>
+              </header>
+              <div class="Comment-content" >{{ review.comment_text }}</div>
+            </div>
+          </div>
+        {% endfor %}
+
+    </div>
+    {% if user.is_authenticated %}
+    <header class="Section-header Section-header_product">
+      <h3 class="Section-title">Добавить отзыв
+      </h3>
+    </header>
+    <div class="Tabs-addComment">
+      <form class="form" action="" method="post">
+
+        <div class="form-group">
+            {% csrf_token %}
+            <textarea class="form-textarea" name="review" id="review" placeholder="Отзыв"></textarea>
+        </div>
+        <div class="form-group">
+            <button class="btn btn_muted" type="submit">Отправить отзыв
+            </button>
+            </div>
+      </form>
+    </div>
+    {% else %}
+        <div >
+            <div class="Section-header Section-header_product">
+              <h3 class="Section-title">Чтобы оставить отзыв, вам нужно авторизоваться.</h3>
+                <a class="btn btn_primary" href="#">Авторизоваться</a>
+            </div>
+
+        </div>
+    {% endif %}
+</div>

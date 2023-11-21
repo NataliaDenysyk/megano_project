@@ -19,13 +19,14 @@
                 <span>Характеристика</span>
               </a>
               <a class="Tabs-link" href="#reviews">
-                <span>Отзывы (3)</span>
+                <span>Отзывы ({{ num_reviews }})</span>
               </a>
             </div>
             <div class="Tabs-wrap">
               {% include "store/product/description.html" %}
               {% include "store/product/sellers.html" %}
               {% include "store/product/features.html" %}
+              {% include "store/product/product-reviews.html" %}
             </div>
           </div>
         </div>

@@ -1,3 +1,4 @@
+from django.shortcuts import render
 from django.views.generic import ListView, DetailView, TemplateView
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
@@ -6,7 +7,7 @@ from django.core.cache import cache
 
 from store.filters import ProductFilter
 from store.models import Product
-from services.services import ProductService, CategoryServices
+from services.services import ProductService, CategoryServices, ReviewsProduct
 import re
 from typing import Any
 
@@ -76,7 +77,6 @@ class ProductDetailView(DetailView):
     """
     Вьюшка детальной страницы товара
     """
-
     template_name = 'store/product/product-detail.html'
     model = Product
     context_object_name = 'product'
@@ -88,9 +88,16 @@ class ProductDetailView(DetailView):
         """
 
         context = super().get_context_data(**kwargs)
+        context['num_reviews'] = ReviewsProduct.get_number_of_reviews_for_product(self.object)
+        context['reviews'] = ReviewsProduct.get_list_of_product_reviews(self.object)
         context.update(ProductService(context['product'])._get_context())
 
         return context
+
+    def post(self, request, *args, **kwargs):
+        ReviewsProduct.add_review_to_product(self.request, self.kwargs['slug'])
+        return HttpResponseRedirect(reverse_lazy("store:product-detail", kwargs=self.kwargs))
+
 
 
 # Представления для отображения страницы настроек

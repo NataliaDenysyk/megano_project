@@ -1,8 +1,11 @@
 from typing import List, Dict, Any
+
+from django.contrib.auth.models import User
 from django.db.models import Avg, Count
 
 from django.shortcuts import get_object_or_404
 
+from authorization.models import Profile
 from store.models import Product, Offer, Category, Reviews, Discount, ProductImage
 
 from cart.models import Cart
@@ -392,19 +395,32 @@ class ReviewsProduct:
     """
     Сервис для добавления отзыва к товару
     """
-
-    def _add_review_to_product(self, reviews: Reviews, product: Product) -> None:
+    @classmethod
+    def add_review_to_product(cls, request, slug) -> None:
         # добавить отзыв к товару
-        pass
 
-    def _get_list_of_product_reviews(self, product: Product) -> List:
+        rew = Reviews()
+        rew.comment_text = request.POST['review']
+        rew.product = Product.objects.get(slug=slug)
+        rew.author = Profile.objects.get(user__id=request.user.id)
+        rew.save()
+
+    @classmethod
+    def get_list_of_product_reviews(cls, product) -> List:
         # получить список отзывов к товару
-        pass
+        reviews = Reviews.objects.all().filter(product=product)
+        for review in reviews:
+            review.created_at = review.created_at.strftime('%b %d / %Y / %H:%M')
+
+        return reviews
 
     def _get_discount_on_cart(self, cart: Cart) -> Discount:
         # получить скидку на корзину
         pass
 
-    def _get_number_of_reviews_for_product(self, product: Product) -> int:
+    @classmethod
+    def get_number_of_reviews_for_product(cls, product) -> int:
         # получить количество отзывов для товара
-        pass
+        num_reviews = len(Reviews.objects.all().filter(product=product))
+
+        return num_reviews
