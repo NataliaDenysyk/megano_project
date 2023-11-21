@@ -2,6 +2,7 @@ from django.urls import path
 
 from .views import (
     CatalogListView,
+    ProductListView,
     ProductDetailView,
     SettingsView,
     ClearCacheAll,
@@ -13,12 +14,13 @@ from .views import (
     CacheSetupBannerView,
     CacheSetupCartView,
     CacheSetupProdDetailView,
-    CacheSetupSellerView
+    CacheSetupSellerView,
 )
 
 app_name = 'store'
 
 urlpatterns = [
+    path('', ProductListView.as_view(), name='index'),
     path('catalog/', CatalogListView.as_view(), name='catalog'),
     path('product/<slug:slug>/', ProductDetailView.as_view(), name='product-detail'),
 

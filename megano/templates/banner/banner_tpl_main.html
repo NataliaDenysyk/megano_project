@@ -1,13 +1,41 @@
 {% load static %}
 
-{% for banner in banners %}
-    {% if banner.is_active %}
-        <div class="container_slider_css">
-            <a href="{{ banner.link }}">
-                <img class="photo_slider_css" src="{{ banner.product.photos.url }}" width="350" alt="{{ banner.name }}">
-            </a>
+{% if banners %}
+    <div class="Header-slider">
+        <div class="Slider Slider_main">
+            <div class="Slider-box">
+                {% for banner in banners %}
+                    {% if banner.is_active %}
+                        <div class="Slider-item">
+                            <div class="Slider-content">
+                                <div class="row">
+                                    <div class="row-block">
+                                        <strong class="Slider-title">{{ banner.title }}
+                                        </strong>
+                                        <div class="Slider-text">{{ banner.description }}
+                                        </div>
+                                        <div class="Slider-footer">
+                                            <a class="btn btn_primary" href="#">{{ banner.link }}</a>
+                                        </div>
+                                    </div>
+                                    <div class="row-block">
+                                        <div class="Slider-img">
+                                            <img src="{{ banner.product.images.first.image.url }}"
+                                                 alt="{{ banner.title }}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <div class="Slider-navigateWrap">
+                <div class="Slider-navigate">
+                </div>
+            </div>
         </div>
-    {% else %}
-        <p>Здесь могла быть ваша реклама!</p> # TODO for mode Development. Insert an ad image
-    {% endif %}
-{% endfor %}
+    </div>
+{% else %}
+    Banners must  # TODO если нет баннера вставить изображение по умолчанию
+{% endif %}
