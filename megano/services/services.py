@@ -120,7 +120,7 @@ class ProductService:
             'feature': self._get_features(),
             'description': self._get_description(),
             'images': self._get_images(),
-            'price_avg': self._get_average_price(),
+            'price_avg': self.get_average_price(),
             'offers': self._get_offers(),
         }
 
@@ -219,7 +219,8 @@ class CategoryServices:
     Сервис по работе категорий
     """
 
-    def product_by_category(self, category_slug=None) -> Product.objects:
+    @staticmethod
+    def product_by_category(category_slug=None) -> Product.objects:
         """
         Функция отбирает продукты по категориям
         """
@@ -261,7 +262,8 @@ class CatalogService:
 
         return filterset
 
-    def filter_products_by_name(self, queryset: Product.objects, name: str, value: str) -> Product.objects:
+    @staticmethod
+    def filter_products_by_name(queryset: Product.objects, name: str, value: str) -> Product.objects:
         """
         Функция фильтрует товары по имени
 
@@ -272,7 +274,8 @@ class CatalogService:
 
         return queryset.filter(name__icontains=value)
 
-    def filter_by_price(self, queryset: Product.objects, name: str, value: str) -> Product.objects:
+    @staticmethod
+    def filter_by_price(queryset: Product.objects, name: str, value: str) -> Product.objects:
         """
         Функция фильтрует товары по цене
 
@@ -289,7 +292,8 @@ class CatalogService:
 
         return queryset.filter(id__in=offers.values_list('product_id', flat=True))
 
-    def filter_by_availability(self, queryset: Product.objects, name: str, value: str) -> Product.objects:
+    @staticmethod
+    def filter_by_availability(queryset: Product.objects, name: str, value: str) -> Product.objects:
         """
         Функция фильтрует по доступности продукта
 
@@ -300,8 +304,8 @@ class CatalogService:
 
         return queryset.filter(availability=value)
 
-    # TODO дописать фильтрацию по доставке
-    def filter_by_delivery(self, queryset: Product.objects, name: str, value: str):
+    @staticmethod
+    def filter_by_delivery(queryset: Product.objects, name: str, value: str) -> Product.objects:
         """
         Функция фильтрует товары по способу доставки
 
@@ -310,9 +314,15 @@ class CatalogService:
         :param value: значения поля
         """
 
-        pass
+        delivery_type = 1
 
-    def filter_by_stores(self, queryset: Product.objects, name: str, value: str) -> Product.objects:
+        if value == 'False':
+            delivery_type = 2
+
+        return queryset.filter(offer__seller__store_settings__delivery_type=delivery_type)
+
+    @staticmethod
+    def filter_by_stores(queryset: Product.objects, name: str, value: str) -> Product.objects:
         """
         Функция фильтрует товары по продавцу
 
@@ -328,7 +338,8 @@ class CatalogService:
 
         return queryset
 
-    def filter_by_feature(self, queryset: Product.objects, name: str, value: str) -> Product.objects:
+    @staticmethod
+    def filter_by_feature(queryset: Product.objects, name: str, value: str) -> Product.objects:
         """
         Функция фильтрует товары по характеристикам
 
@@ -339,7 +350,8 @@ class CatalogService:
 
         return queryset.filter(feature__icontains=value)
 
-    def _filter_by_tags(self, queryset: Product.objects, value: str) -> Product.objects:
+    @staticmethod
+    def _filter_by_tags(queryset: Product.objects, value: str) -> Product.objects:
         """
         Функция фильтрует товары по переданному тегу
 
@@ -349,7 +361,8 @@ class CatalogService:
 
         return queryset.filter(tags__name=value)
 
-    def get_popular_tags(self):
+    @staticmethod
+    def get_popular_tags():
         """
         Функция отбирает популярные теги по частоте купленных товаров
         """
@@ -383,7 +396,8 @@ class CatalogService:
 
         return queryset
 
-    def _sort_by_popularity(self, sorting: str, products: Product.objects) -> Product.objects:
+    @staticmethod
+    def _sort_by_popularity(sorting: str, products: Product.objects) -> Product.objects:
         """
         Функция сортирует продукты по популярности
 
@@ -403,7 +417,8 @@ class CatalogService:
 
         return products
 
-    def _sort_by_price(self, sorting: str, products: Product.objects) -> Product.objects:
+    @staticmethod
+    def _sort_by_price(sorting: str, products: Product.objects) -> Product.objects:
         """
         Функция сортирует продукты по средней цене
 
@@ -421,7 +436,8 @@ class CatalogService:
 
         return products
 
-    def _sort_by_reviews(self, sorting: str, products: Product.objects) -> Product.objects:
+    @staticmethod
+    def _sort_by_reviews(sorting: str, products: Product.objects) -> Product.objects:
         """
         Функция сортирует продукты по количеству отзывов
 
@@ -439,7 +455,8 @@ class CatalogService:
 
         return products
 
-    def _sort_by_novelty(self, sorting: str, products: Product.objects) -> Product.objects:
+    @staticmethod
+    def _sort_by_novelty(sorting: str, products: Product.objects) -> Product.objects:
         """
         Функция сортирует продукты по дате обновления
 

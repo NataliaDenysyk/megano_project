@@ -32,35 +32,29 @@ class CatalogListView(ListView):
 
     def get_queryset(self) -> Product.objects:
         """
-        Функция возвращает отфильтрованные продукты
-
-        :return queryset Product objects
+        Функция возвращает отфильтрованные продукты по категории, тегу, фильтру или сортировке
         """
 
         queryset = super().get_queryset()
 
         if self.request.resolver_match.captured_kwargs.get('slug'):
-            queryset = CategoryServices().product_by_category(
+            queryset = CategoryServices.product_by_category(
                 self.request.resolver_match.captured_kwargs['slug']
             )
 
         self.filterset = ProductFilter(self.request.GET, queryset=queryset)
         self.filterset = CatalogService().catalog_processing(self.request, self.filterset)
 
-        return self.filterset.queryset
+        return self.filterset.qs
 
     def get_context_data(self, **kwargs) -> HttpResponse:
-        """
-        Функция возвращает контекст
-        """
-
         context = super().get_context_data(**kwargs)
 
         context['filter'] = self.filterset.form
-        context['tags'] = CatalogService().get_popular_tags()
+        context['tags'] = CatalogService.get_popular_tags()
 
-        for i_product in context['products']:
-            i_product.price = ProductService(i_product).get_average_price()
+        for product in context['products']:
+            product.price = ProductService(product).get_average_price()
 
         context['full_path'] = GetParamService(self.request.get_full_path()).remove_param('sorting').get_url()
 
@@ -80,7 +74,6 @@ class ProductDetailView(DetailView):
     def get_context_data(self, **kwargs) -> HttpResponse:
         """
         Функция возвращает контекст
-
         """
 
         context = super().get_context_data(**kwargs)

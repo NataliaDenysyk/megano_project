@@ -31,7 +31,7 @@ class AdminBanner(admin.ModelAdmin):
 
     fieldsets = [
         (None, {
-            "fields": ('title', 'link', 'images', 'slug'),
+            "fields": ('title', 'link', 'slug'),
         }),
         ("Extra options", {
             "fields": ("is_active",),
