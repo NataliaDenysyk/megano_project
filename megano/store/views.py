@@ -61,12 +61,20 @@ class CatalogListView(ListView):
         return context
 
 
+class ProductListView(ListView):
+    """
+    Выводит весь список продуктов на главной странице
+    """
+    model = Product
+    template_name = 'base/base.html'
+    context_object_name = 'products'
+
+
 # TODO добавить кэширование страницы
 class ProductDetailView(DetailView):
     """
     Вьюшка детальной страницы товара
     """
-
     template_name = 'store/product/product-detail.html'
     model = Product
     context_object_name = 'product'
@@ -75,7 +83,6 @@ class ProductDetailView(DetailView):
         """
         Функция возвращает контекст
         """
-
         context = super().get_context_data(**kwargs)
         context.update(ProductService(context['product'])._get_context())
 
