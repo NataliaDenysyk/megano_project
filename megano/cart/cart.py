@@ -29,7 +29,7 @@ class Cart(object):
         """
         product_id = str(product.id)
         if product_id not in self.cart:
-            self.cart[product_id] = {'quantity': 0, 'price': str(product.price)}
+            self.cart[product_id] = {'quantity': 0, 'price': str(product.offers.first().unit_price)}
         if update:
             self.cart[product_id]['quantity'] = quantity
         else:
@@ -86,7 +86,7 @@ class Cart(object):
 
         cart = self.cart.copy()
         for product in products:
-            cart[str(product_id)]['product'] = product
+            cart[str(product.id)]['product'] = product
         for item in cart.values():
             item['price'] = Decimal(item['price'])
             item['total_price'] = item['price'] * item['quantity']
