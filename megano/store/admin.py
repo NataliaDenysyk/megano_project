@@ -32,7 +32,7 @@ class AdminBanner(admin.ModelAdmin):
 
     fieldsets = [
         (None, {
-            "fields": ('title', 'link', 'images', 'slug'),
+            "fields": ('title', 'link', 'slug', 'product', 'description'),
         }),
         ("Extra options", {
             "fields": ("is_active",),
@@ -46,7 +46,7 @@ class AdminBanner(admin.ModelAdmin):
         ссылка на изображение отображается в виде картинки размером 60х 60.
         """
         if obj.product:
-            return mark_safe(f'<img src="{obj.product.photos.url}" alt=""width="60">')
+            return mark_safe(f'<img src="{obj.product.images.first().image.url}" alt=""width="60">')
         else:
             return 'not url'
 
