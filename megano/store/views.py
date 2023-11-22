@@ -72,6 +72,15 @@ class CatalogListView(ListView):
         return context
 
 
+class ProductListView(ListView):
+    """
+    Выводит весь список продуктов на главной странице
+    """
+    model = Product
+    template_name = 'base/base.html'
+    context_object_name = 'products'
+
+
 # TODO добавить кэширование страницы
 class ProductDetailView(DetailView):
     """
@@ -84,9 +93,7 @@ class ProductDetailView(DetailView):
     def get_context_data(self, **kwargs) -> HttpResponse:
         """
         Функция возвращает контекст
-
         """
-
         context = super().get_context_data(**kwargs)
         context['num_reviews'] = ReviewsProduct.get_number_of_reviews_for_product(self.object)
         context['reviews'] = ReviewsProduct.get_list_of_product_reviews(self.object)
@@ -126,10 +133,9 @@ class ClearCacheAll(ChangeListMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         cache.clear()
         messages.success(self.request, 'Кеш полностью очищен.')  # Добавление сообщения для действия
-        change_list = self.get_change_list_admin(title="Settings")
-        return dict(list(context.items()) + list(change_list.items()))
+        return context
 
-    def dispatch(self, request, *args, **kwargs):
+    def dispatch(self, request, *args, **kwargs) -> HttpResponse:
         if cache:
             super().dispatch(request, *args, **kwargs)
         return HttpResponseRedirect(reverse_lazy("store:settings"))
@@ -145,10 +151,9 @@ class ClearCacheBanner(ChangeListMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         cache.delete("banners")
         messages.success(self.request, 'Кеш баннера очищен.')
-        change_list = self.get_change_list_admin(title="Settings")
-        return dict(list(context.items()) + list(change_list.items()))
+        return context
 
-    def dispatch(self, request, *args, **kwargs):
+    def dispatch(self, request, *args, **kwargs) -> HttpResponse:
         if cache:
             super().dispatch(request, *args, **kwargs)
         return HttpResponseRedirect(reverse_lazy("store:settings"))
@@ -164,10 +169,9 @@ class ClearCacheCart(ChangeListMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         cache.delete("cart")
         messages.success(self.request, 'Кеш корзины очищен.')
-        change_list = self.get_change_list_admin(title="Settings")
-        return dict(list(context.items()) + list(change_list.items()))
+        return context
 
-    def dispatch(self, request, *args, **kwargs):
+    def dispatch(self, request, *args, **kwargs) -> HttpResponse:
         if cache:
             super().dispatch(request, *args, **kwargs)
         return HttpResponseRedirect(reverse_lazy("store:settings"))
@@ -183,10 +187,27 @@ class ClearCacheProductDetail(ChangeListMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         cache.delete("product_detail")
         messages.success(self.request, 'Кеш продукта очищен.')
-        change_list = self.get_change_list_admin(title="Settings")
-        return dict(list(context.items()) + list(change_list.items()))
+        return context
 
-    def dispatch(self, request, *args, **kwargs):
+    def dispatch(self, request, *args, **kwargs) -> HttpResponse:
+        if cache:
+            super().dispatch(request, *args, **kwargs)
+        return HttpResponseRedirect(reverse_lazy("store:settings"))
+
+
+class ClearCacheSeller(ChangeListMixin, TemplateView):
+    """
+    Класс ClearCacheProductDetail позволяет очистить кеш детализации продуктов
+    """
+    template_name = 'admin/settings.html'
+
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        cache.delete("seller")
+        messages.success(self.request, 'Кеш продавца очищен.')
+        return context
+
+    def dispatch(self, request, *args, **kwargs) -> HttpResponse:
         if cache:
             super().dispatch(request, *args, **kwargs)
         return HttpResponseRedirect(reverse_lazy("store:settings"))
@@ -198,20 +219,13 @@ class SiteName(ChangeListMixin, TemplateView):
     """
     template_name = 'admin/settings.html'
 
-    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
-        context = super().get_context_data(**kwargs)
-        change_list = self.get_change_list_admin(
-            title="site name",
-        )
-        return dict(list(context.items()) + list(change_list.items()))
-
-    def post(self, request):
+    def post(self, request) -> HttpResponse:
         title_site = request.POST.get('title_site')
         if title_site:
             settings.set_site_name(title_site)
             messages.success(self.request, 'Название магазина успешно изменено')
         else:
-            messages.error(self.request, 'Поле не должно быть пустым')
+            messages.warning(self.request, 'Поле не должно быть пустым')
         return HttpResponseRedirect(reverse_lazy('store:settings'))
 
 
@@ -221,20 +235,14 @@ class CacheSetupBannerView(ChangeListMixin, TemplateView):
     """
     template_name = 'admin/settings.html'
 
-    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
-        context = super().get_context_data(**kwargs)
-        change_list = self.get_change_list_admin(
-            title="site name",
-        )
-        return dict(list(context.items()) + list(change_list.items()))
-
-    def post(self, request):
+    def post(self, request) -> HttpResponse:
         cache_time_banner = request.POST.get('cache_time_banner')
-        if re.findall(r'[0-9]', cache_time_banner):
-            settings.set_cache_banner(cache_time_banner)
+        time_banner = re.findall(r'[0-9]+', cache_time_banner)
+        if time_banner:
+            settings.set_cache_banner(time_banner[0])
             messages.success(self.request, 'Время кеширование Баннера установлено')
         else:
-            messages.error(self.request, 'Поле не должно быть пустым и содержать только цифры')
+            messages.warning(self.request, 'Поле не должно быть пустым или содержать только цифры')
         return HttpResponseRedirect(reverse_lazy('store:settings'))
 
 
@@ -244,41 +252,46 @@ class CacheSetupCartView(ChangeListMixin, TemplateView):
     """
     template_name = 'admin/settings.html'
 
-    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
-        context = super().get_context_data(**kwargs)
-        change_list = self.get_change_list_admin(
-            title="site name",
-        )
-        return dict(list(context.items()) + list(change_list.items()))
-
-    def post(self, request):
+    def post(self, request) -> HttpResponse:
         cache_time_cart = request.POST.get('cache_time_cart')
-        if re.findall(r'[0-9]', cache_time_cart):
-            settings.set_cache_cart(cache_time_cart)
+        time_cart = re.findall(r'[0-9]+', cache_time_cart)
+        if time_cart:
+            settings.set_cache_cart(time_cart[0])
             messages.success(self.request, 'Время кеширование Корзины установлено')
         else:
-            messages.error(self.request, 'Поле не должно быть пустым и содержать только цифры')
+            messages.warning(self.request, 'Поле не должно быть пустым или содержать только цифры')
         return HttpResponseRedirect(reverse_lazy('store:settings'))
 
 
-class CacheSetupBProdDetailView(ChangeListMixin, TemplateView):
+class CacheSetupProdDetailView(ChangeListMixin, TemplateView):
     """
-    Класс CacheSetupBProdDetailView позволяет задать или обновить время кеширования детальной информации продукта
+    Класс CacheSetupProdDetailView позволяет задать или обновить время кеширования детальной информации продукта
     """
     template_name = 'admin/settings.html'
 
-    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
-        context = super().get_context_data(**kwargs)
-        change_list = self.get_change_list_admin(
-            title="site name",
-        )
-        return dict(list(context.items()) + list(change_list.items()))
-
-    def post(self, request):
+    def post(self, request) -> HttpResponse:
         cache_time_prod_detail = request.POST.get('cache_time_prod_detail')
-        if re.findall(r'[0-9]', cache_time_prod_detail):
-            settings.set_cache_product_detail(cache_time_prod_detail)
+        time_prod_detail = re.findall(r'[0-9]+', cache_time_prod_detail)
+        if time_prod_detail:
+            settings.set_cache_product_detail(time_prod_detail[0])
             messages.success(self.request, 'Время кеширование детализации продукта установлено')
         else:
-            messages.error(self.request, 'Поле не должно быть пустым и содержать только цифры')
+            messages.warning(self.request, 'Поле не должно быть пустым или содержать только цифры')
+        return HttpResponseRedirect(reverse_lazy('store:settings'))
+
+
+class CacheSetupSellerView(ChangeListMixin, TemplateView):
+    """
+    Класс CacheSetupSellerView позволяет задать или обновить время кеширования детальной информации продавца
+    """
+    template_name = 'admin/settings.html'
+
+    def post(self, request) -> HttpResponse:
+        cache_time_seller = request.POST.get('cache_time_seller')
+        time_seller = re.findall(r'[0-9]+', cache_time_seller)
+        if time_seller:
+            settings.set_cache_seller(time_seller[0])
+            messages.success(self.request, 'Время кеширование детализации продавца установлено')
+        else:
+            messages.warning(self.request, 'Поле не должно быть пустым или содержать только цифры')
         return HttpResponseRedirect(reverse_lazy('store:settings'))
