@@ -28,7 +28,7 @@ class CartAdmin(admin.ModelAdmin):
         """
         Возвращает ссылку на изображение товара в виде иконки.
         """
-        return mark_safe(f"<img src='{obj.products.images.first().image.url}' width=50>")
+        return mark_safe(f"<img src='{obj.products.preview.url}' width=50>")
 
     product_name.short_description = 'Товары'
     icon_image.short_description = 'Иконка'
