@@ -2,7 +2,6 @@ from django.urls import path
 
 from .views import (
     CatalogListView,
-    ProductListView,
     ProductDetailView,
     SettingsView,
     ClearCacheAll,
@@ -20,9 +19,7 @@ from .views import (
 app_name = 'store'
 
 urlpatterns = [
-    path('', ProductListView.as_view(), name='index'),
-    path('catalog/', CatalogListView.as_view(), name='catalog'),
-    path('catalog/<slug:slug>/', CatalogListView.as_view(), name='category'),
+    path('', CatalogListView.as_view(), name='index'),
     path('product/<slug:slug>/', ProductDetailView.as_view(), name='product-detail'),
 
     path('settings/', SettingsView.as_view(), name='settings'),
