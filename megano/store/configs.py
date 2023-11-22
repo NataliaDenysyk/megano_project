@@ -11,7 +11,7 @@ class Settings:
     """
     Класс с настройками сайта.
     Обновление названия магазина.
-    Обновление время кеширования для Баннера, корзины, детализации продуктов
+    Обновление время кеширования для Баннера, корзины, детализации продуктов, каталога
     """
 
     def __init__(self):
@@ -21,6 +21,7 @@ class Settings:
         self.__cache_cart = SECOND * 10  # 10 min
         self.__cache_product = DAYS  # 1 day
         self.__cache_seller = DAYS  # 1 day
+        self.__cache_catalog = DAYS  # 1 day
 
     @staticmethod
     def time_calculate(cache_time) -> str:
@@ -79,6 +80,13 @@ class Settings:
         """
         self.__cache_seller = int(time_cache) * SECOND
 
+    def set_cache_catalog(self, time_cache: int) -> None:
+        """
+        Устанавливает время кеширования каталога
+        :param time_cache:  int время в минутах
+        """
+        self.__cache_catalog = int(time_cache) * SECOND
+
     def get_site_name(self) -> str:
         """
         Возвращает название магазина
@@ -113,6 +121,14 @@ class Settings:
         :return: int время в минутах
         """
         return self.time_calculate(self.__cache_seller)
+
+    def get_cache_catalog(self):
+        """
+        Возвращает время хранения кеша данных каталога
+        :return: int время в минутах
+        """
+
+        return self.__cache_catalog
 
 
 settings = Settings()

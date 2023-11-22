@@ -19,5 +19,6 @@ class ChangeListMixin:
             cache_cart=settings.get_cache_cart(),
             cache_prod_detail=settings.get_cache_product_detail(),
             cache_seller=settings.get_cache_seller(),
+            cache_catalog=settings.get_cache_catalog()
         )
         return context
