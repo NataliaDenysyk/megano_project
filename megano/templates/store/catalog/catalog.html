@@ -34,7 +34,7 @@
                       {% endfor %}
                     </div>
                     <div class="Card-hover">
-                      <a class="Card-btn" href="#">
+                      <a class="Card-btn" href="{% url 'cart:add_product_to_cart' product.slug %}">
                         <img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg"/>
                       </a>
                       <a class="Card-btn" href="#">

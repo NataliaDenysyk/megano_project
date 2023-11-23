@@ -1,26 +1,26 @@
 <div class="Tabs-block" id="description">
-  <h2>{{ description.title }}</h2>
-  <p>{% firstof description.description "Описания пока нет" %}</p>
+  <h2>{{ product.description.title }}</h2>
+  <p>{% firstof product.description.text_bottom "Описания пока нет" %}</p>
   <img class="pict pict_right"
        src="{{ product.preview.url }}" alt="bigGoods.png"/>
   <ul>
-    {% for i_descr in description.description_ul %}
-      <li>{{ i_descr }}</li>
+    {% for text in product.description.text_bottom_ul %}
+      <li>{{ text }}</li>
     {% endfor %}
   </ul>
   <div class="clearfix">
   </div>
-  {% if feature %}
+  {% if product.feature %}
     <div class="table">
       <table>
         <tr>
           <th>Характеристика</th>
           <th>Значение</th>
         </tr>
-        {% for i_key, i_value in feature.items %}
+        {% for key, value in product.feature.items %}
           <tr>
-            <td>{{ i_key }}</td>
-            <td>{{ i_value }}</td>
+            <td>{{ key }}</td>
+            <td>{{ value }}</td>
           </tr>
         {% endfor %}
       </table>

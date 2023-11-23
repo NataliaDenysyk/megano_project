@@ -7,24 +7,12 @@ from authorization.models import Profile
 from django.urls import reverse
 from mptt.models import MPTTModel, TreeForeignKey
 
-
-def category_image_directory_path(instance) -> str:
-    """
-    Функция coздания пути к картинке категории
-    """
-    return f'assets/img/icons/departments/{instance.pk}.svg'
-
-
-def product_images_directory_path(instance: 'ProductImage', filename: str) -> str:
-    """
-    Функция генерирует путь сохранения изображений с привязкой к id товара
-
-    :param instance: объект ProductImage
-    :param filename: имя файла
-    :return: str - путь для сохранения
-    """
-
-    return f'products/product_{instance.product_id}/{filename}'
+from store.utils import (
+    category_image_directory_path,
+    jsonfield_default_description,
+    jsonfield_default_feature,
+    product_images_directory_path
+)
 
 
 class Category(MPTTModel):
@@ -58,17 +46,28 @@ class Category(MPTTModel):
     class MPTTMeta:
         order_insertion_by = ['name']
 
+
 class Product(models.Model):
     """
     Модель товаров магазина
-
     """
 
     name = models.CharField('Название товара', default='', max_length=150, null=False, db_index=True)
     slug = models.SlugField(max_length=150, default='')
-    category = TreeForeignKey('Category', on_delete=models.PROTECT, related_name='products', verbose_name='Категория')
-    description = models.TextField('Описание', default='', null=False, blank=True)
-    feature = models.TextField('Характеристика', default='', null=False, blank=True)
+    category = TreeForeignKey(
+        'Category',
+        on_delete=models.PROTECT,
+        related_name='products',
+        verbose_name='Категория'
+    )
+    description = models.JSONField(
+        'Описание',
+        default=jsonfield_default_description,
+    )
+    feature = models.JSONField(
+        'Характеристика',
+        default=jsonfield_default_feature,
+    )
     tags = models.ManyToManyField('Tag', related_name='products', verbose_name='Теги')
     preview = ProcessedImageField(
         verbose_name='Основное фото',

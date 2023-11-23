@@ -53,6 +53,7 @@ cover/
 
 # Makefile
 .Makefile
+megano/Makefile
 
 # Translations
 *.mo

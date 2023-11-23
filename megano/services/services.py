@@ -108,7 +108,7 @@ class ProductService:
         """
         return int(len(self._get_viewed_product_list()))
 
-    def _get_context(self) -> Dict:
+    def get_context(self) -> Dict:
         """
         Функция собирает контекст для рендера шаблона
 
@@ -117,8 +117,6 @@ class ProductService:
         """
 
         context = {
-            'feature': self._get_features(),
-            'description': self._get_description(),
             'images': self._get_images(),
             'price_avg': self.get_average_price(),
             'offers': self._get_offers(),
@@ -138,48 +136,6 @@ class ProductService:
                 Avg('unit_price')
             ).get('unit_price__avg')
         )
-
-    def _get_features(self) -> Dict:
-        """
-        Приводит строку характеристик в формат словаря
-
-        :param product:
-        :return: dict - словарь характеристик и их описаний
-        """
-
-        new_feature = dict()
-        try:
-            features_list = self._product.feature.split('\r\n')
-            for feature in features_list:
-                key, value = feature.split('-')
-                new_feature[key] = value
-        except Exception as error:
-            return {}
-
-        return new_feature
-
-    def _get_description(self) -> Dict:
-        """
-        Приводит строку описания в формат словаря
-        """
-
-        description_data = {}
-
-        try:
-            description_list = self._product.description.split('\r\n\r\n')
-            if description_list[0]:
-                description_data['title'] = description_list[0]
-            if description_list[1]:
-                description_data['description'] = description_list[1]
-            if description_list[2]:
-                description_data['cart_text'] = description_list[2].split('\r\n')
-            if description_list[3]:
-                description_data['description_ul'] = description_list[3].split('\r\n')
-
-            return description_data
-
-        except Exception as error:
-            return description_data
 
     def _get_images(self) -> ProductImage.objects:
         """
