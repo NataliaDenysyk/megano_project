@@ -3,7 +3,6 @@ from django.conf import settings
 
 from store.models import Product
 
-
 MAX_COUNT = 21
 
 
@@ -11,6 +10,7 @@ class Cart(object):
     """
     Класс корзины для хранения, добавления, удаления товаров.
     """
+
     def __init__(self, request) -> None:
         self.session = request.session
         cart = self.session.get(settings.CART_ID)
@@ -18,7 +18,7 @@ class Cart(object):
             cart = self.session[settings.CART_ID] = {}
         self.cart = cart
 
-    def __check_product_to_cart(self,product: Product):
+    def __check_product_to_cart(self, product: Product):
         product_id = str(product.id)
         if product_id in self.cart:
             return product_id
@@ -40,7 +40,7 @@ class Cart(object):
         """
         Добавление кол-ва товара на странице корзины (+1 шт.)
         """
-        product_id =  self.__check_product_to_cart(product)
+        product_id = self.__check_product_to_cart(product)
         if 1 <= self.cart[product_id]['quantity'] < MAX_COUNT:
             self.cart[product_id]['quantity'] += quantity
         self.save()
