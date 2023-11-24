@@ -1,11 +1,12 @@
+from django.db.models import Count, Q
 from django.views.generic import ListView, DetailView, TemplateView
-from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.core.cache import cache
 
 from store.filters import ProductFilter
-from store.models import Product
+from store.models import Product, Orders, Offer
 from services.services import ProductService, CategoryServices
 import re
 from typing import Any
@@ -278,3 +279,31 @@ class CacheSetupSellerView(ChangeListMixin, TemplateView):
         else:
             messages.warning(self.request, 'Поле не должно быть пустым или содержать только цифры')
         return HttpResponseRedirect(reverse_lazy('store:settings'))
+
+
+class MainPage(ListView):
+    """
+    Главная страница
+    """
+
+    template_name = 'store/index.html'
+    model = Product
+
+    def get_queryset(self):
+        """
+        Queryset:
+            'pk': int,
+            'preview': image url,
+            'name': str,
+            'category__name': str,
+            'offer__unit_price': Decimal,
+            'count': int
+        """
+        cache_key = 'product_list_cache'
+        popular_products = cache.get(cache_key)
+
+        if popular_products is None:
+            popular_products = ProductService(self.model).get_popular_products(quantity=5)
+            cache.set(cache_key, popular_products, settings.set_popular_products_cache(1))
+
+        return popular_products
