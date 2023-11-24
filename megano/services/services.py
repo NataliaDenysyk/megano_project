@@ -197,7 +197,7 @@ class ProductService:
 
     def get_popular_products(self, quantity):
         popular_products = self._product.objects.filter(orders__status=True). \
-                               values('pk', 'preview', 'name', 'category__name', 'offer__unit_price'). \
+                               values('pk', 'slug', 'preview', 'name', 'category__name', 'offer__unit_price'). \
                                annotate(count=Count('pk')).order_by('-count')[:quantity]
         print(popular_products)
         return popular_products
