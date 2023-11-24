@@ -193,6 +193,13 @@ class ProductService:
 
         return Offer.objects.filter(product=self._product)
 
+    def get_popular_products(self, quantity):
+        popular_products = self._product.objects.filter(orders__status=True). \
+                               values('pk', 'preview', 'name', 'category__name', 'offer__unit_price'). \
+                               annotate(count=Count('pk')).order_by('-count')[:quantity]
+        print(popular_products)
+        return popular_products
+
 
 class ComparisonServices:
     """
@@ -212,11 +219,11 @@ class ComparisonServices:
         pass
 
 
-
 class CategoryServices:
     """
     Сервис по работе категорий
     """
+
     def _product_by_category(self, category_slug=None):
         """"
         Функция отбирает продукты по категориям
@@ -235,7 +242,7 @@ class CategoryServices:
         }
         return context
 
-    def _sorting_products(self, request):# -> dict[str, Any]:
+    def _sorting_products(self, request):  # -> dict[str, Any]:
         """"
         Функция сортировки товаров по  'Популярности'
         """

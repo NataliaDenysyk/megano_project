@@ -114,5 +114,8 @@ class Settings:
         """
         return self.time_calculate(self.__cache_seller)
 
+    def set_popular_products_cache(self, time_cache):
+        self.__cache_product = int(time_cache) * DAYS
+
 
 settings = Settings()
