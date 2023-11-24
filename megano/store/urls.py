@@ -13,19 +13,19 @@ from .views import (
     SiteName,
     CacheSetupBannerView,
     CacheSetupCartView,
-    CacheSetupProdDetailView,
     CacheSetupSellerView,
-    CacheSetupCatalogView
+    CacheSetupCatalogView,
+    CacheSetupProdDetailView,
+    MainPage,
 )
 
 app_name = 'store'
 
 urlpatterns = [
-    path('', CatalogListView.as_view(), name='index'),
     path('catalog/', CatalogListView.as_view(), name='catalog'),
     path('catalog/<slug:slug>/', CatalogListView.as_view(), name='category'),
     path('product/<slug:slug>/', ProductDetailView.as_view(), name='product-detail'),
-
+    path('', MainPage.as_view(), name='index'),
     path('settings/', SettingsView.as_view(), name='settings'),
     path('clear-all/', ClearCacheAll.as_view(), name='clear_all_cache'),
     path('clear-banner/', ClearCacheBanner.as_view(), name='clear_banner_cache'),
