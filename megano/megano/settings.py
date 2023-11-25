@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     'django_mptt_admin',
     'imagekit',
     'django_filters',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [

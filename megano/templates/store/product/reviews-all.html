@@ -1,10 +1,10 @@
-<div  class="Tabs-block" id="reviews">
+<div  class="Tabs-block" id="reviews_all">
     <header class="Section-header">
       <h3 class="Section-title">Отзывы
       </h3>
     </header>
     <div class="Comments">
-        {% for review in reviews_num3 %}
+        {% for review in reviews_all %}
           <div class="Comment">
             <div class="Comment-column Comment-column_pict">
               <div class="Comment-avatar"></div>
@@ -20,13 +20,6 @@
             </div>
           </div>
         {% endfor %}
-    {% if reviews_all.3 %}
-        </div>
-        <a class="Tabs-link" href="#reviews_all">
-            <span>Показать ещё</span>
-        </a>
-    {% endif %}
+    </div>
     {% include "store/product/form-reviews.html" %}
 </div>
-
-

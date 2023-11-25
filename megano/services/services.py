@@ -395,31 +395,31 @@ class ReviewsProduct:
     """
     Сервис для добавления отзыва к товару
     """
-    @classmethod
-    def add_review_to_product(cls, request, slug) -> None:
+    @staticmethod
+    def add_review_to_product(request, form, slug) -> None:
         # добавить отзыв к товару
 
         rew = Reviews()
-        rew.comment_text = request.POST['review']
+        rew.comment_text = form.cleaned_data['review']
         rew.product = Product.objects.get(slug=slug)
         rew.author = Profile.objects.get(user__id=request.user.id)
         rew.save()
 
-    @classmethod
-    def get_list_of_product_reviews(cls, product) -> List:
+    @staticmethod
+    def get_list_of_product_reviews(product):
         # получить список отзывов к товару
-        reviews = Reviews.objects.all().filter(product=product)
+        reviews = Reviews.objects.all().filter(product=product).order_by('-created_at')
         for review in reviews:
             review.created_at = review.created_at.strftime('%b %d / %Y / %H:%M')
 
-        return reviews
+        return reviews[0:3], reviews
 
     def _get_discount_on_cart(self, cart: Cart) -> Discount:
         # получить скидку на корзину
         pass
 
-    @classmethod
-    def get_number_of_reviews_for_product(cls, product) -> int:
+    @staticmethod
+    def get_number_of_reviews_for_product(product) -> int:
         # получить количество отзывов для товара
         num_reviews = len(Reviews.objects.all().filter(product=product))
 
