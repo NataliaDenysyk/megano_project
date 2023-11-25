@@ -136,7 +136,7 @@ block
               <div class="dropdown-content">
                 <a class="dropdown-content-a" href="account.html">Личный кабинет</a>
                 {% if user.is_superuser %}
-                  <a class="dropdown-content-a" href="account.html">Административный раздел</a>
+                  <a class="dropdown-content-a" href="/admin">Административный раздел</a>
                 {% endif %}
                 <a class="dropdown-content-a" href="account.html">Выход</a>
               </div>
@@ -219,3 +219,4 @@ block
     </div>
   </div>
 </header>
+
