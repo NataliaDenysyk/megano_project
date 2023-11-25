@@ -1,4 +1,3 @@
-from django.db.models import Count, Q
 from django.views.generic import ListView, DetailView, TemplateView
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
