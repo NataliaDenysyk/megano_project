@@ -5,34 +5,20 @@ from django.urls import reverse_lazy
 from django.contrib import messages
 from django.core.cache import cache
 
-from store.filters import ProductFilter
-from store.models import Product, Orders, Offer
-from services.services import ProductService, CategoryServices
+from store.models import Product
+from services.services import (
+    ProductService,
+    CatalogService,
+    CategoryServices,
+    GetParamService,
+)
+
 import re
 from typing import Any
 
 from .configs import settings
+from .filters import ProductFilter
 from .mixins import ChangeListMixin
-
-
-class CategoryView(TemplateView):
-    """"
-    Класс получения категорий и подкатегорий
-    """
-    template_name = 'store/category_product.html'
-
-    def get_context_data(self, **kwargs):
-        """"
-        Функция отображает переданный шаблон
-        """
-        context = super().get_context_data()
-        if self.request.GET.get('category_slug'):
-            category_slug = self.request.GET['category_slug']
-            context = CategoryServices()._product_by_category(category_slug)
-
-        else:
-            context = CategoryServices()._sorting_products(self.request)
-        return context
 
 
 class CatalogListView(ListView):
@@ -41,42 +27,51 @@ class CatalogListView(ListView):
     """
 
     template_name = 'store/catalog/catalog.html'
-    queryset = Product.objects.all()
+    model = Product
     context_object_name = 'products'
     paginate_by = 8
 
     def get_queryset(self) -> Product.objects:
         """
-        Функция возвращает отфильтрованные продукты
-
-        :return queryset Product objects
+        Функция возвращает отфильтрованные продукты по категории, тегу, фильтру или сортировке
         """
 
         queryset = super().get_queryset()
+        queryset = cache.get_or_set('products', queryset, settings.get_cache_catalog())
+
+        if self.request.resolver_match.captured_kwargs.get('slug'):
+            queryset = CategoryServices.product_by_category(
+                self.request.resolver_match.captured_kwargs['slug']
+            )
+
         self.filterset = ProductFilter(self.request.GET, queryset=queryset)
+        self.filterset = CatalogService().catalog_processing(self.request, self.filterset)
 
         return self.filterset.qs
 
     def get_context_data(self, **kwargs) -> HttpResponse:
         """
         Функция возвращает контекст
-
         """
 
         context = super().get_context_data(**kwargs)
-        context['filter'] = self.filterset.form
 
-        for i_product in context['products']:
-            i_product.price = ProductService(i_product)._get_average_price()
+        context['filter'] = self.filterset.form
+        context['tags'] = CatalogService.get_popular_tags()
+
+        for product in context['products']:
+            product.price = ProductService(product).get_average_price()
+
+        context['full_path'] = GetParamService(self.request.get_full_path()).remove_param('sorting').get_url()
 
         return context
 
 
-# TODO добавить кэширование страницы
 class ProductDetailView(DetailView):
     """
     Вьюшка детальной страницы товара
     """
+
     template_name = 'store/product/product-detail.html'
     model = Product
     context_object_name = 'product'
@@ -85,6 +80,7 @@ class ProductDetailView(DetailView):
         """
         Функция возвращает контекст
         """
+
         context = super().get_context_data(**kwargs)
         context.update(ProductService(context['product'])._get_context())
 
@@ -197,6 +193,25 @@ class ClearCacheSeller(ChangeListMixin, TemplateView):
         return HttpResponseRedirect(reverse_lazy("store:settings"))
 
 
+class ClearCacheCatalog(ChangeListMixin, TemplateView):
+    """
+    Класс ClearCacheProductDetail позволяет очистить кеш детализации продуктов
+    """
+
+    template_name = 'admin/settings.html'
+
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        cache.delete("catalog")
+        messages.success(self.request, 'Кеш каталога очищен.')
+        return context
+
+    def dispatch(self, request, *args, **kwargs) -> HttpResponse:
+        if cache:
+            super().dispatch(request, *args, **kwargs)
+        return HttpResponseRedirect(reverse_lazy("store:settings"))
+
+
 class SiteName(ChangeListMixin, TemplateView):
     """
     Класс SiteName позволяет задать новое название интернет магазина
@@ -275,6 +290,24 @@ class CacheSetupSellerView(ChangeListMixin, TemplateView):
         time_seller = re.findall(r'[0-9]+', cache_time_seller)
         if time_seller:
             settings.set_cache_seller(time_seller[0])
+            messages.success(self.request, 'Время кеширование детализации продавца установлено')
+        else:
+            messages.warning(self.request, 'Поле не должно быть пустым или содержать только цифры')
+        return HttpResponseRedirect(reverse_lazy('store:settings'))
+
+
+class CacheSetupCatalogView(ChangeListMixin, TemplateView):
+    """
+    Класс CacheSetupCatalogView позволяет задать или обновить время кеширования каталога
+    """
+
+    template_name = 'admin/settings.html'
+
+    def post(self, request) -> HttpResponse:
+        cache_time_catalog = request.POST.get('cache_time_catalog')
+        time_catalog = re.findall(r'[0-9]+', cache_time_catalog)
+        if time_catalog:
+            settings.set_cache_catalog(time_catalog[0])
             messages.success(self.request, 'Время кеширование детализации продавца установлено')
         else:
             messages.warning(self.request, 'Поле не должно быть пустым или содержать только цифры')

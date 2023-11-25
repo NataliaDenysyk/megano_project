@@ -26,7 +26,7 @@ class ProductFilter(django_filters.FilterSet):
             'placeholder': 'Название',
             'name': 'title',
         }),
-        method=CatalogService()._filter_products_by_name,
+        method=CatalogService().filter_products_by_name,
     )
     range = django_filters.CharFilter(
         label='Цена',
@@ -39,25 +39,25 @@ class ProductFilter(django_filters.FilterSet):
             'data-min': '0',
             'data-max': '1000',
         }),
-        method=CatalogService()._filter_by_price,
+        method=CatalogService().filter_by_price,
     )
     profile = django_filters.ModelMultipleChoiceFilter(
         label='Продавцы',
         queryset=Profile.objects.filter(role='store'),
         widget=CustomCheckboxMultiple(),
-        method=CatalogService()._filter_by_stores,
+        method=CatalogService().filter_by_stores,
     )
     availability = django_filters.TypedChoiceFilter(
         label='Только товары в наличии',
         choices=CHOICES,
         widget=CustomRadioSelect(),
-        method=CatalogService()._filter_by_availability,
+        method=CatalogService().filter_by_availability,
     )
     delivery_free = django_filters.TypedChoiceFilter(
         label='С бесплатной доставкой',
         choices=CHOICES,
         widget=CustomRadioSelect(),
-        method=CatalogService()._filter_by_delivery,
+        method=CatalogService().filter_by_delivery,
     )
     feature = django_filters.CharFilter(
         label='Характеристика',
@@ -67,5 +67,5 @@ class ProductFilter(django_filters.FilterSet):
             'placeholder': 'Характеристика',
             'name': 'feature',
         }),
-        method=CatalogService()._filter_by_feature,
+        method=CatalogService().filter_by_feature,
     )
