@@ -103,7 +103,6 @@ class Settings:
         """
         if time:
             return self.__cache_banner
-<<<<<<< megano/store/configs.py
 
         return self.time_calculate(self.get_cache_banner())
 
