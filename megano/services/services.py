@@ -1,9 +1,15 @@
 from typing import List, Dict, Any
+
+from django.contrib.auth.models import User
 from django.db.models import Avg, Count
+from urllib.parse import urlparse, parse_qs, urlencode
+
+from django.db.models import Avg, Count, When, Case
 
 from django.shortcuts import get_object_or_404
 
-from store.models import Product, Offer, Category, Reviews, Discount, ProductImage
+from authorization.models import Profile
+from store.models import Product, Offer, Category, Reviews, Discount, ProductImage, Tag
 
 from cart.models import Cart
 
@@ -118,13 +124,13 @@ class ProductService:
             'feature': self._get_features(),
             'description': self._get_description(),
             'images': self._get_images(),
-            'price_avg': self._get_average_price(),
+            'price_avg': self.get_average_price(),
             'offers': self._get_offers(),
         }
 
         return context
 
-    def _get_average_price(self) -> float:
+    def get_average_price(self) -> float:
         """
         Функция возвращает среднюю цену товара по всем продавцам
         """
@@ -160,6 +166,7 @@ class ProductService:
         """
         Приводит строку описания в формат словаря
         """
+
         description_data = {}
 
         try:
@@ -188,10 +195,16 @@ class ProductService:
     def _get_offers(self):
         """
         Функция возвращает всех продавцов товара
-
         """
 
         return Offer.objects.filter(product=self._product)
+
+    def get_popular_products(self, quantity):
+        popular_products = self._product.objects.filter(orders__status=True). \
+                               values('pk', 'slug', 'preview', 'name', 'category__name', 'offer__unit_price'). \
+                               annotate(count=Count('pk')).order_by('-count')[:quantity]
+        print(popular_products)
+        return popular_products
 
 
 class ComparisonServices:
@@ -212,96 +225,24 @@ class ComparisonServices:
         pass
 
 
-
 class CategoryServices:
     """
     Сервис по работе категорий
     """
-    def _product_by_category(self, category_slug=None):
-        """"
+
+    @staticmethod
+    def product_by_category(category_slug=None) -> Product.objects:
+        """
         Функция отбирает продукты по категориям
         """
-        category = None
-        categories = Category.objects.all()
+
         products = Product.objects.filter(availability=True)
         if category_slug:
             category = get_object_or_404(Category, slug=category_slug)
             sub_categories = category.get_descendants(include_self=True)
             products = products.filter(category__in=sub_categories)
-        context = {
-            'category': category,
-            'categories': categories,
-            'products': products,
-        }
-        return context
 
-    def _sorting_products(self, request):# -> dict[str, Any]:
-        """"
-        Функция сортировки товаров по  'Популярности'
-        """
-        offer = Offer.objects.filter(product__availability=True)
-        if request.GET.get('popular'):
-            offer = self._sort_by_popularity(request, offer=offer)
-            context = {
-                'offer': self._sort_by_popularity(request, offer=offer)
-            }
-        elif request.GET.get('price'):
-            context = {
-                'offer': self._sort_by_price(request, offer=offer)
-            }
-        elif request.GET.get('reviews'):
-            context = {
-                'offer': self._sort_by_reviews(request, offer=offer)
-            }
-        elif request.GET.get('novetly'):
-            context = {
-                'offer': self._sort_by_novelty(request, offer=offer)
-            }
-        else:
-            context = {
-                'offer': offer
-            }
-
-        return context
-
-    def _sort_by_popularity(self, request, offer) -> Any:
-        if 'up' in request.GET:
-            offer = offer.annotate(cnt=Count('order__total', filter='products').order_by('cnt'))
-        elif 'down' in request.GET:
-            offer = offer.annotate(cnt=Count('order__total', filter='products').order_by('-cnt'))
-        else:
-            offer = offer
-
-        return offer
-
-    def _sort_by_price(self, request, offer) -> Any:
-        if 'up' in request.GET:
-            offer = offer.order_by('unit_price')
-        elif 'down' in request.GET:
-            offer = offer.order_by('-unit_price')
-        else:
-            offer = offer
-        return offer
-
-    def _sort_by_reviews(self, request, offer) -> Any:
-        if 'up' in request.GET:
-            offer = offer.annotate(cnt=Count('product__reviews', distinct=True).order_by('cnt'))
-        elif 'down' in request.GET:
-            offer = offer.annotate(cnt=Count('product__reviews', distinct=True).order_by('-cnt'))
-        else:
-            offer = offer
-
-        return offer
-
-    def _sort_by_novelty(self, request, offer) -> Any:
-        if 'up' in request.GET:
-            offer = offer.order_by('product__update_at')
-        elif 'down' in request.GET:
-            offer = offer.order_by('-product__update_at')
-        else:
-            offer = offer
-
-        return offer
+        return products
 
 
 class CatalogService:
@@ -309,7 +250,31 @@ class CatalogService:
     Сервис по работе фильтра
     """
 
-    def _filter_products_by_name(self, queryset: Product.objects, name: str, value: str) -> Product.objects:
+    def catalog_processing(self, request, filterset):
+        """
+        Функция сортирует переданные товары и фильтрует по тегу
+
+        :param request: объект запроса
+        :param filterset: объект ProductFilter
+        :return: объект ProductFilter после сортировки
+        """
+
+        if 'tag' in set(request.GET.keys()):
+            filterset.queryset = self._filter_by_tags(
+                filterset.queryset,
+                request.GET.get('tag')
+            )
+
+        if 'sorting' in set(request.GET.keys()):
+            filterset.queryset = self._sorting_products(
+                request.GET.get('sorting'),
+                filterset.queryset
+            )
+
+        return filterset
+
+    @staticmethod
+    def filter_products_by_name(queryset: Product.objects, name: str, value: str) -> Product.objects:
         """
         Функция фильтрует товары по имени
 
@@ -320,7 +285,8 @@ class CatalogService:
 
         return queryset.filter(name__icontains=value)
 
-    def _filter_by_price(self, queryset: Product.objects, name: str, value: str) -> Product.objects:
+    @staticmethod
+    def filter_by_price(queryset: Product.objects, name: str, value: str) -> Product.objects:
         """
         Функция фильтрует товары по цене
 
@@ -337,7 +303,8 @@ class CatalogService:
 
         return queryset.filter(id__in=offers.values_list('product_id', flat=True))
 
-    def _filter_by_availability(self, queryset: Product.objects, name: str, value: str) -> Product.objects:
+    @staticmethod
+    def filter_by_availability(queryset: Product.objects, name: str, value: str) -> Product.objects:
         """
         Функция фильтрует по доступности продукта
 
@@ -348,8 +315,8 @@ class CatalogService:
 
         return queryset.filter(availability=value)
 
-    # TODO дописать фильтрацию по доставке
-    def _filter_by_delivery(self, queryset: Product.objects, name: str, value: str):
+    @staticmethod
+    def filter_by_delivery(queryset: Product.objects, name: str, value: str) -> Product.objects:
         """
         Функция фильтрует товары по способу доставки
 
@@ -358,9 +325,15 @@ class CatalogService:
         :param value: значения поля
         """
 
-        pass
+        delivery_type = 1
 
-    def _filter_by_stores(self, queryset: Product.objects, name: str, value: str) -> Product.objects:
+        if value == 'False':
+            delivery_type = 2
+
+        return queryset.filter(offer__seller__store_settings__delivery_type=delivery_type)
+
+    @staticmethod
+    def filter_by_stores(queryset: Product.objects, name: str, value: str) -> Product.objects:
         """
         Функция фильтрует товары по продавцу
 
@@ -376,7 +349,8 @@ class CatalogService:
 
         return queryset
 
-    def _filter_by_feature(self, queryset: Product.objects, name: str, value: str) -> Product.objects:
+    @staticmethod
+    def filter_by_feature(queryset: Product.objects, name: str, value: str) -> Product.objects:
         """
         Функция фильтрует товары по характеристикам
 
@@ -387,24 +361,192 @@ class CatalogService:
 
         return queryset.filter(feature__icontains=value)
 
+    @staticmethod
+    def _filter_by_tags(queryset: Product.objects, value: str) -> Product.objects:
+        """
+        Функция фильтрует товары по переданному тегу
+
+        :param queryset: Product objects
+        :param value: имя тега
+        """
+
+        return queryset.filter(tags__name=value)
+
+    @staticmethod
+    def get_popular_tags():
+        """
+        Функция отбирает популярные теги по частоте купленных товаров
+        """
+
+        tags = Tag.objects.annotate(
+            count=Count(Case(
+                When(products__orders__status=True, then=1),
+            ))
+        ).order_by('-count')
+
+        return tags
+
+    def _sorting_products(self, sorting: str, queryset: Product.objects) -> Product.objects:
+        """
+        Функция отвечает за выбор метода сортировки
+
+        :param sorting: параметр сортировки
+        """
+
+        if 'popular' in sorting:
+            queryset = self._sort_by_popularity(sorting, products=queryset)
+
+        elif 'price' in sorting:
+            queryset = self._sort_by_price(sorting, products=queryset)
+
+        elif 'reviews' in sorting:
+            queryset = self._sort_by_reviews(sorting, products=queryset)
+
+        elif 'novelty' in sorting:
+            queryset = self._sort_by_novelty(sorting, products=queryset)
+
+        return queryset
+
+    @staticmethod
+    def _sort_by_popularity(sorting: str, products: Product.objects) -> Product.objects:
+        """
+        Функция сортирует продукты по популярности
+
+        :param sorting: параметр сортировки
+        """
+
+        ordering = 'count'
+
+        if 'down' in sorting:
+            ordering = '-count'
+
+        products = products.annotate(
+            count=Count(Case(
+                When(orders__status=True, then=1),
+            ))
+        ).order_by(ordering)
+
+        return products
+
+    @staticmethod
+    def _sort_by_price(sorting: str, products: Product.objects) -> Product.objects:
+        """
+        Функция сортирует продукты по средней цене
+
+        :param sorting: параметр сортировки
+        """
+
+        ordering = 'avg'
+
+        if 'down' in sorting:
+            ordering = '-avg'
+
+        products = products.annotate(
+            avg=Avg('offer__unit_price')
+        ).order_by(ordering)
+
+        return products
+
+    @staticmethod
+    def _sort_by_reviews(sorting: str, products: Product.objects) -> Product.objects:
+        """
+        Функция сортирует продукты по количеству отзывов
+
+        :param sorting: параметр сортировки
+        """
+
+        ordering = 'count'
+
+        if 'down' in sorting:
+            ordering = '-count'
+
+        products = products.annotate(
+            count=Count('reviews')
+        ).order_by(ordering)
+
+        return products
+
+    @staticmethod
+    def _sort_by_novelty(sorting: str, products: Product.objects) -> Product.objects:
+        """
+        Функция сортирует продукты по дате обновления
+
+        :param sorting: параметр сортировки
+        """
+
+        update = 'update_at'
+
+        if 'down' in sorting:
+            update = '-update_at'
+
+        products = products.order_by(update)
+
+        return products
+
 
 class ReviewsProduct:
     """
     Сервис для добавления отзыва к товару
     """
-
-    def _add_review_to_product(self, reviews: Reviews, product: Product) -> None:
+    @staticmethod
+    def add_review_to_product(request, form, slug) -> None:
         # добавить отзыв к товару
-        pass
 
-    def _get_list_of_product_reviews(self, product: Product) -> List:
+        rew = Reviews()
+        rew.comment_text = form.cleaned_data['review']
+        rew.product = Product.objects.get(slug=slug)
+        rew.author = Profile.objects.get(user__id=request.user.id)
+        rew.save()
+
+    @staticmethod
+    def get_list_of_product_reviews(product):
         # получить список отзывов к товару
-        pass
+        reviews = Reviews.objects.all().filter(product=product).order_by('-created_at')
+        for review in reviews:
+            review.created_at = review.created_at.strftime('%b %d / %Y / %H:%M')
+
+        return reviews[0:3], reviews
 
     def _get_discount_on_cart(self, cart: Cart) -> Discount:
         # получить скидку на корзину
         pass
 
-    def _get_number_of_reviews_for_product(self, product: Product) -> int:
+    @staticmethod
+    def get_number_of_reviews_for_product(product) -> int:
         # получить количество отзывов для товара
-        pass
+        num_reviews = len(Reviews.objects.all().filter(product=product))
+
+        return num_reviews
+
+
+class GetParamService:
+    """
+    Сервис, позволяющий добавлять или удалять get параметры из url
+    """
+
+    def __init__(self, url):
+        self._parsed_url = urlparse(url)
+        self._query = parse_qs(self._parsed_url.query, keep_blank_values=True)
+
+    def get_url(self) -> str:
+        """
+        Возвращает новый url
+        """
+
+        return self._parsed_url._replace(query=urlencode(self._query, True)).geturl()
+
+    def remove_param(self, param_name: str) -> 'GetParamService':
+        """
+        Удаляет get параметр из url
+        """
+
+        self._query.pop(param_name, None)
+        return self
+
+    def add_param(self, param_name: str, param_value: str) -> 'GetParamService':
+        """
+        Добавляет get параметр в url
+        """
+
+        self._query[param_name] = param_value
+        return self

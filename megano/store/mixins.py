@@ -8,6 +8,7 @@ class ChangeListMixin:
     """
     Класс ChangeListMixin миксуется для отображения "sidebar" и навигации в "header" в шаблоне настроек
     """
+
     def get_change_list_admin(self, **kwargs):
         model = Product
         context = kwargs
@@ -19,5 +20,6 @@ class ChangeListMixin:
             cache_cart=settings.get_cache_cart(time=False),
             cache_prod_detail=settings.get_cache_product_detail(time=False),
             cache_seller=settings.get_cache_seller(time=False),
+            cache_catalog=settings.get_cache_catalog(time=False)
         )
         return context

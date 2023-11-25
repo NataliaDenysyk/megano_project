@@ -11,7 +11,7 @@ class Settings:
     """
     Класс с настройками сайта.
     Обновление названия магазина.
-    Обновление время кеширования для Баннера, корзины, детализации продуктов
+    Обновление время кеширования для Баннера, корзины, детализации продуктов, каталога
     """
 
     def __init__(self):
@@ -21,6 +21,7 @@ class Settings:
         self.__cache_cart = SECOND * 10  # 10 min
         self.__cache_product = DAYS  # 1 day
         self.__cache_seller = DAYS  # 1 day
+        self.__cache_catalog = DAYS  # 1 day
 
     @staticmethod
     def time_calculate(cache_time) -> str:
@@ -79,6 +80,13 @@ class Settings:
         """
         self.__cache_seller = int(time_cache) * SECOND
 
+    def set_cache_catalog(self, time_cache: int) -> None:
+        """
+        Устанавливает время кеширования каталога
+        :param time_cache:  int время в минутах
+        """
+        self.__cache_catalog = int(time_cache) * SECOND
+
     def get_site_name(self) -> str:
         """
         Возвращает название магазина
@@ -89,17 +97,20 @@ class Settings:
     def get_cache_banner(self, time: bool = True) -> int | str:
         """
         Возвращает время хранения кеша Баннера.
+
         :time: bool Если time == True, то время возвращается как число, иначе как форматированный вывод
         :return: int или str время в минутах
         """
         if time:
             return self.__cache_banner
+<<<<<<< megano/store/configs.py
 
         return self.time_calculate(self.get_cache_banner())
 
     def get_cache_cart(self, time: bool = True) -> int | str:
         """
         Возвращает время хранения кеша Корзины.
+
         :time: bool Если time == True, то время возвращается как число, иначе как форматированный вывод
         :return: int или str время в минутах
         """
@@ -111,6 +122,7 @@ class Settings:
     def get_cache_product_detail(self, time: bool = True) -> int | str:
         """
         Возвращает время хранения кеша детальной информации Продукта.
+
         :time: bool Если time == True, то время возвращается как число, иначе как форматированный вывод
         :return: int или str время в минутах
         """
@@ -122,6 +134,7 @@ class Settings:
     def get_cache_seller(self, time: bool = True) -> int | str:
         """
         Возвращает время хранения кеша данных о продавце.
+
         :time: bool Если time == True, то время возвращается как число, иначе как форматированный вывод
         :return: int или str время в минутах
         """
@@ -129,6 +142,22 @@ class Settings:
             return self.__cache_seller
 
         return self.time_calculate(self.get_cache_seller())
+
+
+    def get_cache_catalog(self, time: bool = True) -> int | str:
+        """
+        Возвращает время хранения кеша данных каталога
+
+        :time: bool Если time == True, то время возвращается как число, иначе как форматированный вывод
+        :return: int или str время в минутах
+        """
+        if time:
+            return self.__cache_catalog
+
+        return self.time_calculate(self.__cache_catalog)
+
+    def set_popular_products_cache(self, time_cache):
+        self.__cache_product = int(time_cache) * DAYS
 
 
 settings = Settings()
