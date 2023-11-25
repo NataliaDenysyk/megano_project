@@ -96,19 +96,20 @@ class Settings:
 
     def get_cache_banner(self, time: bool = True) -> int | str:
         """
-        Возвращает время хранения кеша Баннера
+        Возвращает время хранения кеша Баннера.
 
         :time: bool Если time == True, то время возвращается как число, иначе как форматированный вывод
         :return: int или str время в минутах
         """
         if time:
             return self.__cache_banner
+<<<<<<< megano/store/configs.py
 
-        return self.time_calculate(self.__cache_banner)
+        return self.time_calculate(self.get_cache_banner())
 
     def get_cache_cart(self, time: bool = True) -> int | str:
         """
-        Возвращает время хранения кеша Корзины
+        Возвращает время хранения кеша Корзины.
 
         :time: bool Если time == True, то время возвращается как число, иначе как форматированный вывод
         :return: int или str время в минутах
@@ -116,11 +117,11 @@ class Settings:
         if time:
             return self.__cache_cart
 
-        return self.time_calculate(self.__cache_cart)
+        return self.time_calculate(self.get_cache_cart())
 
     def get_cache_product_detail(self, time: bool = True) -> int | str:
         """
-        Возвращает время хранения кеша детальной информации Продукта
+        Возвращает время хранения кеша детальной информации Продукта.
 
         :time: bool Если time == True, то время возвращается как число, иначе как форматированный вывод
         :return: int или str время в минутах
@@ -128,11 +129,11 @@ class Settings:
         if time:
             return self.__cache_product
 
-        return self.time_calculate(self.__cache_product)
+        return self.time_calculate(self.get_cache_product_detail())
 
     def get_cache_seller(self, time: bool = True) -> int | str:
         """
-        Возвращает время хранения кеша данных о продавце
+        Возвращает время хранения кеша данных о продавце.
 
         :time: bool Если time == True, то время возвращается как число, иначе как форматированный вывод
         :return: int или str время в минутах
@@ -140,7 +141,8 @@ class Settings:
         if time:
             return self.__cache_seller
 
-        return self.time_calculate(self.__cache_seller)
+        return self.time_calculate(self.get_cache_seller())
+
 
     def get_cache_catalog(self, time: bool = True) -> int | str:
         """

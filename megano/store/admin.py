@@ -3,6 +3,7 @@ from django.core.cache import cache
 from django.utils.safestring import mark_safe
 from django_mptt_admin.admin import DjangoMpttAdmin
 
+from cart.models import Cart
 from .models import (
     Banners,
     Product,
@@ -14,6 +15,11 @@ from .models import (
     Tag,
     ProductImage,
 )
+
+
+class CartInline(admin.TabularInline):
+    model = Cart
+    extra = 0
 
 
 @admin.register(Tag)
@@ -61,6 +67,7 @@ class ProductInline(admin.TabularInline):
 class AdminOrders(admin.ModelAdmin):
     inlines = [
         ProductInline,
+        CartInline,
     ]
     list_display = 'pk', 'delivery_type', 'address', 'created_at', 'profile', 'total',
     list_display_links = 'pk', 'delivery_type'
