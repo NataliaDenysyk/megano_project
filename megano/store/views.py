@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from django.db.models import Count, Q
 from django.views.generic import ListView, DetailView, TemplateView
 from django.http import HttpResponse, HttpResponseRedirect
@@ -12,14 +11,12 @@ from services.services import (
     CatalogService,
     CategoryServices,
     GetParamService,
-    ReviewsProduct,
 )
 
 import re
 from typing import Any
 
 from .configs import settings
-from .forms import ReviewsForm
 from .filters import ProductFilter
 from .mixins import ChangeListMixin
 
@@ -85,20 +82,9 @@ class ProductDetailView(DetailView):
         """
 
         context = super().get_context_data(**kwargs)
-        context['num_reviews'] = ReviewsProduct.get_number_of_reviews_for_product(self.object)
-        context['reviews_num3'], context['reviews_all'] = ReviewsProduct.get_list_of_product_reviews(self.object)
-        context['form'] = ReviewsForm()
         context.update(ProductService(context['product'])._get_context())
 
         return context
-
-    def post(self, request, *args, **kwargs):
-        form = ReviewsForm(request.POST)
-        if form.is_valid():
-            ReviewsProduct.add_review_to_product(request, form, self.kwargs['slug'])
-
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-
 
 
 # Представления для отображения страницы настроек

@@ -1,14 +1,10 @@
-from typing import List, Dict, Any
-
-from django.contrib.auth.models import User
-from django.db.models import Avg, Count
+from typing import List, Dict
 from urllib.parse import urlparse, parse_qs, urlencode
 
 from django.db.models import Avg, Count, When, Case
 
 from django.shortcuts import get_object_or_404
 
-from authorization.models import Profile
 from store.models import Product, Offer, Category, Reviews, Discount, ProductImage, Tag
 
 from cart.models import Cart
@@ -488,35 +484,22 @@ class ReviewsProduct:
     """
     Сервис для добавления отзыва к товару
     """
-    @staticmethod
-    def add_review_to_product(request, form, slug) -> None:
+
+    def _add_review_to_product(self, reviews: Reviews, product: Product) -> None:
         # добавить отзыв к товару
+        pass
 
-        rew = Reviews()
-        rew.comment_text = form.cleaned_data['review']
-        rew.product = Product.objects.get(slug=slug)
-        rew.author = Profile.objects.get(user__id=request.user.id)
-        rew.save()
-
-    @staticmethod
-    def get_list_of_product_reviews(product):
+    def _get_list_of_product_reviews(self, product: Product) -> List:
         # получить список отзывов к товару
-        reviews = Reviews.objects.all().filter(product=product).order_by('-created_at')
-        for review in reviews:
-            review.created_at = review.created_at.strftime('%b %d / %Y / %H:%M')
-
-        return reviews[0:3], reviews
+        pass
 
     def _get_discount_on_cart(self, cart: Cart) -> Discount:
         # получить скидку на корзину
         pass
 
-    @staticmethod
-    def get_number_of_reviews_for_product(product) -> int:
+    def _get_number_of_reviews_for_product(self, product: Product) -> int:
         # получить количество отзывов для товара
-        num_reviews = len(Reviews.objects.all().filter(product=product))
-
-        return num_reviews
+        pass
 
 
 class GetParamService:
