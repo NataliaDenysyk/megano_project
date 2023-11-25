@@ -2,7 +2,6 @@ from django.urls import path
 
 from .views import (
     CatalogListView,
-    ProductListView,
     ProductDetailView,
     SettingsView,
     ClearCacheAll,

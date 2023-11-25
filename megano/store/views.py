@@ -72,15 +72,6 @@ class CatalogListView(ListView):
         return context
 
 
-class ProductListView(ListView):
-    """
-    Выводит весь список продуктов на главной странице
-    """
-    model = Product
-    template_name = 'base/base.html'
-    context_object_name = 'products'
-
-
 # TODO добавить кэширование страницы
 class ProductDetailView(DetailView):
     """
