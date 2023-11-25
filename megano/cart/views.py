@@ -8,7 +8,7 @@ from store.models import Product
 
 
 class CartListView(generic.TemplateView):
-    template_name = 'cart/index.html'
+    template_name = 'store/cart.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

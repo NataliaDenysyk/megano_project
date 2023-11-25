@@ -1,4 +1,4 @@
-{% extends "base/../base/base.html" %}
+{% extends 'base/base.html' %}
 {% load static %}
 
 {% block content %}
@@ -7,50 +7,44 @@
       <div class="wrap">
         <div class="Section-column">
           {% include 'store/catalog/filter.html' %}
-          <div class="Section-columnSection">
-            <header class="Section-header">
-              <strong class="Section-title">Популярные тэги
-              </strong>
-            </header>
-            <div class="Section-columnContent">
-              <div class="buttons"><a class="btn btn_default btn_sm" href="#">Видео</a><a class="btn btn_default btn_sm"
-                                                                                          href="#">Разработка</a><a
-                      class="btn btn_default btn_sm" href="#">Игры</a><a class="btn btn_default btn_sm"
-                                                                         href="#">Asus</a><a
-                      class="btn btn_default btn_sm" href="#">Разработка</a><a class="btn btn_default btn_sm" href="#">Видео</a>
-              </div>
-            </div>
-          </div>
         </div>
         <div class="Section-content">
-          <div class="Sort">
-            <div class="Sort-title">Сортировать по:
-            </div>
-            <div class="Sort-variants"><a class="Sort-sortBy Sort-sortBy_dec" href="#">Популярности</a><a
-                    class="Sort-sortBy" href="#">Цене</a><a class="Sort-sortBy" href="#">Отзывам</a><a
-                    class="Sort-sortBy Sort-sortBy_inc" href="#">Новизне</a>
-            </div>
-          </div>
+          {% include "store/catalog/sorting.html" %}
           <div class="Cards">
             {% for product in products %}
               <div class="Card"><a class="Card-picture" href={% url 'store:product-detail' slug=product.slug %}><img src="{{ product.preview.url }}"/></a>
                 <div class="Card-content">
                   <strong class="Card-title"><a href={% url 'store:product-detail' slug=product.slug %}>{{ product.name }}</a>
+                  <strong class="Card-title">
+                    <a href="{% url 'store:product-detail' slug=product.slug %}">{{ product.name }}</a>
                   </strong>
                   <div class="Card-description">
-                    <div class="Card-cost"><span class="Card-price">{{ product.price }}</span>
+                    <div class="Card-cost">
+                      <span class="Card-price">${{ product.price }}</span>
                     </div>
-                    <div class="Card-category">{{ product.category }}
+                    <div class="Card-category">
+                      {% for tag in product.tags.all %}
+                        {% if not forloop.last %}
+                          {{ tag }}/
+                        {% else %}
+                          {{ tag }}
+                        {% endif %}
+                      {% endfor %}
                     </div>
-                    <div class="Card-hover"><a class="Card-btn" href="#"><img
-                            src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg"/></a>
+                    <div class="Card-hover">
+                      <a class="Card-btn" href="#">
+                        <img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg"/>
+                      </a>
+                      <a class="Card-btn" href="#">
+                        <img src="{% static 'assets/img/icons/card/change.svg' %}" alt="change.svg"/>
+                      </a>
                     </div>
                   </div>
                 </div>
               </div>
             {% endfor %}
           </div>
-          {% include "store/paginator.html" %}
+          {% include "store/catalog/paginator.html" %}
         </div>
       </div>
     </div>
