@@ -1,26 +1,168 @@
 from django.db import models
-from django.utils.safestring import mark_safe
+
+from imagekit.models import ProcessedImageField
+from imagekit.processors import ResizeToFill
+
+from authorization.models import Profile
+from django.urls import reverse
+from mptt.models import MPTTModel, TreeForeignKey
+
+from store.utils import (
+    category_image_directory_path,
+    jsonfield_default_description,
+    jsonfield_default_feature,
+    product_images_directory_path
+)
 
 
-# Create your models here.
-# TODO models Orders, Product, Discount, Category
+class Category(MPTTModel):
+    """
+    Модель хранения категорий товара
+    """
+    name = models.CharField(max_length=50, unique=True, verbose_name='Название')
+    parent = TreeForeignKey('self', on_delete=models.PROTECT,
+                            null=True, blank=True, related_name='children',
+                            db_index=True, verbose_name='Родительская категория')
+    image = models.ImageField(null=True, blank=True,
+                              upload_to=category_image_directory_path,
+                              verbose_name='Изображение')
+    slug = models.SlugField()
+    activity = models.BooleanField(default=True, verbose_name='Активация')
+    sort_index = models.IntegerField(verbose_name='Индекс сортировки')
 
-class Orders(models.Model):
-    pass
+    def __str__(self) -> str:
+        return f'{self.name}'
+
+    def get_absolute_url(self):
+        return reverse('product-by-category', args=[str(self.slug)])
+
+    class Meta:
+        unique_together = [['parent', 'slug']]
+        ordering = ["sort_index"]
+        db_table = 'Category'
+        verbose_name = 'Категория'
+        verbose_name_plural = 'Категории'
+
+    class MPTTMeta:
+        order_insertion_by = ['name']
 
 
 class Product(models.Model):
-    pass
+    """
+    Модель товаров магазина
+    """
+
+    name = models.CharField('Название товара', default='', max_length=150, null=False, db_index=True)
+    slug = models.SlugField(max_length=150, default='')
+    category = TreeForeignKey(
+        'Category',
+        on_delete=models.PROTECT,
+        related_name='products',
+        verbose_name='Категория'
+    )
+    description = models.JSONField(
+        'Описание',
+        default=jsonfield_default_description,
+    )
+    feature = models.JSONField(
+        'Характеристика',
+        default=jsonfield_default_feature,
+    )
+    tags = models.ManyToManyField('Tag', related_name='products', verbose_name='Теги')
+    preview = ProcessedImageField(
+        verbose_name='Основное фото',
+        upload_to="products/product/%y/%m/%d/",
+        options={"quality": 80},
+        processors=[ResizeToFill(200, 200)],
+        blank=True,
+        null=True
+    )
+    availability = models.BooleanField('Доступность', default=False)
+    created_at = models.DateTimeField('Создан', auto_now_add=True)
+    update_at = models.DateTimeField('Отредактирован', auto_now=True)
+    discount = models.ManyToManyField('Discount', related_name='products', verbose_name='Скидка')
+    is_view = models.BooleanField('Просмотрен', default=False)
+
+    def __str__(self) -> str:
+        return f"{self.name} (id:{self.pk})"
+
+    class Meta:
+        db_table = 'Products'
+        ordering = ['id', 'name']
+        verbose_name = 'Товар'
+        verbose_name_plural = 'Товары'
+
+
+class ProductImage(models.Model):
+    """
+    Модель хранит изображения товаров
+    """
+
+    product = models.ForeignKey('Product', on_delete=models.CASCADE, related_name='images')
+    image = ProcessedImageField(
+        verbose_name='Фотография товара',
+        upload_to=product_images_directory_path,
+        options={"quality": 80},
+        processors=[ResizeToFill(200, 200)],
+    )
+
+    def __str__(self) -> str:
+        return f"{self.pk})"
+
+    class Meta:
+        db_table = 'Images'
+        ordering = ['id', ]
+        verbose_name = 'Изображение'
+        verbose_name_plural = 'Изображения'
+
+
+class Offer(models.Model):
+    """
+    Модель предложений продавцов, содержит цену и кол-во предлагаемого товара
+
+    """
+
+    unit_price = models.DecimalField('Цена', default=0, max_digits=8, decimal_places=2)
+    amount = models.PositiveIntegerField('Количество')
+    seller = models.ForeignKey('authorization.Profile', on_delete=models.CASCADE, verbose_name='Продавец')
+    product = models.ForeignKey('store.Product', on_delete=models.CASCADE, verbose_name='Товар')
+
+    def __str__(self) -> str:
+        return f"Предложение от {self.seller.name_store}"
+
+    class Meta:
+        db_table = 'Offer'
+        ordering = ['id', 'unit_price']
+        verbose_name = 'Предложение'
+        verbose_name_plural = 'Предложения'
+
+
+class Tag(models.Model):
+    """
+    Модель тегов
+
+    """
+
+    name = models.CharField('Название', default='', max_length=50, null=False, blank=False)
+
+    def __str__(self) -> str:
+        return f"{self.name}"
+
+    class Meta:
+        db_table = 'Tags'
+        ordering = ['id', 'name']
+        verbose_name = 'Тег'
+        verbose_name_plural = 'Теги'
 
 
 class Banners(models.Model):
     """
-
+    Модель Баннеры
     """
     title = models.CharField(u"Название баннера", max_length=150, db_index=True)
     slug = models.SlugField(u"URL", max_length=150, db_index=True)
+    product = models.OneToOneField(Product, on_delete=models.CASCADE, verbose_name='Продукт')
     description = models.TextField(u"Описание баннера", blank=True)
-    images = models.ImageField(upload_to="img_banner/%y/%m/%d/", verbose_name="Изображение")
     link = models.URLField(max_length=250, blank=True, verbose_name="Ссылка")
     is_active = models.BooleanField(default=False, verbose_name="Модерация")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Создан")
@@ -29,21 +171,82 @@ class Banners(models.Model):
     def __str__(self) -> str:
         return f"{self.title}"
 
-    def get_html_images(self, object):
-        """
-        В панели администратора,
-        ссылка на изображение отображается в виде картинки размером 60х 60.
-        """
-        if self.images:
-            return mark_safe(f"<img src'{object.images.url}' width=60")
-        else:
-            return 'not url'
-
-    get_html_images.short_description = "Изображение"
-    get_html_images.allow_tags = True
-
     class Meta:
         db_table = "banners"
         ordering = ["title", ]
         verbose_name = 'баннер'
         verbose_name_plural = 'баннеры'
+
+
+class Reviews(models.Model):
+    """
+    Модель отзывов товара
+    """
+
+    comment_text = models.TextField(' Отзыв', default='', null=False, blank=True)
+    author = models.ForeignKey('authorization.Profile', on_delete=models.CASCADE)
+    created_at = models.DateTimeField('Создан', auto_now_add=True)
+    product = models.ForeignKey('store.Product', on_delete=models.CASCADE, verbose_name='Товары')
+
+    def __str__(self) -> str:
+        return f"{self.comment_text[:25]}"
+
+    class Meta:
+        db_table = 'Reviews'
+        verbose_name = 'Отзыв'
+        verbose_name_plural = 'Отзывы'
+
+
+class Discount(models.Model):
+    """
+    Модель скидок
+
+    """
+
+    name = models.CharField('Название', default='', max_length=70, null=False, blank=False)
+    description = models.TextField('Описание', default='', null=False, blank=True)
+    sum_discount = models.FloatField('Сумма скидки', null=False, blank=False)
+    total_products = models.IntegerField('Количество товаров', null=True, blank=True)
+    valid_from = models.DateTimeField('Действует с', null=True, blank=True)
+    valid_to = models.DateTimeField('Действует до', blank=False)
+    is_active = models.BooleanField('Активно', default=False)
+    created_at = models.DateTimeField('Создана', auto_now_add=True)
+
+    def __str__(self) -> str:
+        return f'{self.name}'
+
+    class Meta:
+        db_table = 'Discounts'
+        ordering = ['id', 'name']
+        verbose_name = 'Скидка'
+        verbose_name_plural = 'Скидки'
+
+
+class Comparison(models.Model):
+    pass
+
+
+class Orders(models.Model):
+    """
+    Модель хранения заказов
+    """
+
+    delivery_type = models.CharField(
+        max_length=100,
+        blank=False,
+        default='pickup',
+        verbose_name="Тип доставки")
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    address = models.TextField(max_length=150, null=True, verbose_name="Адрес")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Создан")
+    status = models.BooleanField(default=False, verbose_name='Оплачен')
+    total = models.IntegerField(verbose_name='Количество')
+    products = models.ManyToManyField(Product, related_name='orders')
+
+    def __str__(self) -> str:
+        return f"Order(pk = {self.pk}"
+
+    class Meta:
+        db_table = "Orders"
+        verbose_name = "Заказ"
+        verbose_name_plural = "Заказы"
