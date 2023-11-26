@@ -71,15 +71,15 @@
           </div>
           {% if seller.phone %}
             <div class="Section-columnSection Section-columnSection_mark">
-            <div class="media media_middle">
-              <div class="media-image"><img src="{% static 'assets/img/icons/contacts/phone.svg' %}" alt="phone.svg"/>
-              </div>
-              <div class="media-content">
-                Phone:+7 {% change_phone_format seller.phone %}
+              <div class="media media_middle">
+                <div class="media-image"><img src="{% static 'assets/img/icons/contacts/phone.svg' %}" alt="phone.svg"/>
+                </div>
+                <div class="media-content">
+                  Phone:+7 {% change_phone_format seller.phone %}
+                </div>
               </div>
             </div>
           {% endif %}
-          </div>
           {% if seller.address %}
             <div class="Section-columnSection Section-columnSection_mark">
               <div class="media media_middle">
