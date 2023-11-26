@@ -111,7 +111,7 @@ class ProductImage(models.Model):
 
     class Meta:
         db_table = 'Images'
-        ordering = ['id',]
+        ordering = ['id', ]
         verbose_name = 'Изображение'
         verbose_name_plural = 'Изображения'
 
@@ -249,4 +249,4 @@ class Orders(models.Model):
     class Meta:
         db_table = "Orders"
         verbose_name = "Заказ"
-    verbose_name_plural = "Заказы"
+        verbose_name_plural = "Заказы"

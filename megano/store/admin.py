@@ -1,7 +1,9 @@
 from django.contrib import admin
+from django.core.cache import cache
 from django.utils.safestring import mark_safe
 from django_mptt_admin.admin import DjangoMpttAdmin
 
+from cart.models import Cart
 from .models import (
     Banners,
     Product,
@@ -13,6 +15,11 @@ from .models import (
     Tag,
     ProductImage,
 )
+
+
+class CartInline(admin.TabularInline):
+    model = Cart
+    extra = 0
 
 
 @admin.register(Tag)
@@ -60,6 +67,7 @@ class ProductInline(admin.TabularInline):
 class AdminOrders(admin.ModelAdmin):
     inlines = [
         ProductInline,
+        CartInline,
     ]
     list_display = 'pk', 'delivery_type', 'address', 'created_at', 'profile', 'total',
     list_display_links = 'pk', 'delivery_type'
@@ -146,6 +154,7 @@ class AdminProduct(admin.ModelAdmin):
     search_fields = 'name', 'description'
     prepopulated_fields = {'slug': ('name',)}
     readonly_fields = ('created_time', 'update_time')
+    actions = ['reset_product_list_cache']
 
     fieldsets = [
         (None, {
@@ -184,6 +193,12 @@ class AdminProduct(admin.ModelAdmin):
     description_short.short_description = 'Описание'
     created_time.short_description = 'Создан'
     update_time.short_description = 'Отредактирован'
+
+    def reset_product_list_cache(self, request, queryset):
+        cache.clear()
+        self.message_user(request, "Кеш списка товаров сброшен.")
+
+    reset_product_list_cache.short_description = "Сбросить кеш списка товаров"
 
 
 @admin.register(Offer)
@@ -234,5 +249,3 @@ class DiscountAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         return Discount.objects.prefetch_related('products')
-
-

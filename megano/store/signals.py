@@ -25,3 +25,8 @@ def cache_deleted_product(**kwargs) -> None:
     except AttributeError:
         pass
 
+
+@receiver(post_save, sender=Product)
+def reset_product_list_cache(sender, instance, **kwargs):
+    cache_key = 'product_list_cache'
+    cache.delete(cache_key)
