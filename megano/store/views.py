@@ -10,6 +10,7 @@ from services.services import (
     CatalogService,
     CategoryServices,
     GetParamService,
+    ProductsViewService,
 )
 
 import re
@@ -66,7 +67,6 @@ class CatalogListView(ListView):
         return context
 
 
-# TODO добавить кэширование страницы
 class ProductDetailView(DetailView):
     """
     Вьюшка детальной страницы товара
@@ -77,9 +77,12 @@ class ProductDetailView(DetailView):
     context_object_name = 'product'
 
     def get_object(self, *args, **kwargs) -> Product.objects:
+
         slug = self.kwargs.get('slug')
         instance = Product.objects.get(slug=slug)
         product = cache.get_or_set(f'product-{slug}', instance, settings.get_cache_product_detail())
+
+        ProductsViewService(self.request).add_product_to_viewed(product.id)
 
         return product
 
