@@ -8,7 +8,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('store', '0019_alter_orders_options_remove_product_is_view'),
+        ('store', '0018_alter_orders_options_remove_product_is_view_and_more'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ('authorization', '0003_remove_profile_sale_alter_profile_avatar_and_more'),
     ]

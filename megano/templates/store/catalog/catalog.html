@@ -37,7 +37,7 @@
                     </div>
                     <div class="Card-hover">
                       {% if product.offers.all %}
-                        <a class="Card-btn" href="{% url 'cart:add_product_to_cart' product.slug %}">
+                        <a class="Card-btn" href="{% url 'cart:add_product_to_cart' product.offers.first.id %}">
                           <img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg"/>
                         </a>
                       {% endif %}

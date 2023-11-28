@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.views import generic
 
 from .cart import Cart
-from store.models import Product
+from store.models import Product, Offer
 
 
 class CartListView(generic.TemplateView):
@@ -20,17 +20,17 @@ class CartListView(generic.TemplateView):
         return context
 
 
-def add_product_to_cart(request: WSGIRequest, slug: Product) -> HttpResponse:
+def add_product_to_cart(request: WSGIRequest, offer_id) -> HttpResponse:
     """
     Добавление товара в корзину
 
-    :param request: запрос
-    :param slug: slug товара
+    :param offer_id: айди оффера
     :return: HttpResponse - текущая страница
     """
     cart = Cart(request)
-    product = get_object_or_404(Product, slug=slug)
-    cart.add_product(product, update=False)
+    offer = get_object_or_404(Offer, id=offer_id)
+
+    cart.add_product(offer, update=False)
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
