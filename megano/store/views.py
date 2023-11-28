@@ -79,10 +79,14 @@ class ProductDetailView(DetailView):
     model = Product
     context_object_name = 'product'
 
+    def get_object(self, *args, **kwargs) -> Product.objects:
+        slug = self.kwargs.get('slug')
+        instance = Product.objects.get(slug=slug)
+        product = cache.get_or_set(f'product-{slug}', instance, settings.get_cache_product_detail())
+
+        return product
+
     def get_context_data(self, **kwargs) -> HttpResponse:
-        """
-        Функция возвращает контекст
-        """
 
         context = super().get_context_data(**kwargs)
         context['num_reviews'] = ReviewsProduct.get_number_of_reviews_for_product(self.object)
@@ -209,7 +213,7 @@ class ClearCacheSeller(ChangeListMixin, TemplateView):
 
 class ClearCacheCatalog(ChangeListMixin, TemplateView):
     """
-    Класс ClearCacheProductDetail позволяет очистить кеш детализации продуктов
+    Класс ClearCacheCatalog позволяет очистить кеш детализации продуктов
     """
 
     template_name = 'admin/settings.html'

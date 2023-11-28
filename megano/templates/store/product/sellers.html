@@ -23,19 +23,24 @@
                 <div class="Order-info Order-info_delivery">
                   <div class="Order-infoType">Тип доставки:
                   </div>
-                  <div class="Order-infoContent">Обычная доставка
+                  <div class="Order-infoContent">
+                    {{ offer.seller.store_settings.get_delivery_type_display }}
                   </div>
                 </div>
                 <div class="Order-info Order-info_pay">
                   <div class="Order-infoType">Оплата:
                   </div>
-                  <div class="Order-infoContent">Онлайн картой
+                  <div class="Order-infoContent">
+                    <div class="Order-infoContent">
+                      {{ offer.seller.store_settings.get_payment_display }}
+                    </div>
                   </div>
                 </div>
                 <div class="Order-info">
                   <div class="Order-infoType">Стоимость:
                   </div>
-                  <div class="Order-infoContent"><span class="Order-price">{{ offer.unit_price }}</span>
+                  <div class="Order-infoContent">
+                    <span class="Order-price">{{ offer.unit_price }}$</span>
                   </div>
                 </div>
               </div>
