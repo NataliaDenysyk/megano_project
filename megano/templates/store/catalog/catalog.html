@@ -12,10 +12,7 @@
           {% include "store/catalog/sorting.html" %}
           <div class="Cards">
             {% for product in products %}
-              <div class="Card">
-                <a class="Card-picture" href="#">
-                  <img src="{{ product.preview.url }}"/>
-                </a>
+              <div class="Card"><a class="Card-picture" href={% url 'store:product-detail' slug=product.slug %}><img src="{{ product.preview.url }}"/></a>
                 <div class="Card-content">
                   <strong class="Card-title">
                     <a href="{% url 'store:product-detail' slug=product.slug %}">{{ product.name }}</a>
