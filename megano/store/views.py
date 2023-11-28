@@ -96,7 +96,7 @@ class ProductDetailView(DetailView):
         context['num_reviews'] = ReviewsProduct.get_number_of_reviews_for_product(self.object)
         context['reviews_num3'], context['reviews_all'] = ReviewsProduct.get_list_of_product_reviews(self.object)
         context['form'] = ReviewsForm()
-        context.update(ProductService(context['product'])._get_context())
+        context.update(ProductService(context['product']).get_context())
 
         return context
 
@@ -106,7 +106,6 @@ class ProductDetailView(DetailView):
             ReviewsProduct.add_review_to_product(request, form, self.kwargs['slug'])
 
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-
 
 
 # Представления для отображения страницы настроек
