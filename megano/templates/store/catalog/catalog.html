@@ -12,10 +12,7 @@
           {% include "store/catalog/sorting.html" %}
           <div class="Cards">
             {% for product in products %}
-              <div class="Card">
-                <a class="Card-picture" href="#">
-                  <img src="{{ product.preview.url }}"/>
-                </a>
+              <div class="Card"><a class="Card-picture" href={% url 'store:product-detail' slug=product.slug %}><img src="{{ product.preview.url }}"/></a>
                 <div class="Card-content">
                   <strong class="Card-title">
                     <a href="{% url 'store:product-detail' slug=product.slug %}">{{ product.name }}</a>
@@ -34,7 +31,7 @@
                       {% endfor %}
                     </div>
                     <div class="Card-hover">
-                      <a class="Card-btn" href="#">
+                      <a class="Card-btn" href="{% url 'cart:add_product_to_cart' product.slug %}">
                         <img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg"/>
                       </a>
                       <a class="Card-btn" href="#">
@@ -46,7 +43,7 @@
               </div>
             {% endfor %}
           </div>
-          {% include "store/catalog/paginator.html" %}
+          {% include "store/paginator.html" %}
         </div>
       </div>
     </div>

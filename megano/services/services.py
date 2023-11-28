@@ -1,4 +1,7 @@
-from typing import List, Dict
+from typing import List, Dict, Any
+
+from django.contrib.auth.models import User
+from django.db.models import Avg, Count
 from urllib.parse import urlparse, parse_qs, urlencode
 
 from django.db.models import Avg, Count, When, Case
@@ -109,7 +112,7 @@ class ProductService:
         """
         return int(len(self._get_viewed_product_list()))
 
-    def _get_context(self) -> Dict:
+    def get_context(self) -> Dict:
         """
         Функция собирает контекст для рендера шаблона
 
@@ -118,8 +121,6 @@ class ProductService:
         """
 
         context = {
-            'feature': self._get_features(),
-            'description': self._get_description(),
             'images': self._get_images(),
             'price_avg': self.get_average_price(),
             'offers': self._get_offers(),
@@ -139,48 +140,6 @@ class ProductService:
                 Avg('unit_price')
             ).get('unit_price__avg')
         )
-
-    def _get_features(self) -> Dict:
-        """
-        Приводит строку характеристик в формат словаря
-
-        :param product:
-        :return: dict - словарь характеристик и их описаний
-        """
-
-        new_feature = dict()
-        try:
-            features_list = self._product.feature.split('\r\n')
-            for feature in features_list:
-                key, value = feature.split('-')
-                new_feature[key] = value
-        except Exception as error:
-            return {}
-
-        return new_feature
-
-    def _get_description(self) -> Dict:
-        """
-        Приводит строку описания в формат словаря
-        """
-
-        description_data = {}
-
-        try:
-            description_list = self._product.description.split('\r\n\r\n')
-            if description_list[0]:
-                description_data['title'] = description_list[0]
-            if description_list[1]:
-                description_data['description'] = description_list[1]
-            if description_list[2]:
-                description_data['cart_text'] = description_list[2].split('\r\n')
-            if description_list[3]:
-                description_data['description_ul'] = description_list[3].split('\r\n')
-
-            return description_data
-
-        except Exception as error:
-            return description_data
 
     def _get_images(self) -> ProductImage.objects:
         """
@@ -485,22 +444,35 @@ class ReviewsProduct:
     """
     Сервис для добавления отзыва к товару
     """
-
-    def _add_review_to_product(self, reviews: Reviews, product: Product) -> None:
+    @staticmethod
+    def add_review_to_product(request, form, slug) -> None:
         # добавить отзыв к товару
-        pass
 
-    def _get_list_of_product_reviews(self, product: Product) -> List:
+        rew = Reviews()
+        rew.comment_text = form.cleaned_data['review']
+        rew.product = Product.objects.get(slug=slug)
+        rew.author = Profile.objects.get(user__id=request.user.id)
+        rew.save()
+
+    @staticmethod
+    def get_list_of_product_reviews(product):
         # получить список отзывов к товару
-        pass
+        reviews = Reviews.objects.all().filter(product=product).order_by('-created_at')
+        for review in reviews:
+            review.created_at = review.created_at.strftime('%b %d / %Y / %H:%M')
+
+        return reviews[0:3], reviews
 
     def _get_discount_on_cart(self, cart: Cart) -> Discount:
         # получить скидку на корзину
         pass
 
-    def _get_number_of_reviews_for_product(self, product: Product) -> int:
+    @staticmethod
+    def get_number_of_reviews_for_product(product) -> int:
         # получить количество отзывов для товара
-        pass
+        num_reviews = len(Reviews.objects.all().filter(product=product))
+
+        return num_reviews
 
 
 class GetParamService:
