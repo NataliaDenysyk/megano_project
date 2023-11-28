@@ -172,13 +172,15 @@ class ProductService:
         Функция возвращает среднюю цену товара по всем продавцам
         """
 
-        return round(
-            Offer.objects.filter(
-                product=self._product,
-            ).aggregate(
-                Avg('unit_price')
-            ).get('unit_price__avg')
-        )
+        if self._product.offers.all():
+            return round(
+                Offer.objects.filter(
+                    product=self._product,
+                ).aggregate(
+                    Avg('unit_price')
+                ).get('unit_price__avg')
+            )
+        return None
 
     def _get_images(self) -> ProductImage.objects:
         """
@@ -196,7 +198,7 @@ class ProductService:
 
     def get_popular_products(self, quantity):
         popular_products = self._product.objects.filter(orders__status=True). \
-                               values('pk', 'slug', 'preview', 'name', 'category__name', 'offer__unit_price'). \
+                               values('pk', 'slug', 'preview', 'name', 'category__name', 'offers__unit_price'). \
                                annotate(count=Count('pk')).order_by('-count')[:quantity]
         print(popular_products)
         return popular_products
@@ -325,7 +327,7 @@ class CatalogService:
         if value == 'False':
             delivery_type = 2
 
-        return queryset.filter(offer__seller__store_settings__delivery_type=delivery_type)
+        return queryset.filter(offers__seller__store_settings__delivery_type=delivery_type)
 
     @staticmethod
     def filter_by_stores(queryset: Product.objects, name: str, value: str) -> Product.objects:
@@ -437,7 +439,7 @@ class CatalogService:
             ordering = '-avg'
 
         products = products.annotate(
-            avg=Avg('offer__unit_price')
+            avg=Avg('offers__unit_price')
         ).order_by(ordering)
 
         return products

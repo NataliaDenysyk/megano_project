@@ -24,7 +24,10 @@
       </h2>
       <div class="ProductCard-info">
         <div class="ProductCard-cost">
-          <div class="ProductCard-price"> {{ price_avg }}
+          <div class="ProductCard-price">
+            {% if price_avg != None %}
+              <span class="Card-price">${{ price_avg }}</span>
+            {% endif %}
           </div>
         </div>
       </div>
@@ -46,12 +49,14 @@
           </button>
         </div>
       </div>
-      <div class="ProductCard-cartElement">
-        <a class="btn btn_primary" href="#modal_open">
-          <img class="btn-icon" src={% static "assets/img/icons/card/cart_white.svg" %}/>
-          <span class="btn-content">Купить</span>
-        </a>
-      </div>
+      {% if product.offers.all %}
+        <div class="ProductCard-cartElement">
+          <a class="btn btn_primary" href="#modal_open">
+            <img class="btn-icon" src={% static "assets/img/icons/card/cart_white.svg" %}/>
+            <span class="btn-content">Купить</span>
+          </a>
+        </div>
+      {% endif %}
       <div id="modal_open" class="my_modal">
         <div class="my_modal-dialog">
           <div class="my_modal-content">

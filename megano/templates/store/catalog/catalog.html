@@ -22,7 +22,9 @@
                   </strong>
                   <div class="Card-description">
                     <div class="Card-cost">
-                      <span class="Card-price">${{ product.price }}</span>
+                      {% if product.price != None %}
+                        <span class="Card-price">${{ product.price }}</span>
+                      {% endif %}
                     </div>
                     <div class="Card-category">
                       {% for tag in product.tags.all %}
@@ -34,9 +36,11 @@
                       {% endfor %}
                     </div>
                     <div class="Card-hover">
-                      <a class="Card-btn" href="{% url 'cart:add_product_to_cart' product.slug %}">
-                        <img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg"/>
-                      </a>
+                      {% if product.offers.all %}
+                        <a class="Card-btn" href="{% url 'cart:add_product_to_cart' product.slug %}">
+                          <img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg"/>
+                        </a>
+                      {% endif %}
                       <a class="Card-btn" href="#">
                         <img src="{% static 'assets/img/icons/card/change.svg' %}" alt="change.svg"/>
                       </a>
