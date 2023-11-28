@@ -5,7 +5,8 @@ from django.db.models import Avg, Count, When, Case
 
 from django.shortcuts import get_object_or_404
 
-from store.models import Product, Offer, Category, Reviews, Discount, ProductImage, Tag
+from authorization.models import Profile, StoreSettings
+from store.models import Product, Offer, Category, Reviews, Discount, ProductImage, Tag, Orders
 
 from cart.models import Cart
 
@@ -533,3 +534,35 @@ class GetParamService:
 
         self._query[param_name] = param_value
         return self
+
+
+class ProfileService:
+    """
+    Сервис по работе с профилем
+    """
+
+    def __init__(self, profile: Profile):
+        self.profile = profile
+
+    def get_context(self):
+        """
+        Функция собирает контекст для рендера шаблона
+
+        :param object: объект Profile
+        :return: context - контекст для рендера шаблона
+        """
+        context = {
+            'order': self._get_orders()[:1],
+            # 'orders': self._get_orders(),
+            # 'price': 'pass'
+        }
+        return context
+
+    def _get_orders(self):
+        return Orders.objects.filter(profile=self.profile).order_by('created_at')
+
+    def name_profile(self, name):
+        print('name', name)
+        # last_name =
+
+
