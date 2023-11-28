@@ -18,3 +18,16 @@ def cache_deleted_banners(**kwargs) -> None:
 def reset_product_list_cache(sender, instance, **kwargs):
     cache_key = 'product_list_cache'
     cache.delete(cache_key)
+
+
+@receiver(post_save, sender=Product)
+def cache_deleted_product(**kwargs) -> None:
+    """ Удаление кеша товара и списка товаров при изменении, добавлении модели """
+    try:
+        slug = kwargs['instance'].slug
+        cache.delete(f'product-{slug}')
+        cache.delete('products')
+
+    except AttributeError:
+        pass
+

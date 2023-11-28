@@ -204,12 +204,18 @@ class AdminProduct(admin.ModelAdmin):
 @admin.register(Offer)
 class OfferAdmin(admin.ModelAdmin):
     list_display = 'pk', 'product', 'seller_verbose', 'unit_price', 'amount'
-    list_display_links = 'pk', 'product'
+    list_display_links = 'pk', 'seller_verbose'
     ordering = 'pk', 'unit_price', 'amount'
     search_fields = 'product', 'seller_verbose', 'unit_price', 'amount'
 
+    fieldsets = [
+        (None, {
+            'fields': ('product', 'unit_price', 'amount'),
+        }),
+    ]
+
     def get_queryset(self, request):
-        return Offer.objects.select_related('seller', 'product')
+        return Offer.objects.filter(seller__role='store').select_related('product', 'seller')
 
     def seller_verbose(self, obj: Offer) -> str:
         return obj.seller.name_store
