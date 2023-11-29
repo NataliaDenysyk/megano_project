@@ -81,7 +81,6 @@ class ProductDetailView(DetailView):
     context_object_name = 'product'
 
     def get_object(self, *args, **kwargs) -> Product.objects:
-
         slug = self.kwargs.get('slug')
         instance = Product.objects.get(slug=slug)
         product = cache.get_or_set(f'product-{slug}', instance, settings.get_cache_product_detail())
@@ -91,7 +90,6 @@ class ProductDetailView(DetailView):
         return product
 
     def get_context_data(self, **kwargs) -> HttpResponse:
-
         context = super().get_context_data(**kwargs)
         context['num_reviews'] = ReviewsProduct.get_number_of_reviews_for_product(self.object)
         context['reviews_num3'], context['reviews_all'] = ReviewsProduct.get_list_of_product_reviews(self.object)
