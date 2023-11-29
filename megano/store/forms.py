@@ -5,7 +5,9 @@ from .models import Orders
 
 class ReviewsForm(forms.Form):
     review = forms.CharField(widget=forms.Textarea, max_length=100)
-class OrderCreateForm(forms.ModelForm):
+
+
+class OrderCreateForm(forms.Form):
     name = forms.CharField(
         max_length=100,
         label='ФИО',
