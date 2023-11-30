@@ -42,15 +42,12 @@
                                 </header>
                                 <div class="row">
                                     <div class="row-block">
-                                        {% for field in form %}
-                                            <div class="form-group">
-                                                {% if field.id_for_label == 'name' or field.id_for_label == 'phone' %}
-                                                    <label class="form-label"
-                                                           for="{{ field.id_for_label }}">{{ field.label }}
-                                                    </label>{{ field }}
-                                                {% endif %}
-                                            </div>
-                                        {% endfor %}
+                                        <div class="form-group">
+                                            {{ form.name.label }}
+                                            {{ form.name }}
+                                            {{ form.phone.label }}
+                                            {{ form.phone }}
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="Order-footer"><a class="btn btn_success Order-next" href="#step2">Дальше</a>
@@ -78,14 +75,12 @@
                                         </label>
                                     </div>
                                 </div>
-                                {% for field in form %}
-                                    <div class="form-group">
-                                        {% if field.id_for_label == 'id_city' or field.id_for_label == 'id_address' %}
-                                            <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}
-                                            </label>{{ field }}
-                                        {% endif %}
-                                    </div>
-                                {% endfor %}
+                                <div class="form-group">
+                                    {{ form.city.label }}
+                                    {{ form.city }}
+                                    {{ from.address.label }}
+                                    {{ form.address }}
+                                </div>
                                 <div class="Order-footer"><a class="btn btn_success Order-next" href="#step3">Дальше</a>
                                 </div>
                             </div>
@@ -102,10 +97,10 @@
                                         {% endif %}
                                     </div>
                                 {% endfor %}
-                                {#                            <div class="Order-footer"><a class="btn btn_success Order-next" href="#step4">Дальше</a>#}
-                                <button class="btn btn_primary btn_lg" type="submit">Оплатить
-                                </button>
-                            </div>
+                                <div class="Order-footer"><a class="btn btn_success Order-next" href="#step4">Дальше</a>
+                                    <button class="btn btn_primary btn_lg" type="submit">Оплатить
+                                    </button>
+                                </div>
                         </form>
                     {% endif %}
                 </div>
