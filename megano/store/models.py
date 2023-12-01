@@ -26,6 +26,7 @@ class Category(MPTTModel):
     image = models.ImageField(null=True, blank=True,
                               upload_to=category_image_directory_path,
                               verbose_name='Изображение')
+    discount = models.ManyToManyField('Discount', related_name='categories', verbose_name='Скидка')
     slug = models.SlugField()
     activity = models.BooleanField(default=True, verbose_name='Активация')
     sort_index = models.IntegerField(verbose_name='Индекс сортировки')
@@ -125,7 +126,12 @@ class Offer(models.Model):
     unit_price = models.DecimalField('Цена', default=0, max_digits=8, decimal_places=2)
     amount = models.PositiveIntegerField('Количество')
     seller = models.ForeignKey('authorization.Profile', on_delete=models.CASCADE, verbose_name='Продавец')
-    product = models.ForeignKey('store.Product', on_delete=models.CASCADE, verbose_name='Товар')
+    product = models.ForeignKey(
+        'store.Product',
+        on_delete=models.CASCADE,
+        related_name='offers',
+        verbose_name='Товар'
+    )
 
     def __str__(self) -> str:
         return f"Предложение от {self.seller.name_store}"
@@ -207,6 +213,8 @@ class Discount(models.Model):
     description = models.TextField('Описание', default='', null=False, blank=True)
     sum_discount = models.FloatField('Сумма скидки', null=False, blank=False)
     total_products = models.IntegerField('Количество товаров', null=True, blank=True)
+    sum_cart = models.FloatField(verbose_name='Сумма корзины', null=True, blank=True)
+    priority = models.BooleanField(verbose_name='Приоритет', default=False)
     valid_from = models.DateTimeField('Действует с', null=True, blank=True)
     valid_to = models.DateTimeField('Действует до', blank=False)
     is_active = models.BooleanField('Активно', default=False)

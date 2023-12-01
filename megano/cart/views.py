@@ -1,20 +1,24 @@
 from django.core.handlers.wsgi import WSGIRequest
 from django.shortcuts import get_object_or_404, redirect
 from django.http import HttpResponseRedirect, HttpResponse
-from django.views import generic
+from django.views.generic import TemplateView
 
+from services.services import DiscountProduct
 from .cart import Cart
 from store.models import Product
 
 
-class CartListView(generic.TemplateView):
+class CartListView(TemplateView):
     template_name = 'store/cart.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        cart = Cart(self.request)
+        discount = DiscountProduct()
         context.update(
             {
-                'carts': Cart(self.request)
+                'carts': cart,
+                'total_price': discount.get_priority_discount(cart=cart)
             }
         )
         return context
@@ -83,4 +87,3 @@ def clear_cart(request: WSGIRequest) -> HttpResponseRedirect:
     cart = Cart(request)
     cart.clear()
     return redirect('cart:index')
-
