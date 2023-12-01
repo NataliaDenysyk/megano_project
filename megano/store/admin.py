@@ -62,7 +62,6 @@ class AdminBanner(admin.ModelAdmin):
 class ProductInline(admin.TabularInline):
     model = Orders.products.through
 
-
 @admin.register(Orders)
 class AdminOrders(admin.ModelAdmin):
     inlines = [
@@ -170,7 +169,7 @@ class AdminProduct(admin.ModelAdmin):
     ]
 
     def get_queryset(self, request):
-        return Product.objects.select_related('category').prefetch_related('discount', 'tags', 'offer_set')
+        return Product.objects.select_related('category').prefetch_related('discount', 'tags', 'offers')
 
     def description_short(self, obj: Product) -> str:
         """
@@ -237,10 +236,17 @@ class ReviewsProduct(admin.ModelAdmin):
         return obj.comment_text[:100]
 
 
+class CategoriesInline(admin.TabularInline):
+    model = Discount.categories.through
+    verbose_name = 'Категория'
+    verbose_name_plural = 'Категории'
+
+
 @admin.register(Discount)
 class DiscountAdmin(admin.ModelAdmin):
     inlines = [
         ProductInline,
+        CategoriesInline
     ]
     list_display = 'pk', 'name', 'description', 'sum_discount', 'valid_from', 'valid_to', 'is_active'
     list_display_links = 'pk', 'name'
