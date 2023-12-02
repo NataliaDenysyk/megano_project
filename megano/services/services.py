@@ -5,6 +5,7 @@ from django.db.models import Avg, Count
 from urllib.parse import urlparse, parse_qs, urlencode
 
 from django.db.models import Avg, Count, When, Case
+from django.http import HttpRequest
 
 from django.shortcuts import get_object_or_404
 
@@ -58,59 +59,101 @@ class PaymentService:
         return 'Оплачено'
 
 
-# TODO Добавить расчет цены с учетом скидки
-# TODO Добавить отображение отзывов на страницу товара
-class ProductService:
+class ProductsViewService:
     """
-    Сервис по работе с продуктами
-
+    Сервис просмотренных товаров
     """
+    LIMIT_PRODUCTS = 20
 
-    def __init__(self, product: Product):
-        self._product = product
+    def __init__(self, request: HttpRequest):
+        self._request = request
 
-    def _get_all_products(self):
+    def get_cached_products_id(self) -> List:
         """
-        Получить все продукты
+        Получить список id продуктов из кэша
         """
-        return Product.objects.all()
 
-    def _get_viewed_product_list(self):
+        viewed = self._request.session.get('products_viewed')
+
+        return viewed
+
+    def get_viewed_product_list(self) -> List:
         """
         Получить список просмотренных продуктов
         """
-        return self._get_all_products().filter(is_viewed=True)
 
-    def _add_product_to_viewed(self, prod_slug):
-        """
-        Добавить продукт в список просмотренных продуктов
-        """
-        product = Product.objects.get(slug=prod_slug)
-        product.is_viewed = True
-        product.save()
+        viewed = self.get_cached_products_id()
+        products = Product.objects.filter(id__in=viewed)
 
-    def _remove_product_from_viewed(self, prod_id):
+        products_dict = {product.id: product for product in products}
+        viewed_list = [products_dict.get(product) for product in viewed]
+
+        return viewed_list
+
+    def add_product_to_viewed(self, product_id: int):
+        """
+        Добавляет id продукта в список просмотренных, который хранится в сессии.
+        Если список просмотренных заполнен(равен 20) - удаляет из него самый старый просмотр.
+        Если продукт уже есть в этом списке - передвигает его на место последнего просмотра.
+        """
+
+        viewed = self.get_cached_products_id()
+        full_list = len(viewed) == self.LIMIT_PRODUCTS
+
+        if viewed:
+            if full_list:
+                viewed.pop(0)
+
+            if self._is_product_in_viewed_list(product_id):
+                viewed = self._remove_product_from_viewed(product_id)
+
+            viewed.append(product_id)
+            self._request.session['products_viewed'] = viewed
+
+        else:
+            self._request.session['products_viewed'] = [product_id]
+
+    def _remove_product_from_viewed(self,  product_id: int) -> List:
         """
         Удалить продукт из списка просмотренных продуктов
         """
-        product = Product.objects.get(id=prod_id)
-        product.is_viewed = False
-        product.save()
 
-    def _is_product_in_viewed_list(self, prod_id):
+        viewed = self.get_cached_products_id()
+        viewed.remove(product_id)
+
+        return viewed
+
+    def _is_product_in_viewed_list(self, product_id: int) -> bool:
         """
         Проверить есть ли продукт в списке просмотренных продуктов
         """
-        if prod_id in self._get_viewed_product_list():
-            return True
-        else:
-            return False
+
+        viewed = self.get_cached_products_id()
+
+        return product_id in viewed
 
     def _count_viewed_product(self) -> int:
         """
         Получить количество просмотренных продуктов
         """
-        return int(len(self._get_viewed_product_list()))
+
+        viewed = self.get_cached_products_id()
+        if viewed:
+            count = len(viewed)
+            return count
+
+        return 0
+
+
+# TODO Добавить расчет цены с учетом скидки
+# TODO Добавить отображение отзывов на страницу товара
+class ProductService:
+    """
+    Сервис по работе с продуктами
+    """
+
+    def __init__(self, product: Product):
+        self._product = product
 
     def get_context(self) -> Dict:
         """
@@ -133,13 +176,15 @@ class ProductService:
         Функция возвращает среднюю цену товара по всем продавцам
         """
 
-        return round(
-            Offer.objects.filter(
-                product=self._product,
-            ).aggregate(
-                Avg('unit_price')
-            ).get('unit_price__avg')
-        )
+        if self._product.offers.all():
+            return round(
+                Offer.objects.filter(
+                    product=self._product,
+                ).aggregate(
+                    Avg('unit_price')
+                ).get('unit_price__avg')
+            )
+        return None
 
     def _get_images(self) -> ProductImage.objects:
         """
@@ -157,7 +202,7 @@ class ProductService:
 
     def get_popular_products(self, quantity):
         popular_products = self._product.objects.filter(orders__status=True). \
-                               values('pk', 'slug', 'preview', 'name', 'category__name', 'offer__unit_price'). \
+                               values('pk', 'slug', 'preview', 'name', 'category__name', 'offers__unit_price'). \
                                annotate(count=Count('pk')).order_by('-count')[:quantity]
         print(popular_products)
         return popular_products
@@ -286,7 +331,7 @@ class CatalogService:
         if value == 'False':
             delivery_type = 2
 
-        return queryset.filter(offer__seller__store_settings__delivery_type=delivery_type)
+        return queryset.filter(offers__seller__store_settings__delivery_type=delivery_type)
 
     @staticmethod
     def filter_by_stores(queryset: Product.objects, name: str, value: str) -> Product.objects:
@@ -398,7 +443,7 @@ class CatalogService:
             ordering = '-avg'
 
         products = products.annotate(
-            avg=Avg('offer__unit_price')
+            avg=Avg('offers__unit_price')
         ).order_by(ordering)
 
         return products

@@ -81,7 +81,6 @@ class Product(models.Model):
     created_at = models.DateTimeField('Создан', auto_now_add=True)
     update_at = models.DateTimeField('Отредактирован', auto_now=True)
     discount = models.ManyToManyField('Discount', related_name='products', verbose_name='Скидка')
-    is_view = models.BooleanField('Просмотрен', default=False)
 
     def __str__(self) -> str:
         return f"{self.name} (id:{self.pk})"
@@ -124,8 +123,18 @@ class Offer(models.Model):
 
     unit_price = models.DecimalField('Цена', default=0, max_digits=8, decimal_places=2)
     amount = models.PositiveIntegerField('Количество')
-    seller = models.ForeignKey('authorization.Profile', on_delete=models.CASCADE, verbose_name='Продавец')
-    product = models.ForeignKey('store.Product', on_delete=models.CASCADE, verbose_name='Товар')
+    seller = models.ForeignKey(
+        'authorization.Profile',
+        on_delete=models.CASCADE,
+        verbose_name='Продавец',
+        related_name='offers'
+    )
+    product = models.ForeignKey(
+        'store.Product',
+        on_delete=models.CASCADE,
+        verbose_name='Товар',
+        related_name='offers'
+    )
 
     def __str__(self) -> str:
         return f"Предложение от {self.seller.name_store}"
