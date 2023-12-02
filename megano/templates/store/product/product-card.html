@@ -51,7 +51,7 @@
       </div>
       {% if product.offers.all %}
         <div class="ProductCard-cartElement">
-          <a class="btn btn_primary" href="#modal_open">
+          <a class="btn btn_primary" href="{% url 'cart:add_product_to_cart' product.offers.first.id %}">
             <img class="btn-icon" src={% static "assets/img/icons/card/cart_white.svg" %}/>
             <span class="btn-content">Купить</span>
           </a>

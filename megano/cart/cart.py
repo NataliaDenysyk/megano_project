@@ -23,13 +23,13 @@ class Cart(object):
         if product_id in self.cart:
             return product_id
 
-    def add_product(self, product: Product, quantity: int = 1, update: bool = False) -> None:
+    def add_product(self, offer, quantity: int = 1, update: bool = False) -> None:
         """
         Метод добавления товара в корзину на странице сайта
         """
-        product_id = str(product.id)
+        product_id = str(offer.product.id)
         if product_id not in self.cart:
-            self.cart[product_id] = {'quantity': 0, 'price': str(product.offer_set.first().unit_price)}
+            self.cart[product_id] = {'quantity': 0, 'price': str(offer.unit_price)}
         if update:
             self.cart[product_id]['quantity'] = quantity
         else:

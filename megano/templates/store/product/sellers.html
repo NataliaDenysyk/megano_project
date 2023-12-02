@@ -1,5 +1,6 @@
 {% load static %}
 
+
 <div class="Tabs-block" id="sellers">
   <div class="Section-content">
     <div class="Orders">
@@ -9,11 +10,11 @@
             <div class="Order-personal">
               <div class="row">
                 <div class="row-block">
-                  <a class="Order-title" href="#">
+                  <a class="Order-title" href="{% url 'profile:seller' slug=offer.seller.slug %}">
                     {{ offer.seller.name_store }}
                   </a>
                   <div class="ProductCard-cartElement" style="margin-top: 10px;">
-                    <a class="btn btn_primary" href="#modal_open">
+                    <a class="btn btn_primary" href="{% url 'cart:add_product_to_cart' offer.id %}">
                       <img class="btn-icon"
                            src={% static "assets/img/icons/card/cart_white.svg" %} alt="cart_white.svg"/>
                       <span class="btn-content">Купить</span>
@@ -50,7 +51,7 @@
           </div>
         {% endfor %}
       {% else %}
-        <h3>Сейчас этот товар никто не продает</h3>
+        <h2>Сейчас этот товар никто не продает</h2>
       {% endif %}
     </div>
   </div>
