@@ -69,14 +69,14 @@ class AdminOrders(admin.ModelAdmin):
         ProductInline,
         CartInline,
     ]
-    list_display = 'pk', 'delivery_type', 'address', 'created_at', 'profile', 'total',
+    list_display = 'pk', 'profile', 'delivery_type', 'created_at', 'total_payment',
     list_display_links = 'pk', 'delivery_type'
-    ordering = 'pk', 'created_at', 'address'
-    search_fields = 'delivery_type', 'address', 'created_at'
+    ordering = 'pk', 'created_at',
+    search_fields = 'delivery_type', 'created_at'
 
     fieldsets = [
         (None, {
-            "fields": ('profile', 'delivery_type', 'address', 'products', 'total'),
+            "fields": ('profile', 'products', 'total_payment', 'delivery_type'),
         }),
         ('Extra options', {
             'fields': ('status',),
