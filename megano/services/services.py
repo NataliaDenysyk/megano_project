@@ -3,6 +3,7 @@ from decimal import Decimal
 from typing import Dict
 
 from django.db.models import Sum
+from django.http import HttpResponse
 
 from urllib.parse import urlparse, parse_qs, urlencode
 
@@ -738,8 +739,66 @@ class ProfileService:
     def _get_orders(self):
         return Orders.objects.filter(profile=self.profile).order_by('created_at')
 
-    def name_profile(self, name):
-        print('name', name)
-        # last_name =
+
+class ProfileCreateService:
+    def get_form_valid(self, form, customer):
+        print(customer)
+        name = form.cleaned_data['name'].split(' ')
+        # phone = form.cleaned_data['phone']
+        password = self.get_password_valid(form.cleaned_data['password'],
+                                           form.cleaned_data['password_2'])
+
+        profile = Profile.objects.update(
+            avatar=form.cleaned_data['avatar'],
+            # phone=form.cleaned_data['phone'],
+            )
+        # profile.save()
+
+        customer.user.first_name = ' '.join([name[1],name[2]])
+        customer.user.last_name = name[0]
+        customer.user.email = form.cleaned_data['e_mail']
+        customer.user.password = password
+
+        # customer.save()
+
+
+    # @staticmethod
+    def get_password_valid(self, password, password_2):
+        # try:
+        print('password', password_2)
+        if password == password_2:
+            password = password[2:]
+            # password = int(str(password[2:]))
+            print(password)
+            return password
+        # except ValidationError:
+        #     return HttpResponse('Пароли не совпадают.')
+
+
+    # name = form.cleaned_data['name']
+    #     # price = form.cleaned_data['price']
+    #     # Product.objects.create(**form.cleaned_data)
+    #     form.save()
+    #     url = reverse('shopapp:orders_list')
+    #     return redirect(url)
+    # # else:
+    # #     form = OrderForm()
+    # # context = {
+    # #     'form': form,
+    # # }
+    # return render(request, 'shopapp/create-order.html', context=context)
+
+
+
+
+
+
+
+
+
+
+    # def name_profile(self, name):
+    #     print('name', name)
+    #     # last_name =
 
 

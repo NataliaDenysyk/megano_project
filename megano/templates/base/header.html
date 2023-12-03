@@ -126,6 +126,7 @@ block
       </nav>
       <div class="row-block">
         <div class="CartBlock">
+        {{ request.user }}
           {% if user.is_authenticated %}
             <div class="dropdown">
               <button class="dropbtn">
@@ -134,7 +135,7 @@ block
                      alt="loon-icon.svg}"/>
               </button>
               <div class="dropdown-content">
-                <a class="dropdown-content-a" href="account.html">Личный кабинет</a>
+                <a class="dropdown-content-a" href="{% url 'authorization:profile_details' pk=request.user.id %}">Личный кабинет</a>
                 {% if user.is_superuser %}
                   <a class="dropdown-content-a" href="/admin">Административный раздел</a>
                 {% endif %}

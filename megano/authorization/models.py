@@ -26,12 +26,12 @@ class Profile(models.Model):
         upload_to='profiles/profile/%y/%m/%d/',
         options={"quality": 80},
         processors=[ResizeToFill(157, 100)],
+        null=True
     )
     name_store = models.CharField(max_length=50, blank=True, null=True)
     # slug = models.SlugField(max_length=150)
-    address = models.CharField(max_length=100)
+    address = models.CharField(max_length=250)
     phone = models.IntegerField(null=True, blank=True, unique=True, verbose_name='телефон')
-    e_mail = models.EmailField(max_length=50, verbose_name='Email', null=True, blank=True)
     viewed_orders = models.ForeignKey('store.Product', blank=True, null=True, on_delete=models.CASCADE)
     role = models.CharField(default=Role.BUYER, choices=Role.choices)
 
