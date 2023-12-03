@@ -17,7 +17,7 @@
                 <strong class="Card-title"><a href="{% url 'store:product-detail' slug=product.slug %}">{{ product.name }}</a>
                 </strong>
                 <div class="Card-description">
-                  <div class="Card-cost"><span class="Card-price">$ {{ product.offer__unit_price }}</span>
+                  <div class="Card-cost"><span class="Card-price">$ {{ product.offers__unit_price }}</span>
                   </div>
                   <div class="Card-category">{{ product.category__name }}
                   </div>
