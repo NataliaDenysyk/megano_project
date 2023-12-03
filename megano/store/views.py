@@ -1,4 +1,4 @@
-from django.views.generic import ListView, DetailView, TemplateView
+from django.views.generic import ListView, DetailView, TemplateView, FormView
 from django.shortcuts import render
 from django.db.models import Count, Q
 from django.http import HttpResponse, HttpResponseRedirect
@@ -359,3 +359,81 @@ class MainPage(ListView):
             cache.set(cache_key, popular_products, settings.set_popular_products_cache(1))
 
         return popular_products
+
+
+class Order:
+    pass
+
+
+class OrderCreateView(FormView):
+    """
+    Класс позволяет оформить заказ для пользователя и очистить корзину из сессии.
+    Перед оформлением заказа товар проверяется:
+    1. Проверка на отсутствие товара.
+    2. Проверка на кол-во заказа больше, чем доступно в магазине.
+    """
+    model = Orders
+    template_name = 'store/order/order.html'
+    form_class = OrderCreateForm
+
+    def post(self, request, *args, **kwargs):
+        cart = Cart(request)
+        form = OrderCreateForm(request.POST)
+        customer = Profile.objects.get(user=request.user)
+        if form.is_valid():
+            city = form.cleaned_data.get("city")
+            address = form.cleaned_data.get("address")
+            order = Orders.objects.create(
+                profile=customer,
+                address=f'{city}, {address}',
+                total=len(cart)
+            )
+            customer.address = f'{city}, {address}'
+            customer.phone = {form.cleaned_data.get("phone")}
+            customer.save()
+            order.save()
+
+            for item in cart:  # TODO отнимает кол-во заказанного товара из модели Товаров
+                quantity = Product.objects.get(slug=item['product'].slug)
+                print("Then", quantity.offer_set.first().amount)
+                quantity.offer_set.first().amount -= int(item['quantity'])
+                print("Now", quantity.offer_set.first().amount, '-', item['quantity'])
+                quantity.save()
+
+            cart.clear()  # TODO очищаем корзину в сессиях
+            messages.success(request, messages.INFO, 'Товар успешно заказан. Менеджер с Вами свяжется')
+            return HttpResponseRedirect(reverse_lazy('store:index'))
+
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+"""
+            not_available = []
+            more_than_allowed = []
+            more_than_allowed_messages = ''
+            for item in cart:
+                product_available = Product.objects.get(slug=item['product'].slug)
+                if not product_available.offer_set.first().amount:  # TODO Проверка если товара в наличии 0
+                    not_available.append(''.join(
+                        item['product']
+                    ))
+                if item['quantity'] > product_available.offer_set.first().amount:  # TODO Проверка если кол-во товара заказано больше чем имеется
+                    more_than_allowed.append(
+                        {'product': ''.join(item['product']),
+                         'available': product_available.offer_set.first().amount,
+                         'quantity': item['quantity']}
+                    )
+            error_messages = ""  # TODO собираем ошибки
+            if not_available:  # TODO добавляем ошибку если товар отсутствует
+                not_available_messages = f'Товара уже нет в наличии: {", ".join(not_available)}. \n'
+                error_messages += f'{not_available_messages}\n'
+
+            if more_than_allowed:  # TODO добавляем ошибку если товара заказано больше чем имеется
+                for item in more_than_allowed:
+                    more_than_allowed_messages += f'Товар: {item["product"]}.' \
+                                                  f'В наличии: {item["available"]}' \
+                                                  f'Заказано: {item["quantity"]}\n'
+                    error_messages += f'{more_than_allowed_messages}\n'
+            if error_messages:
+                return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+"""
