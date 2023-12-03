@@ -30,4 +30,3 @@ def cache_deleted_product(**kwargs) -> None:
 
     except AttributeError:
         pass
-

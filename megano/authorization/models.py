@@ -18,8 +18,10 @@ class Profile(models.Model):
         STORE = 'store'
         BUYER = 'buyer'
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    description = models.CharField(max_length=100)
+    user = models.ForeignKey(User, verbose_name='Пользователь', on_delete=models.CASCADE)
+    slug = models.SlugField('Слаг', max_length=150, default='')
+    phone = models.CharField('Teleфон', null=True, blank=True, unique=True)
+    description = models.CharField('Описание', max_length=100)
     avatar = ProcessedImageField(
         blank=True,
         verbose_name='Фотография товара',
@@ -27,10 +29,16 @@ class Profile(models.Model):
         options={"quality": 80},
         processors=[ResizeToFill(157, 100)],
     )
-    name_store = models.CharField(max_length=50, blank=True, null=True)
-    address = models.CharField(max_length=100)
-    viewed_orders = models.ForeignKey('store.Product', blank=True, null=True, on_delete=models.CASCADE)
-    role = models.CharField(default=Role.BUYER, choices=Role.choices)
+    name_store = models.CharField('Имя магазина', max_length=50, blank=True, null=True)
+    address = models.CharField('Адрес', max_length=100)
+    viewed_orders = models.ForeignKey(
+        'store.Product',
+        verbose_name='Связанные заказы',
+        blank=True,
+        null=True,
+        on_delete=models.CASCADE
+    )
+    role = models.CharField('Роль', default=Role.BUYER, choices=Role.choices)
 
     def __str__(self) -> str:
         return f'{self.user}'
