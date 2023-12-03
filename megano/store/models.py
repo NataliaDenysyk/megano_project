@@ -241,17 +241,37 @@ class Orders(models.Model):
     """
     Модель хранения заказов
     """
+    class Delivery(models.IntegerChoices):
+        """
+        Модель вариантов доставки
+        """
 
-    delivery_type = models.CharField(
-        max_length=100,
-        blank=False,
-        default='pickup',
-        verbose_name="Тип доставки")
+        FREE = 1, 'Обычная доставка'
+        EXPRESS = 2, 'Экспресс-доставка'
+
+        __empty__ = 'Выберите доставку'
+
+    class Payment(models.IntegerChoices):
+        """
+        Модель вариантов оплаты
+        """
+
+        OWN_CARD = 1, 'Онлайн картой'
+        ANOTHER_CARD = 2, 'Онлайн со случайного счета'
+
+        __empty__ = 'Выберите оплату'
+
+    class Status(models.TextChoices):
+        PAID = 1, 'Оплачено'
+        UNPAID = 2, 'Не оплачено'
+        PROCESS = 3, 'Доставляется'
+
+    delivery_type = models.IntegerField(choices=Delivery.choices, verbose_name="Способ доставки")
+    payment = models.IntegerField(choices=Payment.choices, verbose_name='Способ оплаты')
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    address = models.TextField(max_length=150, null=True, verbose_name="Адрес")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Создан")
-    status = models.BooleanField(default=False, verbose_name='Оплачен')
-    total = models.IntegerField(verbose_name='Количество')
+    status = models.IntegerField(choices=Status.choices, verbose_name='Статус заказа')
+    total_payment = models.IntegerField(verbose_name='Количество')
     products = models.ManyToManyField(Product, related_name='orders')
 
     def __str__(self) -> str:

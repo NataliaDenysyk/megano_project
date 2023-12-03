@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.http import HttpResponseRedirect, HttpResponse
 from django.views.generic import TemplateView
 
-from services.services import DiscountProduct
+from store.forms import SearchForm
 from .cart import Cart
 from store.models import Product, Offer
 
@@ -12,13 +12,13 @@ class CartListView(TemplateView):
     template_name = 'store/cart.html'
 
     def get_context_data(self, **kwargs):
+        form_search = SearchForm(self.request.GET or None)
         context = super().get_context_data(**kwargs)
-        cart = Cart(self.request)
-        discount = DiscountProduct()
+
         context.update(
             {
-                'carts': cart,
-                'total_price': discount.get_priority_discount(cart=cart)
+                'carts': Cart(self.request),
+                'form_search': form_search,
             }
         )
         return context
