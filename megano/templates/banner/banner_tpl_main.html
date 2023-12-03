@@ -15,12 +15,13 @@
                     <div class="Slider-text">{{ banner.description }}
                     </div>
                     <div class="Slider-footer">
-                      <a class="btn btn_primary" href="#">{{ banner.link }}</a>
+                      <a class="btn btn_primary" href="#">Подробнее</a>
+{#                        {% url 'store:{{ banner.link }}' %}#}
                     </div>
                   </div>
                   <div class="row-block">
                     <div class="Slider-img">
-                      <img src="{{ banner.product.preview.url }}"
+                      <img src="{{ banner.products.preview.url }}"
                            alt="{{ banner.title }}">
                     </div>
                   </div>
