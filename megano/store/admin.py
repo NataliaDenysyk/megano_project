@@ -52,7 +52,7 @@ class AdminBanner(admin.ModelAdmin):
         ссылка на изображение отображается в виде картинки размером 60х 60.
         """
         if obj.product:
-            return mark_safe(f'<img src="{obj.product.images.first().image.url}" alt=""width="60">')
+            return mark_safe(f'<img src="{obj.product.preview.url}" alt=""width="60">')
         else:
             return 'not url'
 
@@ -170,7 +170,7 @@ class AdminProduct(admin.ModelAdmin):
     ]
 
     def get_queryset(self, request):
-        return Product.objects.select_related('category').prefetch_related('discount', 'tags', 'offer_set')
+        return Product.objects.select_related('category').prefetch_related('discount', 'tags', 'offers')
 
     def description_short(self, obj: Product) -> str:
         """
