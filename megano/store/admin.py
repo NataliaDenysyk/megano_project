@@ -61,6 +61,7 @@ class AdminBanner(admin.ModelAdmin):
 
 class ProductInline(admin.TabularInline):
     model = Orders.products.through
+    extra = 0
 
 
 @admin.register(Orders)
@@ -113,28 +114,34 @@ class TagInline(admin.TabularInline):
     model = Product.tags.through
     verbose_name = 'Тег'
     verbose_name_plural = 'Теги'
+    extra = 0
 
 
 class OfferInline(admin.TabularInline):
     model = Offer
+    extra = 0
 
 
 class ReviewsInline(admin.TabularInline):
     model = Reviews
+    extra = 0
 
 
 class DiscountInline(admin.TabularInline):
     model = Product.discount.through
     verbose_name = 'Скидка'
     verbose_name_plural = 'Скидки'
+    extra = 0
 
 
 class OrderInline(admin.TabularInline):
     model = Product.orders.through
+    extra = 0
 
 
 class ProductInlineImages(admin.TabularInline):
     model = ProductImage
+    extra = 0
 
 
 @admin.register(Product)
@@ -155,6 +162,7 @@ class AdminProduct(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
     readonly_fields = ('created_time', 'update_time')
     actions = ['reset_product_list_cache']
+    save_on_top = True
 
     fieldsets = [
         (None, {
@@ -227,6 +235,7 @@ class ProductInline(admin.TabularInline):
     model = Discount.products.through
     verbose_name = 'Товар'
     verbose_name_plural = 'Товары'
+    extra = 0
 
 
 @admin.register(Reviews)
