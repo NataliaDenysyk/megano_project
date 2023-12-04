@@ -20,6 +20,7 @@ from .views import (
     OrderCreateView,
 )
 
+
 app_name = 'store'
 
 urlpatterns = [
