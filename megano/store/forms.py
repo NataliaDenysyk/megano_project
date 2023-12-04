@@ -32,10 +32,11 @@ class OrderCreateForm(forms.Form):
     )
     city = forms.CharField(max_length=100, label='Город', help_text='Город проживания')
     address = forms.CharField(max_length=200, label='Адрес', help_text='Адрес доставки')
+    email = forms.EmailField(max_length=80, label='Почта', help_text='Почта')
 
     class Meta:
         model = Orders
-        fields = ['name', 'phone', 'city', 'address']
+        fields = ['name', 'phone', 'city', 'address', 'email']
 
 
 class ReviewsForm(forms.Form):
