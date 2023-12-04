@@ -77,7 +77,7 @@ class AdminOrders(admin.ModelAdmin):
 
     fieldsets = [
         (None, {
-            "fields": ('profile', 'products', 'total_payment', 'delivery_type'),
+            "fields": ('profile', 'products', 'total_payment', 'delivery_type', 'payment'),
         }),
         ('Extra options', {
             'fields': ('status',),
