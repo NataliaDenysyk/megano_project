@@ -249,6 +249,7 @@ class CategoriesInline(admin.TabularInline):
     model = Discount.categories.through
     verbose_name = 'Категория'
     verbose_name_plural = 'Категории'
+    extra = 0
 
 
 @admin.register(Discount)
