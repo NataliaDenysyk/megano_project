@@ -74,7 +74,6 @@ class ProductInline(admin.TabularInline):
     model = Orders.products.through
     extra = 0
 
-
 @admin.register(Orders)
 class AdminOrders(admin.ModelAdmin):
     inlines = [
@@ -266,10 +265,18 @@ class ReviewsProduct(admin.ModelAdmin):
         return obj.comment_text[:100]
 
 
+class CategoriesInline(admin.TabularInline):
+    model = Discount.categories.through
+    verbose_name = 'Категория'
+    verbose_name_plural = 'Категории'
+    extra = 0
+
+
 @admin.register(Discount)
 class DiscountAdmin(admin.ModelAdmin):
     inlines = [
         ProductInline,
+        CategoriesInline
     ]
     list_display = 'pk', 'name', 'description', 'sum_discount', 'valid_from', 'valid_to', 'is_active'
     list_display_links = 'pk', 'name'
