@@ -142,7 +142,6 @@ class Settings:
 
         return self.time_calculate(self.get_cache_seller())
 
-
     def get_cache_catalog(self, time: bool = True) -> int | str:
         """
         Возвращает время хранения кеша данных каталога

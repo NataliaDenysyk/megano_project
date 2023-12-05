@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     'imagekit',
     'django_filters',
     'widget_tweaks',
+    'compare'
 ]
 
 MIDDLEWARE = [

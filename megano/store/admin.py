@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.contrib.contenttypes.admin import GenericStackedInline
+
 from django.core.cache import cache
 from django.utils.safestring import mark_safe
 from django_mptt_admin.admin import DjangoMpttAdmin
@@ -15,6 +17,15 @@ from .models import (
     Tag,
     ProductImage,
 )
+from compare.admin import (TVSetCharacteristicInline,
+                           HeadphonesCharacteristicInline,
+                           PhotoCamCharacteristicInline,
+                           KitchenCharacteristicInline,
+                           WashMachineCharacteristicInline,
+                           NotebookCharacteristicInline,
+                           TorchereCharacteristicInline,
+                           MicrowaveOvenCharacteristicInline,
+                           MobileCharacteristicInline)
 
 
 class CartInline(admin.TabularInline):
@@ -146,8 +157,17 @@ class AdminProduct(admin.ModelAdmin):
         OrderInline,
         ProductInlineImages,
         ReviewsInline,
+        TVSetCharacteristicInline,
+        HeadphonesCharacteristicInline,
+        PhotoCamCharacteristicInline,
+        KitchenCharacteristicInline,
+        WashMachineCharacteristicInline,
+        NotebookCharacteristicInline,
+        TorchereCharacteristicInline,
+        MicrowaveOvenCharacteristicInline,
+        MobileCharacteristicInline,
     ]
-    list_display = 'pk', 'name', 'category', 'description_short', 'created_time', 'update_time', 'availability'
+    list_display = ('pk', 'name', 'category', 'description_short', 'created_time', 'update_time', 'availability',)
     list_display_links = 'pk', 'name'
     list_filter = ['availability']
     ordering = 'pk', 'name', 'created_at'
@@ -158,7 +178,7 @@ class AdminProduct(admin.ModelAdmin):
 
     fieldsets = [
         (None, {
-            'fields': ('name', 'description', 'feature'),
+            'fields': ('name', 'description'),
         }),
         ('Главное фото', {
             'fields': ('preview',),

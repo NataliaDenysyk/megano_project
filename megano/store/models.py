@@ -1,8 +1,13 @@
+import json
+
+from django.contrib.contenttypes.fields import GenericRelation
+from compare.models import *
 from django.db import models
 
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
 
+import compare.models
 from authorization.models import Profile
 from django.urls import reverse
 from mptt.models import MPTTModel, TreeForeignKey
@@ -10,7 +15,6 @@ from mptt.models import MPTTModel, TreeForeignKey
 from store.utils import (
     category_image_directory_path,
     jsonfield_default_description,
-    jsonfield_default_feature,
     product_images_directory_path
 )
 
@@ -45,52 +49,6 @@ class Category(MPTTModel):
 
     class MPTTMeta:
         order_insertion_by = ['name']
-
-
-class Product(models.Model):
-    """
-    Модель товаров магазина
-    """
-
-    name = models.CharField('Название товара', default='', max_length=150, null=False, db_index=True)
-    slug = models.SlugField(max_length=150, default='')
-    category = TreeForeignKey(
-        'Category',
-        on_delete=models.PROTECT,
-        related_name='products',
-        verbose_name='Категория'
-    )
-    description = models.JSONField(
-        'Описание',
-        default=jsonfield_default_description,
-    )
-    feature = models.JSONField(
-        'Характеристика',
-        default=jsonfield_default_feature,
-    )
-    tags = models.ManyToManyField('Tag', related_name='products', verbose_name='Теги')
-    preview = ProcessedImageField(
-        verbose_name='Основное фото',
-        upload_to="products/product/%y/%m/%d/",
-        options={"quality": 80},
-        processors=[ResizeToFill(200, 200)],
-        blank=True,
-        null=True
-    )
-    availability = models.BooleanField('Доступность', default=False)
-    created_at = models.DateTimeField('Создан', auto_now_add=True)
-    update_at = models.DateTimeField('Отредактирован', auto_now=True)
-    discount = models.ManyToManyField('Discount', related_name='products', verbose_name='Скидка')
-    is_view = models.BooleanField('Просмотрен', default=False)
-
-    def __str__(self) -> str:
-        return f"{self.name} (id:{self.pk})"
-
-    class Meta:
-        db_table = 'Products'
-        ordering = ['id', 'name']
-        verbose_name = 'Товар'
-        verbose_name_plural = 'Товары'
 
 
 class ProductImage(models.Model):
@@ -161,7 +119,7 @@ class Banners(models.Model):
     """
     title = models.CharField(u"Название баннера", max_length=150, db_index=True)
     slug = models.SlugField(u"URL", max_length=150, db_index=True)
-    product = models.OneToOneField(Product, on_delete=models.CASCADE, verbose_name='Продукт')
+    product = models.OneToOneField('Product', on_delete=models.CASCADE, verbose_name='Продукт')
     description = models.TextField(u"Описание баннера", blank=True)
     link = models.URLField(max_length=250, blank=True, verbose_name="Ссылка")
     is_active = models.BooleanField(default=False, verbose_name="Модерация")
@@ -241,7 +199,7 @@ class Orders(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Создан")
     status = models.BooleanField(default=False, verbose_name='Оплачен')
     total = models.IntegerField(verbose_name='Количество')
-    products = models.ManyToManyField(Product, related_name='orders')
+    products = models.ManyToManyField('Product', related_name='orders')
 
     def __str__(self) -> str:
         return f"Order(pk = {self.pk}"
@@ -250,3 +208,50 @@ class Orders(models.Model):
         db_table = "Orders"
         verbose_name = "Заказ"
         verbose_name_plural = "Заказы"
+
+
+class Product(models.Model):
+    """
+    Модель товаров магазина
+
+    """
+
+    name = models.CharField('Название товара', default='', max_length=150, null=False, db_index=True)
+    slug = models.SlugField(max_length=150, default='')
+    category = TreeForeignKey(
+        'Category',
+        on_delete=models.PROTECT,
+        related_name='products',
+        verbose_name='Категория'
+    )
+    description = models.JSONField(
+        'Описание',
+        default=jsonfield_default_description,
+    )
+    feature = GenericRelation(compare.models.AbstractCharacteristicModel, null=True, blank=True)
+    tags = models.ManyToManyField('Tag', related_name='products', verbose_name='Теги')
+    preview = ProcessedImageField(
+        verbose_name='Основное фото',
+        upload_to="products/product/%y/%m/%d/",
+        options={"quality": 80},
+        processors=[ResizeToFill(200, 200)],
+        blank=True,
+        null=True
+    )
+    availability = models.BooleanField('Доступность', default=False)
+    created_at = models.DateTimeField('Создан', auto_now_add=True)
+    update_at = models.DateTimeField('Отредактирован', auto_now=True)
+    discount = models.ManyToManyField('Discount', related_name='products', verbose_name='Скидка')
+    is_view = models.BooleanField('Просмотрен', default=False)
+
+    def __str__(self) -> str:
+        return f"{self.name} (id:{self.pk})"
+
+    def get_comparison_id(self):
+        return f"{(self.id)}"
+
+    class Meta:
+        db_table = 'Products'
+        ordering = ['id', 'name']
+        verbose_name = 'Товар'
+        verbose_name_plural = 'Товары'
