@@ -13,6 +13,7 @@ class AuthorAdmin(admin.ModelAdmin):
     list_display = ['pk', 'user', 'role']
     list_display_links = ['pk', 'user']
     list_filter = ['role']
+    prepopulated_fields = {'slug': ('name_store', )}
 
     def get_inlines(self, request, obj):
         """

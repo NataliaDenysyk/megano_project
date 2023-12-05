@@ -12,14 +12,17 @@
           {% include "store/catalog/sorting.html" %}
           <div class="Cards">
             {% for product in products %}
-              <div class="Card"><a class="Card-picture" href="{% url 'store:product-detail' slug=product.slug %}"><img src="{{ product.preview.url }}"/></a>
+              <div class="Card"><a class="Card-picture" href="{% url 'store:product-detail' slug=product.slug %}">
+                <img src="{{ product.preview.url }}"/></a>
                 <div class="Card-content">
                   <strong class="Card-title">
                     <a href="{% url 'store:product-detail' slug=product.slug %}">{{ product.name }}</a>
                   </strong>
                   <div class="Card-description">
                     <div class="Card-cost">
-                      <span class="Card-price">${{ product.price }}</span>
+                      {% if product.price != None %}
+                        <span class="Card-price">${{ product.price }}</span>
+                      {% endif %}
                     </div>
                     <div class="Card-category">
                       {% for tag in product.tags.all %}
@@ -31,9 +34,11 @@
                       {% endfor %}
                     </div>
                     <div class="Card-hover">
+                      {% if product.offers.all %}
                       <a class="Card-btn" href="{% url 'cart:add_product_to_cart' product.slug %}">
                         <img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg"/>
                       </a>
+                      {% endif %}
                       <a class="Card-btn" href="">
                             <form action="{% url 'compare:add_to_comparison' product.id %}" method="get">
                               <button type="submit">

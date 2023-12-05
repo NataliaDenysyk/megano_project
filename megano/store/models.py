@@ -23,6 +23,7 @@ class Category(MPTTModel):
     """
     Модель хранения категорий товара
     """
+
     name = models.CharField(max_length=50, unique=True, verbose_name='Название')
     parent = TreeForeignKey('self', on_delete=models.PROTECT,
                             null=True, blank=True, related_name='children',
@@ -77,13 +78,22 @@ class ProductImage(models.Model):
 class Offer(models.Model):
     """
     Модель предложений продавцов, содержит цену и кол-во предлагаемого товара
-
     """
 
     unit_price = models.DecimalField('Цена', default=0, max_digits=8, decimal_places=2)
     amount = models.PositiveIntegerField('Количество')
-    seller = models.ForeignKey('authorization.Profile', on_delete=models.CASCADE, verbose_name='Продавец')
-    product = models.ForeignKey('store.Product', on_delete=models.CASCADE, verbose_name='Товар')
+    seller = models.ForeignKey(
+        'authorization.Profile',
+        on_delete=models.CASCADE,
+        verbose_name='Продавец',
+        related_name='offers'
+    )
+    product = models.ForeignKey(
+        'store.Product',
+        on_delete=models.CASCADE,
+        verbose_name='Товар',
+        related_name='offers'
+    )
 
     def __str__(self) -> str:
         return f"Предложение от {self.seller.name_store}"
@@ -98,7 +108,6 @@ class Offer(models.Model):
 class Tag(models.Model):
     """
     Модель тегов
-
     """
 
     name = models.CharField('Название', default='', max_length=50, null=False, blank=False)
@@ -188,18 +197,38 @@ class Orders(models.Model):
     """
     Модель хранения заказов
     """
+    class Delivery(models.IntegerChoices):
+        """
+        Модель вариантов доставки
+        """
 
-    delivery_type = models.CharField(
-        max_length=100,
-        blank=False,
-        default='pickup',
-        verbose_name="Тип доставки")
+        FREE = 1, 'Обычная доставка'
+        EXPRESS = 2, 'Экспресс-доставка'
+
+        __empty__ = 'Выберите доставку'
+
+    class Payment(models.IntegerChoices):
+        """
+        Модель вариантов оплаты
+        """
+
+        OWN_CARD = 1, 'Онлайн картой'
+        ANOTHER_CARD = 2, 'Онлайн со случайного счета'
+
+        __empty__ = 'Выберите оплату'
+
+    class Status(models.TextChoices):
+        PAID = 1, 'Оплачено'
+        UNPAID = 2, 'Не оплачено'
+        PROCESS = 3, 'Доставляется'
+
+    delivery_type = models.IntegerField(choices=Delivery.choices, verbose_name="Способ доставки")
+    payment = models.IntegerField(choices=Payment.choices, verbose_name='Способ оплаты')
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    address = models.TextField(max_length=150, null=True, verbose_name="Адрес")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Создан")
-    status = models.BooleanField(default=False, verbose_name='Оплачен')
-    total = models.IntegerField(verbose_name='Количество')
-    products = models.ManyToManyField('Product', related_name='orders')
+    status = models.IntegerField(choices=Status.choices, verbose_name='Статус заказа')
+    total_payment = models.IntegerField(verbose_name='Количество')
+    products = models.ManyToManyField(Product, related_name='orders')
 
     def __str__(self) -> str:
         return f"Order(pk = {self.pk}"
