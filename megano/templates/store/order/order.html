@@ -30,13 +30,15 @@
                     </div>
                 </div>
                 <div class="Section-content">
+                    {% if user.is_authenticated %}
+                        {% block order_create %}
+
+                        {% endblock %}
+                    {% endif %}
+
                     {% block order_register %}
                     {% endblock %}
 
-                    {% if user.is_authenticated %}
-                        {% block order_create %}
-                        {% endblock %}
-                    {% endif %}
 
                     {% block order_confirm %}
                     {% endblock %}
