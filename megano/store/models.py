@@ -258,7 +258,7 @@ class Orders(models.Model):
 
         __empty__ = 'Выберите оплату'
 
-    class Status(models.TextChoices):
+    class Status(models.IntegerChoices):
         PAID = 1, 'Оплачено'
         UNPAID = 2, 'Не оплачено'
         PROCESS = 3, 'Доставляется'
@@ -268,7 +268,7 @@ class Orders(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Создан")
     status = models.IntegerField(choices=Status.choices, verbose_name='Статус заказа')
-    total_payment = models.IntegerField(verbose_name='Количество')
+    total_payment = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Стоимость заказа')
     products = models.ManyToManyField(Product, related_name='orders')
 
     def __str__(self) -> str:
