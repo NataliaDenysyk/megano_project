@@ -98,9 +98,9 @@ class ProductsViewService:
         """
 
         viewed = self.get_cached_products_id()
-        full_list = len(viewed) == self.LIMIT_PRODUCTS
 
         if viewed:
+            full_list = len(viewed) == self.LIMIT_PRODUCTS
             if full_list:
                 viewed.pop(0)
 
