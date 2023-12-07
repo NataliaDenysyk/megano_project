@@ -377,9 +377,12 @@ class MainPage(ListView):
 
 
 class OrderRegisterView(CreateView):
+    """
+    Класс регистрации пользователя.
+    После регистрации пользователь авторизуется.
+    """
     template_name = 'store/order/order_register.html'
     form_class = RegisterForm
-    success_url = reverse_lazy('cart:index')
 
     def form_valid(self, form):
         user = form.save()
@@ -388,11 +391,14 @@ class OrderRegisterView(CreateView):
         phone = form.cleaned_data.get('phone')
         Profile.objects.create(
             user=user,
+            slug='slug',
             phone=phone,
+            description='description',
+            address='address',
         )
         user = authenticate(username=username, password=password)
         login(self.request, user)
-        return super().form_valid(form)
+        return redirect(reverse_lazy("store:order_create", kwargs={'pk': user.pk}))
 
 
 class OrderView(UpdateView):
@@ -403,7 +409,7 @@ class OrderView(UpdateView):
     2. Проверка на кол-во заказанного товара больше, чем доступно в магазине.
     """
     model = User
-    template_name = 'store/order/order.html'
+    template_name = 'store/order/order_create.html'
     form_class = OrderCreateForm
 
     def get_context_data(self, **kwargs):
@@ -454,10 +460,13 @@ class OrderView(UpdateView):
             )
             order.save()
             order.products.add(item['product'])
+            # product = Product.objects.get(slug=item['product'].slug)
+            # TODO: added function for checking counter products
 
             quantity = Offer.objects.get(product=item['product'].id)
             quantity.amount -= int(item['quantity'])
             quantity.save()
+
         cart.clear()
         return super().form_valid(form)
 
