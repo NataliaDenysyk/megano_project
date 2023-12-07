@@ -1,12 +1,19 @@
-from django.views.generic import ListView, DetailView, TemplateView, FormView
-from django.shortcuts import render
-from django.db.models import Count, Q
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User, Permission
+from django.shortcuts import render, redirect
+from django.views.generic import ListView, DetailView, TemplateView, FormView, UpdateView, CreateView
 from django.http import HttpResponse, HttpResponseRedirect
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.contrib import messages
 from django.core.cache import cache
 
-from store.models import Product
+from .configs import settings
+from .forms import ReviewsForm, SearchForm, OrderCreateForm, RegisterForm
+from .filters import ProductFilter
+from .mixins import ChangeListMixin
+from authorization.models import Profile
+from cart.cart import Cart
+from .models import Product, Orders, Offer
 from services.services import (
     ProductService,
     CatalogService,
@@ -18,11 +25,6 @@ from services.services import (
 
 import re
 from typing import Any
-
-from .configs import settings
-from .forms import ReviewsForm, SearchForm
-from .filters import ProductFilter
-from .mixins import ChangeListMixin
 
 
 class CatalogListView(ListView):
@@ -92,7 +94,6 @@ class ProductDetailView(DetailView):
         return product
 
     def get_context_data(self, **kwargs) -> HttpResponse:
-
         form_search = SearchForm(self.request.GET or None)
         context = super().get_context_data(**kwargs)
 
@@ -373,3 +374,92 @@ class MainPage(ListView):
         context['form_search'] = form_search
 
         return context
+
+
+class OrderRegisterView(CreateView):
+    template_name = 'store/order/order_register.html'
+    form_class = RegisterForm
+    success_url = reverse_lazy('cart:index')
+
+    def form_valid(self, form):
+        user = form.save()
+        username = form.cleaned_data.get('username')
+        password = form.cleaned_data.get('password1')
+        phone = form.cleaned_data.get('phone')
+        Profile.objects.create(
+            user=user,
+            phone=phone,
+        )
+        user = authenticate(username=username, password=password)
+        login(self.request, user)
+        return super().form_valid(form)
+
+
+class OrderView(UpdateView):
+    """
+    Класс позволяет оформить заказ для пользователя и очистить корзину из сессии.
+    Перед оформлением заказа товар проверяется:
+    1. Проверка на отсутствие товара.
+    2. Проверка на кол-во заказанного товара больше, чем доступно в магазине.
+    """
+    model = User
+    template_name = 'store/order/order.html'
+    form_class = OrderCreateForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update(
+            {
+                'form': self.get_data
+            }
+        )
+        return context
+
+    def get_data(self):
+        user = self.request.user
+        profile = Profile.objects.get(user=user)
+        address = profile.address.split(' ')
+        data = {
+            'name': user.first_name + ' ' + user.last_name,
+            'email': user.email,
+            'phone': profile.phone,
+            'city': address[0],
+            'address': ' '.join(address[1:])
+        }
+        form = OrderCreateForm(data)
+        return form
+
+    def form_valid(self, form):
+        cart = Cart(self.request)
+        user = self.request.user
+        profile = Profile.objects.get(user=user)
+        full_name = form.cleaned_data['name'].split(' ')
+        delivery = form.cleaned_data['delivery']
+        payment = form.cleaned_data['payment']
+        user.email = form.cleaned_data['email']
+        user.first_name = full_name[0]
+        user.last_name = full_name[1]
+        user.save()
+
+        profile.phone = form.cleaned_data['phone']
+        profile.address = f"{form.cleaned_data['city']} {form.cleaned_data['address']}"
+        profile.save()
+        for item in cart:
+            order = Orders.objects.create(
+                delivery_type=delivery,
+                payment=payment,
+                profile=profile,
+                total_payment=item['total_price'],
+                status=3,
+            )
+            order.save()
+            order.products.add(item['product'])
+
+            quantity = Offer.objects.get(product=item['product'].id)
+            quantity.amount -= int(item['quantity'])
+            quantity.save()
+        cart.clear()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('store:index')
