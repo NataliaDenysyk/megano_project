@@ -27,6 +27,7 @@ class Category(MPTTModel):
     image = models.ImageField(null=True, blank=True,
                               upload_to=category_image_directory_path,
                               verbose_name='Изображение')
+    discount = models.ManyToManyField('Discount', related_name='categories', verbose_name='Скидка')
     slug = models.SlugField()
     activity = models.BooleanField(default=True, verbose_name='Активация')
     sort_index = models.IntegerField(verbose_name='Индекс сортировки')
@@ -215,6 +216,8 @@ class Discount(models.Model):
     description = models.TextField('Описание', default='', null=False, blank=True)
     sum_discount = models.FloatField('Сумма скидки', null=False, blank=False)
     total_products = models.IntegerField('Количество товаров', null=True, blank=True)
+    sum_cart = models.FloatField(verbose_name='Сумма корзины', null=True, blank=True)
+    priority = models.BooleanField(verbose_name='Приоритет', default=False)
     valid_from = models.DateTimeField('Действует с', null=True, blank=True)
     valid_to = models.DateTimeField('Действует до', blank=False)
     is_active = models.BooleanField('Активно', default=False)
