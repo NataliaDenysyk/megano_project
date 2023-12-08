@@ -20,4 +20,3 @@ def banner_main_page() -> dict:
         return {'banners': banners}
     except Exception as err:
         HttpResponse('Not Banners', err)  # TODO заменить заглушку на файл с логами
-

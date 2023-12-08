@@ -6,7 +6,6 @@ from django.urls import reverse_lazy
 from django.contrib import messages
 from django.core.cache import cache
 
-from store.models import Product
 from services.services import (
     ProductService,
     CatalogService,
@@ -23,6 +22,8 @@ from .configs import settings
 from .forms import ReviewsForm, SearchForm
 from .filters import ProductFilter
 from .mixins import ChangeListMixin
+
+from .models import Product
 
 
 class CatalogListView(ListView):
