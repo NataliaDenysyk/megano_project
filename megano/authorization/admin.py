@@ -10,7 +10,6 @@ class StoreSettingsInline(admin.TabularInline):
 
 @admin.register(Profile)
 class AuthorAdmin(admin.ModelAdmin):
-
     list_display = ['pk', 'user', 'role']
     list_display_links = ['pk', 'user']
     list_filter = ['role']
