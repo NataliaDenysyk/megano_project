@@ -2,7 +2,7 @@
 {% load i18n static %}
 
 {% block order_create %}
-    <form class="form" action='{% url "store:order_create" user.id %}' method="post"
+    <form class="form" action='' method="post"
           enctype="multipart/form-data">
         {% csrf_token %}
         <div class="Order-block Order-block_OPEN" id="step1">
