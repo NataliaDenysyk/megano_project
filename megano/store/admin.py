@@ -74,6 +74,7 @@ class ProductInline(admin.TabularInline):
     model = Orders.products.through
     extra = 0
 
+
 @admin.register(Orders)
 class AdminOrders(admin.ModelAdmin):
     inlines = [

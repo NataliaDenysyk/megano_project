@@ -273,7 +273,7 @@ class ProductsViewService:
     def __init__(self, request: HttpRequest):
         self._request = request
 
-    def get_cached_products_id(self) -> List:
+    def get_cached_products_id(self) -> list:
         """
         Получить список id продуктов из кэша
         """
@@ -282,7 +282,7 @@ class ProductsViewService:
 
         return viewed
 
-    def get_viewed_product_list(self) -> List:
+    def get_viewed_product_list(self) -> list:
         """
         Получить список просмотренных продуктов
         """
@@ -303,9 +303,9 @@ class ProductsViewService:
         """
 
         viewed = self.get_cached_products_id()
-        full_list = len(viewed) == self.LIMIT_PRODUCTS
 
         if viewed:
+            full_list = len(viewed) == self.LIMIT_PRODUCTS
             if full_list:
                 viewed.pop(0)
 
@@ -318,7 +318,7 @@ class ProductsViewService:
         else:
             self._request.session['products_viewed'] = [product_id]
 
-    def _remove_product_from_viewed(self,  product_id: int) -> List:
+    def _remove_product_from_viewed(self,  product_id: int) -> list:
         """
         Удалить продукт из списка просмотренных продуктов
         """
@@ -675,7 +675,6 @@ class ReviewsProduct:
     """
     Сервис для добавления отзыва к товару
     """
-
     @staticmethod
     def add_review_to_product(request, form, slug) -> None:
         # добавить отзыв к товару
