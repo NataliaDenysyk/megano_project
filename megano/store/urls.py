@@ -21,7 +21,6 @@ from .views import (
     OrderRegisterView,
 )
 
-
 app_name = 'store'
 
 urlpatterns = [
@@ -44,4 +43,5 @@ urlpatterns = [
     path('cache-time-prod-detail/', CacheSetupProdDetailView.as_view(), name='cache_time_prod_detail'),
     path('cache-time-seller/', CacheSetupSellerView.as_view(), name='cache_time_seller'),
     path('cache-time-catalog/', CacheSetupCatalogView.as_view(), name='cache_time_catalog'),
+
 ]

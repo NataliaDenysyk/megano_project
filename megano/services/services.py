@@ -273,7 +273,7 @@ class ProductsViewService:
     def __init__(self, request: HttpRequest):
         self._request = request
 
-    def get_cached_products_id(self) -> List:
+    def get_cached_products_id(self) -> list:
         """
         Получить список id продуктов из кэша
         """
@@ -282,7 +282,7 @@ class ProductsViewService:
 
         return viewed
 
-    def get_viewed_product_list(self) -> List:
+    def get_viewed_product_list(self) -> list:
         """
         Получить список просмотренных продуктов
         """
@@ -318,7 +318,7 @@ class ProductsViewService:
         else:
             self._request.session['products_viewed'] = [product_id]
 
-    def _remove_product_from_viewed(self,  product_id: int) -> List:
+    def _remove_product_from_viewed(self,  product_id: int) -> list:
         """
         Удалить продукт из списка просмотренных продуктов
         """
@@ -409,26 +409,7 @@ class ProductService:
         popular_products = self._product.objects.filter(orders__status=True). \
                                values('pk', 'slug', 'preview', 'name', 'category__name', 'offers__unit_price'). \
                                annotate(count=Count('pk')).order_by('-count')[:quantity]
-        print(popular_products)
         return popular_products
-
-
-class ComparisonServices:
-    """
-    Сервис по работе списка сравнений
-    """
-
-    def _add_product_to_comparison(self):
-        pass
-
-    def _get_comparison_list(self):
-        pass
-
-    def _get_amount_from_comparison(self) -> int:
-        pass
-
-    def _delete_product_from_comparison(self):
-        pass
 
 
 class CategoryServices:
