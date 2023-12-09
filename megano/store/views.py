@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.models import User, Permission
-from django.shortcuts import render, redirect
-from django.views.generic import ListView, DetailView, TemplateView, FormView, UpdateView, CreateView
+from django.contrib.auth.models import User
+from django.shortcuts import redirect
+from django.views.generic import ListView, DetailView, TemplateView, UpdateView, CreateView
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy, reverse
 from django.contrib import messages
@@ -25,13 +25,6 @@ from services.services import (
 
 import re
 from typing import Any
-
-from .configs import settings
-from .forms import ReviewsForm, SearchForm
-from .filters import ProductFilter
-from .mixins import ChangeListMixin
-
-from .models import Product
 
 
 class CatalogListView(ListView):
@@ -478,4 +471,25 @@ class OrderView(UpdateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy('store:index')
+        return reverse_lazy('store:order_confirm', kwargs={'pk': self.kwargs['pk']})
+
+
+class OrderConfirmView(TemplateView):
+    """
+    Подтверждение заказа и переход на страницу оплаты
+    """
+    model = Orders
+    template_name = 'store/order/order_confirm.html'
+    context_object_name = 'order'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update(
+            {
+                'order': Orders.objects.select_related('profile').last()
+            }
+        )
+        return context
+
+    def get_success_url(self):
+        return reverse_lazy('store:order_confirm', kwargs={'pk': self.request.user.id})
