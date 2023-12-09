@@ -11,7 +11,7 @@ class CartAdmin(admin.ModelAdmin):
     list_display = ['order', 'product_name', 'quantity', 'icon_image', 'created_at', 'updated_at']
     list_filter = ['created_at', 'products']
     search_fields = ['order', 'products']
-    list_editable = ['quantity',]
+    list_editable = ['quantity', ]
     list_per_page = 20
 
     def product_name(self, obj: Cart) -> str:

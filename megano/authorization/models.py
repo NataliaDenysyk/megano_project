@@ -38,7 +38,6 @@ class Profile(models.Model):
     slug = models.SlugField('Слаг', max_length=150, default='')
     phone = models.BigIntegerField('Teleфон', null=True, blank=True)
     description = models.CharField('Описание', max_length=100)
-    # avatar = models.ImageField(null=True, blank=True, upload_to=profile_images_directory_path)
     avatar = ProcessedImageField(
         blank=True,
         verbose_name='Фотография товара',
