@@ -480,7 +480,6 @@ class OrderConfirmView(TemplateView):
     """
     model = Orders
     template_name = 'store/order/order_confirm.html'
-    context_object_name = 'order'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
