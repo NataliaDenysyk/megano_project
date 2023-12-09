@@ -11,10 +11,10 @@ class MenuMixin:
         :rtype: list
         """
         menu = [
-            {'name': 'Личный кабинет', 'url': 'authorization:profile_details'},
-            {'name': 'Профиль', 'url': 'authorization:profile'},
-            # {'name': 'История заказов', 'url': 'authorization:history_order', 'id': '/history_order/', },
-            # {'name': 'История просмотров', 'url': 'authorization:history_view', 'id': '/history_view/', },
+            {'name': 'Личный кабинет', 'url': 'authorization:profile_details', 'id': '1', },
+            {'name': 'Профиль', 'url': 'authorization:profile', 'id': '2', },
+            {'name': 'История заказов', 'url': 'authorization:history_orders', 'id': '3', },
+            # {'name': 'История просмотров', 'url': 'authorization:history_view', 'id': '4', },
         ]
         return menu
 

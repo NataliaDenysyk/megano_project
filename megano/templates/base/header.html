@@ -83,7 +83,7 @@ p.error-browser
                 <a class="ControlPanel-title" href="login.html">Вход</a>
                 <a class="ControlPanel-title" href="registr.html">Регистрация</a>
               {% else %}
-                <a class="ControlPanel-title" href="">Личный кабинет</a>
+                <a class="ControlPanel-title" href="{% url 'authorization:profile_details' pk=user.id %}">Личный кабинет</a>
               {% endif %}
             </div>
           </div>
@@ -126,7 +126,6 @@ block
       </nav>
       <div class="row-block">
         <div class="CartBlock">
-        {{ request.user }}
           {% if user.is_authenticated %}
             <div class="dropdown">
               <button class="dropbtn">
@@ -135,7 +134,7 @@ block
                      alt="loon-icon.svg}"/>
               </button>
               <div class="dropdown-content">
-                <a class="dropdown-content-a" href="{% url 'authorization:profile_details' pk=request.user.id %}">Личный кабинет</a>
+                <a class="dropdown-content-a" href="{% url 'authorization:profile_details' pk=user.id %}">Личный кабинет</a>
                 {% if user.is_superuser %}
                   <a class="dropdown-content-a" href="/admin">Административный раздел</a>
                 {% endif %}
@@ -209,8 +208,9 @@ block
       </div>
       <div class="Header-search">
         <div class="search">
-          <form class="form form_search" action="#" method="post">
-            <input class="search-input" id="query" name="query" type="text" placeholder="NVIDIA GeForce RTX 3060"/>
+          <form class="form form_search" action="{% url 'store:catalog' %}" method="get">
+            {% csrf_token %}
+            {{ form_search.name }}
             <button class="search-button" type="submit" name="search" id="search"><img
                     src="{% static 'assets/img/icons/search.svg' %}" alt="search.svg"/>Поиск
             </button>

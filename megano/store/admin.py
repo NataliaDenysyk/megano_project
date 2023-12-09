@@ -52,7 +52,7 @@ class AdminBanner(admin.ModelAdmin):
         ссылка на изображение отображается в виде картинки размером 60х 60.
         """
         if obj.product:
-            return mark_safe(f'<img src="{obj.product.images.first().image.url}" alt=""width="60">')
+            return mark_safe(f'<img src="{obj.product.preview.url}" alt=""width="60">')
         else:
             return 'not url'
 
@@ -61,6 +61,8 @@ class AdminBanner(admin.ModelAdmin):
 
 class ProductInline(admin.TabularInline):
     model = Orders.products.through
+    extra = 0
+
 
 @admin.register(Orders)
 class AdminOrders(admin.ModelAdmin):
@@ -68,14 +70,15 @@ class AdminOrders(admin.ModelAdmin):
         ProductInline,
         CartInline,
     ]
-    list_display = 'pk', 'delivery_type', 'address', 'created_at', 'profile', 'total', 'payment'
+    list_display = 'pk', 'profile', 'delivery_type', 'created_at', 'total_payment',
     list_display_links = 'pk', 'delivery_type'
-    ordering = 'pk', 'created_at', 'address'
-    search_fields = 'delivery_type', 'address', 'created_at'
+    ordering = 'pk', 'created_at',
+    search_fields = 'delivery_type', 'created_at'
+    # readonly_fields = ('total_payment',)
 
     fieldsets = [
         (None, {
-            "fields": ('profile', 'delivery_type', 'address', 'products', 'total', 'payment'),
+            "fields": ('profile', 'products', 'total_payment', 'delivery_type', 'payment'),
         }),
         ('Extra options', {
             'fields': ('status',),
@@ -112,28 +115,34 @@ class TagInline(admin.TabularInline):
     model = Product.tags.through
     verbose_name = 'Тег'
     verbose_name_plural = 'Теги'
+    extra = 0
 
 
 class OfferInline(admin.TabularInline):
     model = Offer
+    extra = 0
 
 
 class ReviewsInline(admin.TabularInline):
     model = Reviews
+    extra = 0
 
 
 class DiscountInline(admin.TabularInline):
     model = Product.discount.through
     verbose_name = 'Скидка'
     verbose_name_plural = 'Скидки'
+    extra = 0
 
 
 class OrderInline(admin.TabularInline):
     model = Product.orders.through
+    extra = 0
 
 
 class ProductInlineImages(admin.TabularInline):
     model = ProductImage
+    extra = 0
 
 
 @admin.register(Product)
@@ -154,6 +163,7 @@ class AdminProduct(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
     readonly_fields = ('created_time', 'update_time')
     actions = ['reset_product_list_cache']
+    save_on_top = True
 
     fieldsets = [
         (None, {
@@ -226,6 +236,7 @@ class ProductInline(admin.TabularInline):
     model = Discount.products.through
     verbose_name = 'Товар'
     verbose_name_plural = 'Товары'
+    extra = 0
 
 
 @admin.register(Reviews)

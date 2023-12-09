@@ -5,72 +5,90 @@
 {% load cache %}
 
 {% block content123 %}
-<div class="Section-content">
-  <div class="Profile">
-    <form class="form Profile-form" action="#" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
+  <div class="Section-content">
+    <div class="Profile">
 
-      <div class="row">
-        <div class="row-block">
+      <form class="form Profile-form" action="#" method="post" enctype="multipart/form-data">
 
-          <div class="form-group">
+      {% if error %}
+      {{ error }}
+      {% endif %}
+        {% csrf_token %}
 
-            <label class="form-label" for="avatar">Аватар
-            </label>
+        <div class="row">
+          <div class="row-block">
 
-            <div class="Profile-avatar Profile-avatar_noimg">
-              <label class="Profile-fileLabel" for="avatar"><img src="{% static 'assets/img/icons/upload.png' %}" alt="upload.png"/>Загрузить
-                фото
+            <div class="form-group">
+
+              <label class="form-label" for="avatar">Аватар
               </label>
+
+              <div class="Profile-avatar Profile-avatar_noimg">
+                <label class="Profile-fileLabel" for="avatar">
+                  <img src="{% static 'assets/img/icons/upload.png' %}" alt="upload.png"/>Загрузить
+                  фото
+                </label>
                 {{ form.avatar }}
 
+              </div>
+            </div>
+            <div class="form-group">
+
+              <label class="form-label" for="name">ФИО
+              </label>
+              {{ user_form.name }}
+              {{ user_form.errors.name }}
+
             </div>
           </div>
-          <div class="form-group">
+          <div class="row-block">
+            <div class="form-group">
 
-            <label class="form-label" for="name">ФИО
-            </label>
-          {{ form.name }}
+              <label class="form-label" for="phone">Телефон
+              </label>
+              {{ form.phone }}
+              {{ form.errors.phone }}
+{#               <ul class="errorlist"><li>Enter a whole number.</li></ul>#}
+
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="mail">E-mail
+              </label>
+              {{ user_form.e_mail }}
+               {%  firstof user_form.errors.e_mail  %}
+
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="password">Пароль
+              </label>
+              {{ user_form.password }}
+            {{ user_form.errors.password }}
+
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="passwordReply">Подтверждение пароля
+              </label>
+              {{ user_form.password_2 }}
+
+            </div>
+            <div class="form-group">
+              <div class="Profile-btn">
+                <button class="btn btn_success" type="submit">Сохранить
+                </button>
+              </div>
+              {% if messages %}
+                <div class="Profile-success">
+                {% for message in messages %}
+                  <li {% if message.tags %} {% endif %}>{{ message }}</li>
+                {% endfor %}
 
 
+              {% endif %}
+              </div>
+            </div>
           </div>
         </div>
-        <div class="row-block">
-{#          <div class="form-group">#}
-{#            <label class="form-label" for="phone">Телефон#}
-{#            </label>#}
-{#            {{ form.phone }}#}
-{##}
-{#          </div>#}
-          <div class="form-group">
-            <label class="form-label" for="mail">E-mail
-            </label>
-             {{ form.e_mail }}
-
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="password">Пароль
-            </label>
-            {{ form.password }}
-
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="passwordReply">Подтверждение пароля
-            </label>
-            {{ form.password_2 }}
-
-          </div>
-          <div class="form-group">
-            <div class="Profile-btn">
-              <button class="btn btn_success" type="submit">Сохранить
-              </button>
-            </div>
-            <div class="Profile-success">Профиль успешно сохранен
-            </div>
-          </div>
-        </div>
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
-</div>
 {% endblock %}

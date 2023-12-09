@@ -11,9 +11,10 @@ class StoreSettingsInline(admin.TabularInline):
 @admin.register(Profile)
 class AuthorAdmin(admin.ModelAdmin):
 
-    list_display = ['pk', 'user', 'role']
+    list_display = ['pk', 'user', 'phone', 'role']
     list_display_links = ['pk', 'user']
     list_filter = ['role']
+    prepopulated_fields = {'slug': ('name_store', )}
 
     def get_inlines(self, request, obj):
         """

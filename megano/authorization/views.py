@@ -1,28 +1,25 @@
 from django.contrib.auth.mixins import PermissionRequiredMixin
-from django.contrib.auth.models import Permission
+
+from django.contrib import messages
 from django.shortcuts import render, reverse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse
 
-from django.db.models import Count, Case, When
-from django.views.generic import DetailView, TemplateView
-
-from authorization.mixins import MenuMixin
-from authorization.models import Profile
-from store.configs import settings
-from store.models import Offer
+from django.views.generic import ListView, DetailView, UpdateView
 
 from django.core.cache import cache
 
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.db.models import Count, Case, When
 
-from authorization.forms import ProfileForm
-from authorization.models import Profile
+from .mixins import MenuMixin
 
-from django.http import HttpResponse
-from django.urls import reverse_lazy
+from store.configs import settings
+from store.models import Offer
 
-from store.models import Orders
-from services.services import ProfileService, ProfileCreateService
+from .models import Profile
+
+from services.services import ProfileService, ProfileOrders, ProfileUpdate
+
+from .forms import UserUpdateForm, ProfileUpdateForm
 
 
 class SellerDetail(DetailView):
@@ -51,58 +48,33 @@ class SellerDetail(DetailView):
         return context
 
 
-# class AccountView(TemplateView, MenuMixin):
-#     model = Profile
-#     template_name = 'auth/account/account.html'
-#
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context.update(
-#             self.get_menu()
-#         )
-#
-#         return context
-#
-# class ProfileView(TemplateView, MenuMixin):
-#     model = Profile
-#     template_name = 'auth/account/profile.html'
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context.update(
-#             self.get_menu()
-#         )
-#
-#         return context
-#
-# class HistoryOrderView(TemplateView, MenuMixin):
-#     model = Profile
-#     template_name = 'auth/account/historyorder.html'
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context.update(
-#             self.get_menu()
-#         )
-#
-#         return context
+class OrdersListView(ListView, MenuMixin):
+    """
+    Представление для просмотра заказов профиля
+    """
+    model = Profile
+    template_name = 'authorization/history_orders.html'
 
-# class HistoryProductsView(TemplateView, MenuMixin):
-#     model = Profile
-#     template_name = 'auth/account/historyview.html'
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context.update(
-#             self.get_menu()
-#         )
-#
-#         return context
+    def get_context_data(self, **kwargs):
+        """
+        Функция возвращает контекст
+        """
+        context = super().get_context_data(**kwargs)
+        context.update(ProfileOrders(
+            context['object_list'])
+                       .get_context(self.request.user))
+        context.update(
+            self.get_menu(id='3'),
+        )
+
+        return context
 
 
 class ProfileDetailView(MenuMixin, DetailView):
-    queryset = (
-        Profile.objects
-        .select_related('user')
-        .select_related('viewed_orders')
-    )
+    """
+    Представление для просмотра профиля
+    """
+    model = Profile
     template_name = 'authorization/profile_detail.html'
 
     def get_context_data(self, **kwargs) -> HttpResponse:
@@ -110,46 +82,84 @@ class ProfileDetailView(MenuMixin, DetailView):
         Функция возвращает контекст
         """
         context = super().get_context_data(**kwargs)
-        context.update(ProfileService(context['object']).get_context())
-        context.update(
-            {'menu': self.get_menu()}
-        )
-        context.update(ProfileService(context['object']).get_context())
 
+        context.update(ProfileService(
+            context['object']).get_context())
+        context.update(
+            self.get_menu(id='1')
+        )
+        context['title'] = f'Страница пользователя: {self.object.user.username}'
         return context
 
 
 class ProfileUpdateView(MenuMixin, UpdateView):
-    queryset = (
-        Profile.objects
-        .select_related('user')
-        .select_related('viewed_orders')
-    )
-    form_class = ProfileForm
-    # template_name = 'authorization/profile_update_form.html'
-    template_name_suffix = "_update_form"
+    """
+   Представление для редактирования профиля
+   """
+    model = Profile
+    form_class = ProfileUpdateForm
+    template_name = 'authorization/profile_update_form.html'
 
-    def get_success_url(self,):
+    def get_success_url(self):
         return reverse(
-            'authorization:profile_details',
+            'authorization:profile',
             kwargs={'pk': self.request.user.id},
         )
 
-    # @login_required
     def form_valid(self, form):
-        customer = Profile.objects.get(user=self.request.user)
-        ProfileCreateService().get_form_valid(form, customer)
-        # HttpResponseRedirect(self.get_success_url)
-        return HttpResponseRedirect(self.get_success_url())
+        """"
+        Функция обрабатывает валидную форму
+        """
+        context = self.get_context_data()
+        user_form = context['user_form']
+        profile = Profile.objects.get(user=self.request.user)
+        response = ProfileUpdate(profile).update_profile(
+            request=self.request, form=form, user_form=user_form, context=context)
+        if response is not None:
+            return response
 
-    def form_invalid(self, form):
+        messages.success(self.request, 'Профиль успешно сохранен ')
+        return super().form_valid(form)
 
-        return HttpResponseRedirect(self.get_success_url())
+    def form_invalid(self, form, *args, **kwargs):
+        """"
+        Функция обрабатывает невалидную форму
+        """
+        context = self.get_context_data()
+        context.update(
+            {'error': "Некорректный ввод данных. Попробуйте еще раз."}
+        )
+
+        return render(self.request, 'authorization/profile_update_form.html', context=context)
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+        """
+        Функция возвращает контекст
+        """
+        context = super(ProfileUpdateView, self).get_context_data(**kwargs)
         context.update(
-            {'menu': self.get_menu()}
+            self.get_menu(id='2'),
         )
-        print('context', context)
+        context['title'] = f'Редактирование страницы пользователя: {self.object.user.username}'
+        if self.request.POST:
+            context['user_form'] = UserUpdateForm(self.request.POST, instance=self.request.user)
+        else:
+            context['user_form'] = UserUpdateForm(instance=self.request.user)
+
         return context
+
+    # def get_data(self):
+    # """
+    # Функция возвращает данные для предзаполнения формы
+    # """
+    #     user = self.request.user
+    #     profile = Profile.objects.get(user=self.request.user)
+    #     data = {
+    #         'email': user.email,
+    #         'name': user.last_name + user.first_name,
+    #         'phone': profile.phone,
+    #         'avatar': profile.avatar
+    #     }
+    #     form = ProfileUpdateView(data)
+    #     return form
+

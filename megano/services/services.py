@@ -1,18 +1,21 @@
-from decimal import Decimal
-
-from typing import Dict
-
-from django.db.models import Sum
-from django.http import HttpResponse
+from django.contrib import messages
+from django.contrib.auth import authenticate, login
 
 from urllib.parse import urlparse, parse_qs, urlencode
 
 from django.db.models import Avg, Count, When, Case
 from django.http import HttpRequest
+from django.shortcuts import get_object_or_404, render
 
-from django.shortcuts import get_object_or_404
+from typing import Dict, List
+
+from decimal import Decimal
+from django.forms import ValidationError
+
+from django.db.models import Sum
 
 from authorization.models import Profile, StoreSettings
+# from authorization.views import ProfileUpdateView
 from store.models import Product, Offer, Category, Reviews, Discount, ProductImage, Tag, Orders
 
 
@@ -84,11 +87,7 @@ class DiscountProduct:
             )
             if price:
                 return price
-
-        discounts_product = discounts.filter(
-            name='Скидки на товар')
-        if discounts_product:
-            return self.get_discount_on_product(cart)
+        return self.get_discount_on_product(cart)
 
     @staticmethod
     def calculate_price_with_discount(product, price) -> float:
@@ -203,7 +202,6 @@ class DiscountProduct:
         elif product['product'] in categories:
             return self.get_price_categories(product, priority_false)
         else:
-
             return product['product'].offers.first().unit_price
 
     @staticmethod
@@ -213,7 +211,8 @@ class DiscountProduct:
         """
         return Product.objects.filter(
             discount__name='Скидки на товар',
-            discount__priority=priority
+            discount__priority=priority,
+            discount__is_active=True
         )
 
     @staticmethod
@@ -223,7 +222,8 @@ class DiscountProduct:
         """
         return Category.objects.filter(
             discount__name='Скидки на товар',
-            discount__priority=priority
+            discount__priority=priority,
+            discount__is_active=True
         )
 
     def get_price_product(self, product, priority):
@@ -739,7 +739,6 @@ class GetParamService:
         """
         Возвращает новый url
         """
-
         return self._parsed_url._replace(query=urlencode(self._query, True)).geturl()
 
     def remove_param(self, param_name: str) -> 'GetParamService':
@@ -769,81 +768,127 @@ class ProfileService:
 
     def get_context(self):
         """
-        Функция собирает контекст для рендера шаблона
-
-        :param object: объект Profile
-        :return: context - контекст для рендера шаблона
+        Функция собирает контекст для рендера шаблона 'profile_details'
         """
         context = {
-            'order': self._get_orders()[:1],
-            # 'orders': self._get_orders(),
-            # 'price': 'pass'
+
+            'order': Orders.objects.filter(profile=self.profile).order_by('created_at')[:1],
         }
         return context
 
-    def _get_orders(self):
-        return Orders.objects.filter(profile=self.profile).order_by('created_at')
+
+class ProfileOrders:
+    """
+    Сервис по работе с заказами
+    """
+    def __init__(self, orders: Orders):
+        self.orders = Orders
+
+    def get_context(self, user):
+        """
+       Функция собирает контекст для рендера шаблона 'history_orders'
+       """
+        context = {
+            'order': self.get_orders(user),
+        }
+        return context
+
+    @staticmethod
+    def get_orders(user):
+        """"
+        Функция для нахождения заказов пользователя
+        """
+        return (Orders.objects.filter(
+            profile=user.id)
+                .order_by('created_at')
+                )
 
 
-class ProfileCreateService:
-    def get_form_valid(self, form, customer):
-        print(customer)
+class ProfileUpdate:
+    """
+    Сервис для редактирования профиля
+    """
+    def __init__(self, profile: Profile):
+        self.profile = profile
+
+    def update_profile(self, request, form, user_form, context):
+        print('user_form', user_form)
+        user = request.user
+        names = self.full_name(user_form)
+        user.first_name, user.last_name = names[1], names[0]
+        email = self.get_mail_valid(user_form)
+        if email is 'error':
+            return self.get_error(
+                context=context,
+                form=user_form,
+                request=request,
+                inst='e_mail',)
+        user.email = email
+        password = self.get_password_valid(user_form)
+        if password == 'error':
+            return self.get_error(
+                context=context,
+                form=user_form,
+                request=request,
+                inst='password',
+                text='Пароли не совпадают.')
+        user.set_password(password)
+        self.profile.avatar = form.cleaned_data.get('avatar')
+        self.profile.phone = self.phone_replace(form)
+        print(self.profile.phone)
+        user.save()
+        self.profile.save()
+
+        user = authenticate(username=user.username, password=password)
+        login(request, user)
+
+    @staticmethod
+    def full_name(form):
+        """"
+        Функция для определения first_name и last_name пользователя из формы
+        """
         name = form.cleaned_data['name'].split(' ')
-        # phone = form.cleaned_data['phone']
-        password = self.get_password_valid(form.cleaned_data['password'],
-                                           form.cleaned_data['password_2'])
+        return [name[0], ' '.join(name[1:])]
 
-        profile = Profile.objects.update(
-            avatar=form.cleaned_data['avatar'],
-            # phone=form.cleaned_data['phone'],
-            )
-        # profile.save()
+    @staticmethod
+    def phone_replace(form):
+        """"
+        Функция для очистки номера и приведения его к int
+        """
+        phone_str = form.cleaned_data['phone']
+        chars_to_remove = ['(', ')']
+        for char in chars_to_remove:
+            phone_str = phone_str.replace(char, '')
 
-        customer.user.first_name = ' '.join([name[1],name[2]])
-        customer.user.last_name = name[0]
-        customer.user.email = form.cleaned_data['e_mail']
-        customer.user.password = password
+        return int(phone_str[2:])
 
-        # customer.save()
+    @staticmethod
+    def get_error(form, request, context, inst, text=''):
+        """"
+        Функция для отправки сообщения об ошибке при заполнении формы
+        """
+        form.add_error(inst, text)
+        return render(request,
+                      'authorization/profile_update_form.html',
+                      context=context)
 
+    @staticmethod
+    def get_password_valid(form):
+        """"
+        Функция для проверки одинаковости ввода password и password_2 в форму
+        """
+        if form.cleaned_data['password'] == form.cleaned_data['password_2']:
+            return form.cleaned_data['password']
+        else:
+            return 'error'
 
-    # @staticmethod
-    def get_password_valid(self, password, password_2):
-        # try:
-        print('password', password_2)
-        if password == password_2:
-            password = password[2:]
-            # password = int(str(password[2:]))
-            print(password)
-            return password
-        # except ValidationError:
-        #     return HttpResponse('Пароли не совпадают.')
-
-
-    # name = form.cleaned_data['name']
-    #     # price = form.cleaned_data['price']
-    #     # Product.objects.create(**form.cleaned_data)
-    #     form.save()
-    #     url = reverse('shopapp:orders_list')
-    #     return redirect(url)
-    # # else:
-    # #     form = OrderForm()
-    # # context = {
-    # #     'form': form,
-    # # }
-    # return render(request, 'shopapp/create-order.html', context=context)
-
-
-
-
-
-
-
-
-
-
-    # def name_profile(self, name):
-    #     print('name', name)
-    #     # last_name =
-
+    @staticmethod
+    def get_mail_valid(form):
+        """"
+        Функция для проверки email при вводе в форму
+        """
+        if 'e_mail' in form.errors:
+            return 'error'
+        else:
+            return form.cleaned_data['e_mail']
 
