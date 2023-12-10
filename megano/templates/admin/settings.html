@@ -17,7 +17,7 @@
     <div class="flex container">
         <table>
             <div class="setup-time-cache">
-                <h2 class="flex">Настройка времени кеширования</h2>
+                <h2 class="flex">Настройка времени кэширования</h2>
                 <tr>
                     <form class="flex setup" method="post" action="{% url 'store:site_name' %}">
                         {% csrf_token %}
@@ -41,7 +41,7 @@
                         {% csrf_token %}
                         <td>
                             <label for="cache_time_banner">
-                                <li>Время кеширование Баннера:</li>
+                                <li>Время кэширование Баннера:</li>
                             </label>
                         <td>
                             <span class="span-default">{{ cache_banner }}</span>
@@ -60,7 +60,7 @@
                         <td>
                             {% csrf_token %}
                             <label for="cache_time_cart">
-                                <li>Время кеширование Корзины:</li>
+                                <li>Время кэширование Корзины:</li>
                             </label>
                         <td>
                             <span class="span-default">{{ cache_cart }}</span>
@@ -79,7 +79,7 @@
                         <td>
                             {% csrf_token %}
                             <label for="cache_time_prod_detail">
-                                <li>Время кеширование деталей продукта:</li>
+                                <li>Время кэширование деталей продукта:</li>
                             </label>
                         <td>
                             <span class="span-default">{{ cache_prod_detail }}</span>
@@ -98,7 +98,7 @@
                         <td>
                             {% csrf_token %}
                             <label for="cache_time_seller">
-                                <li>Время кеширование деталей Продавца:</li>
+                                <li>Время кэширование деталей Продавца:</li>
                             </label>
                         <td>
                             <span class="span-default">{{ cache_seller }}</span>
@@ -117,7 +117,7 @@
                         <td>
                             {% csrf_token %}
                             <label for="cache_time_catalog">
-                                <li>Время кеширование Каталога:</li>
+                                <li>Время кэширование Каталога:</li>
                             </label>
                         <td>
                             <span class="span-default">{{ cache_catalog }}</span>
@@ -136,10 +136,10 @@
 
         <table>
             <div class="setup-time-cache">
-                <h2 class="flex">Очистка кеша</h2>
+                <h2 class="flex">Очистка кэша</h2>
                 <tr>
                     <td>
-                        <li>Очистить весь кеш</li>
+                        <li>Очистить весь кэш</li>
                     <td class="flex td-clear-cache">
                         <a class="clear-cache" href="{% url 'store:clear_all_cache' %}">
                             <input type="submit" value="Очистить">
@@ -149,7 +149,7 @@
                 <hr>
                 <tr>
                     <td>
-                        <li>Очистить кеш Баннера</li>
+                        <li>Очистить кэш Баннера</li>
                     </td>
                     <td class="flex td-clear-cache">
                         <a class="clear-cache" href="{% url 'store:clear_banner_cache' %}">
@@ -159,7 +159,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <li>Очистить кеш Корзины</li>
+                        <li>Очистить кэш Корзины</li>
                     </td>
                     <td class="flex td-clear-cache">
                         <a class="clear-cache" href="{% url 'store:clear_cart_cache' %}">
@@ -169,7 +169,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <li>Очистить кеш Детализации продукта</li>
+                        <li>Очистить кэш Детализации продукта</li>
                     </td>
                     <td class="flex td-clear-cache">
                         <a class="clear-cache" href="{% url 'store:clear_product_detail' %}">
@@ -179,7 +179,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <li>Очистить кеш Продавца</li>
+                        <li>Очистить кэш Продавца</li>
                     </td>
                     <td class="flex td-clear-cache">
                         <a class="clear-cache" href="{% url 'store:clear_seller' %}">
@@ -189,7 +189,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <li>Очистить кеш Каталога продуктов</li>
+                        <li>Очистить кэш Каталога продуктов</li>
                     </td>
                     <td class="flex td-clear-cache">
                         <a class="clear-cache" href="{% url 'store:clear_catalog' %}">
