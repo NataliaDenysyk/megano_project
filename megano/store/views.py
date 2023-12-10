@@ -451,15 +451,17 @@ class OrderView(UpdateView):
         profile.phone = form.cleaned_data['phone']
         profile.address = f"{form.cleaned_data['city']} {form.cleaned_data['address']}"
         profile.save()
+
+        order = Orders.objects.create(
+            delivery_type=delivery,
+            payment=payment,
+            profile=profile,
+            total_payment=sum([item['total_price'] for item in cart]),
+            status=3,
+        )
+        order.save()
+
         for item in cart:
-            order = Orders.objects.create(
-                delivery_type=delivery,
-                payment=payment,
-                profile=profile,
-                total_payment=item['total_price'],
-                status=3,
-            )
-            order.save()
             order.products.add(item['product'])
             Basket.objects.create(
                 order=order,
@@ -492,7 +494,6 @@ class OrderConfirmView(TemplateView):
         context.update(
             {
                 'order': Orders.objects.select_related('profile').last(),
-                'basket': Basket.objects.select_related('order')
             }
         )
         return context
