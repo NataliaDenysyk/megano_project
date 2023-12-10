@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import redirect
 from django.views.generic import ListView, DetailView, TemplateView, UpdateView, CreateView
 from django.http import HttpResponse, HttpResponseRedirect
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse_lazy
 from django.contrib import messages
 from django.core.cache import cache
 
@@ -13,6 +13,7 @@ from .filters import ProductFilter
 from .mixins import ChangeListMixin
 from authorization.models import Profile
 from cart.cart import Cart
+from cart.models import Cart as Basket
 from .models import Product, Orders, Offer
 from services.services import (
     ProductService,
@@ -460,6 +461,11 @@ class OrderView(UpdateView):
             )
             order.save()
             order.products.add(item['product'])
+            Basket.objects.create(
+                order=order,
+                products=item['product'],
+                quantity=item['quantity'],
+            )
             # product = Product.objects.get(slug=item['product'].slug)
             # TODO: added function for checking counter products
 
@@ -485,7 +491,8 @@ class OrderConfirmView(TemplateView):
         context = super().get_context_data(**kwargs)
         context.update(
             {
-                'order': Orders.objects.select_related('profile').last()
+                'order': Orders.objects.select_related('profile').last(),
+                'basket': Basket.objects.select_related('order')
             }
         )
         return context

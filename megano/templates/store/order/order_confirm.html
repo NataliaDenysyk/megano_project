@@ -28,7 +28,9 @@
                                                 <div class="Order-info Order-info_date">
                                                     <div class="Order-infoType">Дата заказа:
                                                     </div>
-                                                    <div class="Order-infoContent">{{ order.created_at }}
+                                                    <div class="Order-infoContent">
+                                                        {{ order.created_at|date:"Y-M-d" }}
+                                                        {{ order.created_at|time:"H:i" }}
                                                     </div>
                                                 </div>
                                                 <div class="Order-info">
@@ -121,7 +123,9 @@
                                                     </div>
                                                 </div>
                                                 <div class="Cart-block Cart-block_row">
-                                                    <div class="Cart-block Cart-block_amount">1 шт.
+                                                    <div class="Cart-block Cart-block_amount">
+                                                        {% if basket.quantity %}{{ basket.quantity }}{% else %}0
+                                                        {% endif %} шт.
                                                     </div>
                                                 </div>
                                             </div>
