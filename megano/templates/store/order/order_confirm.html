@@ -1,5 +1,6 @@
 {% extends "store/order/order.html" %}
 {% load i18n static %}
+{% load split_user_address %}
 
 
 {% block order_confirm %}
@@ -59,18 +60,20 @@
                                                     <div class="Order-infoContent">{{ order.delivery_type }}
                                                     </div>
                                                 </div>
-                                                <div class="Order-info">
-                                                    <div class="Order-infoType">Город:
+                                                {% with address=order.profile.address|split_string:" " %}
+                                                    <div class="Order-info">
+                                                        <div class="Order-infoType">Город:
+                                                        </div>
+                                                        <div class="Order-infoContent">{{ address|first }}
+                                                        </div>
                                                     </div>
-                                                    <div class="Order-infoContent">{{ order.profile.address }}
+                                                    <div class="Order-info">
+                                                        <div class="Order-infoType">Адрес:
+                                                        </div>
+                                                        <div class="Order-infoContent">{{ address|last }}
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="Order-info">
-                                                    <div class="Order-infoType">Адрес:
-                                                    </div>
-                                                    <div class="Order-infoContent">{{ order.profile.address }}
-                                                    </div>
-                                                </div>
+                                                {% endwith %}
                                                 <div class="Order-info Order-info_pay">
                                                     <div class="Order-infoType">Оплата:
                                                     </div>
