@@ -1,7 +1,7 @@
 from decimal import Decimal
 from django.conf import settings
 
-from store.models import Product
+from store.models import Product, Offer
 
 MAX_COUNT = 21
 
