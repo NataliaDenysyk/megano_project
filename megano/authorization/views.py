@@ -17,11 +17,19 @@ from django.core.cache import cache
 
 
 class SellerDetail(DetailView):
+    """
+    Вьюшка детальной страницы продавца
+    """
+
     model = Profile
     template_name = 'auth/about-seller.html'
     context_object_name = 'seller'
 
     def get_object(self, *args, **kwargs) -> Profile.objects:
+        """
+        Находит профиль продавца по слагу
+        """
+
         slug = self.kwargs.get('slug')
         instance = Profile.objects.get(slug=slug)
         profile = cache.get_or_set(f'profile-{slug}', instance, settings.get_cache_seller())
@@ -29,6 +37,10 @@ class SellerDetail(DetailView):
         return profile
 
     def get_context_data(self, **kwargs):
+        """
+        Передает в контекст топ товаров продавца
+        """
+
         context = super().get_context_data(**kwargs)
 
         context['top_offers'] = Offer.objects.filter(
@@ -43,23 +55,36 @@ class SellerDetail(DetailView):
 
 
 class RegisterView(CreateView):
+    """
+    Вьюшка страницы регистрации
+    """
+
     form_class = RegisterForm
     template_name = 'registration/register.html'
     success_url = reverse_lazy('store:index')
 
-    def form_valid(self, form):
+    def form_valid(self, form: RegisterForm):
+        """
+        Если удалось зарегистрировать пользователя - авторизует и отправляет на главную страницу,
+        иначе возвращает форму и ошибку
+        """
+
         result = AuthorizationService().register_new_user(self.request, form)
 
         if result is True:
             return super().form_valid(form)
 
         context = {
-            'error': result,
+            'error': 'Указанный email уже зарегистрирован',
             'form': form,
         }
         return render(self.request, 'registration/register.html', context=context)
 
-    def form_invalid(self, form):
+    def form_invalid(self, form: RegisterForm):
+        """
+        Когда форма невалидна, возвращает форму и ошибку
+        """
+
         context = {
             'form': form,
         }
@@ -77,11 +102,20 @@ class RegisterView(CreateView):
 
 
 class UserLoginView(FormView):
+    """
+    Вьюшка страницы авторизации
+    """
+
     form_class = LoginForm
     template_name = 'registration/login.html'
     success_url = reverse_lazy('store:index')
 
-    def form_valid(self, form):
+    def form_valid(self, form: LoginForm):
+        """
+        Если удалось авторизоваться - отправляет на главную страницу,
+        иначе возвращает форму и ошибку
+        """
+
         result = AuthorizationService().get_login(self.request, form)
 
         if result is True:
@@ -89,11 +123,15 @@ class UserLoginView(FormView):
 
         else:
             context = {
-                'form': LoginForm(),
+                'form': form,
                 'error': result,
             }
             return render(self.request, 'registration/login.html', context=context)
 
 
 class UserLogoutView(LogoutView):
+    """
+    Осуществляет выход пользователя из аккаунта с редиректом на главную страницу
+    """
+
     next_page = reverse_lazy('store:index')

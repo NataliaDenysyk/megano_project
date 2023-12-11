@@ -3,6 +3,9 @@ from django.contrib.auth.models import User
 
 
 class RegisterForm(forms.ModelForm):
+    """
+    Форма регистрации
+    """
 
     username = forms.CharField(
         max_length=20,
@@ -36,6 +39,10 @@ class RegisterForm(forms.ModelForm):
 
 
 class LoginForm(forms.Form):
+    """
+    Форма авторизации
+    """
+
     email = forms.EmailField(
         widget=forms.EmailInput(attrs={
             'class': 'user-input',

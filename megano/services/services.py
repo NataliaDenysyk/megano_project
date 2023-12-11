@@ -4,16 +4,15 @@ from typing import Dict, List
 
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
-from django.db.models import Sum
 
 from urllib.parse import urlparse, parse_qs, urlencode
 
 from django.db.models import Avg, Count, When, Case
-from django.http import HttpRequest, HttpResponseRedirect
+from django.http import HttpRequest
 
-from django.shortcuts import get_object_or_404, redirect
-from django.urls import reverse_lazy
+from django.shortcuts import get_object_or_404
 
+from authorization.forms import RegisterForm, LoginForm
 from authorization.models import Profile
 from store.models import Product, Offer, Category, Reviews, Discount, ProductImage, Tag
 
@@ -23,7 +22,12 @@ class AuthorizationService:
     Сервис авторизации и регистрации пользователей
     """
 
-    def register_new_user(self, request, form):
+    @staticmethod
+    def register_new_user(request: HttpRequest, form: RegisterForm) -> bool:
+        """
+        Регистрирует нового пользователя, если указанного email нет в базе данных
+        """
+
         username = form.cleaned_data["username"]
         email = form.cleaned_data["email"]
         password = form.cleaned_data["password"]
@@ -31,7 +35,7 @@ class AuthorizationService:
         email_in_db = User.objects.filter(email=email).first()
 
         if email_in_db:
-            return 'Указанный email уже зарегистрирован'
+            return False
         else:
             user = form.save()
             user.set_password(password)
@@ -47,13 +51,20 @@ class AuthorizationService:
             )
 
             login(request=request, user=user)
-            print('успех')
 
             return True
 
-    def get_login(self, request, form):
+    @staticmethod
+    def get_login(request: HttpRequest, form: LoginForm):
+        """
+        Авторизует пользователя по email и password
+
+        :return: возвращает True или str - описание ошибки
+        """
+
         email = form.cleaned_data["email"]
         password = form.cleaned_data["password"]
+
         try:
             user = User.objects.get(email=email)
 
@@ -63,8 +74,10 @@ class AuthorizationService:
                 login(request, user)
                 return True
 
+            return 'Пароль и email не совпадают, проверьте ввод или зарегистрируйтесь'
+
         except User.DoesNotExist:
-            return "Пароль и email не совпадают, проверьте ввод или зарегистрируйтесь"
+            return "Пользователь с таким email не найден"
 
 
 class GetAdminSettings:
