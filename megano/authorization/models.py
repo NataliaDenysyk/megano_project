@@ -34,7 +34,7 @@ class Profile(models.Model):
         STORE = 'store'
         BUYER = 'buyer'
 
-    user = models.ForeignKey(User, verbose_name='Пользователь', on_delete=models.CASCADE)
+    user = models.OneToOneField(User, verbose_name='Пользователь', on_delete=models.CASCADE)
     slug = models.SlugField('Слаг', max_length=150, default='')
     phone = models.CharField('Teleфон', null=True, blank=True, unique=True)
     description = models.CharField('Описание', max_length=100)

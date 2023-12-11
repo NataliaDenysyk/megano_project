@@ -98,7 +98,7 @@ class ProfileUpdateView(MenuMixin, UpdateView):
     def get_success_url(self):
         return reverse(
             'authorization:profile',
-            kwargs={'pk': self.request.user.id},
+            kwargs={'pk': self.request.user.profile.id},
         )
 
     def form_valid(self, form):

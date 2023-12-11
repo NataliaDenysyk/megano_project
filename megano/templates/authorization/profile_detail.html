@@ -2,8 +2,6 @@
 
 {% load static %}
 
-{% load cache %}
-
 {% block content123 %}
   <div class="Section-content">
     <div class="Account">
@@ -18,7 +16,7 @@
           <div class="Account-name">
             {% firstof object.first_name and object.last_name profile.user.first_name object.username %}
           </div>
-          <a class="Account-editLink" href="{% url 'authorization:profile' pk=user.id %}">Редактировать
+          <a class="Account-editLink" href="{% url 'authorization:profile' pk=user.profile.id %}">Редактировать
             профиль</a>
         </div>
       </div>
@@ -29,7 +27,7 @@
               <div class="Order Order_anons">
                 <div class="Order-personal">
                   <div class="row">
-                    <div class="row-block"><a class="Order-title" href="oneorder.html">Заказ&#32;<span
+                    <div class="row-block"><a class="Order-title" href="detailed_order_page.html">Заказ&#32;<span
                         class="Order-numberOrder">
                     №{{ order_id.id }} </span>&#32;от&#32;
                       <span class="Order-dateOrder">{{ order_id.created_at|date:"d.m.Y" }}</span></a>

@@ -83,7 +83,7 @@ p.error-browser
                 <a class="ControlPanel-title" href="login.html">Вход</a>
                 <a class="ControlPanel-title" href="registr.html">Регистрация</a>
               {% else %}
-                <a class="ControlPanel-title" href="{% url 'authorization:profile_details' pk=user.id %}">Личный
+                <a class="ControlPanel-title" href="{% url 'authorization:profile_details' pk=user.profile.id %}">Личный
                   кабинет</a>
               {% endif %}
             </div>
@@ -136,7 +136,7 @@ block
               </button>
               <div class="dropdown-content">
                 {% if user.is_authenticated  %}
-                  <a class="dropdown-content-a" href="{% url 'authorization:profile_details' pk=user.id %}">Личный
+                  <a class="dropdown-content-a" href="{% url 'authorization:profile_details' pk=user.profile.id %}">Личный
                     кабинет</a>
                 {% endif %}
                 {% if user.is_superuser %}
