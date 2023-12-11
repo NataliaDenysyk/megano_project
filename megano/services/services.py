@@ -764,10 +764,11 @@ class ProfileUpdate:
         user_form = context['user_form']
         with transaction.atomic():
             if all([form.is_valid(), user_form.is_valid()]):
+                self.profile = form.save()
+                self.profile.phone = self.get_phone(form)
                 password = self.get_password_valid(user_form)
                 names = self.get_full_name(user_form)
                 user.email = user_form.cleaned_data['mail']
-                self.profile.phone = self.get_phone(form)
                 self.profile.avatar = form.cleaned_data['avatar']
                 if user_form.errors or form.errors:
                     context.update({'user_form': user_form})
@@ -779,7 +780,7 @@ class ProfileUpdate:
 
                 user.save()
                 self.profile.save()
-                # self.profile.save(update_fields=['phone'])
+
                 user = authenticate(username=user.username, password=password)
                 login(request, user)
             else:
@@ -818,9 +819,10 @@ class ProfileUpdate:
         chars_to_remove = ['(', ')']
         for char in chars_to_remove:
             phone_str = phone_str.replace(char, '')
-        phone = int(phone_str[2:])
+        phone = phone_str[2:]
         if Profile.objects.filter(phone=phone).exists():
             form.add_error('phone', 'Телефон должен быть уникальным')
+        print('type', type(phone))
 
         return phone
 
