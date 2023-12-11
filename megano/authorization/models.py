@@ -36,7 +36,7 @@ class Profile(models.Model):
 
     user = models.ForeignKey(User, verbose_name='Пользователь', on_delete=models.CASCADE)
     slug = models.SlugField('Слаг', max_length=150, default='')
-    phone = models.BigIntegerField('Teleфон', null=True, blank=True)
+    phone = models.BigIntegerField('Teleфон', null=True, blank=True, unique=True)
     description = models.CharField('Описание', max_length=100)
     avatar = ProcessedImageField(
         blank=True,

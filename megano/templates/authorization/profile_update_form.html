@@ -10,9 +10,9 @@
 
       <form class="form Profile-form" action="#" method="post" enctype="multipart/form-data">
 
-      {% if error %}
-      {{ error }}
-      {% endif %}
+        {% if error %}
+          {{ error }}
+        {% endif %}
         {% csrf_token %}
 
         <div class="row">
@@ -22,23 +22,26 @@
 
               <label class="form-label" for="avatar">Аватар
               </label>
-
+              <div class="form-error">{{ form.errors.avatar }}</div>
               <div class="Profile-avatar Profile-avatar_noimg">
+
                 <label class="Profile-fileLabel" for="avatar">
                   <img src="{% static 'assets/img/icons/upload.png' %}" alt="upload.png"/>Загрузить
                   фото
                 </label>
-                {{ form.avatar }}
-
+                <input class="Profile-file form-input{% if user_form.errors.e_mail %}form-input_error{% endif %}"
+                       id="avatar" name="avatar" type="file" enctype="multipart/form-data"
+                       data-validate="onlyImgAvatar"/>
               </div>
             </div>
             <div class="form-group">
 
               <label class="form-label" for="name">ФИО
               </label>
-              {{ user_form.name }}
-              {{ user_form.errors.name }}
-
+              <div class="form-error">{{ user_form.errors.name }}</div>
+              <input class="form-input{% if user_form.errors.e_mail %}form-input_error{% endif %}" id="name" name="name"
+                     type="text" value=""
+                     data-validate="require">
             </div>
           </div>
           <div class="row-block">
@@ -46,30 +49,33 @@
 
               <label class="form-label" for="phone">Телефон
               </label>
-              {{ form.phone }}
-              {{ form.errors.phone }}
-{#               <ul class="errorlist"><li>Enter a whole number.</li></ul>#}
-
+              <div class="form-error">{{ user_form.errors.phone }}</div>
+              <input class="form-input {% if user_form.errors.e_mail %}form-input_error{% endif %}" id="phone"
+                     name="phone" type="text" placeholder="+7(999)9999999"
+                     data-mask="+7(999)9999999">
             </div>
             <div class="form-group">
               <label class="form-label" for="mail">E-mail
               </label>
-              {{ user_form.e_mail }}
-               {%  firstof user_form.errors.e_mail  %}
-
+              <div class="form-error">{{ user_form.errors.mail }}</div>
+              <input class="form-input {% if user_form.errors.mail %}form-input_error{% endif %}" id="mail"
+                     name="mail" type="email" value="" placeholder="send@test.test"
+                     data-validate="require">
             </div>
             <div class="form-group">
               <label class="form-label" for="password">Пароль
               </label>
-              {{ user_form.password }}
-            {{ user_form.errors.password }}
-
+              <div class="form-error">{{ user_form.errors.password }}</div>
+              <input class="form-input {% if user_form.errors.password %}form-input_error{% endif %}" id="password"
+                     name="password" type="password" value=""
             </div>
             <div class="form-group">
               <label class="form-label" for="passwordReply">Подтверждение пароля
               </label>
-              {{ user_form.password_2 }}
-
+              <div class="form-error">{{ user_form.errors.password }}</div>
+              <input class="form-input{% if user_form.errors.password %}form-input_error{% endif %}" id="passwordReply"
+                     name="passwordReply" type="password"
+                     placeholder="Введите пароль повторно"/>
             </div>
             <div class="form-group">
               <div class="Profile-btn">

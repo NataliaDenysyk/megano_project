@@ -1,21 +1,16 @@
-from django.contrib import messages
 from django.contrib.auth import authenticate, login
-
 from urllib.parse import urlparse, parse_qs, urlencode
 
 from django.db.models import Avg, Count, When, Case
+from django.db import transaction
 from django.http import HttpRequest
 from django.shortcuts import get_object_or_404, render
 
-from typing import Dict, List
+from typing import Dict
 
 from decimal import Decimal
-from django.forms import ValidationError
-
-from django.db.models import Sum
 
 from authorization.models import Profile, StoreSettings
-# from authorization.views import ProfileUpdateView
 from store.models import Product, Offer, Category, Reviews, Discount, ProductImage, Tag, Orders
 
 
@@ -752,37 +747,9 @@ class ProfileService:
         Функция собирает контекст для рендера шаблона 'profile_details'
         """
         context = {
-
-            'order': Orders.objects.filter(profile=self.profile).order_by('created_at')[:1],
+            'order': Orders.objects.filter(profile=self.profile).order_by('-created_at')[:1],
         }
         return context
-
-
-class ProfileOrders:
-    """
-    Сервис по работе с заказами
-    """
-    def __init__(self, orders: Orders):
-        self.orders = Orders
-
-    def get_context(self, user):
-        """
-       Функция собирает контекст для рендера шаблона 'history_orders'
-       """
-        context = {
-            'order': self.get_orders(user),
-        }
-        return context
-
-    @staticmethod
-    def get_orders(user):
-        """"
-        Функция для нахождения заказов пользователя
-        """
-        return (Orders.objects.filter(
-            profile=user.id)
-                .order_by('created_at')
-                )
 
 
 class ProfileUpdate:
@@ -792,39 +759,50 @@ class ProfileUpdate:
     def __init__(self, profile: Profile):
         self.profile = profile
 
-    def update_profile(self, request, form, user_form, context):
-        print('user_form', user_form)
+    def update_profile(self, request, form, context):
         user = request.user
-        names = self.full_name(user_form)
-        user.first_name, user.last_name = names[1], names[0]
-        email = self.get_mail_valid(user_form)
-        if email is 'error':
-            return self.get_error(
-                context=context,
-                form=user_form,
-                request=request,
-                inst='e_mail',)
-        user.email = email
-        password = self.get_password_valid(user_form)
-        if password == 'error':
-            return self.get_error(
-                context=context,
-                form=user_form,
-                request=request,
-                inst='password',
-                text='Пароли не совпадают.')
-        user.set_password(password)
-        self.profile.avatar = form.cleaned_data.get('avatar')
-        self.profile.phone = self.phone_replace(form)
-        print(self.profile.phone)
-        user.save()
-        self.profile.save()
+        user_form = context['user_form']
+        with transaction.atomic():
+            if all([form.is_valid(), user_form.is_valid()]):
+                password = self.get_password_valid(user_form)
+                names = self.get_full_name(user_form)
+                user.email = user_form.cleaned_data['mail']
+                self.profile.phone = self.get_phone(form)
+                self.profile.avatar = form.cleaned_data['avatar']
+                if user_form.errors or form.errors:
+                    context.update({'user_form': user_form})
+                    return render(request,
+                                  'authorization/profile_update_form.html',
+                                  context=context)
+                user.set_password(password)
+                user.first_name, user.last_name = names[1], names[0]
 
-        user = authenticate(username=user.username, password=password)
-        login(request, user)
+                user.save()
+                self.profile.save()
+                # self.profile.save(update_fields=['phone'])
+                user = authenticate(username=user.username, password=password)
+                login(request, user)
+            else:
+                context.update({'user_form': user_form})
+                return render(request,
+                              'authorization/profile_update_form.html',
+                              context=context)
 
     @staticmethod
-    def full_name(form):
+    def get_password_valid(form):
+        """"
+        Функция для проверки одинаковости ввода password и passwordReply в форму
+        """
+        if form.cleaned_data['password'] and form.cleaned_data['passwordReply']:
+            if form.cleaned_data['password'] == form.cleaned_data['passwordReply']:
+                return form.cleaned_data['password']
+            else:
+                form.add_error('password', 'Пароли не совпадают')
+        else:
+            form.add_error('password', 'Введите пароль и подтверждение пароля')
+    #
+    @staticmethod
+    def get_full_name(form):
         """"
         Функция для определения first_name и last_name пользователя из формы
         """
@@ -832,44 +810,19 @@ class ProfileUpdate:
         return [name[0], ' '.join(name[1:])]
 
     @staticmethod
-    def phone_replace(form):
+    def get_phone(form):
         """"
-        Функция для очистки номера и приведения его к int
+        Функция для очистки номера проверки его на уникальность и приведения к int
         """
         phone_str = form.cleaned_data['phone']
         chars_to_remove = ['(', ')']
         for char in chars_to_remove:
             phone_str = phone_str.replace(char, '')
+        phone = int(phone_str[2:])
+        if Profile.objects.filter(phone=phone).exists():
+            form.add_error('phone', 'Телефон должен быть уникальным')
 
-        return int(phone_str[2:])
+        return phone
 
-    @staticmethod
-    def get_error(form, request, context, inst, text=''):
-        """"
-        Функция для отправки сообщения об ошибке при заполнении формы
-        """
-        form.add_error(inst, text)
-        return render(request,
-                      'authorization/profile_update_form.html',
-                      context=context)
 
-    @staticmethod
-    def get_password_valid(form):
-        """"
-        Функция для проверки одинаковости ввода password и password_2 в форму
-        """
-        if form.cleaned_data['password'] == form.cleaned_data['password_2']:
-            return form.cleaned_data['password']
-        else:
-            return 'error'
-
-    @staticmethod
-    def get_mail_valid(form):
-        """"
-        Функция для проверки email при вводе в форму
-        """
-        if 'e_mail' in form.errors:
-            return 'error'
-        else:
-            return form.cleaned_data['e_mail']
 

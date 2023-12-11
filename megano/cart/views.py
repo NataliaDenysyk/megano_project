@@ -20,7 +20,7 @@ class CartListView(TemplateView):
             {
                 'carts': Cart(self.request),
                 'form_search': form_search,
-                'total_price': discount.get_priority_discount(cart=cart)
+                'total_price': discount.get_priority_discount(cart=Cart(self.request))
             }
         )
         return context

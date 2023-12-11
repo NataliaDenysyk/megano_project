@@ -1,5 +1,4 @@
 from django import forms
-from django.core import validators
 from django.contrib.auth.models import User
 from .models import Profile
 
@@ -19,7 +18,7 @@ class UserUpdateForm(forms.ModelForm):
             'data-validate': "require"
         })
     )
-    e_mail = forms.EmailField(
+    mail = forms.EmailField(
         label='mail',
         widget=forms.EmailInput(attrs={
             'class': "form-input",
@@ -29,9 +28,6 @@ class UserUpdateForm(forms.ModelForm):
             'data-validate': "require",
             'placeholder': "send@test.test"
         }),
-        # validators=[
-        #     validators.EmailValidator(message='dfghjiklm')
-        # ]
     )
     password = forms.CharField(
         label='password',
@@ -45,32 +41,31 @@ class UserUpdateForm(forms.ModelForm):
             'placeholder': "Тут можно изменить пароль"
         })
     )
-    password_2 = forms.CharField(
+    passwordReply = forms.CharField(
         label='passwordReply',
         min_length=8,
         max_length=50,
         widget=forms.PasswordInput(attrs={
             'class': "form-input",
-            'id': "password",
-            'name': "password",
+            'id': "passwordReply",
+            'name': "passwordReply",
             'type': "password",
             'placeholder': "Введите пароль повторно"
         })
     )
 
-    class Meta:
-        model = User
-        fields = ('name', 'email', 'password', 'password_2')
-
-    def clean_email(self):
+    def clean_mail(self):
         """
         Проверка email на уникальность
         """
-        email = self.cleaned_data.get('email')
-        username = self.cleaned_data.get('username')
-        if email and User.objects.filter(email=email).exclude(username=username).exists():
-            raise forms.ValidationError('Email адрес должен быть уникальным')
+        email = self.cleaned_data.get('mail')
+        if User.objects.filter(email__iexact=email).exists():
+            self.add_error('mail', 'Email адрес должен быть уникальным')
         return email
+
+    class Meta:
+        model = User
+        fields = ('name', 'email', 'password', 'passwordReply')
 
 
 class ProfileUpdateForm(forms.ModelForm):
@@ -102,89 +97,21 @@ class ProfileUpdateForm(forms.ModelForm):
         })
     )
 
+    def clean_avatar(self):
+        """"
+       Функция, ограничивающая размер загружаемой avatar
+       """
+        image = self.cleaned_data.get('avatar', False)
+        if image:
+            if image.size > 2.5 * 1024 * 1024:
+                self.add_error('avatar', 'Размер изображения слишком большой ( > 2.5mb )')
+            return image
+        else:
+            self.add_error('avatar', 'Не удалось прочитать загруженное изображение')
+
     class Meta:
         model = Profile
         fields = ('avatar',)
 
 
 
-
-# class ProfileForm(forms.ModelForm):
-#
-#     avatar = forms.ImageField(
-#         label='avatar',
-#         required=False,
-#         widget=forms.FileInput(attrs={
-#             'class': "Profile-file form-input",
-#             'id': "avatar",
-#             'name': "avatar",
-#             'type': "file",
-#             'enctype': "multipart/form-data",
-#             'data-validate': "onlyImgAvatar"
-#         }))
-#
-#     name = forms.CharField(
-#         label='name',
-#         max_length=200,
-#         widget=forms.TextInput(attrs={
-#             'class': "form-input",
-#             'id': "name",
-#             'name': "name",
-#             'type': "text",
-#             'data-validate': "require"
-#         })
-#     )
-#     phone = forms.CharField(
-#         label='Телефон',
-#         widget=forms.TextInput(attrs={
-#             'class': "form-input",
-#             'id': "phone",
-#             'name': "phone",
-#             'type': "text",
-#             'placeholder': '+7(999)9999999',
-#             "data-mask": '+7(999)9999999',
-#
-#         }))
-#
-#     e_mail = forms.EmailField(
-#         label='mail',
-#         widget=forms.EmailInput(attrs={
-#             'class': "form-input",
-#             'id': "mail",
-#             'name': "mail",
-#             'type': "email",
-#             'data-validate': "require",
-#             'placeholder': "send@test.test"
-#         })
-#     )
-#
-#     password = forms.CharField(
-#         label='password',
-#         min_length=8,
-#         max_length=50,
-#         widget=forms.PasswordInput(attrs={
-#             'class': "form-input",
-#             'id': "password",
-#             'name': "password",
-#             'type': "password",
-#             'placeholder': "Тут можно изменить пароль"
-#         })
-#     )
-#     password_2 = forms.CharField(
-#         label='passwordReply',
-#         min_length=8,
-#         max_length=50,
-#         widget=forms.PasswordInput(attrs={
-#             'class': "form-input",
-#             'id': "password",
-#             'name': "password",
-#             'type': "password",
-#             'placeholder': "Введите пароль повторно"
-#         })
-#     )
-#
-#     class Meta:
-#         model = Profile
-#         fields = ['avatar', 'name']   #'phone'
-#
-#

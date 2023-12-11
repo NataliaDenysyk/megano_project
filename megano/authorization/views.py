@@ -1,5 +1,3 @@
-from django.contrib.auth.mixins import PermissionRequiredMixin
-
 from django.contrib import messages
 from django.shortcuts import render, reverse
 from django.http import HttpResponse
@@ -13,13 +11,14 @@ from django.db.models import Count, Case, When
 from .mixins import MenuMixin
 
 from store.configs import settings
-from store.models import Offer
+from store.models import Offer, Orders
+
+from services.services import ProfileService, ProfileUpdate
+
+from .forms import UserUpdateForm, ProfileUpdateForm
 
 from .models import Profile
 
-from services.services import ProfileService, ProfileOrders, ProfileUpdate
-
-from .forms import UserUpdateForm, ProfileUpdateForm
 
 
 class SellerDetail(DetailView):
@@ -48,7 +47,7 @@ class SellerDetail(DetailView):
         return context
 
 
-class OrdersListView(ListView, MenuMixin):
+class ProfileOrders(ListView, MenuMixin):
     """
     Представление для просмотра заказов профиля
     """
@@ -60,13 +59,10 @@ class OrdersListView(ListView, MenuMixin):
         Функция возвращает контекст
         """
         context = super().get_context_data(**kwargs)
-        context.update(ProfileOrders(
-            context['object_list'])
-                       .get_context(self.request.user))
+        context['orders'] = Orders.objects.filter(profile=self.request.user.id).order_by('created_at')[:20]
         context.update(
             self.get_menu(id='3'),
         )
-
         return context
 
 
@@ -81,14 +77,13 @@ class ProfileDetailView(MenuMixin, DetailView):
         """
         Функция возвращает контекст
         """
+        profile = Profile.objects.get(user=self.request.user)
         context = super().get_context_data(**kwargs)
-
-        context.update(ProfileService(
-            context['object']).get_context())
+        context.update(ProfileService(profile).get_context())
         context.update(
             self.get_menu(id='1')
         )
-        context['title'] = f'Страница пользователя: {self.object.user.username}'
+        context['title'] = f'Страница пользователя: {self.request.user.username}'
         return context
 
 
@@ -111,10 +106,9 @@ class ProfileUpdateView(MenuMixin, UpdateView):
         Функция обрабатывает валидную форму
         """
         context = self.get_context_data()
-        user_form = context['user_form']
         profile = Profile.objects.get(user=self.request.user)
         response = ProfileUpdate(profile).update_profile(
-            request=self.request, form=form, user_form=user_form, context=context)
+            request=self.request, form=form, context=context)
         if response is not None:
             return response
 
@@ -140,7 +134,7 @@ class ProfileUpdateView(MenuMixin, UpdateView):
         context.update(
             self.get_menu(id='2'),
         )
-        context['title'] = f'Редактирование страницы пользователя: {self.object.user.username}'
+        context['title'] = f'Редактирование страницы пользователя: {self.request.user.username}'
         if self.request.POST:
             context['user_form'] = UserUpdateForm(self.request.POST, instance=self.request.user)
         else:
@@ -148,18 +142,4 @@ class ProfileUpdateView(MenuMixin, UpdateView):
 
         return context
 
-    # def get_data(self):
-    # """
-    # Функция возвращает данные для предзаполнения формы
-    # """
-    #     user = self.request.user
-    #     profile = Profile.objects.get(user=self.request.user)
-    #     data = {
-    #         'email': user.email,
-    #         'name': user.last_name + user.first_name,
-    #         'phone': profile.phone,
-    #         'avatar': profile.avatar
-    #     }
-    #     form = ProfileUpdateView(data)
-    #     return form
 
