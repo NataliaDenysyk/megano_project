@@ -1,11 +1,15 @@
 from django.db import models
 
+from django.contrib.contenttypes.fields import GenericRelation
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
 
 from authorization.models import Profile
 from django.urls import reverse
 from mptt.models import MPTTModel, TreeForeignKey
+
+import compare
+from compare.models import *
 
 from store.utils import (
     category_image_directory_path,
@@ -65,9 +69,9 @@ class Product(models.Model):
         'Описание',
         default=jsonfield_default_description,
     )
-    feature = models.JSONField(
-        'Характеристика',
-        default=jsonfield_default_feature,
+    feature = GenericRelation(
+        compare.models.AbstractCharacteristicModel,
+        null=True, blank=True
     )
     tags = models.ManyToManyField('Tag', related_name='products', verbose_name='Теги')
     preview = ProcessedImageField(
