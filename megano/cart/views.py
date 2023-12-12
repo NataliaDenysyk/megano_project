@@ -28,8 +28,7 @@ class CartListView(ListView):
         carts = Cart(request)
         for item in carts:
             if item['product'].id == offer.product.id:
-                carts.update_price(offer.product, offer.unit_price)
-
+                carts.update_date(offer, offer.unit_price)
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
