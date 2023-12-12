@@ -19,7 +19,7 @@
                 {% for m in menu %}
                   <ul class="menu menu_vt">
                     <li class="menu-item {% if id == m.id %} menu-item_ACTIVE {% endif %}">
-                      <a class="menu-link" href="{% url m.url pk=request.user.profile.id %}">{{ m.name }}</a>
+                      <a class="menu-link" href="{% url m.url slug=request.user.profile.slug %}">{{ m.name }}</a>
                     </li>
                   </ul>
                 {% endfor %}

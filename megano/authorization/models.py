@@ -5,7 +5,7 @@ from django.dispatch import receiver
 
 from django.core.exceptions import ObjectDoesNotExist
 from imagekit.models import ProcessedImageField
-from pilkit.processors import ResizeToFill
+from pilkit.processors import ResizeToFit
 
 
 def profile_images_directory_path(instance: 'Profile', filename: str) -> str:
@@ -43,7 +43,7 @@ class Profile(models.Model):
         verbose_name='Фотография товара',
         upload_to=profile_images_directory_path,
         options={"quality": 80},
-        processors=[ResizeToFill(157, 100)],
+        processors=[ResizeToFit(157, 100)],
         null=True
     )
     name_store = models.CharField('Имя магазина', max_length=50, blank=True, null=True)

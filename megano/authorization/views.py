@@ -59,7 +59,7 @@ class ProfileOrders(ListView, MenuMixin):
         Функция возвращает контекст
         """
         context = super().get_context_data(**kwargs)
-        context['orders'] = Orders.objects.filter(profile=self.request.user.id).order_by('created_at')[:20]
+        context['orders'] = Orders.objects.filter(profile=self.request.user.profile.id).order_by('-created_at')[:20]
         context.update(
             self.get_menu(id='3'),
         )
@@ -98,7 +98,7 @@ class ProfileUpdateView(MenuMixin, UpdateView):
     def get_success_url(self):
         return reverse(
             'authorization:profile',
-            kwargs={'pk': self.request.user.profile.id},
+            kwargs={'pk': self.request.user.profile.slug},
         )
 
     def form_valid(self, form):
@@ -141,5 +141,24 @@ class ProfileUpdateView(MenuMixin, UpdateView):
             context['user_form'] = UserUpdateForm(instance=self.request.user)
 
         return context
+
+
+class ProfileOrderPage(DetailView):
+
+    """
+    Представление для просмотра детализации заказов профиля
+    """
+    model = Profile
+    template_name = 'authorization/detailed_order_page.html'
+
+    def get_context_data(self, **kwargs):
+        """
+        Функция возвращает контекст
+        """
+        context = super().get_context_data(**kwargs)
+        context['orders'] = Orders.objects.select_related('profile').prefetch_related('products')
+
+        return context
+
 
 

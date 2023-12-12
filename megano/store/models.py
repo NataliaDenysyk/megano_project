@@ -2,7 +2,7 @@ from django.db import models
 
 from django.contrib.contenttypes.fields import GenericRelation
 from imagekit.models import ProcessedImageField
-from imagekit.processors import ResizeToFill
+from imagekit.processors import ResizeToFit
 
 from authorization.models import Profile
 from django.urls import reverse
@@ -78,7 +78,7 @@ class Product(models.Model):
         verbose_name='Основное фото',
         upload_to="products/product/%y/%m/%d/",
         options={"quality": 80},
-        processors=[ResizeToFill(200, 200)],
+        processors=[ResizeToFit(200, 200)],
         blank=True,
         null=True
     )
@@ -107,7 +107,7 @@ class ProductImage(models.Model):
         verbose_name='Фотография товара',
         upload_to=product_images_directory_path,
         options={"quality": 80},
-        processors=[ResizeToFill(200, 200)],
+        processors=[ResizeToFit(200, 200)],
     )
 
     def __str__(self) -> str:
