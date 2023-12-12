@@ -1,12 +1,13 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.shortcuts import redirect
-from django.views.generic import ListView, DetailView, TemplateView, UpdateView, CreateView
+from django.views.generic import ListView, DetailView, TemplateView, UpdateView, CreateView, FormView
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.core.cache import cache
 
+from .tasks import pay_order
 from .configs import settings
 from .forms import ReviewsForm, SearchForm, OrderCreateForm, RegisterForm
 from .filters import ProductFilter
@@ -26,6 +27,11 @@ from services.services import (
 
 import re
 from typing import Any
+
+from .configs import settings
+from .forms import ReviewsForm, SearchForm, PaymentForm
+from .filters import ProductFilter
+from .mixins import ChangeListMixin
 
 
 class CatalogListView(ListView):
@@ -500,3 +506,41 @@ class OrderConfirmView(TemplateView):
 
     def get_success_url(self):
         return reverse_lazy('store:order_confirm', kwargs={'pk': self.request.user.id})
+
+
+class PaymentFormView(FormView):
+    """
+    Вьюшка формы оплаты
+    """
+
+    template_name = 'store/order/payment.html'
+    form_class = PaymentForm
+
+    def form_valid(self, form):
+        pay_order.delay(card=form.cleaned_data['bill'])
+        return HttpResponseRedirect(reverse_lazy('store:payment-progress'))
+
+    def get_context_data(self, **kwargs):
+        form_search = SearchForm(self.request.GET or None)
+        context = super().get_context_data(**kwargs)
+
+        context['form_search'] = form_search
+
+        return context
+
+
+class PaymentProgressView(TemplateView):
+    """
+    Вьюшка страницы ожидания оплаты
+    """
+
+    template_name = 'store/order/payment_progress.html'
+
+    def get_context_data(self, **kwargs):
+        form_search = SearchForm(self.request.GET or None)
+        context = super().get_context_data(**kwargs)
+
+        context['form_search'] = form_search
+
+        return context
+

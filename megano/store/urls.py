@@ -20,8 +20,9 @@ from .views import (
     OrderView,
     OrderRegisterView,
     OrderConfirmView,
+    PaymentFormView,
+    PaymentProgressView,
 )
-
 
 app_name = 'store'
 
@@ -30,6 +31,8 @@ urlpatterns = [
     path('catalog/<slug:slug>/', CatalogListView.as_view(), name='category'),
     path('product/<slug:slug>/', ProductDetailView.as_view(), name='product-detail'),
     path('', MainPage.as_view(), name='index'),
+    path('order/payment/', PaymentFormView.as_view(), name='payment-form'),
+    path('order/payment/progress/', PaymentProgressView.as_view(), name='payment-progress'),
     path('order-reg/', OrderRegisterView.as_view(), name='order_reg'),
     path('order-create/<int:pk>/', OrderView.as_view(), name='order_create'),
     path('order-confirm/<int:pk>/', OrderConfirmView.as_view(), name='order_confirm'),

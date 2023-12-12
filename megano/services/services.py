@@ -1,3 +1,5 @@
+import random
+
 from decimal import Decimal
 
 from typing import Dict, List
@@ -14,8 +16,7 @@ from django.shortcuts import get_object_or_404
 
 from authorization.forms import RegisterForm, LoginForm
 from authorization.models import Profile
-from store.models import Product, Offer, Category, Reviews, Discount, ProductImage, Tag
-
+from store.models import Product, Offer, Category, Reviews, Discount, ProductImage, Tag, Orders
 
 class AuthorizationService:
     """
@@ -318,16 +319,44 @@ class PaymentService:
     Сервис оплаты
     """
 
-    def _get_payment_status(self, order) -> str:
-        if order.is_paid == True:
-            return 'Оплаченый заказ'
-        else:
-            return 'Заказ не оплачен'
+    def __init__(self, order_id: int, card):
+        self._order_id = order_id
+        self._card = card
 
-    def _pay_order(self, order) -> str:
-        order.is_paid = True
-        order.save()
-        return 'Оплачено'
+    def get_payment_status(self):
+        """
+        Меняет статус заказа
+        """
+
+        result = FakePaymentService(self._card).pay_order()
+
+        if result == 'Оплачено':
+            Orders.objects.filter(id=self._order_id).update(status=result)
+        else:
+            Orders.objects.filter(id=self._order_id).update(status='Не оплачено')
+
+
+class FakePaymentService:
+    """
+    Фиктивный сервис оплаты
+    """
+
+    EXCEPTIONS = ['Банк недоступен', 'На счете недостаточно средств', 'Введенный счет недействителен']
+
+    def __init__(self, card: int) -> str:
+        self._card = card
+
+    def pay_order(self) -> str:
+        """
+        Проверяет валидность номера счета или карты
+
+        :return: статут Оплачено или имя случайной ошибки
+        """
+
+        if self._card % 2 == 0 and self._card % 10 != 0:
+            return 'Оплачено'
+        else:
+            return random.choice(self.EXCEPTIONS)
 
 
 class ProductsViewService:
