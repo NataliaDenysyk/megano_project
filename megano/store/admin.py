@@ -88,7 +88,7 @@ class AdminOrders(admin.ModelAdmin):
 
     fieldsets = [
         (None, {
-            "fields": ('profile', 'products', 'total_payment', 'delivery_type'),
+            "fields": ('profile', 'products', 'total_payment', 'delivery_type', 'payment'),
         }),
         ('Extra options', {
             'fields': ('status',),
@@ -107,7 +107,7 @@ class AdminCategory(DjangoMpttAdmin):
     ordering = 'pk', 'name', 'activity'
     list_filter = ['activity']
     search_fields = ['name']
-    repopulated_fields = {'slug': ('name',)}
+    prepopulated_fields = {'slug': ('name',)}
 
     fieldsets = [
         (None, {
@@ -224,9 +224,9 @@ class AdminProduct(admin.ModelAdmin):
 
     def reset_product_list_cache(self, request, queryset):
         cache.clear()
-        self.message_user(request, "Кеш списка товаров сброшен.")
+        self.message_user(request, "кэш списка товаров сброшен.")
 
-    reset_product_list_cache.short_description = "Сбросить кеш списка товаров"
+    reset_product_list_cache.short_description = "Сбросить кэш списка товаров"
 
 
 @admin.register(Offer)

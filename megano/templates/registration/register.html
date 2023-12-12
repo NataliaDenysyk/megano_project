@@ -1,0 +1,35 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+  <div class="wrapper">
+    {% if not user.is_authenticated %}
+      <div class="header">
+        <h3 class="sign-in">Регистрация</h3>
+      </div>
+      <div class="clear"></div>
+      <form action="#" method="post">
+        {% csrf_token %}
+        <div>
+          {{ form.username }}
+        </div>
+        <div>
+          {{ form.email }}
+        </div>
+        <div>
+          {{ form.password }}
+        </div>
+        <input type="submit" value="Зарегистрироваться"/>
+
+        <a class="registr" href="{% url 'profile:login' %}">
+          Вход
+        </a>
+        <div class="clear"></div>
+      </form>
+    {% else %}
+      <h2>Вы уже зарегистрированы и авторизованы :)</h2>
+    {% endif %}
+  {% if error %}
+    <p>{{ error }}</p>
+  {% endif %}
+  </div>
+{% endblock %}

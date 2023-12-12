@@ -1,0 +1,48 @@
+{% extends "store/order/order.html" %}
+{% load i18n static %}
+
+{% block order_register %}
+    <form class="form" method="post" action="#">
+        {% csrf_token %}
+        <header class="Section-header Section-header_sm">
+            <h2 class="Section-title">Шаг 1. Параметры пользователя
+            </h2>
+        </header>
+        <div class="row">
+            <div class="row-block">
+                <div class="form-group">
+                    {{ form.username.label }}
+                    {{ form.username }}
+                    {{ form.username.errors }}
+                </div>
+                <div class="form-group">
+                    {{ form.phone.label }}
+                    {{ form.phone }}
+                    {{ form.phone.errors }}
+                </div>
+                <div class="form-group">
+                    {{ form.email.label }}
+                    {{ form.email }}
+                    {{ form.email.errors }}
+                </div>
+            </div>
+            <div class="row-block">
+                <div class="form-group">
+                    {{ form.password1.label }}
+                    {{ form.password1 }}
+                    {{ form.password1.errors }}
+                </div>
+                <div class="form-group">
+                    {{ form.password2.label }}
+                    {{ form.password2 }}
+                    {{ form.password2.errors }}
+                </div>
+                <div class="form-group">
+                    <a class="btn btn_muted Order-btnReg" href="#">Я уже
+                        зарегистрирован</a>
+                </div>
+            </div>
+        </div>
+        <button class="btn btn_success" type="submit">Дальше</button>
+    </form>
+{% endblock %}

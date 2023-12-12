@@ -1,8 +1,9 @@
 from decimal import Decimal
 
-from typing import Dict
+from typing import Dict, List
 
-from django.db.models import Sum
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User
 
 from urllib.parse import urlparse, parse_qs, urlencode
 
@@ -11,8 +12,72 @@ from django.http import HttpRequest
 
 from django.shortcuts import get_object_or_404
 
+from authorization.forms import RegisterForm, LoginForm
 from authorization.models import Profile
 from store.models import Product, Offer, Category, Reviews, Discount, ProductImage, Tag
+
+
+class AuthorizationService:
+    """
+    Сервис авторизации и регистрации пользователей
+    """
+
+    @staticmethod
+    def register_new_user(request: HttpRequest, form: RegisterForm) -> bool:
+        """
+        Регистрирует нового пользователя, если указанного email нет в базе данных
+        """
+
+        username = form.cleaned_data["username"]
+        email = form.cleaned_data["email"]
+        password = form.cleaned_data["password"]
+
+        email_in_db = User.objects.filter(email=email).first()
+
+        if email_in_db:
+            return False
+        else:
+            user = form.save()
+            user.set_password(password)
+            user.save()
+
+            Profile.objects.create(
+                user=user,
+                slug=username,
+            )
+
+            user = authenticate(
+                request, username=username, password=password
+            )
+
+            login(request=request, user=user)
+
+            return True
+
+    @staticmethod
+    def get_login(request: HttpRequest, form: LoginForm):
+        """
+        Авторизует пользователя по email и password
+
+        :return: возвращает True или str - описание ошибки
+        """
+
+        email = form.cleaned_data["email"]
+        password = form.cleaned_data["password"]
+
+        try:
+            user = User.objects.get(email=email)
+
+            user = authenticate(request, username=user.username, password=password)
+
+            if user:
+                login(request, user)
+                return True
+
+            return 'Пароль и email не совпадают, проверьте ввод или зарегистрируйтесь'
+
+        except User.DoesNotExist:
+            return "Пользователь с таким email не найден"
 
 
 class GetAdminSettings:
@@ -252,6 +317,7 @@ class PaymentService:
     """
     Сервис оплаты
     """
+
     def _get_payment_status(self, order) -> str:
         if order.is_paid == True:
             return 'Оплаченый заказ'
@@ -318,7 +384,7 @@ class ProductsViewService:
         else:
             self._request.session['products_viewed'] = [product_id]
 
-    def _remove_product_from_viewed(self,  product_id: int) -> list:
+    def _remove_product_from_viewed(self, product_id: int) -> list:
         """
         Удалить продукт из списка просмотренных продуктов
         """
@@ -675,6 +741,7 @@ class ReviewsProduct:
     """
     Сервис для добавления отзыва к товару
     """
+
     @staticmethod
     def add_review_to_product(request, form, slug) -> None:
         # добавить отзыв к товару
