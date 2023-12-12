@@ -120,8 +120,8 @@ class ProfileUpdateView(MenuMixin, UpdateView):
 
     def get_success_url(self):
         return reverse(
-            'authorization:profile',
-            kwargs={'pk': self.request.user.profile.slug},
+            'profile:profile',
+            kwargs={'slug': self.request.user.profile.slug},
         )
 
     def form_valid(self, form):
@@ -147,7 +147,7 @@ class ProfileUpdateView(MenuMixin, UpdateView):
             {'error': "Некорректный ввод данных. Попробуйте еще раз."}
         )
 
-        return render(self.request, 'authorization/profile_update_form.html', context=context)
+        return render(self.request, 'profile/profile_update_form.html', context=context)
 
     def get_context_data(self, **kwargs):
         """
@@ -184,14 +184,10 @@ class ProfileOrderPage(DetailView):
         return context
 
 
-
-
-
 class RegisterView(CreateView):
     """
     Вьюшка страницы регистрации
     """
-
     form_class = RegisterForm
     template_name = 'registration/register.html'
     success_url = reverse_lazy('store:index')

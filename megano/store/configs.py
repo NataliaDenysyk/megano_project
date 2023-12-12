@@ -1,6 +1,7 @@
 """
 Модуль с настройками сайта
 """
+from __future__ import annotations
 
 SECOND = 60
 HOURS = 60 * 60

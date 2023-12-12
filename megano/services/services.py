@@ -19,6 +19,8 @@ from authorization.forms import RegisterForm, LoginForm
 from authorization.models import Profile
 from store.models import Product, Offer, Category, Reviews, Discount, ProductImage, Tag
 
+from store.models import Orders
+
 
 class AuthorizationService:
     """
@@ -870,7 +872,7 @@ class ProfileUpdate:
                 form.add_error('password', 'Пароли не совпадают')
         else:
             form.add_error('password', 'Введите пароль и подтверждение пароля')
-    #
+
     @staticmethod
     def get_full_name(form):
         """"
@@ -891,7 +893,6 @@ class ProfileUpdate:
         phone = phone_str[2:]
         if Profile.objects.filter(phone=phone).exists():
             form.add_error('phone', 'Телефон должен быть уникальным')
-        print('type', type(phone))
 
         return phone
 

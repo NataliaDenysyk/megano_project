@@ -83,7 +83,7 @@ p.error-browser
                 <a class="ControlPanel-title" href="{% url 'profile:login' %}">Вход</a>
                 <a class="ControlPanel-title" href="{% url 'profile:register' %}">Регистрация</a>
               {% else %}
-                <a class="ControlPanel-title" href="{% url 'authorization:profile_details' slug=user.profile.slug %}">Личный
+                <a class="ControlPanel-title" href="{% url 'profile:profile_details' slug=user.profile.slug %}">Личный
                   кабинет</a>
                 <a class="ControlPanel-title" href="">Личный кабинет</a>
                 <a class="ControlPanel-title" href="{% url 'profile:logout' %}">Выход</a>

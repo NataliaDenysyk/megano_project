@@ -16,7 +16,7 @@
           <div class="Account-name">
             {% firstof object.first_name and object.last_name profile.user.first_name object.username %}
           </div>
-          <a class="Account-editLink" href="{% url 'authorization:profile' slug=user.profile.slug %}">Редактировать
+          <a class="Account-editLink" href="{% url 'profile:profile' slug=user.profile.slug %}">Редактировать
             профиль</a>
         </div>
       </div>
@@ -27,12 +27,13 @@
               <div class="Order Order_anons">
                 <div class="Order-personal">
                   <div class="row">
-                    <div class="row-block"><a class="Order-title" href="detailed_order_page.html">Заказ&#32;<span
+                    <div class="row-block"><a class="Order-title"
+                                              href="{% url 'profile:detailed_order' slug=request.user.profile.slug pk=order_id.pk %}">Заказ&#32;<span
                         class="Order-numberOrder">
                     №{{ order_id.id }} </span>&#32;от&#32;
                       <span class="Order-dateOrder">{{ order_id.created_at|date:"d.m.Y" }}</span></a>
                       <div class="Account-editLink">
-                        <a href="{% url 'authorization:history_orders' slug=request.user.profile.slug %}">История заказов</a>
+                        <a href="{% url 'profile:history_orders' slug=request.user.profile.slug %}">История заказов</a>
                       </div>
                     </div>
 
