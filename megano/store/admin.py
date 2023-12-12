@@ -107,7 +107,7 @@ class AdminCategory(DjangoMpttAdmin):
     ordering = 'pk', 'name', 'activity'
     list_filter = ['activity']
     search_fields = ['name']
-    repopulated_fields = {'slug': ('name',)}
+    prepopulated_fields = {'slug': ('name',)}
 
     fieldsets = [
         (None, {
