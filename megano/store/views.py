@@ -14,7 +14,7 @@ from .mixins import ChangeListMixin
 from authorization.models import Profile
 from cart.cart import Cart
 from cart.models import Cart as Basket
-from .models import Product, Orders, Offer
+from .models import Product, Orders, Offer, BannersCategory
 from services.services import (
     ProductService,
     CatalogService,
@@ -22,10 +22,16 @@ from services.services import (
     GetParamService,
     ProductsViewService,
     ReviewsProduct,
+    MainService,
 )
 
 import re
 from typing import Any
+
+from .configs import settings
+from .forms import ReviewsForm, SearchForm
+from .filters import ProductFilter
+from .mixins import ChangeListMixin
 
 
 class CatalogListView(ListView):
@@ -95,6 +101,7 @@ class ProductDetailView(DetailView):
         return product
 
     def get_context_data(self, **kwargs) -> HttpResponse:
+
         form_search = SearchForm(self.request.GET or None)
         context = super().get_context_data(**kwargs)
 
@@ -363,7 +370,7 @@ class MainPage(ListView):
         popular_products = cache.get(cache_key)
 
         if popular_products is None:
-            popular_products = ProductService(self.model).get_popular_products(quantity=5)
+            popular_products = ProductService(self.model).get_popular_products(quantity=8)
             cache.set(cache_key, popular_products, settings.set_popular_products_cache(1))
 
         return popular_products
@@ -373,6 +380,11 @@ class MainPage(ListView):
         context = super().get_context_data(**kwargs)
 
         context['form_search'] = form_search
+        context['banners_category'] = BannersCategory.objects.all()[:3]
+        context['limited_deals'] = MainService.get_limited_deals()
+        print(Product.objects.filter(discount__isnull=False)[:9][0].discount)
+        context['hot_offers'] = Product.objects.filter(discount__isnull=False)[:9]
+        context['limited_edition'] = Product.objects.filter(limited_edition=True)[:16]
 
         return context
 

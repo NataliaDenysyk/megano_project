@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Avg
 
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
@@ -37,6 +38,18 @@ class Category(MPTTModel):
 
     def get_absolute_url(self):
         return reverse('product-by-category', args=[str(self.slug)])
+
+    def get_min_price(self):
+        # Функция вычисления минимальной цены в категории, нужна для главной страницы
+
+        # TODO закешировать, обновлять раз в день или при создании продукта
+        offers = Offer.objects.filter(product__category=self)
+        if hasattr(offers, '__iter__'):
+            return min((offer.unit_price for offer in offers))
+
+        return offers.unit_price
+
+
 
     class Meta:
         unique_together = [['parent', 'slug']]
@@ -83,9 +96,25 @@ class Product(models.Model):
     created_at = models.DateTimeField('Создан', auto_now_add=True)
     update_at = models.DateTimeField('Отредактирован', auto_now=True)
     discount = models.ManyToManyField('Discount', related_name='products', verbose_name='Скидка')
+    limited_edition = models.BooleanField('Ограниченный тираж', default=False)
 
     def __str__(self) -> str:
         return f"{self.name} (id:{self.pk})"
+
+    def get_average_price(self) -> float:
+        """
+        Функция возвращает среднюю цену товара по всем продавцам
+        """
+
+        if self.offers.all():
+            return round(
+                Offer.objects.filter(
+                    product=self,
+                ).aggregate(
+                    Avg('unit_price')
+                ).get('unit_price__avg')
+            )
+
 
     class Meta:
         db_table = 'Products'
@@ -281,3 +310,28 @@ class Orders(models.Model):
         db_table = "Orders"
         verbose_name = "Заказ"
         verbose_name_plural = "Заказы"
+
+
+class BannersCategory(models.Model):
+    """
+    Модель банеров категорий для главной страницы
+    """
+
+    category = models.ForeignKey('store.Category', on_delete=models.CASCADE, verbose_name='Категории')
+    preview = ProcessedImageField(
+        verbose_name='Фото категории',
+        upload_to="category/%y/%m/%d/",
+        options={"quality": 80},
+        processors=[ResizeToFill(200, 200)],
+        blank=True,
+        null=True
+    )
+    is_active = models.BooleanField(default=False, verbose_name="Активный")
+
+    def __str__(self) -> str:
+        return f"{self.category.name}"
+
+    class Meta:
+        db_table = 'Banners_Category'
+        verbose_name = 'Банер категории'
+        verbose_name_plural = 'Банеры категорий'

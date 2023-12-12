@@ -1,6 +1,10 @@
+from datetime import datetime, timedelta
 from decimal import Decimal
+from random import choice
 
 from typing import Dict, List
+
+from django.core.cache import cache
 
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
@@ -85,10 +89,6 @@ class GetAdminSettings:
 
 
 class AddProductInTrash:
-    pass
-
-
-class AddReview:
     pass
 
 
@@ -317,7 +317,6 @@ class PaymentService:
     """
     Сервис оплаты
     """
-
     def _get_payment_status(self, order) -> str:
         if order.is_paid == True:
             return 'Оплаченый заказ'
@@ -473,7 +472,6 @@ class ProductService:
 
     def get_popular_products(self, quantity):
         popular_products = self._product.objects.filter(orders__status=True). \
-                               values('pk', 'slug', 'preview', 'name', 'category__name', 'offers__unit_price'). \
                                annotate(count=Count('pk')).order_by('-count')[:quantity]
         return popular_products
 
@@ -741,7 +739,6 @@ class ReviewsProduct:
     """
     Сервис для добавления отзыва к товару
     """
-
     @staticmethod
     def add_review_to_product(request, form, slug) -> None:
         # добавить отзыв к товару
@@ -804,3 +801,21 @@ class GetParamService:
 
         self._query[param_name] = param_value
         return self
+
+
+class MainService:
+    @staticmethod
+    def get_limited_deals() -> Product:
+        limited_cache = cache.get('product_limited_edition')
+        if not limited_cache:
+
+            products = Product.objects.filter(limited_edition=True)
+            product_l_e = choice(products)
+
+            product_l_e.time = datetime.now() + timedelta(days=2, hours=3)
+            product_l_e.time = product_l_e.time.strftime("%d.%m.%Y %H:%M")
+            cache.set('product_limited_edition', product_l_e, 86400)
+
+            return product_l_e
+        else:
+            return limited_cache

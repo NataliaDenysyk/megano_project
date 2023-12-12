@@ -16,6 +16,7 @@ from .models import (
     Reviews,
     Tag,
     ProductImage,
+    BannersCategory,
 )
 from compare.admin import (TVSetCharacteristicInline,
                            HeadphonesCharacteristicInline,
@@ -174,7 +175,7 @@ class AdminProduct(admin.ModelAdmin):
         MicrowaveOvenCharacteristicInline,
         MobileCharacteristicInline,
     ]
-    list_display = ('pk', 'name', 'category', 'description_short', 'created_time', 'update_time', 'availability',)
+    list_display = ('pk', 'name', 'category', 'description_short', 'created_time', 'update_time', 'availability', 'limited_edition')
     list_display_links = 'pk', 'name'
     list_filter = ['availability']
     ordering = 'pk', 'name', 'created_at'
@@ -192,7 +193,7 @@ class AdminProduct(admin.ModelAdmin):
             'fields': ('preview',),
         }),
         ('Другие опции', {
-            'fields': ('availability', 'slug', 'category'),
+            'fields': ('limited_edition', 'availability', 'slug', 'category'),
             "classes": ("collapse",),
         }),
     ]
@@ -286,3 +287,24 @@ class DiscountAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         return Discount.objects.prefetch_related('products')
+
+
+@admin.register(BannersCategory)
+class AdminBanner(admin.ModelAdmin):
+    list_display = ['category', 'get_html_images', 'is_active']
+    list_display_links = ['category']
+    list_filter = ['is_active']
+
+
+    def get_html_images(self, obj: BannersCategory):
+        """
+        В панели администратора,
+        ссылка на изображение отображается в виде картинки размером 60х 60.
+        """
+        if obj.preview:
+            return mark_safe(f'<img src="{obj.preview.url}" alt=""width="60">')
+        else:
+            return 'not url'
+
+    get_html_images.short_description = "Изображение"
+
