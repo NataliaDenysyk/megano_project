@@ -1,7 +1,8 @@
+import copy
 from decimal import Decimal
 from django.conf import settings
 
-from store.models import Product, Offer
+from store.models import Product, Offer, Orders
 
 MAX_COUNT = 21
 
@@ -84,7 +85,7 @@ class Cart(object):
         product_id = self.cart.keys()
         products = Product.objects.filter(id__in=product_id)
 
-        cart = self.cart.copy()
+        cart = copy.deepcopy(self.cart)
         for product in products:
             cart[str(product.id)]['product'] = product
         for item in cart.values():
@@ -100,6 +101,12 @@ class Cart(object):
             Decimal(item['price']) * item['quantity']
             for item in self.cart.values()
         )
+
+    def update_price(self, offer: Offer, price: int) -> None:
+        product_id = str(offer.id)
+        print(product_id)
+        self.cart[product_id]['price'] = str(price)
+        self.save()
 
     def clear(self) -> None:
         """

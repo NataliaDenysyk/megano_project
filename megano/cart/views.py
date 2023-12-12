@@ -1,7 +1,7 @@
 from django.core.handlers.wsgi import WSGIRequest
 from django.shortcuts import get_object_or_404, redirect
 from django.http import HttpResponseRedirect, HttpResponse
-from django.views.generic import TemplateView, ListView
+from django.views.generic import ListView
 
 from store.forms import SearchForm
 from .cart import Cart
@@ -15,15 +15,22 @@ class CartListView(ListView):
     def get_context_data(self, **kwargs):
         form_search = SearchForm(self.request.GET or None)
         context = super().get_context_data(**kwargs)
-        carts = Cart(self.request)
-        print(self.request.GET)
         context.update(
             {
-                'carts': carts,
+                'carts': Cart(self.request),
                 'form_search': form_search,
             }
         )
         return context
+
+    def post(self, request):
+        offer = Offer.objects.get(id=request.POST.get('offer'))
+        carts = Cart(request)
+        for item in carts:
+            if item['product'].id == offer.product.id:
+                carts.update_price(offer.product, offer.unit_price)
+
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 def add_product_to_cart(request: WSGIRequest, offer_id) -> HttpResponse:
