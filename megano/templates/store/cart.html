@@ -32,14 +32,14 @@
                                     <div class="Cart-block Cart-block_row">
                                         <div class="Cart-block Cart-block_seller">
                                             <!-- - var options = setOptions(items, ['value', 'selected', 'disabled']);-->
-                                            <form method="get">
-                                                <label>
-                                                    <select name="offers">
+                                            <form method="post">
+                                                {% csrf_token %}
+                                                    <select name="offer" id="element">
                                                         {% for offer in cart.offers.all %}
-                                                            <option type="submit" value="{{ offer }}">{{ offer }}</option>
+                                                            <option value="{{ offer.pk }}">{{ offer }}</option>
                                                         {% endfor %}
                                                     </select>
-                                                </label>
+                                                <button style="width: 100%" type="submit">Показать</button>
                                             </form>
                                         </div>
                                         <div class="Cart-block Cart-block_amount">
