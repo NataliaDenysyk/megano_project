@@ -2,76 +2,84 @@
 {% load i18n static %}
 
 {% block content %}
-  <div class="Middle Middle_top">
-    <div class="Section">
-      <div class="wrap">
-        {% if carts %}
-          <form class="form Cart" action="#" method="post">
-            {% csrf_token %}
-            {% for item in carts %}
-              {% with cart=item.product %}
-                <div class="Cart-product">
-                  <div class="Cart-block Cart-block_row">
-                    <div class="Cart-block Cart-block_pict">
-                      <a class="Cart-pict" href="#">
-                        <img class="Cart-img"
-                             src="{{ cart.preview.url }}"
-                             width="120px"
-                             alt="{{ cart.name }}"/>
-                      </a>
-                    </div>
-                    <div class="Cart-block Cart-block_info">
-                      <a class="Cart-title" href="#">{{ cart.name }}</a>
-                      <div class="Cart-desc">{{ cart.description.text_bottom }}</div>
-                    </div>
-                    <div class="Cart-block Cart-block_price">
-                      <div class="Cart-price">{{ item.price }}$
-                      </div>
-                    </div>
-                  </div>
-                  <div class="Cart-block Cart-block_row">
-                    <div class="Cart-block Cart-block_seller">
-                      <!-- - var options = setOptions(items, ['value', 'selected', 'disabled']);-->
-                    </div>
-                    <div class="Cart-block Cart-block_amount">
-                      <div class="Cart-amount">
-                        <div class="Amount">
-                          <button class="button-visible take-product" type="button">
-                            <a href="{% url 'cart:take_product' cart.slug %}">—</a>
-                          </button>
-                          <label class="quantity-product">{{ item.quantity }}</label>
-                          <button class="button-visible add-product" type="button">
-                            <a href="{% url 'cart:add_product' cart.slug %}">+</a>
-                          </button>
+    <div class="Middle Middle_top">
+        <div class="Section">
+            <div class="wrap">
+                {% if carts %}
+                    <form class="form Cart" action="#" method="post">
+                        {% csrf_token %}
+                        {% for item in carts %}
+                            {% with cart=item.product %}
+                                <div class="Cart-product">
+                                    <div class="Cart-block Cart-block_row">
+                                        <div class="Cart-block Cart-block_pict">
+                                            <a class="Cart-pict" href="#">
+                                                <img class="Cart-img"
+                                                     src="{{ cart.preview.url }}"
+                                                     width="120px"
+                                                     alt="{{ cart.name }}"/>
+                                            </a>
+                                        </div>
+                                        <div class="Cart-block Cart-block_info">
+                                            <a class="Cart-title" href="#">{{ cart.name }}</a>
+                                            <div class="Cart-desc">{{ cart.description.text_bottom }}</div>
+                                        </div>
+                                        <div class="Cart-block Cart-block_price">
+                                            <div class="Cart-price">{{ item.price }}$
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="Cart-block Cart-block_row">
+                                        <div class="Cart-block Cart-block_seller">
+                                            <!-- - var options = setOptions(items, ['value', 'selected', 'disabled']);-->
+                                        </div>
+                                        <div class="Cart-block Cart-block_amount">
+                                            <div class="Cart-amount">
+                                                <div class="Amount">
+                                                    <button class="button-visible take-product" type="button">
+                                                        <a href="{% url 'cart:take_product' cart.slug %}">—</a>
+                                                    </button>
+                                                    <label class="quantity-product">{{ item.quantity }}</label>
+                                                    <button class="button-visible add-product" type="button">
+                                                        <a href="{% url 'cart:add_product' cart.slug %}">+</a>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="Cart-block Cart-block_delete">
+                                            <a class="Cart-delete" href="{% url 'cart:delete_product' cart.slug %}">
+                                                <img src="{% static 'assets/img/icons/card/delete.svg' %}"
+                                                     alt="delete.svg"/>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endwith %}
+                        {% endfor %}
+                        <div class="Cart-total">
+                            <div class="Cart-block Cart-block_total">
+                                <strong class="Cart-title">Итого:
+                                </strong><span class="Cart-price">{{ cart.get_total_price }}$</span>
+                            </div>
+                            <div class="Cart-block">
+                                {% if user.is_authenticated %}
+                                    <a class="btn btn_success btn_lg"
+                                       href="{% url 'store:order_create' user.id %}">Оформить заказ
+                                    </a>
+                                {% else %}
+                                    <a class="btn btn_success btn_lg"
+                                       href="{% url 'store:order_reg' %}">Оформить заказ
+                                    </a>
+                                {% endif %}
+                            </div>
                         </div>
-                      </div>
-                    </div>
-                    <div class="Cart-block Cart-block_delete">
-                      <a class="Cart-delete" href="{% url 'cart:delete_product' cart.slug %}">
-                        <img src="{% static 'assets/img/icons/card/delete.svg' %}"
-                             alt="delete.svg"/>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              {% endwith %}
-            {% endfor %}
-            <div class="Cart-total">
-              <div class="Cart-block Cart-block_total">
-                <strong class="Cart-title">Итого:
-                </strong><span class="Cart-price">{{ total_price }}$</span>
-              </div>
-              <div class="Cart-block">
-                <a class="btn btn_success btn_lg" href="order.html">Оформить заказ</a>
-              </div>
+                    </form>
+                {% else %}
+                    Корзина пуста
+                {% endif %}
             </div>
-          </form>
-        {% else %}
-          Корзина пуста
-        {% endif %}
-      </div>
+        </div>
     </div>
-  </div>
 {% endblock %}
 
 {% include 'base/footer.html' %}

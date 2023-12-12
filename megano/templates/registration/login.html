@@ -1,40 +1,33 @@
-{% extends "base/../base/base.html" %}
+{% extends "base/base.html" %}
+
+{% block bottom_header %}
+{% endblock %}
 
 {% block content %}
-
-{% if form.errors %}
-  <p>Your username and password didn't match. Please try again.</p>
-{% endif %}
-
-{% if next %}
-  {% if user.is_authenticated %}
-    <p>Your account doesn't have access to this page. To proceed,
-    please login with an account that has access.</p>
-  {% else %}
-    <p>Please login to see this page.</p>
-  {% endif %}
-{% endif %}
-
-<form method="post" action="{% url 'login' %}">
-{% csrf_token %}
-<table>
-
-<tr>
-  <td>{{ form.username.label_tag }}</td>
-  <td>{{ form.username }}</td>
-</tr>
-
-<tr>
-  <td>{{ form.password.label_tag }}</td>
-  <td>{{ form.password }}</td>
-</tr>
-</table>
-
-<input type="submit" value="login" />
-<input type="hidden" name="next" value="{{ next }}" />
-</form>
-
-{# Assumes you setup the password_reset view in your URLconf #}
-<p><a href="{% url 'password_reset' %}">Lost password?</a></p>
+  <div class="wrapper">
+    <div class="header">
+      <h3 class="sign-in">Вход</h3>
+    </div>
+    <div class="clear"></div>
+    <form action="" method="post">
+      {% csrf_token %}
+      <div>
+        {{ form.email }}
+      </div>
+      <div>
+        {{ form.password }}
+      </div>
+      <div>
+        <input type="submit" value="Войти"/>
+      </div>
+      <a class="forgot-label" href="">Забыли пароль?</a>
+      <a class="registr" href="{% url 'profile:register' %}">
+        Регистрация
+      </a>
+    </form>
+    {% if error %}
+      <p>{{ error }}</p>
+    {% endif %}
+  </div>
 
 {% endblock %}
