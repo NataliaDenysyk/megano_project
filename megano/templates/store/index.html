@@ -14,7 +14,8 @@
           <div class="product">
             <div class="Card"><a class="Card-picture" href="#"><img src="{% get_media_prefix %}{{ product.preview }}"/></a>
               <div class="Card-content">
-                <strong class="Card-title"><a href="{% url 'store:product-detail' slug=product.slug %}">{{ product.name }}</a>
+                <strong class="Card-title"><a
+                    href="{% url 'store:product-detail' slug=product.slug %}">{{ product.name }}</a>
                 </strong>
                 <div class="Card-description">
                   <div class="Card-cost"><span class="Card-price">$ {{ product.offers__unit_price }}</span>

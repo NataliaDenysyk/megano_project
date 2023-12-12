@@ -61,16 +61,16 @@ p.error-browser
             <div class="row-block hide_700">
               <ul class="menu menu_img menu_smallImg ControlPanel-menu">
                 <li class="menu-item"><a class="menu-link" href="#"><img
-                        src="{% static 'assets/img/icons/socialHeader/tw.svg' %}" alt="tw.svg"/></a>
+                    src="{% static 'assets/img/icons/socialHeader/tw.svg' %}" alt="tw.svg"/></a>
                 </li>
                 <li class="menu-item"><a class="menu-link" href="#"><img
-                        src="{% static 'assets/img/icons/socialHeader/in.svg' %}" alt="in.svg"/></a>
+                    src="{% static 'assets/img/icons/socialHeader/in.svg' %}" alt="in.svg"/></a>
                 </li>
                 <li class="menu-item"><a class="menu-link" href="#"><img
-                        src="{% static 'assets/img/icons/socialHeader/pt.svg' %}" alt="pt.svg"/></a>
+                    src="{% static 'assets/img/icons/socialHeader/pt.svg' %}" alt="pt.svg"/></a>
                 </li>
                 <li class="menu-item"><a class="menu-link" href="#"><img
-                        src="{% static 'assets/img/icons/socialHeader/mail.svg' %}" alt="mail.svg"/></a>
+                    src="{% static 'assets/img/icons/socialHeader/mail.svg' %}" alt="mail.svg"/></a>
                 </li>
               </ul>
             </div>
@@ -120,8 +120,8 @@ block
               <li class="menu-item"><a class="menu-link" href="{% url 'store:index' %}">Главная</a>
               </li>
               <li class="menu-item"><span class="menu-label menu-label_success">Скидки</span><a
-                      class="menu-link"
-                      href="{% url 'store:catalog' %}">Каталог</a>
+                  class="menu-link"
+                  href="{% url 'store:catalog' %}">Каталог</a>
               </li>
               <li class="menu-item"><a class="menu-link" href="{% url 'compare:comparison' %}">Сравнение</a>
               </li>
@@ -138,7 +138,8 @@ block
                        alt="loon-icon.svg}"/>
                 </button>
                 <div class="dropdown-content">
-                  <a class="dropdown-content-a" href="{% url 'profile:profile_details' slug=user.profile.slug %}">Личный кабинет</a>
+                  <a class="dropdown-content-a" href="{% url 'profile:profile_details' slug=user.profile.slug %}">Личный
+                    кабинет</a>
                   {% if user.is_superuser %}
                     <a class="dropdown-content-a" href="/admin">Административный раздел</a>
                   {% endif %}
@@ -220,7 +221,7 @@ block
               {% csrf_token %}
               {{ form_search.name }}
               <button class="search-button" type="submit" name="search" id="search"><img
-                      src="{% static 'assets/img/icons/search.svg' %}" alt="search.svg"/>Поиск
+                  src="{% static 'assets/img/icons/search.svg' %}" alt="search.svg"/>Поиск
               </button>
             </form>
           </div>
