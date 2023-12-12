@@ -11,7 +11,7 @@ class Settings:
     """
     Класс с настройками сайта.
     Обновление названия магазина.
-    Обновление время кеширования для Баннера, корзины, детализации продуктов, каталога
+    Обновление время кэширования для Баннера, корзины, детализации продуктов, каталога
     """
 
     def __init__(self):
@@ -54,35 +54,35 @@ class Settings:
 
     def set_cache_banner(self, time_cache: int) -> None:
         """
-        Устанавливает время кеширование Баннера.
+        Устанавливает время кэширование Баннера.
         :param time_cache: int время в минутах
         """
         self.__cache_banner = int(time_cache) * SECOND
 
     def set_cache_cart(self, time_cache: int) -> None:
         """
-        Устанавливает время кеширование Корзины.
+        Устанавливает время кэширование Корзины.
         :param time_cache: int время в минутах
         """
         self.__cache_cart = int(time_cache) * SECOND
 
     def set_cache_product_detail(self, time_cache: int) -> None:
         """
-        Устанавливает время кеширования детальной информации продукта.
+        Устанавливает время кэширования детальной информации продукта.
         :param time_cache:  int время в минутах
         """
         self.__cache_product = int(time_cache) * SECOND
 
     def set_cache_seller(self, time_cache: int) -> None:
         """
-        Устанавливает время кеширования детальной информации продавца
+        Устанавливает время кэширования детальной информации продавца
         :param time_cache:  int время в минутах
         """
         self.__cache_seller = int(time_cache) * SECOND
 
     def set_cache_catalog(self, time_cache: int) -> None:
         """
-        Устанавливает время кеширования каталога.
+        Устанавливает время кэширования каталога.
         :param time_cache:  int время в минутах
         """
         self.__cache_catalog = int(time_cache) * SECOND
@@ -96,7 +96,7 @@ class Settings:
 
     def get_cache_banner(self, time: bool = True) -> int | str:
         """
-        Возвращает время хранения кеша Баннера.
+        Возвращает время хранения кэша Баннера.
 
         :time: bool, если time == True, то время возвращается как число, иначе как форматированный вывод.
         :return: int или str время в минутах.
@@ -108,7 +108,7 @@ class Settings:
 
     def get_cache_cart(self, time: bool = True) -> int | str:
         """
-        Возвращает время хранения кеша Корзины.
+        Возвращает время хранения кэша Корзины.
 
         :time: bool Если time == True, то время возвращается как число, иначе как форматированный вывод.
         :return: int или str время в минутах.
@@ -120,7 +120,7 @@ class Settings:
 
     def get_cache_product_detail(self, time: bool = True) -> int | str:
         """
-        Возвращает время хранения кеша детальной информации Продукта.
+        Возвращает время хранения кэша детальной информации Продукта.
 
         :time: bool Если time == True, то время возвращается как число, иначе как форматированный вывод.
         :return: int или str время в минутах.
@@ -132,7 +132,7 @@ class Settings:
 
     def get_cache_seller(self, time: bool = True) -> int | str:
         """
-        Возвращает время хранения кеша данных о продавце.
+        Возвращает время хранения кэша данных о продавце.
 
         :time: bool Если time == True, то время возвращается как число, иначе как форматированный вывод.
         :return: int или str время в минутах.
@@ -144,7 +144,7 @@ class Settings:
 
     def get_cache_catalog(self, time: bool = True) -> int | str:
         """
-        Возвращает время хранения кеша данных каталога
+        Возвращает время хранения кэша данных каталога
 
         :time: bool Если time == True, то время возвращается как число, иначе как форматированный вывод.
         :return: int или str время в минутах.
@@ -159,7 +159,7 @@ class Settings:
 
     def get_popular_products_cache(self, time: bool = True):
         """
-        Возвращает время хранения кеша данных популярных продуктов.
+        Возвращает время хранения кэша данных популярных продуктов.
 
         :time: bool Если time == True, то время возвращается как число, иначе как форматированный вывод.
         :return: int или str время в минутах.
