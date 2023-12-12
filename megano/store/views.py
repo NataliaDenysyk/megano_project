@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import redirect
 from django.views.generic import ListView, DetailView, TemplateView, UpdateView, CreateView, FormView
 from django.http import HttpResponse, HttpResponseRedirect
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.contrib import messages
 from django.core.cache import cache
 
@@ -516,13 +516,29 @@ class PaymentFormView(FormView):
     template_name = 'store/order/payment.html'
     form_class = PaymentForm
 
-    def form_valid(self, form):
-        pay_order.delay(card=form.cleaned_data['bill'])
-        return HttpResponseRedirect(reverse_lazy('store:payment-progress'))
+    def form_valid(self, form: PaymentForm) -> HttpResponse:
+        """
+        Отправляет оплату в очередь, если форма прошла валидацию
+        """
 
-    def get_context_data(self, **kwargs):
+        pay_order.delay(order_id=self.kwargs['pk'], card=form.cleaned_data['bill'])
+
+        return redirect(reverse_lazy('store:payment-progress', kwargs={'pk': self.kwargs['pk']}))
+
+    def get_context_data(self, **kwargs) -> dict:
+        """
+        Передает в контекст тип оплаты по id заказа
+        """
+
         form_search = SearchForm(self.request.GET or None)
         context = super().get_context_data(**kwargs)
+
+        payment_type = Orders.objects.get(id=self.kwargs['pk']).payment
+        context.update(
+            {
+                'payment_type': payment_type
+            }
+        )
 
         context['form_search'] = form_search
 
@@ -536,11 +552,21 @@ class PaymentProgressView(TemplateView):
 
     template_name = 'store/order/payment_progress.html'
 
-    def get_context_data(self, **kwargs):
-        form_search = SearchForm(self.request.GET or None)
+    def get(self, *args, **kwargs) -> HttpResponse:
+        """
+        Проверяет статус оплаты, если изменился - отправляет на детальную страницу заказа
+        """
+
+        status = Orders.objects.get(id=self.kwargs['pk']).status
+        if status != 3:
+            return redirect(reverse_lazy('store:index'))
+
+        return super().get(self.request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs) -> dict:
         context = super().get_context_data(**kwargs)
 
+        form_search = SearchForm(self.request.GET or None)
         context['form_search'] = form_search
 
         return context
-

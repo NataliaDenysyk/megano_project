@@ -33,4 +33,9 @@
       </div>
     </div>
   </div>
+  <script>
+    setTimeout(function () {
+      window.location.href = '{% url "store:payment-progress" pk=request.resolver_match.captured_kwargs.pk %}';
+    }, 5000);
+  </script>
 {% endblock %}

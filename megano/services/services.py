@@ -1,4 +1,5 @@
 import random
+import time
 
 from decimal import Decimal
 
@@ -319,11 +320,11 @@ class PaymentService:
     Сервис оплаты
     """
 
-    def __init__(self, order_id: int, card):
+    def __init__(self, order_id: int, card: str):
         self._order_id = order_id
         self._card = card
 
-    def get_payment_status(self):
+    def get_payment(self):
         """
         Меняет статус заказа
         """
@@ -331,9 +332,9 @@ class PaymentService:
         result = FakePaymentService(self._card).pay_order()
 
         if result == 'Оплачено':
-            Orders.objects.filter(id=self._order_id).update(status=result)
+            Orders.objects.filter(id=self._order_id).update(status=1)
         else:
-            Orders.objects.filter(id=self._order_id).update(status='Не оплачено')
+            Orders.objects.filter(id=self._order_id).update(status=2)
 
 
 class FakePaymentService:
@@ -343,7 +344,7 @@ class FakePaymentService:
 
     EXCEPTIONS = ['Банк недоступен', 'На счете недостаточно средств', 'Введенный счет недействителен']
 
-    def __init__(self, card: int) -> str:
+    def __init__(self, card: str) -> str:
         self._card = card
 
     def pay_order(self) -> str:
@@ -353,7 +354,11 @@ class FakePaymentService:
         :return: статут Оплачено или имя случайной ошибки
         """
 
-        if self._card % 2 == 0 and self._card % 10 != 0:
+        time.sleep(30)
+
+        card_cleaned = int(self._card.replace(" ", ""))
+
+        if card_cleaned % 2 == 0 and card_cleaned % 10 != 0:
             return 'Оплачено'
         else:
             return random.choice(self.EXCEPTIONS)

@@ -18,18 +18,23 @@
     </div>
     <div class="Section">
       <div class="wrap">
-        <form class="form Payment" action="#" method="post">
+        <form class="form Payment" action="" method="post">
           {% csrf_token %}
 
           <div class="Payment-card">
             <div class="form-group">
-                            <label class="form-label">Номер карты </label>
-{#              <label class="form-label">Номер счета</label>#}
+              {% if payment_type == 1 %}
+                <label class="form-label">Номер карты </label>
+              {% elif payment_type == 2 %}
+                <label class="form-label">Номер счета</label>
+              {% endif %}
               {{ form.bill }}
             </div>
-{#            <div class="form-group">#}
-{#              <a class="btn btn_success Payment-generate" href="#">Сгенерировать случайный счет</a>#}
-{#            </div>#}
+            {% if payment_type == 2 %}
+              <div class="form-group">
+                <a class="btn btn_success Payment-generate" href="#">Сгенерировать случайный счет</a>
+              </div>
+            {% endif %}
           </div>
           <div class="Payment-pay">
             <button class="btn btn_primary">Оплатить</button>

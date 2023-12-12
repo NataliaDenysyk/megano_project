@@ -31,8 +31,8 @@ urlpatterns = [
     path('catalog/<slug:slug>/', CatalogListView.as_view(), name='category'),
     path('product/<slug:slug>/', ProductDetailView.as_view(), name='product-detail'),
     path('', MainPage.as_view(), name='index'),
-    path('order/payment/', PaymentFormView.as_view(), name='payment-form'),
-    path('order/payment/progress/', PaymentProgressView.as_view(), name='payment-progress'),
+    path('order/<int:pk>/payment/', PaymentFormView.as_view(), name='payment-form'),
+    path('order/<int:pk>/payment/progress/', PaymentProgressView.as_view(), name='payment-progress'),
     path('order-reg/', OrderRegisterView.as_view(), name='order_reg'),
     path('order-create/<int:pk>/', OrderView.as_view(), name='order_create'),
     path('order-confirm/<int:pk>/', OrderConfirmView.as_view(), name='order_confirm'),
@@ -49,5 +49,4 @@ urlpatterns = [
     path('cache-time-prod-detail/', CacheSetupProdDetailView.as_view(), name='cache_time_prod_detail'),
     path('cache-time-seller/', CacheSetupSellerView.as_view(), name='cache_time_seller'),
     path('cache-time-catalog/', CacheSetupCatalogView.as_view(), name='cache_time_catalog'),
-
 ]
