@@ -30,7 +30,8 @@ class Cart(object):
         """
         product_id = str(offer.product.id)
         if product_id not in self.cart:
-            self.cart[product_id] = {'quantity': 0, 'price': str(offer.unit_price)}
+            self.cart[product_id] = {'quantity': 0, 'price': str(offer.unit_price),
+                                     'offer_id': str(offer.id), 'offer_name': str(offer.seller.name_store)}
         if update:
             self.cart[product_id]['quantity'] = quantity
         else:
@@ -102,10 +103,11 @@ class Cart(object):
             for item in self.cart.values()
         )
 
-    def update_price(self, offer: Offer, price: int) -> None:
-        product_id = str(offer.id)
-        print(product_id)
+    def update_date(self, offer: Offer, price: int) -> None:
+        product_id = str(offer.product.id)
         self.cart[product_id]['price'] = str(price)
+        self.cart[product_id]['offer_id'] = str(offer.id)
+        self.cart[product_id]['offer_name'] = str(offer.seller.name_store)
         self.save()
 
     def clear(self) -> None:
