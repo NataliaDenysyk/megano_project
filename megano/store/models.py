@@ -9,6 +9,7 @@ from django.urls import reverse
 from mptt.models import MPTTModel, TreeForeignKey
 
 import compare
+import compare.models
 from compare.models import *
 
 from store.utils import (
@@ -89,6 +90,9 @@ class Product(models.Model):
 
     def __str__(self) -> str:
         return f"{self.name} (id:{self.pk})"
+
+    def get_comparison_id(self):
+        return f"{self.id}"
 
     class Meta:
         db_table = 'Products'
@@ -282,9 +286,11 @@ class Orders(models.Model):
     products = models.ManyToManyField(Product, related_name='orders')
     status_exception = models.TextField(null=True, blank=True, verbose_name='Статус ошибки')
 
-
     def __str__(self) -> str:
         return f'Order(pk = {self.pk}'
+
+    def get_comparison_id(self):
+        return f"{self.id}"
 
     class Meta:
         db_table = 'Orders'
