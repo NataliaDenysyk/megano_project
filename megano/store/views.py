@@ -521,7 +521,13 @@ class PaymentFormView(FormView):
         Отправляет оплату в очередь, если форма прошла валидацию
         """
 
-        pay_order.delay(order_id=self.kwargs['pk'], card=form.cleaned_data['bill'])
+        pay_order.apply_async(
+            kwargs={
+                'order_id': self.kwargs['pk'],
+                'card': form.cleaned_data['bill']
+            },
+            countdown=30
+        )
 
         return redirect(reverse_lazy('store:payment-progress', kwargs={'pk': self.kwargs['pk']}))
 
@@ -545,6 +551,7 @@ class PaymentFormView(FormView):
         return context
 
 
+#TODO дописать редирект в детальную страницу заказа
 class PaymentProgressView(TemplateView):
     """
     Вьюшка страницы ожидания оплаты

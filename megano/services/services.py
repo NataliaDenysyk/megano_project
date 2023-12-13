@@ -1,5 +1,4 @@
 import random
-import time
 
 from decimal import Decimal
 
@@ -18,6 +17,7 @@ from django.shortcuts import get_object_or_404
 from authorization.forms import RegisterForm, LoginForm
 from authorization.models import Profile
 from store.models import Product, Offer, Category, Reviews, Discount, ProductImage, Tag, Orders
+
 
 class AuthorizationService:
     """
@@ -315,6 +315,7 @@ class DiscountProduct:
         return self.calculate_price_with_discount(product, price)
 
 
+# TODO дописать добавление описания ошибки в заказ
 class PaymentService:
     """
     Сервис оплаты
@@ -353,8 +354,6 @@ class FakePaymentService:
 
         :return: статут Оплачено или имя случайной ошибки
         """
-
-        time.sleep(30)
 
         card_cleaned = int(self._card.replace(" ", ""))
 
