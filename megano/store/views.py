@@ -6,7 +6,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.core.cache import cache
-from django.template.defaultfilters import slugify
+from services.slugify import slugify
 
 from .configs import settings
 from .forms import ReviewsForm, SearchForm, OrderCreateForm, RegisterForm
