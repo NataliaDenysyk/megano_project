@@ -14,6 +14,7 @@ from django.shortcuts import get_object_or_404
 
 from authorization.forms import RegisterForm, LoginForm
 from authorization.models import Profile
+from .slugify import slugify
 from store.models import Product, Offer, Category, Reviews, Discount, ProductImage, Tag
 
 
@@ -43,7 +44,7 @@ class AuthorizationService:
 
             Profile.objects.create(
                 user=user,
-                slug=username,
+                slug=slugify(username),
             )
 
             user = authenticate(
