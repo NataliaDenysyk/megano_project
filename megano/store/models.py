@@ -277,7 +277,7 @@ class Orders(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='orders')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Создан')
     status = models.IntegerField(choices=Status.choices, verbose_name='Статус заказа')
-    address = models.TextField(max_length=150, null=True, verbose_name='Адрес')
+    address = models.TextField(max_length=150, verbose_name='Адрес')
     total_payment = models.DecimalField(decimal_places=2, max_digits=10, verbose_name='Стоимость заказа')
     products = models.ManyToManyField(Product, related_name='orders')
     status_exception = models.TextField(null=True, blank=True, verbose_name='Статус ошибки')

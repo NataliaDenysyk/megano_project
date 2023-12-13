@@ -16,12 +16,11 @@ from django.views.generic import DetailView, CreateView, FormView
 from django.core.exceptions import ValidationError
 
 from authorization.forms import RegisterForm, LoginForm
-from authorization.models import Profile
 from services.services import AuthorizationService
 from .mixins import MenuMixin
 
 from store.configs import settings
-from store.models import Offer, Orders
+from store.models import Offer, Orders, Product
 
 from services.services import ProfileService, ProfileUpdate
 
@@ -96,18 +95,31 @@ class ProfileDetailView(MenuMixin, DetailView):
     model = Profile
     template_name = 'authorization/profile_detail.html'
 
+    def get_object(self, *args, **kwargs):
+        """
+        Находит профиль продавца по слагу
+        """
+        if self.request.user.is_authenticated:
+            slug = self.kwargs.get('slug')
+            instance = Profile.objects.get(slug=slug)
+            profile = cache.get_or_set(f'profile-{slug}', instance, settings.get_cache_seller())
+            return profile
+        else:
+            return redirect(reverse_lazy("profile:login"))
+
     def get_context_data(self, **kwargs) -> HttpResponse:
         """
         Функция возвращает контекст
         """
-        profile = Profile.objects.get(user=self.request.user)
-        context = super().get_context_data(**kwargs)
-        context.update(ProfileService(profile).get_context())
-        context.update(
-            self.get_menu(id='1')
-        )
-        context['title'] = f'Страница пользователя: {self.request.user.username}'
-        return context
+        if self.request.user.is_authenticated:
+            profile = Profile.objects.get(user=self.request.user)
+            context = super().get_context_data(**kwargs)
+            context.update(ProfileService(profile).get_context())
+            context.update(
+                self.get_menu(id='1')
+            )
+            context['title'] = f'Страница пользователя: {self.request.user.username}'
+            return context
 
 
 class ProfileUpdateView(MenuMixin, UpdateView):
@@ -171,7 +183,7 @@ class ProfileOrderPage(DetailView):
     """
     Представление для просмотра детализации заказов профиля
     """
-    model = Profile
+    model = Orders
     template_name = 'authorization/detailed_order_page.html'
 
     def get_context_data(self, **kwargs):
@@ -179,8 +191,7 @@ class ProfileOrderPage(DetailView):
         Функция возвращает контекст
         """
         context = super().get_context_data(**kwargs)
-        context['orders'] = Orders.objects.select_related('profile').prefetch_related('products')
-
+        context['order'] = Orders.objects.get(id=self.kwargs['pk'])
         return context
 
 
