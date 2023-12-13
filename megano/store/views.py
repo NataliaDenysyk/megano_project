@@ -61,10 +61,8 @@ class CatalogListView(ListView):
         Функция возвращает контекст
         """
 
-        form_search = SearchForm(self.request.GET or None)
         context = super().get_context_data(**kwargs)
 
-        context['form_search'] = form_search
         context['filter'] = self.filterset.form
         context['tags'] = CatalogService.get_popular_tags()
 
@@ -95,10 +93,8 @@ class ProductDetailView(DetailView):
         return product
 
     def get_context_data(self, **kwargs) -> HttpResponse:
-        form_search = SearchForm(self.request.GET or None)
         context = super().get_context_data(**kwargs)
 
-        context['form_search'] = form_search
         context['num_reviews'] = ReviewsProduct.get_number_of_reviews_for_product(self.object)
         context['reviews_num3'], context['reviews_all'] = ReviewsProduct.get_list_of_product_reviews(self.object)
         context['form'] = ReviewsForm()
@@ -367,14 +363,6 @@ class MainPage(ListView):
             cache.set(cache_key, popular_products, settings.set_popular_products_cache(1))
 
         return popular_products
-
-    def get_context_data(self, **kwargs):
-        form_search = SearchForm(self.request.GET or None)
-        context = super().get_context_data(**kwargs)
-
-        context['form_search'] = form_search
-
-        return context
 
 
 class OrderRegisterView(CreateView):
