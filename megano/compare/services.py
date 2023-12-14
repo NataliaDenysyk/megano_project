@@ -76,6 +76,7 @@ def get_compare_info(products, prev_prod_category=None) -> dict:
                 'characterisctics': general_characteristics,
                 'product_characteristic_list': model_info,
                 'product_price': product_price,
+                'product_offer_id': product.offers.first().id,
             }
         else:
             return redirect(reverse_lazy("compare:comparison_error"))

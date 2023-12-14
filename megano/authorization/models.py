@@ -1,7 +1,23 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+from django.core.exceptions import ObjectDoesNotExist
 from imagekit.models import ProcessedImageField
-from pilkit.processors import ResizeToFill
+from pilkit.processors import ResizeToFit
+
+
+def profile_images_directory_path(instance: 'Profile', filename: str) -> str:
+    """
+    Функция генерирует путь сохранения изображений с привязкой к id товара
+
+    :param instance: объект ProductImage
+    :param filename: имя файла
+    :return: str - путь для сохранения
+    """
+
+    return f'profiles/profile_{instance.id}/{filename}'
 
 
 class Profile(models.Model):
@@ -18,16 +34,17 @@ class Profile(models.Model):
         STORE = 'store'
         BUYER = 'buyer'
 
-    user = models.ForeignKey(User, verbose_name='Пользователь', on_delete=models.CASCADE)
+    user = models.OneToOneField(User, verbose_name='Пользователь', on_delete=models.CASCADE)
     slug = models.SlugField('Слаг', max_length=150, default='')
     phone = models.CharField('Teleфон', null=True, blank=True, unique=True)
     description = models.CharField('Описание', max_length=100)
     avatar = ProcessedImageField(
         blank=True,
         verbose_name='Фотография товара',
-        upload_to='profiles/profile/%y/%m/%d/',
+        upload_to=profile_images_directory_path,
         options={"quality": 80},
-        processors=[ResizeToFill(157, 100)],
+        processors=[ResizeToFit(157, 100)],
+        null=True
     )
     name_store = models.CharField('Имя магазина', max_length=50, blank=True, null=True)
     address = models.CharField('Адрес', max_length=100)

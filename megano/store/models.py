@@ -1,11 +1,16 @@
 from django.db import models
 
+from django.contrib.contenttypes.fields import GenericRelation
 from imagekit.models import ProcessedImageField
-from imagekit.processors import ResizeToFill
+from imagekit.processors import ResizeToFit
 
 from authorization.models import Profile
 from django.urls import reverse
 from mptt.models import MPTTModel, TreeForeignKey
+
+import compare
+import compare.models
+from compare.models import *
 
 from store.utils import (
     category_image_directory_path,
@@ -19,7 +24,6 @@ class Category(MPTTModel):
     """
     Модель хранения категорий товара
     """
-
     name = models.CharField(max_length=50, unique=True, verbose_name='Название')
     parent = TreeForeignKey('self', on_delete=models.PROTECT,
                             null=True, blank=True, related_name='children',
@@ -66,16 +70,16 @@ class Product(models.Model):
         'Описание',
         default=jsonfield_default_description,
     )
-    feature = models.JSONField(
-        'Характеристика',
-        default=jsonfield_default_feature,
+    feature = GenericRelation(
+        compare.models.AbstractCharacteristicModel,
+        null=True, blank=True
     )
     tags = models.ManyToManyField('Tag', related_name='products', verbose_name='Теги')
     preview = ProcessedImageField(
         verbose_name='Основное фото',
         upload_to="products/product/%y/%m/%d/",
         options={"quality": 80},
-        processors=[ResizeToFill(200, 200)],
+        processors=[ResizeToFit(200, 200)],
         blank=True,
         null=True
     )
@@ -86,6 +90,9 @@ class Product(models.Model):
 
     def __str__(self) -> str:
         return f"{self.name} (id:{self.pk})"
+
+    def get_comparison_id(self):
+        return f"{self.id}"
 
     class Meta:
         db_table = 'Products'
@@ -104,7 +111,7 @@ class ProductImage(models.Model):
         verbose_name='Фотография товара',
         upload_to=product_images_directory_path,
         options={"quality": 80},
-        processors=[ResizeToFill(200, 200)],
+        processors=[ResizeToFit(200, 200)],
     )
 
     def __str__(self) -> str:
@@ -262,23 +269,30 @@ class Orders(models.Model):
         __empty__ = 'Выберите оплату'
 
     class Status(models.IntegerChoices):
+        """
+       Модель вариантов оплаты
+       """
         PAID = 1, 'Оплачено'
         UNPAID = 2, 'Не оплачено'
         PROCESS = 3, 'Доставляется'
 
-    delivery_type = models.IntegerField(choices=Delivery.choices, verbose_name="Способ доставки")
+    delivery_type = models.IntegerField(choices=Delivery.choices, verbose_name='Способ доставки')
     payment = models.IntegerField(choices=Payment.choices, verbose_name='Способ оплаты')
-    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Создан")
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='orders')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Создан')
     status = models.IntegerField(choices=Status.choices, verbose_name='Статус заказа')
     address = models.TextField(max_length=150, verbose_name='Адрес')
-    total_payment = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Стоимость заказа')
+    total_payment = models.DecimalField(decimal_places=2, max_digits=10, verbose_name='Стоимость заказа')
     products = models.ManyToManyField(Product, related_name='orders')
+    status_exception = models.TextField(null=True, blank=True, verbose_name='Статус ошибки')
 
     def __str__(self) -> str:
-        return f"Order(pk = {self.pk}"
+        return f'Order(pk = {self.pk}'
+
+    def get_comparison_id(self):
+        return f"{self.id}"
 
     class Meta:
-        db_table = "Orders"
-        verbose_name = "Заказ"
-        verbose_name_plural = "Заказы"
+        db_table = 'Orders'
+        verbose_name = 'Заказ'
+        verbose_name_plural = 'Заказы'
