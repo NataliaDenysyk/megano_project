@@ -55,9 +55,6 @@ def mark_unarchived(modeladmin: admin.ModelAdmin, request: HttpRequest, queryset
 
 @admin.register(Banners)
 class AdminBanner(admin.ModelAdmin):
-    actions = [
-        mark_archived, mark_unarchived
-    ]
     list_display = ['title', 'link', 'get_html_images', 'is_active', 'update_at']
     list_display_links = ['title']
     list_filter = ['is_active']
@@ -133,17 +130,15 @@ class AdminOrders(admin.ModelAdmin):
 
 @admin.register(Category)
 class AdminCategory(DjangoMpttAdmin):
-    list_display = 'pk', 'name', 'image', 'parent', 'activity', 'sort_index', 'slug'
     actions = [
         mark_archived, mark_unarchived
     ]
-    list_display = 'pk', 'name', 'image', 'parent', 'activity', 'sort_index'
+    list_display = 'pk', 'name', 'image', 'parent', 'activity', 'sort_index', 'slug'
     list_display_links = 'pk', 'name'
     ordering = 'pk', 'name', 'activity'
     list_filter = ['activity']
     search_fields = ['name']
     prepopulated_fields = {'slug': ('name',)}
-    save_on_top = True
 
     fieldsets = [
         (None, {
@@ -333,9 +328,6 @@ class CategoriesInline(admin.TabularInline):
 
 @admin.register(Discount)
 class DiscountAdmin(admin.ModelAdmin):
-    actions = [
-        mark_archived, mark_unarchived
-    ]
     inlines = [
         ProductInline,
         CategoriesInline
