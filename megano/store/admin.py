@@ -1,10 +1,14 @@
 from django.contrib import admin
+from django.contrib.contenttypes.admin import GenericStackedInline
+
+from django.core.cache import cache
 from django.utils.safestring import mark_safe
 from django_mptt_admin.admin import DjangoMpttAdmin
 
 from django.db.models import QuerySet
 from django.http import HttpRequest
 
+from cart.models import Cart
 from .models import (
     Banners,
     Product,
@@ -12,8 +16,31 @@ from .models import (
     Offer,
     Orders,
     Category,
-    Reviews, ProductImage,
+    Reviews,
+    Tag,
+    ProductImage,
 )
+from compare.admin import (TVSetCharacteristicInline,
+                           HeadphonesCharacteristicInline,
+                           PhotoCamCharacteristicInline,
+                           KitchenCharacteristicInline,
+                           WashMachineCharacteristicInline,
+                           NotebookCharacteristicInline,
+                           TorchereCharacteristicInline,
+                           MicrowaveOvenCharacteristicInline,
+                           MobileCharacteristicInline)
+
+
+class CartInline(admin.TabularInline):
+    model = Cart
+    extra = 0
+
+
+@admin.register(Tag)
+class AdminTag(admin.ModelAdmin):
+    list_display = ['name']
+    list_display_links = ['name']
+    search_fields = ['name']
 
 
 @admin.action(description='Archive')
@@ -39,7 +66,7 @@ class AdminBanner(admin.ModelAdmin):
 
     fieldsets = [
         (None, {
-            "fields": ('title', 'link', 'get_html_images', 'slug'),
+            "fields": ('title', 'link', 'get_html_images','slug', 'product', 'description'),
         }),
         ("Extra options", {
             "fields": ("is_active",),
@@ -53,7 +80,7 @@ class AdminBanner(admin.ModelAdmin):
         ссылка на изображение отображается в виде картинки размером 60х 60.
         """
         if obj.product:
-            return mark_safe(f'<img src="{obj.product.photos.url}" alt=""width="60">')
+            return mark_safe(f'<img src="{obj.product.preview.url}" alt=""width="60">')
         else:
             return 'not url'
 
@@ -62,6 +89,7 @@ class AdminBanner(admin.ModelAdmin):
 
 class ProductInline(admin.TabularInline):
     model = Orders.products.through
+    extra = 0
 
 
 @admin.register(Orders)
@@ -71,19 +99,21 @@ class AdminOrders(admin.ModelAdmin):
     ]
     inlines = [
         ProductInline,
+        CartInline,
     ]
-    list_display = 'pk', 'delivery_type', 'address', 'created_at', 'profile', 'total',
+    list_display = 'pk', 'profile', 'delivery_type', 'created_at', 'total_payment',
     list_display_links = 'pk', 'delivery_type'
-    ordering = 'pk', 'created_at', 'address'
-    search_fields = 'delivery_type', 'address', 'created_at'
+    ordering = 'pk', 'created_at',
+    search_fields = 'delivery_type', 'created_at'
+    # readonly_fields = ('total_payment',)
     save_on_top = True
 
     fieldsets = [
         (None, {
-            "fields": ('profile', 'delivery_type', 'address', 'products', 'total'),
+            "fields": ('profile', 'products', 'total_payment', 'delivery_type', 'payment'),
         }),
         ('Extra options', {
-            'fields': ('status', 'archived'),
+            'fields': ('status',),
             'classes': ('collapse',),
         })
     ]
@@ -103,6 +133,7 @@ class AdminOrders(admin.ModelAdmin):
 
 @admin.register(Category)
 class AdminCategory(DjangoMpttAdmin):
+    list_display = 'pk', 'name', 'image', 'parent', 'activity', 'sort_index', 'slug'
     actions = [
         mark_archived, mark_unarchived
     ]
@@ -111,12 +142,12 @@ class AdminCategory(DjangoMpttAdmin):
     ordering = 'pk', 'name', 'activity'
     list_filter = ['activity']
     search_fields = ['name']
-    repopulated_fields = {'slug': ('name',)}
+    prepopulated_fields = {'slug': ('name',)}
     save_on_top = True
 
     fieldsets = [
         (None, {
-            "fields": ('name', 'parent', 'sort_index',),
+            "fields": ('name', 'parent', 'sort_index', 'slug'),
         }),
         ("Extra options", {
             "fields": ("activity",),
@@ -139,28 +170,34 @@ class TagInline(admin.TabularInline):
     model = Product.tags.through
     verbose_name = 'Тег'
     verbose_name_plural = 'Теги'
+    extra = 0
 
 
 class OfferInline(admin.TabularInline):
     model = Offer
+    extra = 0
 
 
 class ReviewsInline(admin.TabularInline):
     model = Reviews
+    extra = 0
 
 
 class DiscountInline(admin.TabularInline):
     model = Product.discount.through
     verbose_name = 'Скидка'
     verbose_name_plural = 'Скидки'
+    extra = 0
 
 
 class OrderInline(admin.TabularInline):
     model = Product.orders.through
+    extra = 0
 
 
 class ProductInlineImages(admin.TabularInline):
     model = ProductImage
+    extra = 0
 
 
 @admin.register(Product)
@@ -175,8 +212,17 @@ class AdminProduct(admin.ModelAdmin):
         OrderInline,
         ProductInlineImages,
         ReviewsInline,
+        TVSetCharacteristicInline,
+        HeadphonesCharacteristicInline,
+        PhotoCamCharacteristicInline,
+        KitchenCharacteristicInline,
+        WashMachineCharacteristicInline,
+        NotebookCharacteristicInline,
+        TorchereCharacteristicInline,
+        MicrowaveOvenCharacteristicInline,
+        MobileCharacteristicInline,
     ]
-    list_display = 'pk', 'name', 'category', 'description_short', 'created_time', 'update_time', 'availability'
+    list_display = ('pk', 'name', 'category', 'description_short', 'created_time', 'update_time', 'availability',)
     list_display_links = 'pk', 'name'
     list_filter = ['availability']
     ordering = 'pk', 'name', 'created_at'
@@ -184,22 +230,24 @@ class AdminProduct(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
     readonly_fields = ('created_time', 'update_time')
     save_on_top = True
+    actions = ['reset_product_list_cache']
+    save_on_top = True
 
     fieldsets = [
         (None, {
-            'fields': ('name', 'description', 'feature', 'category'),
+            'fields': ('name', 'description'),
         }),
         ('Главное фото', {
             'fields': ('preview',),
         }),
         ('Другие опции', {
-            'fields': ('availability', 'slug'),
+            'fields': ('availability', 'slug', 'category'),
             "classes": ("collapse",),
         }),
     ]
 
     def get_queryset(self, request):
-        return Product.objects.select_related('category').prefetch_related('discount', 'tags', 'offer_set')
+        return Product.objects.select_related('category').prefetch_related('discount', 'tags', 'offers')
 
     def description_short(self, obj: Product) -> str:
         """
@@ -223,6 +271,12 @@ class AdminProduct(admin.ModelAdmin):
     created_time.short_description = 'Создан'
     update_time.short_description = 'Отредактирован'
 
+    def reset_product_list_cache(self, request, queryset):
+        cache.clear()
+        self.message_user(request, "кэш списка товаров сброшен.")
+
+    reset_product_list_cache.short_description = "Сбросить кэш списка товаров"
+
     def get_actions(self, request):
         """"
         Функкция удаляет 'delete_selected' из actions(действие) в панели администратора
@@ -236,12 +290,18 @@ class AdminProduct(admin.ModelAdmin):
 @admin.register(Offer)
 class OfferAdmin(admin.ModelAdmin):
     list_display = 'pk', 'product', 'seller_verbose', 'unit_price', 'amount'
-    list_display_links = 'pk', 'product'
+    list_display_links = 'pk', 'seller_verbose'
     ordering = 'pk', 'unit_price', 'amount'
     search_fields = 'product', 'seller_verbose', 'unit_price', 'amount'
 
+    fieldsets = [
+        (None, {
+            'fields': ('product', 'unit_price', 'amount'),
+        }),
+    ]
+
     def get_queryset(self, request):
-        return Offer.objects.select_related('seller', 'product')
+        return Offer.objects.filter(seller__role='store').select_related('product', 'seller')
 
     def seller_verbose(self, obj: Offer) -> str:
         return obj.seller.name_store
@@ -253,6 +313,7 @@ class ProductInline(admin.TabularInline):
     model = Discount.products.through
     verbose_name = 'Товар'
     verbose_name_plural = 'Товары'
+    extra = 0
 
 
 @admin.register(Reviews)
@@ -263,6 +324,13 @@ class ReviewsProduct(admin.ModelAdmin):
         return obj.comment_text[:100]
 
 
+class CategoriesInline(admin.TabularInline):
+    model = Discount.categories.through
+    verbose_name = 'Категория'
+    verbose_name_plural = 'Категории'
+    extra = 0
+
+
 @admin.register(Discount)
 class DiscountAdmin(admin.ModelAdmin):
     actions = [
@@ -270,6 +338,7 @@ class DiscountAdmin(admin.ModelAdmin):
     ]
     inlines = [
         ProductInline,
+        CategoriesInline
     ]
     list_display = 'pk', 'name', 'description', 'sum_discount', 'valid_from', 'valid_to', 'is_active'
     list_display_links = 'pk', 'name'

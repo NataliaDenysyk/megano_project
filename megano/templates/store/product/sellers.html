@@ -1,0 +1,58 @@
+{% load static %}
+
+
+<div class="Tabs-block" id="sellers">
+  <div class="Section-content">
+    <div class="Orders">
+      {% if offers %}
+        {% for offer in offers %}
+          <div class="Order Order_anons">
+            <div class="Order-personal">
+              <div class="row">
+                <div class="row-block">
+                  <a class="Order-title" href="{% url 'profile:seller' slug=offer.seller.slug %}">
+                    {{ offer.seller.name_store }}
+                  </a>
+                  <div class="ProductCard-cartElement" style="margin-top: 10px;">
+                    <a class="btn btn_primary" href="{% url 'cart:add_product_to_cart' offer.id %}">
+                      <img class="btn-icon"
+                           src={% static "assets/img/icons/card/cart_white.svg" %} alt="cart_white.svg"/>
+                      <span class="btn-content">Купить</span>
+                    </a>
+                  </div>
+                </div>
+                <div class="row-block">
+                  <div class="Order-info Order-info_delivery">
+                    <div class="Order-infoType">Тип доставки:
+                    </div>
+                    <div class="Order-infoContent">
+                      {{ offer.seller.store_settings.get_delivery_type_display }}
+                    </div>
+                  </div>
+                  <div class="Order-info Order-info_pay">
+                    <div class="Order-infoType">Оплата:
+                    </div>
+                    <div class="Order-infoContent">
+                      <div class="Order-infoContent">
+                        {{ offer.seller.store_settings.get_payment_display }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="Order-info">
+                    <div class="Order-infoType">Стоимость:
+                    </div>
+                    <div class="Order-infoContent">
+                      <span class="Order-price">{{ offer.unit_price }}$</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <h2>Сейчас этот товар никто не продает</h2>
+      {% endif %}
+    </div>
+  </div>
+</div>

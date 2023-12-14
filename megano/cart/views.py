@@ -1,36 +1,42 @@
 from django.core.handlers.wsgi import WSGIRequest
 from django.shortcuts import get_object_or_404, redirect
 from django.http import HttpResponseRedirect, HttpResponse
-from django.views import generic
+from django.views.generic import TemplateView
 
+from services.services import DiscountProduct
+from store.forms import SearchForm
 from .cart import Cart
-from store.models import Product
+from store.models import Product, Offer
 
 
-class CartListView(generic.TemplateView):
-    template_name = 'cart/index.html'
+class CartListView(TemplateView):
+    template_name = 'store/cart.html'
 
     def get_context_data(self, **kwargs):
+        form_search = SearchForm(self.request.GET or None)
         context = super().get_context_data(**kwargs)
+        discount = DiscountProduct()
         context.update(
             {
-                'carts': Cart(self.request)
+                'carts': Cart(self.request),
+                'form_search': form_search,
+                'total_price': discount.get_priority_discount(cart=Cart(self.request))
             }
         )
         return context
 
 
-def add_product_to_cart(request: WSGIRequest, slug: Product) -> HttpResponse:
+def add_product_to_cart(request: WSGIRequest, offer_id) -> HttpResponse:
     """
     Добавление товара в корзину
 
-    :param request: запрос
-    :param slug: slug товара
+    :param offer_id: айди оффера
     :return: HttpResponse - текущая страница
     """
     cart = Cart(request)
-    product = get_object_or_404(Product, slug=slug)
-    cart.add_product(product, update=False)
+    offer = get_object_or_404(Offer, id=offer_id)
+
+    cart.add_product(offer, update=False)
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
@@ -83,4 +89,3 @@ def clear_cart(request: WSGIRequest) -> HttpResponseRedirect:
     cart = Cart(request)
     cart.clear()
     return redirect('cart:index')
-

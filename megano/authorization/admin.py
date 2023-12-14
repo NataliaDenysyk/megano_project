@@ -1,5 +1,11 @@
 from django.contrib import admin
-from .models import Profile
+from .models import Profile, StoreSettings
+
+
+class StoreSettingsInline(admin.TabularInline):
+    model = StoreSettings
+    verbose_name = 'Настройки магазина'
+    verbose_name_plural = 'Настройки магазина'
 
 from django.db.models import QuerySet
 from django.http import HttpRequest
@@ -19,69 +25,29 @@ def mark_unarchived(modeladmin: admin.ModelAdmin, request: HttpRequest, queryset
 
 
 @admin.register(Profile)
-class AuthorProfile(admin.ModelAdmin):
+class AuthorAdmin(admin.ModelAdmin):
     """
-   Регистрация модели профиля в админ панели.
-   """
+      Регистрация модели профиля в админ панели.
+      """
     actions = [
         mark_archived, mark_unarchived
     ]
-    list_display = [
-        'pk',
-        'user',
-        'description',
-        'avatar',
-        'name_store',
-        'address',
-        'sale',
-        'viewed_orders',
-        'archived',
-        'role',
-    ]
-    list_display_links = 'pk', 'user'
-    ordering = 'pk', 'user', 'archived', 'name_store'
-    list_filter = ['archived']
-    search_fields = 'user', 'name_store'
-    readonly_fields = ['viewed_orders',]
-    fieldsets = [
-        (None, {
-            'fields': ('role', 'user', 'name_store', 'description', 'avatar', 'address',),
-        }),
-        ('Additionally', {
-            'fields': ('sale',)
-        }),
-        ('Extra options', {
-            'fields': ('archived',),
-            'classes': ('collapse',),
-        })
-    ]
+    list_display = ['pk', 'user', 'role']
+    list_display_links = ['pk', 'user']
+    list_filter = ['role']
+    prepopulated_fields = {'slug': ('name_store', )}
 
-    def get_queryset(self, request):
-        return Profile.objects.select_related('user', 'viewed_orders')
+    def get_inlines(self, request, obj):
+        """
+        Определяет отображение настроек магазина при выполнении условия
+        """
 
-    def user_verbose(self, obj: Profile) -> str:
-        """
-        Функция возвращает навание магазина или имя и фамилию польователя, если есть.
-        """
-        if obj.name_store:
-            return obj.name_store
-        elif obj.user.first_name and obj.user.last_name:
-            return f'{obj.user.first_name}, {obj.user.last_name}'
-        elif obj.user.first_name or obj.user.last_name:
-            return obj.user.first_name or obj.user.last_name
-        else:
-            return obj.user.username
-    def get_html_images(self, obj):
-        """
-        В панели администратора,
-        ссылка на изображение отображается в виде картинки размером 60х 60.
-        """
-        if obj.avatar:
-            return mark_safe(f'<img src="{obj.avatar.url}" alt=""width="60">')
-        else:
-            return 'not url'
+        inlines = super().get_inlines(request, obj)
 
-    get_html_images.short_description = 'Изображение'
+        if not obj or obj.role != 'buyer':
+            inlines += (StoreSettingsInline,)
+
+        return inlines
 
     def get_actions(self, request):
         """"

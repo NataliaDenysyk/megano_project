@@ -1,37 +1,29 @@
 from django.db import models
-from django.utils.safestring import mark_safe
+
+from django.contrib.contenttypes.fields import GenericRelation
+from imagekit.models import ProcessedImageField
+from imagekit.processors import ResizeToFit
+
 from authorization.models import Profile
 from django.urls import reverse
 from mptt.models import MPTTModel, TreeForeignKey
 
+import compare
+import compare.models
+from compare.models import *
 
-# Create your models here.
-# TODO models Orders, Product, Discount, Category
-
-
-def category_image_directory_path(instance) -> str:
-    """
-    Функция coздания пути к картинке категории
-    """
-    return f'assets/img/icons/departments/{instance.pk}.svg'
-
-
-def product_images_directory_path(instance: 'ProductImage', filename: str) -> str:
-    """
-    Функция генерирует путь сохранения изображений с привязкой к id товара
-
-    :param instance: объект ProductImage
-    :param filename: имя файла
-    :return: str - путь для сохранения
-    """
-    return f'products/product_{instance.product_id}/{filename}'
+from store.utils import (
+    category_image_directory_path,
+    jsonfield_default_description,
+    jsonfield_default_feature,
+    product_images_directory_path
+)
 
 
 class Category(MPTTModel):
     """
     Модель хранения категорий товара
     """
-
     name = models.CharField(max_length=50, unique=True, verbose_name='Название')
     parent = TreeForeignKey('self', on_delete=models.PROTECT,
                             null=True, blank=True, related_name='children',
@@ -39,15 +31,13 @@ class Category(MPTTModel):
     image = models.ImageField(null=True, blank=True,
                               upload_to=category_image_directory_path,
                               verbose_name='Изображение')
+    discount = models.ManyToManyField('Discount', related_name='categories', verbose_name='Скидка')
     slug = models.SlugField()
     activity = models.BooleanField(default=True, verbose_name='Активация')
     sort_index = models.IntegerField(verbose_name='Индекс сортировки')
 
     def __str__(self) -> str:
         return f'{self.name}'
-
-    class MPTTMeta:
-        order_insertion_by = ['name']
 
     def get_absolute_url(self):
         return reverse('product-by-category', args=[str(self.slug)])
@@ -67,30 +57,50 @@ class Category(MPTTModel):
         verbose_name = 'Категория'
         verbose_name_plural = 'Категории'
 
+    class MPTTMeta:
+        order_insertion_by = ['name']
+
 
 class Product(models.Model):
     """
     Модель товаров магазина
-
     """
 
     name = models.CharField('Название товара', default='', max_length=150, null=False, db_index=True)
     slug = models.SlugField(max_length=150, default='')
-    category = TreeForeignKey('Category', on_delete=models.PROTECT, related_name='products', verbose_name='Категория')
-    description = models.TextField('Описание', default='', null=False, blank=True)
-    feature = models.TextField('Характеристика', default='', null=False, blank=True)
+    category = TreeForeignKey(
+        'Category',
+        on_delete=models.PROTECT,
+        related_name='products',
+        verbose_name='Категория'
+    )
+    description = models.JSONField(
+        'Описание',
+        default=jsonfield_default_description,
+    )
+    feature = GenericRelation(
+        compare.models.AbstractCharacteristicModel,
+        null=True, blank=True
+    )
     tags = models.ManyToManyField('Tag', related_name='products', verbose_name='Теги')
-    preview = models.ImageField(
-        'Изображение', upload_to="products/product/%y/%m/%d/", blank=True, null=True
+    preview = ProcessedImageField(
+        verbose_name='Основное фото',
+        upload_to="products/product/%y/%m/%d/",
+        options={"quality": 80},
+        processors=[ResizeToFit(200, 200)],
+        blank=True,
+        null=True
     )
     availability = models.BooleanField('Доступность', default=False)
     created_at = models.DateTimeField('Создан', auto_now_add=True)
     update_at = models.DateTimeField('Отредактирован', auto_now=True)
     discount = models.ManyToManyField('Discount', related_name='products', verbose_name='Скидка')
-    is_view = models.BooleanField('Просмотрен', default=False)
 
     def __str__(self) -> str:
         return f"{self.name} (id:{self.pk})"
+
+    def get_comparison_id(self):
+        return f"{self.id}"
 
     def delete(self, *arg, **kwargs):
         """"
@@ -113,14 +123,19 @@ class ProductImage(models.Model):
     """
 
     product = models.ForeignKey('Product', on_delete=models.CASCADE, related_name='images')
-    image = models.ImageField(upload_to=product_images_directory_path)
+    image = ProcessedImageField(
+        verbose_name='Фотография товара',
+        upload_to=product_images_directory_path,
+        options={"quality": 80},
+        processors=[ResizeToFit(200, 200)],
+    )
 
     def __str__(self) -> str:
         return f"{self.pk})"
 
     class Meta:
         db_table = 'Images'
-        ordering = ['id',]
+        ordering = ['id', ]
         verbose_name = 'Изображение'
         verbose_name_plural = 'Изображения'
 
@@ -128,13 +143,22 @@ class ProductImage(models.Model):
 class Offer(models.Model):
     """
     Модель предложений продавцов, содержит цену и кол-во предлагаемого товара
-
     """
 
     unit_price = models.DecimalField('Цена', default=0, max_digits=8, decimal_places=2)
     amount = models.PositiveIntegerField('Количество')
-    seller = models.ForeignKey('authorization.Profile', on_delete=models.CASCADE, verbose_name='Продавец')
-    product = models.ForeignKey('store.Product', on_delete=models.CASCADE, verbose_name='Товар')
+    seller = models.ForeignKey(
+        'authorization.Profile',
+        on_delete=models.CASCADE,
+        verbose_name='Продавец',
+        related_name='offers'
+    )
+    product = models.ForeignKey(
+        'store.Product',
+        on_delete=models.CASCADE,
+        verbose_name='Товар',
+        related_name='offers'
+    )
 
     def __str__(self) -> str:
         return f"Предложение от {self.seller.name_store}"
@@ -149,7 +173,6 @@ class Offer(models.Model):
 class Tag(models.Model):
     """
     Модель тегов
-
     """
 
     name = models.CharField('Название', default='', max_length=50, null=False, blank=False)
@@ -216,6 +239,8 @@ class Discount(models.Model):
     description = models.TextField('Описание', default='', null=False, blank=True)
     sum_discount = models.FloatField('Сумма скидки', null=False, blank=False)
     total_products = models.IntegerField('Количество товаров', null=True, blank=True)
+    sum_cart = models.FloatField(verbose_name='Сумма корзины', null=True, blank=True)
+    priority = models.BooleanField(verbose_name='Приоритет', default=False)
     valid_from = models.DateTimeField('Действует с', null=True, blank=True)
     valid_to = models.DateTimeField('Действует до', blank=False)
     is_active = models.BooleanField('Активно', default=False)
@@ -239,22 +264,49 @@ class Orders(models.Model):
     """
     Модель хранения заказов
     """
+    class Delivery(models.IntegerChoices):
+        """
+        Модель вариантов доставки
+        """
 
-    delivery_type = models.CharField(
-        max_length=100,
-        blank=False,
-        default='pickup',
-        verbose_name="Тип доставки")
-    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    address = models.TextField(max_length=150, null=True, verbose_name="Адрес")
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Создан")
-    status = models.BooleanField(default=False, verbose_name='Оплачен')
-    total = models.IntegerField(verbose_name='Количество')
-    archived = models.BooleanField(default=True, verbose_name='Архивация')
+        FREE = 1, 'Обычная доставка'
+        EXPRESS = 2, 'Экспресс-доставка'
+
+        __empty__ = 'Выберите доставку'
+
+    class Payment(models.IntegerChoices):
+        """
+        Модель вариантов оплаты
+        """
+
+        OWN_CARD = 1, 'Онлайн картой'
+        ANOTHER_CARD = 2, 'Онлайн со случайного счета'
+
+        __empty__ = 'Выберите оплату'
+
+    class Status(models.IntegerChoices):
+        """
+       Модель вариантов оплаты
+       """
+        PAID = 1, 'Оплачено'
+        UNPAID = 2, 'Не оплачено'
+        PROCESS = 3, 'Доставляется'
+
+    delivery_type = models.IntegerField(choices=Delivery.choices, verbose_name='Способ доставки')
+    payment = models.IntegerField(choices=Payment.choices, verbose_name='Способ оплаты')
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='orders')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Создан')
+    status = models.IntegerField(choices=Status.choices, verbose_name='Статус заказа')
+    address = models.TextField(max_length=150, verbose_name='Адрес')
+    total_payment = models.DecimalField(decimal_places=2, max_digits=10, verbose_name='Стоимость заказа')
     products = models.ManyToManyField(Product, related_name='orders')
+    status_exception = models.TextField(null=True, blank=True, verbose_name='Статус ошибки')
 
     def __str__(self) -> str:
-        return f"Order(pk = {self.pk}"
+        return f'Order(pk = {self.pk}'
+
+    def get_comparison_id(self):
+        return f"{self.id}"
 
     def delete(self, *arg, **kwargs):
         """"
@@ -265,7 +317,6 @@ class Orders(models.Model):
         return self
 
     class Meta:
-        db_table = "Orders"
-        verbose_name = "Заказ"
-        verbose_name_plural = "Заказы"
-
+        db_table = 'Orders'
+        verbose_name = 'Заказ'
+        verbose_name_plural = 'Заказы'

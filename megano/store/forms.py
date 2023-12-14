@@ -1,73 +1,107 @@
 from django import forms
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
 from authorization.models import Profile
-from store.widgets import CustomCheckboxMultiple, CustomRadioSelect
+from .models import Orders, Product
 
 
-class FilterForm(forms.Form):
+class ReviewsForm(forms.Form):
+    review = forms.CharField(widget=forms.Textarea, max_length=100)
 
-    choices = (
-        (True, 'Да'),
-        (False, 'Нет'),
-        (None, 'Не учитывать')
-    )
-    range = forms.CharField(
+
+class OrderCreateForm(forms.ModelForm):
+    """
+    Класс формы для оформления Заказа.
+    """
+    name = forms.CharField(
+        max_length=100,
+        label='ФИО',
         widget=forms.TextInput(attrs={
-            'class': 'range-line',
-            'type': 'text',
-            'id': 'price',
-            'name': 'price',
-            'data-type': 'double',
-            'data-min': '0',
-            'data-max': '1000',
-            'data-from': '0',
-            'data-to': '27',
+            'class': "form-input",
+            'id': "name",
+            'name': "name",
+            'type': "text",
+            'placeholder': "Иванов Иван Иванович",
         }),
     )
+    phone = forms.CharField(
+        max_length=20,
+        label='Телефон',
+        widget=forms.TextInput(attrs={
+            'class': "form-input",
+            'id': "phone",
+            'name': "phone",
+            'type': "text",
+            'placeholder': "+79991230000",
+        }),
+    )
+    delivery = forms.ChoiceField(
+        choices=Orders.Delivery.choices[1:],
+        widget=forms.RadioSelect(attrs={
+            'class': "toggle-box",
+            'id': "delivery",
+            'name': "delivery",
+            'type': "radio",
+            'checked': "checked"
+        }),
+    )
+    payment = forms.ChoiceField(
+        choices=Orders.Payment.choices[1:],
+        widget=forms.RadioSelect(attrs={
+            'class': "toggle-box",
+            'id': "payment",
+            'name': "payment",
+            'type': "radio",
+        }),
+    )
+    city = forms.CharField(max_length=100, label='Город', help_text='Город проживания')
+    address = forms.CharField(max_length=200, label='Адрес', help_text='Адрес доставки')
+    email = forms.EmailField(max_length=80, label='Почта', help_text='Почта')
+
+    class Meta:
+        model = Profile
+        fields = [
+            'name', 'phone', 'city', 'address',
+            'delivery', 'payment',
+        ]
+
+
+class RegisterForm(UserCreationForm):
+    """
+    Класс формы для регистрации пользователя
+    """
+    username = forms.CharField(label='Логин', widget=forms.TextInput(attrs={'class': 'form-input'}))
+    password1 = forms.CharField(label='Пароль', widget=forms.PasswordInput(attrs={'class': 'form-input'}))
+    password2 = forms.CharField(label='Повтор пароля', widget=forms.PasswordInput(attrs={'class': 'form-input'}))
+    phone = forms.CharField(
+        max_length=20,
+        label='Телефон',
+        widget=forms.TextInput(attrs={
+            'class': "form-input",
+            'id': "phone",
+            'name': "phone",
+            'type': "text",
+            'placeholder': "+79991230000",
+        }),
+    )
+
+    class Meta:
+        model = User
+        fields = ('username', 'phone', 'email', 'password1', 'password2')
+
+
+class SearchForm(forms.ModelForm):
     name = forms.CharField(
-        max_length=150,
-        label='',
-        required=False,
+        max_length=120,
         widget=forms.TextInput(attrs={
-            'class': 'form-input form-input_full',
-            'id': 'title',
-            'placeholder': 'Название',
-            'name': 'title',
-        })
-    )
-    stores = forms.ModelMultipleChoiceField(
-        queryset=Profile.objects.filter(role='store'),
-        required=False,
-        label='',
-        widget=CustomCheckboxMultiple(),
-    )
-    availability = forms.ChoiceField(
-        label='Только товары в наличии',
-        widget=CustomRadioSelect(),
-        choices=choices,
-        required=False,
-    )
-    delivery_free = forms.ChoiceField(
-        label='С бесплатной доставкой',
-        widget=CustomRadioSelect(),
-        choices=choices,
-        required=False,
-    )
-    another_feature = forms.CharField(
-        max_length=150,
-        label='',
-        required=False,
-        widget=forms.TextInput(attrs={
-            'class': 'form-input form-input_full',
-            'id': 'another_feature',
-            'placeholder': 'Поиск по другим характеристикам',
-            'name': 'another_feature',
+            'class': 'search-input',
+            'id': 'query',
+            'name': 'query',
+            'placeholder': 'NVIDIA GeForce RTX 3060',
         })
     )
 
-
-class SiteNameForm(forms.Form):
-    """
-
-    """
-    title_site = forms.CharField(max_length=100, help_text="Название", label='Новое название')
+    class Meta:
+        model = Product
+        fields = ['name', ]
