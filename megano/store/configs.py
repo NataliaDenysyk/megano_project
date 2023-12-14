@@ -1,6 +1,7 @@
 """
 Модуль с настройками сайта
 """
+from __future__ import annotations
 
 SECOND = 60
 HOURS = 60 * 60
@@ -26,7 +27,7 @@ class Settings:
     @staticmethod
     def time_calculate(cache_time) -> str:
         """
-        Расчёт времени и вывод значений по минутам, часам и дням.
+        Расчет времени и вывод значений по минутам, часам и дням
         """
         days = cache_time // DAYS
         hours = (cache_time // SECOND) // SECOND  # hours

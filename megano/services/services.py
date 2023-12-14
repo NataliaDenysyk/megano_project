@@ -5,16 +5,21 @@ from typing import Dict, List
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 
+from django.contrib.auth import authenticate, login
 from urllib.parse import urlparse, parse_qs, urlencode
 
 from django.db.models import Avg, Count, When, Case
+from django.db import transaction
 from django.http import HttpRequest
+from django.shortcuts import get_object_or_404, render
 
-from django.shortcuts import get_object_or_404
+from typing import Dict
 
 from authorization.forms import RegisterForm, LoginForm
 from authorization.models import Profile
 from store.models import Product, Offer, Category, Reviews, Discount, ProductImage, Tag
+
+from store.models import Orders
 
 
 class AuthorizationService:
@@ -148,11 +153,7 @@ class DiscountProduct:
             )
             if price:
                 return price
-
-        discounts_product = discounts.filter(
-            name='Скидки на товар')
-        if discounts_product:
-            return self.get_discount_on_product(cart)
+        return self.get_discount_on_product(cart)
 
     @staticmethod
     def calculate_price_with_discount(product, price) -> float:
@@ -267,7 +268,6 @@ class DiscountProduct:
         elif product['product'] in categories:
             return self.get_price_categories(product, priority_false)
         else:
-
             return product['product'].offers.first().unit_price
 
     @staticmethod
@@ -277,7 +277,8 @@ class DiscountProduct:
         """
         return Product.objects.filter(
             discount__name='Скидки на товар',
-            discount__priority=priority
+            discount__priority=priority,
+            discount__is_active=True
         )
 
     @staticmethod
@@ -287,7 +288,8 @@ class DiscountProduct:
         """
         return Category.objects.filter(
             discount__name='Скидки на товар',
-            discount__priority=priority
+            discount__priority=priority,
+            discount__is_active=True
         )
 
     def get_price_product(self, product, priority):
@@ -317,7 +319,6 @@ class PaymentService:
     """
     Сервис оплаты
     """
-
     def _get_payment_status(self, order) -> str:
         if order.is_paid == True:
             return 'Оплаченый заказ'
@@ -741,7 +742,6 @@ class ReviewsProduct:
     """
     Сервис для добавления отзыва к товару
     """
-
     @staticmethod
     def add_review_to_product(request, form, slug) -> None:
         # добавить отзыв к товару
@@ -786,7 +786,6 @@ class GetParamService:
         """
         Возвращает новый url
         """
-
         return self._parsed_url._replace(query=urlencode(self._query, True)).geturl()
 
     def remove_param(self, param_name: str) -> 'GetParamService':
@@ -804,3 +803,98 @@ class GetParamService:
 
         self._query[param_name] = param_value
         return self
+
+
+class ProfileService:
+    """
+    Сервис по работе с профилем
+    """
+
+    def __init__(self, profile: Profile):
+        self.profile = profile
+
+    def get_context(self):
+        """
+        Функция собирает контекст для рендера шаблона 'profile_details'
+        """
+        context = {
+            'order': Orders.objects.filter(profile=self.profile).order_by('-created_at')[:1],
+        }
+        return context
+
+
+class ProfileUpdate:
+    """
+    Сервис для редактирования профиля
+    """
+    def __init__(self, profile: Profile):
+        self.profile = profile
+
+    def update_profile(self, request, form, context):
+        user = request.user
+        user_form = context['user_form']
+        with transaction.atomic():
+            if all([form.is_valid(), user_form.is_valid()]):
+                self.profile = form.save()
+                self.profile.phone = self.get_phone(form)
+                password = self.get_password_valid(user_form)
+                names = self.get_full_name(user_form)
+                user.email = user_form.cleaned_data['mail']
+                self.profile.avatar = form.cleaned_data['avatar']
+                if user_form.errors or form.errors:
+                    context.update({'user_form': user_form})
+                    return render(request,
+                                  'authorization/profile_update_form.html',
+                                  context=context)
+                user.set_password(password)
+                user.first_name, user.last_name = names[1], names[0]
+
+                user.save()
+                self.profile.save()
+
+                user = authenticate(username=user.username, password=password)
+                login(request, user)
+            else:
+                context.update({'user_form': user_form})
+                return render(request,
+                              'authorization/profile_update_form.html',
+                              context=context)
+
+    @staticmethod
+    def get_password_valid(form):
+        """"
+        Функция для проверки одинаковости ввода password и passwordReply в форму
+        """
+        if form.cleaned_data['password'] and form.cleaned_data['passwordReply']:
+            if form.cleaned_data['password'] == form.cleaned_data['passwordReply']:
+                return form.cleaned_data['password']
+            else:
+                form.add_error('password', 'Пароли не совпадают')
+        else:
+            form.add_error('password', 'Введите пароль и подтверждение пароля')
+
+    @staticmethod
+    def get_full_name(form):
+        """"
+        Функция для определения first_name и last_name пользователя из формы
+        """
+        name = form.cleaned_data['name'].split(' ')
+        return [name[0], ' '.join(name[1:])]
+
+    @staticmethod
+    def get_phone(form):
+        """"
+        Функция для очистки номера проверки его на уникальность и приведения к int
+        """
+        phone_str = form.cleaned_data['phone']
+        chars_to_remove = ['(', ')']
+        for char in chars_to_remove:
+            phone_str = phone_str.replace(char, '')
+        phone = phone_str[2:]
+        if Profile.objects.filter(phone=phone).exists():
+            form.add_error('phone', 'Телефон должен быть уникальным')
+
+        return phone
+
+
+
