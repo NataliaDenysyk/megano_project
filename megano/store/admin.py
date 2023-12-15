@@ -86,6 +86,7 @@ class AdminOrders(admin.ModelAdmin):
     list_display_links = 'pk', 'delivery_type'
     ordering = 'pk', 'created_at',
     search_fields = 'delivery_type', 'created_at'
+    # readonly_fields = ('total_payment',)
 
     fieldsets = [
         (None, {

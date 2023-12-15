@@ -43,7 +43,12 @@
                 </strong>
                 <div class="Card-description">
                   <div class="Card-cost">
-                      <span class="Card-price">${{ limited_deals.get_average_price }}</span>
+                    {% if limited_deals.get_discount_price %}
+                        <span class="Card-priceOld">${{ limited_deals.get_average_price }}</span>
+                        <span class="Card-price">${{ limited_deals.get_discount_price }}</span>
+                    {% else %}
+                        <span class="Card-price">${{ limited_deals.get_average_price }}</span>
+                    {% endif %}
                   </div>
                   <div class="Card-category">{{ limited_deals.category }}
                   </div>
@@ -85,9 +90,12 @@
                     </strong>
                     <div class="Card-description">
                       <div class="Card-cost">
-                      {% if product.get_average_price != None %}
-                        <span class="Card-price">${{ product.get_average_price}}</span>
-                      {% endif %}
+                        {% if product.get_discount_price %}
+                            <span class="Card-priceOld">${{ product.get_average_price }}</span>
+                            <span class="Card-price">${{ product.get_discount_price }}</span>
+                        {% else %}
+                            <span class="Card-price">${{ product.get_average_price }}</span>
+                        {% endif %}
                     </div>
                       <div class="Card-category">{{ product.category}}
                       </div>
@@ -130,7 +138,13 @@
                       <strong class="Card-title"><a href="{% url 'store:product-detail' slug=product.slug %}">{{ product.name }}</a>
                       </strong>
                       <div class="Card-description">
-                        <div class="Card-cost"><span class="Card-price">${{ product.get_average_price }}</span>
+                        <div class="Card-cost">
+                            {% if  product.get_discount_price%}
+                                <span class="Card-priceOld">${{ product.get_average_price }}</span>
+                                <span class="Card-price">${{ product.get_discount_price }}</span>
+                            {% else %}
+                                <span class="Card-price">${{ product.get_average_price }}</span>
+                            {% endif %}
                         </div>
                         <div class="Card-category">{{ product.category }}
                         </div>
@@ -168,7 +182,13 @@
                           <strong class="Card-title"><a href="{% url 'store:product-detail' slug=product.slug %}">{{ product.name }}</a>
                           </strong>
                           <div class="Card-description">
-                            <div class="Card-cost"><span class="Card-price">${{ product.get_average_price }}</span>
+                            <div class="Card-cost">
+                                {% if product.get_discount_price %}
+                                    <span class="Card-priceOld">${{ product.get_average_price }}</span>
+                                    <span class="Card-price">${{ product.get_discount_price }}</span>
+                                {% else %}
+                                    <span class="Card-price">${{ product.get_average_price }}</span>
+                                {% endif %}
                             </div>
                             <div class="Card-category">{{ product.category }}
                             </div>

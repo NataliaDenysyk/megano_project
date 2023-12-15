@@ -28,11 +28,6 @@ from services.services import (
 import re
 from typing import Any
 
-from .configs import settings
-from .forms import ReviewsForm, SearchForm
-from .filters import ProductFilter
-from .mixins import ChangeListMixin
-
 
 class CatalogListView(ListView):
     """
@@ -101,7 +96,6 @@ class ProductDetailView(DetailView):
         return product
 
     def get_context_data(self, **kwargs) -> HttpResponse:
-
         form_search = SearchForm(self.request.GET or None)
         context = super().get_context_data(**kwargs)
 
@@ -369,7 +363,7 @@ class MainPage(ListView):
         cache_key = 'product_list_cache'
         popular_products = cache.get(cache_key)
 
-        if popular_products is None:
+        if len(popular_products) == 0:
             popular_products = ProductService(self.model).get_popular_products(quantity=8)
             cache.set(cache_key, popular_products, settings.set_popular_products_cache(1))
 
@@ -382,9 +376,8 @@ class MainPage(ListView):
         context['form_search'] = form_search
         context['banners_category'] = BannersCategory.objects.all()[:3]
         context['limited_deals'] = MainService.get_limited_deals()
-        print(Product.objects.filter(discount__isnull=False)[:9][0].discount)
-        context['hot_offers'] = Product.objects.filter(discount__isnull=False)[:9]
-        context['limited_edition'] = Product.objects.filter(limited_edition=True)[:16]
+        context['hot_offers'] = Product.objects.all().filter(discount__is_active=True).distinct('pk')[:9]
+        context['limited_edition'] = Product.objects.filter(limited_edition=True).distinct('pk')[:16]
 
         return context
 
