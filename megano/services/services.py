@@ -805,7 +805,6 @@ class GetParamService:
         return self
 
 
-<<<<<<< megano/services/services.py
 class MainService:
     @staticmethod
     def get_limited_deals() -> Product:
@@ -824,8 +823,6 @@ class MainService:
             return limited_cache
 
 
-=======
->>>>>>> megano/services/services.py
 class ProfileService:
     """
     Сервис по работе с профилем
