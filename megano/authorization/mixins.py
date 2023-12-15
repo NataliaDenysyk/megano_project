@@ -14,7 +14,7 @@ class MenuMixin:
             {'name': 'Личный кабинет', 'url': 'profile:profile_details', 'id': '1', },
             {'name': 'Профиль', 'url': 'profile:profile', 'id': '2', },
             {'name': 'История заказов', 'url': 'profile:history_orders', 'id': '3', },
-            # {'name': 'История просмотров', 'url': 'profile:history_view', 'id': '4', },
+            {'name': 'История просмотров', 'url': 'profile:history_view', 'id': '4', },
         ]
         return menu
 

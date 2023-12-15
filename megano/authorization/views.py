@@ -17,11 +17,11 @@ from django.core.exceptions import ValidationError
 
 from authorization.forms import RegisterForm, LoginForm
 from authorization.models import Profile
-from services.services import AuthorizationService
+from services.services import AuthorizationService, ProductsViewService, ProductService
 from .mixins import MenuMixin
 
 from store.configs import settings
-from store.models import Offer, Orders
+from store.models import Offer, Orders, Product
 
 from services.services import ProfileService, ProfileUpdate
 
@@ -31,14 +31,13 @@ from .forms import UserUpdateForm, ProfileUpdateForm
 from .models import Profile
 
 
-
 class SellerDetail(DetailView):
     """
     Вьюшка детальной страницы продавца
     """
 
     model = Profile
-    template_name = 'auth/about-seller.html'
+    template_name = 'authorization/about-seller.html'
     context_object_name = 'seller'
 
     def get_object(self, *args, **kwargs) -> Profile.objects:
@@ -180,6 +179,27 @@ class ProfileOrderPage(DetailView):
         """
         context = super().get_context_data(**kwargs)
         context['orders'] = Orders.objects.select_related('profile').prefetch_related('products')
+
+        return context
+
+
+class ProfileHistoryView(ListView, MenuMixin):
+    """
+    Представление истории просмотров профиля
+    """
+
+    model = Product
+    template_name = 'authorization/history_view.html'
+    context_object_name = 'products'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update(
+            self.get_menu(id='4'),
+        )
+        context['products'] = ProductsViewService(self.request).get_viewed_product_list()
+        for product in context['products']:
+            product.price = ProductService(product).get_average_price()
 
         return context
 
