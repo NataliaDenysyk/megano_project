@@ -39,6 +39,7 @@
             </header>
             <div class="Card"><a class="Card-picture" href="{% url 'store:product-detail' slug=limited_deals.slug %}"><img src="{{ limited_deals.preview.url }}"/></a>
               <div class="Card-content">
+
                 <strong class="Card-title"><a href="{% url 'store:product-detail' slug=limited_deals.slug %}">{{ limited_deals.name }}</a>
                 </strong>
                 <div class="Card-description">

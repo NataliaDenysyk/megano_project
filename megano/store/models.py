@@ -131,9 +131,6 @@ class Product(models.Model):
         if discount:
             return self.get_average_price() - discount[0].sum_discount
 
-
-
-
     class Meta:
         db_table = 'Products'
         ordering = ['id', 'name']
@@ -361,3 +358,4 @@ class BannersCategory(models.Model):
         db_table = 'Banners_Category'
         verbose_name = 'Банер категории'
         verbose_name_plural = 'Банеры категорий'
+
