@@ -1,3 +1,5 @@
+import logging
+
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.shortcuts import redirect
@@ -361,9 +363,14 @@ class MainPage(ListView):
         popular_products = cache.get(cache_key)
 
         if popular_products is None:
-            popular_products = ProductService(self.model).get_popular_products(quantity=8)
-            cache.set(cache_key, popular_products, settings.set_popular_products_cache(1))
+            try:
+                popular_products = ProductService(self.model).get_popular_products(quantity=6)
 
+            except Exception as exception:
+                popular_products = None
+                logging.error(exception)
+
+        cache.set(cache_key, popular_products, settings.set_popular_products_cache(1))
         return popular_products
 
     def get_context_data(self, **kwargs):
