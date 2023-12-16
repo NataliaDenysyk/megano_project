@@ -9,7 +9,7 @@ from django.core.cache import cache
 from services.slugify import slugify
 
 from .configs import settings
-from .forms import ReviewsForm, SearchForm, OrderCreateForm, RegisterForm
+from .forms import ReviewsForm, OrderCreateForm, RegisterForm
 from .filters import ProductFilter
 from .mixins import ChangeListMixin
 from authorization.models import Profile
@@ -360,7 +360,7 @@ class MainPage(ListView):
         cache_key = 'product_list_cache'
         popular_products = cache.get(cache_key)
 
-        if len(popular_products) == 0:
+        if popular_products is None:
             popular_products = ProductService(self.model).get_popular_products(quantity=8)
             cache.set(cache_key, popular_products, settings.set_popular_products_cache(1))
 

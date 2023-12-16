@@ -806,13 +806,14 @@ class MainService:
         if not limited_cache:
 
             products = Product.objects.filter(limited_edition=True).distinct('pk')
-            product_l_e = choice(products)
+            if products:
+                product_l_e = choice(products)
 
-            product_l_e.time = datetime.now() + timedelta(days=2, hours=3)
-            product_l_e.time = product_l_e.time.strftime("%d.%m.%Y %H:%M")
-            cache.set('product_limited_edition', product_l_e, 86400)
+                product_l_e.time = datetime.now() + timedelta(days=2, hours=3)
+                product_l_e.time = product_l_e.time.strftime("%d.%m.%Y %H:%M")
+                cache.set('product_limited_edition', product_l_e, 86400)
 
-            return product_l_e
+                return product_l_e
         else:
             return limited_cache
 
