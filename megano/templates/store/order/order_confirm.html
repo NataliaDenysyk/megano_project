@@ -59,7 +59,7 @@
                                                 <div class="Order-info Order-info_delivery">
                                                     <div class="Order-infoType">Тип доставки:
                                                     </div>
-                                                    <div class="Order-infoContent">{{ order.delivery_type }}
+                                                    <div class="Order-infoContent">{{ order.get_delivery_type_display }}
                                                     </div>
                                                 </div>
                                                 {% with address=order.profile.address|split_string:" " %}
@@ -79,13 +79,14 @@
                                                 <div class="Order-info Order-info_pay">
                                                     <div class="Order-infoType">Оплата:
                                                     </div>
-                                                    <div class="Order-infoContent">{{ order.payment }}
+                                                    <div class="Order-infoContent">{{ order.get_payment_display }}
                                                     </div>
+
                                                 </div>
                                                 <div class="Order-info Order-info_status">
                                                     <div class="Order-infoType">Статус:
                                                     </div>
-                                                    <div class="Order-infoContent">{{ order.status }}
+                                                    <div class="Order-infoContent">{{ order.get_status_display }}
                                                     </div>
                                                 </div>
                                                 <div class="Order-info Order-info_error">
@@ -152,3 +153,4 @@
         <h1>Заказов пока нет!</h1>
     {% endif %}
 {% endblock %}
+order.get_delivery_type_display

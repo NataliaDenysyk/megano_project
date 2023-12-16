@@ -1,7 +1,8 @@
+import copy
 from decimal import Decimal
 from django.conf import settings
 
-from store.models import Product
+from store.models import Product, Offer, Orders
 
 MAX_COUNT = 21
 
@@ -29,7 +30,8 @@ class Cart(object):
         """
         product_id = str(offer.product.id)
         if product_id not in self.cart:
-            self.cart[product_id] = {'quantity': 0, 'price': str(offer.unit_price)}
+            self.cart[product_id] = {'quantity': 0, 'price': str(offer.unit_price),
+                                     'offer_id': str(offer.id), 'offer_name': str(offer.seller.name_store)}
         if update:
             self.cart[product_id]['quantity'] = quantity
         else:
@@ -84,7 +86,7 @@ class Cart(object):
         product_id = self.cart.keys()
         products = Product.objects.filter(id__in=product_id)
 
-        cart = self.cart.copy()
+        cart = copy.deepcopy(self.cart)
         for product in products:
             cart[str(product.id)]['product'] = product
         for item in cart.values():
@@ -100,6 +102,13 @@ class Cart(object):
             Decimal(item['price']) * item['quantity']
             for item in self.cart.values()
         )
+
+    def update_date(self, offer: Offer, price: int) -> None:
+        product_id = str(offer.product.id)
+        self.cart[product_id]['price'] = str(price)
+        self.cart[product_id]['offer_id'] = str(offer.id)
+        self.cart[product_id]['offer_name'] = str(offer.seller.name_store)
+        self.save()
 
     def clear(self) -> None:
         """

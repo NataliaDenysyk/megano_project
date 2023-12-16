@@ -6,6 +6,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy, reverse
 from django.contrib import messages
 from django.core.cache import cache
+from services.slugify import slugify
 
 from .tasks import pay_order
 from .configs import settings
@@ -15,7 +16,7 @@ from .mixins import ChangeListMixin
 from authorization.models import Profile
 from cart.cart import Cart
 from cart.models import Cart as Basket
-from .models import Product, Orders, Offer
+from .models import Product, Orders, Offer, BannersCategory
 from services.services import (
     ProductService,
     CatalogService,
@@ -23,6 +24,7 @@ from services.services import (
     GetParamService,
     ProductsViewService,
     ReviewsProduct,
+    MainService,
 )
 
 import re
@@ -379,6 +381,10 @@ class MainPage(ListView):
         context = super().get_context_data(**kwargs)
 
         context['form_search'] = form_search
+        context['banners_category'] = BannersCategory.objects.all()[:3]
+        context['limited_deals'] = MainService.get_limited_deals()
+        context['hot_offers'] = Product.objects.all().filter(discount__is_active=True).distinct('pk')[:9]
+        context['limited_edition'] = Product.objects.filter(limited_edition=True).distinct('pk')[:16]
 
         return context
 
@@ -398,10 +404,8 @@ class OrderRegisterView(CreateView):
         phone = form.cleaned_data.get('phone')
         Profile.objects.create(
             user=user,
-            slug='slug',
+            slug=slugify(username),
             phone=phone,
-            description='description',
-            address='address',
         )
         user = authenticate(username=username, password=password)
         login(self.request, user)
@@ -462,6 +466,7 @@ class OrderView(UpdateView):
             delivery_type=delivery,
             payment=payment,
             profile=profile,
+            address=profile.address,
             total_payment=sum([item['total_price'] for item in cart]),
             status=3,
         )
@@ -477,7 +482,7 @@ class OrderView(UpdateView):
             # product = Product.objects.get(slug=item['product'].slug)
             # TODO: added function for checking counter products
 
-            quantity = Offer.objects.get(product=item['product'].id)
+            quantity = Offer.objects.get(id=item['offer_id'])
             quantity.amount -= int(item['quantity'])
             quantity.save()
 
@@ -485,7 +490,7 @@ class OrderView(UpdateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy('store:order_confirm', kwargs={'pk': self.kwargs['pk']})
+        return reverse_lazy('store:order_confirm', kwargs={'pk': self.request.user.id})
 
 
 class OrderConfirmView(TemplateView):
@@ -499,13 +504,13 @@ class OrderConfirmView(TemplateView):
         context = super().get_context_data(**kwargs)
         context.update(
             {
-                'order': Orders.objects.select_related('profile').last(),
+                'order': Orders.objects.get(id=self.kwargs['pk']),
             }
         )
         return context
 
     def get_success_url(self):
-        return reverse_lazy('store:order_confirm', kwargs={'pk': self.request.user.id})
+        return reverse_lazy('store:order_confirm', kwargs={'pk': self.kwargs['pk']})
 
 
 class PaymentFormView(FormView):
