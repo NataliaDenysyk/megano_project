@@ -25,6 +25,14 @@ class CartListView(TemplateView):
         )
         return context
 
+    def post(self, request):
+        offer = Offer.objects.get(id=request.POST.get('offer'))
+        carts = Cart(request)
+        for item in carts:
+            if item['product'].id == offer.product.id:
+                carts.update_date(offer, offer.unit_price)
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
 
 def add_product_to_cart(request: WSGIRequest, offer_id) -> HttpResponse:
     """
