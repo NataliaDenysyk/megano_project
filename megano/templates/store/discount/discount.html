@@ -6,18 +6,7 @@
 {% block content %}
 
   <div class="Middle Middle_top">
-    <div class="Middle-top">
-      <div class="wrap">
-        <div class="Middle-header">
-          <ul class="breadcrumbs Middle-breadcrumbs">
-            <li class="breadcrumbs-item"><a href="{% url 'store:index' %}">Главная</a>
-            </li>
-            <li class="breadcrumbs-item breadcrumbs-item_current"><span>Блог</span>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
+    {% include "store/discount/breadcrumbs.html" %}
     <div class="Section">
       <div class="wrap">
         <div class="Cards Cards_blog">
