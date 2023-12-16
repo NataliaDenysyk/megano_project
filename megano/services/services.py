@@ -1,23 +1,17 @@
 from datetime import datetime, timedelta
 from decimal import Decimal
 from random import choice
-
-from typing import Dict, List
+from typing import Dict
 
 from django.core.cache import cache
-
-from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
-
 from django.contrib.auth import authenticate, login
 from urllib.parse import urlparse, parse_qs, urlencode
-
 from django.db.models import Avg, Count, When, Case
 from django.db import transaction
 from django.http import HttpRequest
 from django.shortcuts import get_object_or_404, render
 
-from typing import Dict
 
 from authorization.forms import RegisterForm, LoginForm
 from authorization.models import Profile
