@@ -73,21 +73,4 @@ def slugify(text: str) -> str:
         _res.append(ALPHABET[_char] if _char in ALPHABET.keys() else _char)
 
     return ''.join(_res)
-
-
-if __name__ == '__main__':
-    print("+{:-^38}+{:-^38}+".format("-", "-"))
-    print("|{: ^38}|{: ^38}|".format("Оригинал", "Вывод"))
-    print("+{:-^38}+{:-^38}+".format("-", "-"))
-    input_text = 'Сны и -Сновидения, `~Ubuntu 22.04!'
-    output_text = slugify(input_text)
-    print("|{: ^38}|{: ^38}|".format(input_text, output_text))
-    print("+{:-^38}+{:-^38}+".format("-", "-"))
-
-    # ip_address = '192.168.12.3'
-    # Octets = map(int, re.findall(r'[0-9]+', ip_address))
-
-    # for octet in octets:
-    #     print(f"{octet} -> {octet:b}")
-
-# sny-i-snovideniya-ubuntu-2204
+    
