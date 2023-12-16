@@ -20,6 +20,7 @@ from .views import (
     OrderView,
     OrderRegisterView,
     OrderConfirmView,
+    DiscountList,
 )
 
 
@@ -46,5 +47,6 @@ urlpatterns = [
     path('cache-time-prod-detail/', CacheSetupProdDetailView.as_view(), name='cache_time_prod_detail'),
     path('cache-time-seller/', CacheSetupSellerView.as_view(), name='cache_time_seller'),
     path('cache-time-catalog/', CacheSetupCatalogView.as_view(), name='cache_time_catalog'),
+    path('discounts/', DiscountList.as_view(), name='discounts'),
 
 ]

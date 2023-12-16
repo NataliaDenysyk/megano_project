@@ -6,6 +6,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.core.cache import cache
+from  django.core.paginator import Paginator
 
 from .configs import settings
 from .forms import ReviewsForm, SearchForm, OrderCreateForm, RegisterForm
@@ -14,7 +15,7 @@ from .mixins import ChangeListMixin
 from authorization.models import Profile
 from cart.cart import Cart
 from cart.models import Cart as Basket
-from .models import Product, Orders, Offer
+from .models import Product, Orders, Offer, Discount
 from services.services import (
     ProductService,
     CatalogService,
@@ -500,3 +501,21 @@ class OrderConfirmView(TemplateView):
 
     def get_success_url(self):
         return reverse_lazy('store:order_confirm', kwargs={'pk': self.request.user.id})
+
+
+class DiscountList(ListView):
+    """
+    Представление для просмотра страницы скидок
+    """
+    model = Discount
+    template_name = 'store/discount.html'
+
+    def get_context_data(self, **kwargs):
+        """
+        Функция возвращает контекст
+        """
+        context = super().get_context_data(**kwargs)
+        context['page_obj'] = (Paginator(Discount.objects.filter(is_active=True), 12)
+                               .get_page( self.request.GET.get('page')))
+
+        return context

@@ -181,7 +181,7 @@ class DiscountProduct:
 
         """
         cart_product = [crt for crt in cart]
-        price = sum([product['price'] for product in cart_product])
+        price = sum([product['price'] * product['quantity'] for product in cart_product])
         return price
 
     @staticmethod
@@ -223,7 +223,6 @@ class DiscountProduct:
         :param cart: карзина с товарами
         :return: стоимость карзины со скидкой 'Скидки на наборы'
         """
-        # cart_product = [crt for crt in cart]
         cart_id = [crt['product'].id for crt in cart]
         cart_categories_id = [crt['product'].category.id for crt in cart]
         for discount in discounts:
@@ -232,7 +231,6 @@ class DiscountProduct:
             if (str(product_ids)[1:-1] in str(cart_id)[1:-1]
                     and str(category_ids)[1:-1] in str(cart_categories_id)[1:-1]):
                 price = self.total_price_cart(cart)
-                # price = sum( [product['price'] for product in cart_product])
                 price -= Decimal(discount.sum_discount)
 
                 return 1 if price <= 1 else price
@@ -268,7 +266,7 @@ class DiscountProduct:
         elif product['product'] in categories:
             return self.get_price_categories(product, priority_false)
         else:
-            return product['product'].offers.first().unit_price
+            return product['total_price']
 
     @staticmethod
     def get_products(priority):
