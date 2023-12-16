@@ -537,4 +537,5 @@ class DiscountDetail(DetailView):
         Функция возвращает контекст
         """
         context = super().get_context_data(**kwargs)
-        context['discount'] = Discount.objects.get(slug=self.kwargs['slug'])
+        context['discount'] = Discount.objects.get(id=self.kwargs['pk'])
+        return context
