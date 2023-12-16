@@ -14,12 +14,12 @@ from django.http import HttpRequest
 from django.utils.safestring import mark_safe
 
 
-@admin.action(description='Archive')
+@admin.action(description='Архивировать')
 def mark_archived(modeladmin: admin.ModelAdmin, request: HttpRequest, queryset: QuerySet):
     queryset.update(archived=True)
 
 
-@admin.action(description='Unarchive')
+@admin.action(description='Разархивировать')
 def mark_unarchived(modeladmin: admin.ModelAdmin, request: HttpRequest, queryset: QuerySet):
     queryset.update(archived=False)
 
