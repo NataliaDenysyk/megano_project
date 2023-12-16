@@ -10,7 +10,7 @@
     <div class="Section">
       <div class="wrap">
         <div class="Cards Cards_blog">
-            <div class="Card"><a class="Card-picture" href="#">
+            <div class="Card"><a class="Card-picture" href="{% url 'store:discounts' %}">
               {% if discount.image %}<img src="{{ discount.image.url }}" alt="product.png"/>{% endif %}</a>
 
               {% if discount.valid_from %}
