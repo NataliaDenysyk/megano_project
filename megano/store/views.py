@@ -513,7 +513,7 @@ class DiscountList(ListView):
     Представление для просмотра страницы скидок
     """
     model = Discount
-    template_name = 'store/discount/discount.html'
+    template_name = 'store/discount/discount_list.html'
 
     def get_context_data(self, **kwargs):
         """
@@ -524,3 +524,17 @@ class DiscountList(ListView):
                                .get_page( self.request.GET.get('page')))
 
         return context
+
+class DiscountDetail(DetailView):
+    """
+    Представление для просмотра детальной страницы скидок
+    """
+    model = Discount
+    template_name = 'store/discount/discount_details.html'
+
+    def get_context_data(self, **kwargs):
+        """
+        Функция возвращает контекст
+        """
+        context = super().get_context_data(**kwargs)
+        context['discount'] = Discount.objects.get(slug=self.kwargs['slug'])
