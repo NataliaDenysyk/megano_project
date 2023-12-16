@@ -1,6 +1,10 @@
+from datetime import datetime, timedelta
 from decimal import Decimal
+from random import choice
 
 from typing import Dict, List
+
+from django.core.cache import cache
 
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
@@ -17,7 +21,7 @@ from typing import Dict
 
 from authorization.forms import RegisterForm, LoginForm
 from authorization.models import Profile
-from store.models import Product, Offer, Category, Reviews, Discount, ProductImage, Tag
+from store.models import Product, Offer, Category, Reviews, Discount, ProductImage, Tag, Orders
 
 from store.models import Orders
 
@@ -90,10 +94,6 @@ class GetAdminSettings:
 
 
 class AddProductInTrash:
-    pass
-
-
-class AddReview:
     pass
 
 
@@ -181,7 +181,7 @@ class DiscountProduct:
 
         """
         cart_product = [crt for crt in cart]
-        price = sum([product['price'] for product in cart_product])
+        price = sum([product['price'] * product['quantity'] for product in cart_product])
         return price
 
     @staticmethod
@@ -268,7 +268,8 @@ class DiscountProduct:
         elif product['product'] in categories:
             return self.get_price_categories(product, priority_false)
         else:
-            return product['product'].offers.first().unit_price
+            return product['total_price']
+
 
     @staticmethod
     def get_products(priority):
@@ -474,7 +475,6 @@ class ProductService:
 
     def get_popular_products(self, quantity):
         popular_products = self._product.objects.filter(orders__status=True). \
-                               values('pk', 'slug', 'preview', 'name', 'category__name', 'offers__unit_price'). \
                                annotate(count=Count('pk')).order_by('-count')[:quantity]
         return popular_products
 
@@ -803,6 +803,24 @@ class GetParamService:
 
         self._query[param_name] = param_value
         return self
+
+
+class MainService:
+    @staticmethod
+    def get_limited_deals() -> Product:
+        limited_cache = cache.get('product_limited_edition')
+        if not limited_cache:
+
+            products = Product.objects.filter(limited_edition=True).distinct('pk')
+            product_l_e = choice(products)
+
+            product_l_e.time = datetime.now() + timedelta(days=2, hours=3)
+            product_l_e.time = product_l_e.time.strftime("%d.%m.%Y %H:%M")
+            cache.set('product_limited_edition', product_l_e, 86400)
+
+            return product_l_e
+        else:
+            return limited_cache
 
 
 class ProfileService:
