@@ -1,24 +1,22 @@
+from datetime import datetime, timedelta
 from decimal import Decimal
+from random import choice
+from typing import Dict
 
-from typing import Dict, List
-
-from django.contrib.auth import authenticate, login
+from django.core.cache import cache
 from django.contrib.auth.models import User
-
 from django.contrib.auth import authenticate, login
 from urllib.parse import urlparse, parse_qs, urlencode
-
 from django.db.models import Avg, Count, When, Case
 from django.db import transaction
 from django.http import HttpRequest
 from django.shortcuts import get_object_or_404, render
 
-from typing import Dict
 
 from authorization.forms import RegisterForm, LoginForm
 from authorization.models import Profile
-from store.models import Product, Offer, Category, Reviews, Discount, ProductImage, Tag
-
+from store.models import Product, Offer, Category, Reviews, Discount, ProductImage, Tag, Orders
+from .slugify import slugify
 from store.models import Orders
 
 
@@ -48,7 +46,7 @@ class AuthorizationService:
 
             Profile.objects.create(
                 user=user,
-                slug=username,
+                slug=slugify(username),
             )
 
             user = authenticate(
@@ -90,10 +88,6 @@ class GetAdminSettings:
 
 
 class AddProductInTrash:
-    pass
-
-
-class AddReview:
     pass
 
 
@@ -267,6 +261,7 @@ class DiscountProduct:
             return self.get_price_categories(product, priority_false)
         else:
             return product['total_price']
+
 
     @staticmethod
     def get_products(priority):
@@ -472,7 +467,6 @@ class ProductService:
 
     def get_popular_products(self, quantity):
         popular_products = self._product.objects.filter(orders__status=True). \
-                               values('pk', 'slug', 'preview', 'name', 'category__name', 'offers__unit_price'). \
                                annotate(count=Count('pk')).order_by('-count')[:quantity]
         return popular_products
 
@@ -801,6 +795,24 @@ class GetParamService:
 
         self._query[param_name] = param_value
         return self
+
+
+class MainService:
+    @staticmethod
+    def get_limited_deals() -> Product:
+        limited_cache = cache.get('product_limited_edition')
+        if not limited_cache:
+
+            products = Product.objects.filter(limited_edition=True).distinct('pk')
+            product_l_e = choice(products)
+
+            product_l_e.time = datetime.now() + timedelta(days=2, hours=3)
+            product_l_e.time = product_l_e.time.strftime("%d.%m.%Y %H:%M")
+            cache.set('product_limited_edition', product_l_e, 86400)
+
+            return product_l_e
+        else:
+            return limited_cache
 
 
 class ProfileService:
