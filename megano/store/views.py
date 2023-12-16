@@ -513,7 +513,7 @@ class DiscountList(ListView):
     Представление для просмотра страницы скидок
     """
     model = Discount
-    template_name = 'store/discount.html'
+    template_name = 'store/discount/discount.html'
 
     def get_context_data(self, **kwargs):
         """
