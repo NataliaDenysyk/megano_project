@@ -311,7 +311,6 @@ class AdminBanner(admin.ModelAdmin):
     list_display_links = ['category']
     list_filter = ['is_active']
 
-
     def get_html_images(self, obj: BannersCategory):
         """
         В панели администратора,
