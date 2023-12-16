@@ -261,16 +261,13 @@ class Discount(models.Model):
     """
     Модель скидок
     """
-    DP = 'DP'
-    DS = 'DS'
-    DC = 'DC'
     name_CHOICES = [
         ('DP', 'Скидки на товар'),
-        ('DS', 'Скидки на корзину'),
-        ('DC', 'Скидки на наборы'),
+        ('DS', 'Скидки на наборы'),
+        ('DC', 'Скидки на корзину'),
     ]
     title = models.CharField('Название', default='', max_length=70, null=False, blank=False)
-    name = models.CharField(max_length=2, choices=name_CHOICES, default='DP',
+    name = models.CharField(max_length=2, choices=name_CHOICES, default='DPRO',
                                      verbose_name='Тип скидки')
     description = models.TextField('Описание', default='', null=False, blank=True)
     image = ProcessedImageField(
