@@ -484,7 +484,7 @@ class OrderView(UpdateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy('store:order_confirm', kwargs={'pk': self.request.user.profile.orders.first().id})
+        return reverse_lazy('store:order_confirm', kwargs={'pk': self.request.user.profile.orders.last().id})
 
 
 class OrderConfirmView(TemplateView):
