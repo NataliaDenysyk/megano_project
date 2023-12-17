@@ -290,7 +290,7 @@ class DiscountAdmin(admin.ModelAdmin):
 
     fieldsets = [
         (None, {
-            'fields': ('title', 'name', 'image', 'description', 'sum_discount', 'sum_cart',
+            'fields': ('title', 'slug', 'name', 'image', 'description', 'priority', 'sum_discount', 'sum_cart',
                        'total_products', 'valid_from', 'valid_to', 'is_active'),
         }),
     ]

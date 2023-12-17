@@ -91,21 +91,6 @@ class AddProductInTrash:
     pass
 
 
-# class DiscountProductOrCategory:
-#     # def __init__(self, product: Product):
-#     #     self.product = product
-#
-#     def discount_on_product(self, cart):
-#         cart_product = [crt for crt in cart]
-#         print(cart_product)
-#         if self.product.discount == 'DP':
-#             price = self.product.offers.all()[0].price
-#             price -= price / 100 * self.product.discount
-#             return price
-#         return self.product.offers.all()[0].price
-
-
-
 class DiscountProduct:
     """
     Сервис получения скидок на товары и группы товаров
