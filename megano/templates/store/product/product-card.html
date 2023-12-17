@@ -39,38 +39,39 @@
             </ul>
         </div>
         <div class="ProductCard-cart">
-                                <div class="ProductCard-cartElement ProductCard-cartElement_amount">
-                                    <form method="post" id="amount" action="#modal_open">
-                                        {% csrf_token %}
-                                    <div class="Amount Amount_product">
-                                        <button class="Amount-remove" type="button">
-                                        </button>
-                                        <input class="Amount-input form-input" name="amount" type="text" value="1" />
-                                        <button class="Amount-add" type="button">
-                                        </button>
-                                    </div>
-                                    </form>
-                                </div>
-                                <div class="ProductCard-cartElement">
-                                    <button class="btn btn_primary" form="amount" >
-                                        <img class="btn-icon" src="{% static 'assets/img/icons/card/cart_white.svg' %}" alt="cart_white.svg" />
-                                        Купить
-                                    </button>
-                                </div>
-                                <div id="modal_open" class="my_modal">
-                                    <div class="my_modal-dialog">
-                                        <div class="my_modal-content">
-                                            <div class="my_modal-header">
-                                                <p class="my_modal-title">Поздравляем!</p>
-                                                <a href="#" title="Закрыть модальное окно" class="close">×</a>
-                                            </div>
-                                            <div class="my_modal-body">
-                                                <p>Товар успешно добавлен в корзину!</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+            <div class="ProductCard-cartElement ProductCard-cartElement_amount">
+                <form method="post" id="amount" action="#modal_open">
+                    {% csrf_token %}
+                    <div class="Amount Amount_product">
+                        <button class="Amount-remove" type="button">
+                        </button>
+                        <input class="Amount-input form-input" name="amount" type="text" value="1"/>
+                        <button class="Amount-add" type="button">
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="ProductCard-cartElement">
+                <button class="btn btn_primary" form="amount">
+                    <img class="btn-icon" src="{% static 'assets/img/icons/card/cart_white.svg' %}"
+                         alt="cart_white.svg"/>
+                    Купить
+                </button>
+            </div>
+            <div id="modal_open" class="my_modal">
+                <div class="my_modal-dialog">
+                    <div class="my_modal-content">
+                        <div class="my_modal-header">
+                            <p class="my_modal-title">Поздравляем!</p>
+                            <a href="#" title="Закрыть модальное окно" class="close">×</a>
+                        </div>
+                        <div class="my_modal-body">
+                            <p>Товар успешно добавлен в корзину!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="ProductCard-footer">
             <div class="ProductCard-tags">
                 {% if product.tags.all %}

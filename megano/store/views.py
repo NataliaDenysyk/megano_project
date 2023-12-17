@@ -1,14 +1,11 @@
-from pprint import pprint
-
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.views.generic import ListView, DetailView, TemplateView, UpdateView, CreateView
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.core.cache import cache
-from django.http import JsonResponse
 from services.slugify import slugify
 
 from .configs import settings
@@ -100,18 +97,6 @@ class ProductDetailView(DetailView):
 
         return product
 
-    def get(self, request, *args, **kwargs):
-        # cart = Cart(request)
-        # product_id = Product.objects.get(slug=kwargs['slug'])
-        # cart.add_product(str(product_id.id))
-        numbers = request.GET # .get('count')
-        print(numbers)
-        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-            # numbers += numbers
-            return JsonResponse({'numbers': numbers})
-
-        return super().get(request, *args, **kwargs)
-
     def get_context_data(self, **kwargs) -> HttpResponse:
         form_search = SearchForm(self.request.GET or None)
         context = super().get_context_data(**kwargs)
@@ -129,11 +114,14 @@ class ProductDetailView(DetailView):
         if form.is_valid():
             ReviewsProduct.add_review_to_product(request, form, self.kwargs['slug'])
 
+        numbers = request.POST.get('amount')
+        if numbers:
+            cart = Cart(request)
+            offer = get_object_or_404(Offer, id=request.user.profile.offers.first().id)
+            cart.add_product(offer, quantity=int(numbers))
+
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
-
-# Представления для отображения страницы настроек
-# в административной панели
 
 class SettingsView(ChangeListMixin, ListView):
     """
