@@ -10,18 +10,28 @@
   </ul>
   <div class="clearfix">
   </div>
-  {% if product.feature %}
+  {% if feature %}
     <div class="table">
       <table>
         <tr>
           <th>Характеристика</th>
           <th>Значение</th>
         </tr>
-        {% for key, value in product.feature.items %}
-          <tr>
-            <td>{{ key }}</td>
-            <td>{{ value }}</td>
-          </tr>
+        {% for key, value in feature.characteristics.items %}
+          <div class="Product-prop">
+            <tr>
+              <td>{{ key }}</td>
+              <td>{{ value }}</td>
+            </tr>
+          </div>
+        {% endfor %}
+        {% for key, value in feature.product_characteristic_list.items %}
+          <div class="Product-prop">
+            <tr>
+              <td>{{ key }}</td>
+              <td>{{ value }}</td>
+            </tr>
+          </div>
         {% endfor %}
       </table>
     </div>
