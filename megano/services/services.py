@@ -434,6 +434,7 @@ class ProductService:
             'images': self._get_images(),
             'price_avg': self.get_average_price(),
             'offers': self._get_offers(),
+            'feature': self._get_feature(),
         }
 
         return context
@@ -471,6 +472,28 @@ class ProductService:
         popular_products = self._product.objects.filter(orders__status=True). \
                                annotate(count=Count('pk')).order_by('-count')[:quantity]
         return popular_products
+
+    def _get_feature(self) -> dict:
+        """
+        Получает характеристики продукта
+        """
+
+        from compare.services import get_characteristic_from_common_info, return_model
+
+        try:
+            id_model_characteristics = self._product.feature.values()[0].get('id')
+            general_characteristics = get_characteristic_from_common_info(self._product.feature.values()[0])
+            model_info = return_model(self._product, id_model_characteristics)
+
+            feature = {
+                'characteristics': general_characteristics,
+                'product_characteristic_list': model_info,
+            }
+
+            return feature
+
+        except IndexError:
+            return {}
 
 
 class CategoryServices:
