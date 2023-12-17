@@ -40,7 +40,7 @@ class Category(MPTTModel):
                               upload_to=category_image_directory_path,
                               verbose_name='Изображение')
     discount = models.ManyToManyField('Discount', related_name='categories', verbose_name='Скидка')
-    slug = models.SlugField()
+    slug = models.SlugField(u"URL", max_length=150, db_index=True, unique=True)
     activity = models.BooleanField(default=True, verbose_name='Активация')
     sort_index = models.IntegerField(verbose_name='Индекс сортировки')
 
@@ -267,6 +267,7 @@ class Discount(models.Model):
         ('DC', 'Скидки на корзину'),
     ]
     title = models.CharField('Название', default='', max_length=70, null=False, blank=False)
+    slug = models.SlugField(u"URL", max_length=150, db_index=True, unique=True)
     name = models.CharField(max_length=2, choices=NAME_CHOICES, default='DP',
                                      verbose_name='Тип скидки')
     description = models.TextField('Описание', default='', null=False, blank=True)

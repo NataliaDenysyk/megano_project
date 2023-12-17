@@ -285,11 +285,12 @@ class DiscountAdmin(admin.ModelAdmin):
     list_display_links = 'pk', 'name', 'title'
     ordering = 'pk', 'name', 'valid_to', 'is_active'
     search_fields = 'name', 'description'
+    prepopulated_fields = {"slug": ("title",)}
     save_on_top = True
 
     fieldsets = [
         (None, {
-            'fields': ('title', 'name', 'image', 'description', 'sum_discount', 'sum_cart',
+            'fields': ('title', 'slug', 'name', 'image', 'description', 'priority', 'sum_discount', 'sum_cart',
                        'total_products', 'valid_from', 'valid_to', 'is_active'),
         }),
     ]
