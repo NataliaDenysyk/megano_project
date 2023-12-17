@@ -1,35 +1,24 @@
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.views import LogoutView
 from django.contrib import messages
-from django.shortcuts import render, reverse
+from django.shortcuts import reverse
 from django.http import HttpResponse
 
-from django.views.generic import ListView, DetailView, UpdateView
-
-from django.core.cache import cache
 
 from django.db.models import Count, Case, When
-from django.http import HttpResponseRedirect
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import DetailView, CreateView, FormView
+from django.views.generic import DetailView, CreateView, FormView, ListView, UpdateView
 
-from django.core.exceptions import ValidationError
-
-from authorization.forms import RegisterForm, LoginForm
-from authorization.models import Profile
-from services.services import AuthorizationService
+from services.services import AuthorizationService, ProfileService, ProfileUpdate
 from .mixins import MenuMixin
 
 from store.configs import settings
 from store.models import Offer, Orders
 
-from services.services import ProfileService, ProfileUpdate
-
 from django.core.cache import cache
-from .forms import UserUpdateForm, ProfileUpdateForm
+from .forms import UserUpdateForm, ProfileUpdateForm, RegisterForm, LoginForm
 
 from .models import Profile
-
 
 
 class SellerDetail(DetailView):

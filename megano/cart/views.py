@@ -5,7 +5,6 @@ from django.http import HttpResponseRedirect
 from django.views.generic import TemplateView
 
 from services.services import DiscountProduct
-from store.forms import SearchForm
 from .cart import Cart
 from store.models import Product, Offer
 
@@ -20,7 +19,6 @@ class CartListView(TemplateView):
         context.update(
             {
                 'carts': Cart(self.request),
-                'form_search': form_search,
                 'total_price': discount.get_priority_discount(cart=Cart(self.request))
             }
         )
