@@ -495,9 +495,15 @@ textarea {
     outline: none;
 }
 
+/*.btn-icon {*/
+/*    vertical-align: middle;*/
+/*    margin: 0 !important;*/
+/*    margin-right: 10px !important;*/
+/*}*/
+
 .btn-icon {
     vertical-align: middle;
-    margin: 0 !important;
+    margin: 0 7px !important;
     margin-right: 10px !important;
 }
 

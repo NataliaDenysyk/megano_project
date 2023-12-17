@@ -1,11 +1,14 @@
+from pprint import pprint
+
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.views.generic import ListView, DetailView, TemplateView, UpdateView, CreateView
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.core.cache import cache
+from django.http import JsonResponse
 from services.slugify import slugify
 
 from .configs import settings
@@ -86,6 +89,7 @@ class ProductDetailView(DetailView):
     template_name = 'store/product/product-detail.html'
     model = Product
     context_object_name = 'product'
+    slug_url_kwarg = "slug"
 
     def get_object(self, *args, **kwargs) -> Product.objects:
         slug = self.kwargs.get('slug')
@@ -95,6 +99,18 @@ class ProductDetailView(DetailView):
         ProductsViewService(self.request).add_product_to_viewed(product.id)
 
         return product
+
+    def get(self, request, *args, **kwargs):
+        # cart = Cart(request)
+        # product_id = Product.objects.get(slug=kwargs['slug'])
+        # cart.add_product(str(product_id.id))
+        numbers = request.GET.get('Count')
+        print(numbers)
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            numbers += numbers
+            return JsonResponse({'numbers': numbers})
+
+        return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs) -> HttpResponse:
         form_search = SearchForm(self.request.GET or None)
@@ -364,7 +380,7 @@ class MainPage(ListView):
         cache_key = 'product_list_cache'
         popular_products = cache.get(cache_key)
 
-        if len(popular_products) == 0:
+        if popular_products is None:
             popular_products = ProductService(self.model).get_popular_products(quantity=8)
             cache.set(cache_key, popular_products, settings.set_popular_products_cache(1))
 
