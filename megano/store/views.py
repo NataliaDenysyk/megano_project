@@ -526,6 +526,7 @@ class DiscountList(ListView):
 
         return context
 
+
 class DiscountDetail(DetailView):
     """
     Представление для просмотра детальной страницы скидок
@@ -538,5 +539,6 @@ class DiscountDetail(DetailView):
         Функция возвращает контекст
         """
         context = super().get_context_data(**kwargs)
-        context['discount'] = Discount.objects.get(id=self.kwargs['pk'])
+        context['discount'] = Discount.objects.get(slug=self.kwargs['slug'])
+
         return context

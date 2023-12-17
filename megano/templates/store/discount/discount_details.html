@@ -12,7 +12,6 @@
         <div class="Cards Cards_blog">
             <div class="Card"><a class="Card-picture" href="{% url 'store:discounts' %}">
               {% if discount.image %}<img src="{{ discount.image.url }}" alt="product.png"/>{% endif %}</a>
-
               {% if discount.valid_from %}
                 <div class="Card-date">
                   <strong class="Card-date-number">{{ discount.valid_from|date:"d" }}
