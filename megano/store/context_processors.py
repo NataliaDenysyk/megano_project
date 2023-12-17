@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from store.configs import settings
+from store.forms import SearchForm
 
 
 def store(request):
@@ -10,5 +11,6 @@ def store(request):
     """
     return {
         'mount': settings,
-        'today': datetime.today().strftime("%d-%b-%Y")
+        'today': datetime.today().strftime("%d-%b-%Y"),
+        'form_search': SearchForm(),
     }
