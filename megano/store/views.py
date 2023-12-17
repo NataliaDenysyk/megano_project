@@ -6,6 +6,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.core.cache import cache
+
+from services.check_full_name import check_name
 from services.slugify import slugify
 
 from .configs import settings
@@ -442,14 +444,12 @@ class OrderView(UpdateView):
 
     def form_valid(self, form):
         cart = Cart(self.request)
-        user = self.request.user
+        user = form.save(commit=False)
         profile = Profile.objects.get(user=user)
-        full_name = form.cleaned_data['name'].split(' ')
+        user.first_name, user.last_name = check_name(form.cleaned_data['name'])
         delivery = form.cleaned_data['delivery']
         payment = form.cleaned_data['payment']
         user.email = form.cleaned_data['email']
-        user.first_name = full_name[0]
-        user.last_name = full_name[1]
         user.save()
 
         profile.phone = form.cleaned_data['phone']
@@ -484,7 +484,7 @@ class OrderView(UpdateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy('store:order_confirm', kwargs={'pk': self.request.user.id})
+        return reverse_lazy('store:order_confirm', kwargs={'pk': self.request.user.profile.orders.first().id})
 
 
 class OrderConfirmView(TemplateView):
@@ -502,6 +502,3 @@ class OrderConfirmView(TemplateView):
             }
         )
         return context
-
-    def get_success_url(self):
-        return reverse_lazy('store:order_confirm', kwargs={'pk': self.kwargs['pk']})
