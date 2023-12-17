@@ -5,6 +5,7 @@ from django.http import HttpResponseRedirect
 from django.views.generic import TemplateView
 
 from services.services import DiscountProduct
+from store.forms import SearchForm
 from .cart import Cart
 from store.models import Product, Offer
 
