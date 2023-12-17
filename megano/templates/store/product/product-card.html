@@ -1,8 +1,5 @@
 {% load static %}
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script type="text/javascript" src="{% static 'assets/js/add_to_cart.js' %}"></script>
-
 <div class="ProductCard">
     <div class="ProductCard-look">
         <div class="ProductCard-photo">
@@ -41,41 +38,39 @@
                 {% endfor %}
             </ul>
         </div>
-        <form class="add-form-item" action="{% url 'cart:add_product_to_cart' product.offers.first.id %}">
-            <div class="ProductCard-cart">
-                <div class=" ProductCard-cartElement_amount">
-                    <div class="Amount Amount_product">
-                        <button class="Amount-remove" type="button">
-                        </button>
-                        <input class="Amount-input form-input" id="amount" name="amount" type="text" value="1"/>
-                        <button class="Amount-add" type="button">
-                        </button>
-                    </div>
-                </div>
-                {% if product.offers.all %}
-                    <div class="ProductCard-cartElement">
-                        <a href="{% url 'cart:add_product_to_cart' product.offers.first.id %}">
-                            <button class="btn btn_primary" type="submit" onclick="addProduct()">Купить
-                                <img class="btn-icon" src={% static "assets/img/icons/card/cart_white.svg" %}/>
-                            </button>
-                        </a>
-                    </div>
-                {% endif %}
-                <div id="modal_open" class="my_modal">
-                    <div class="my_modal-dialog">
-                        <div class="my_modal-content">
-                            <div class="my_modal-header">
-                                <p class="my_modal-title">Поздравляем!</p>
-                                <a href="#" title="Закрыть модальное окно" class="close">×</a>
+        <div class="ProductCard-cart">
+                                <div class="ProductCard-cartElement ProductCard-cartElement_amount">
+                                    <form method="post" id="amount" action="#modal_open">
+                                        {% csrf_token %}
+                                    <div class="Amount Amount_product">
+                                        <button class="Amount-remove" type="button">
+                                        </button>
+                                        <input class="Amount-input form-input" name="amount" type="text" value="1" />
+                                        <button class="Amount-add" type="button">
+                                        </button>
+                                    </div>
+                                    </form>
+                                </div>
+                                <div class="ProductCard-cartElement">
+                                    <button class="btn btn_primary" form="amount" >
+                                        <img class="btn-icon" src="{% static 'assets/img/icons/card/cart_white.svg' %}" alt="cart_white.svg" />
+                                        Купить
+                                    </button>
+                                </div>
+                                <div id="modal_open" class="my_modal">
+                                    <div class="my_modal-dialog">
+                                        <div class="my_modal-content">
+                                            <div class="my_modal-header">
+                                                <p class="my_modal-title">Поздравляем!</p>
+                                                <a href="#" title="Закрыть модальное окно" class="close">×</a>
+                                            </div>
+                                            <div class="my_modal-body">
+                                                <p>Товар успешно добавлен в корзину!</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="my_modal-body">
-                                <p>Товар успешно добавлен в корзину!</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
         <div class="ProductCard-footer">
             <div class="ProductCard-tags">
                 {% if product.tags.all %}
