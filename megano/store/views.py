@@ -104,10 +104,10 @@ class ProductDetailView(DetailView):
         # cart = Cart(request)
         # product_id = Product.objects.get(slug=kwargs['slug'])
         # cart.add_product(str(product_id.id))
-        numbers = request.GET.get('Count')
+        numbers = request.GET # .get('count')
         print(numbers)
         if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-            numbers += numbers
+            # numbers += numbers
             return JsonResponse({'numbers': numbers})
 
         return super().get(request, *args, **kwargs)
