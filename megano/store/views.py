@@ -1,5 +1,3 @@
-import logging
-
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.shortcuts import redirect, render, get_object_or_404
@@ -28,6 +26,7 @@ from services.services import (
     MainService,
 )
 
+import logging
 import re
 from typing import Any
 
