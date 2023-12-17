@@ -285,6 +285,7 @@ class DiscountAdmin(admin.ModelAdmin):
     list_display_links = 'pk', 'name', 'title'
     ordering = 'pk', 'name', 'valid_to', 'is_active'
     search_fields = 'name', 'description'
+    prepopulated_fields = {"slug": ("title",)}
     save_on_top = True
 
     fieldsets = [

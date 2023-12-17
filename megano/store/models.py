@@ -267,6 +267,7 @@ class Discount(models.Model):
         ('DC', 'Скидки на корзину'),
     ]
     title = models.CharField('Название', default='', max_length=70, null=False, blank=False)
+    slug = models.SlugField(u"URL", max_length=150, db_index=True, unique=True)
     name = models.CharField(max_length=2, choices=NAME_CHOICES, default='DP',
                                      verbose_name='Тип скидки')
     description = models.TextField('Описание', default='', null=False, blank=True)
