@@ -11,7 +11,9 @@ def split_string(value, separator) -> list:
     :value: string передаваемая строка.
     :separator: string символ разделитель.
     """
-    date = value.split(separator)
-    date.append(' '.join(date[1:]))
-    del date[1:3]
-    return date
+    data = value.split(separator)
+    if len(data) > 2:
+        data.append(' '.join(data[1:]))
+        del data[1:3]
+
+    return data

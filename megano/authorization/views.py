@@ -8,7 +8,7 @@ from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, CreateView, FormView, ListView, UpdateView
 
-from services.services import AuthorizationService, ProfileService, ProfileUpdate
+from services.services import AuthorizationService, ProfileService, ProfileUpdate, ProductsViewService, ProductService
 from .mixins import MenuMixin
 
 from store.configs import settings
@@ -181,6 +181,27 @@ class ProfileOrderPage(DetailView):
         """
         context = super().get_context_data(**kwargs)
         context['order'] = Orders.objects.get(id=self.kwargs['pk'])
+        return context
+
+
+class ProfileHistoryView(ListView, MenuMixin):
+    """
+    Представление истории просмотров профиля
+    """
+
+    model = Product
+    template_name = 'authorization/history_view.html'
+    context_object_name = 'products'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update(
+            self.get_menu(id='4'),
+        )
+        context['products'] = ProductsViewService(self.request).get_viewed_product_list()
+        for product in context['products']:
+            product.price = ProductService(product).get_average_price()
+
         return context
 
 
