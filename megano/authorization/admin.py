@@ -1,27 +1,24 @@
 from django.contrib import admin
+from django.utils.safestring import mark_safe
+from django.http import HttpRequest
 from .models import Profile, StoreSettings
+from django.db.models import QuerySet
+
+
+@admin.action(description='Archive')
+def mark_archived(modeladmin, request, queryset):#(modeladmin: admin.ModelAdmin, request: HttpRequest, queryset: QuerySet)
+    queryset.update(archived=True)
+
+
+@admin.action(description='Unarchive')
+def mark_unarchived(modeladmin, request, queryset):#(modeladmin: admin.ModelAdmin, request: HttpRequest, queryset: QuerySet)
+    queryset.update(archived=False)
 
 
 class StoreSettingsInline(admin.TabularInline):
     model = StoreSettings
     verbose_name = 'Настройки магазина'
     verbose_name_plural = 'Настройки магазина'
-
-from django.db.models import QuerySet
-from django.http import HttpRequest
-
-
-from django.utils.safestring import mark_safe
-
-
-@admin.action(description='Архивировать')
-def mark_archived(modeladmin: admin.ModelAdmin, request: HttpRequest, queryset: QuerySet):
-    queryset.update(archived=True)
-
-
-@admin.action(description='Разархивировать')
-def mark_unarchived(modeladmin: admin.ModelAdmin, request: HttpRequest, queryset: QuerySet):
-    queryset.update(archived=False)
 
 
 @admin.register(Profile)
@@ -36,6 +33,16 @@ class AuthorAdmin(admin.ModelAdmin):
     list_display_links = ['pk', 'user']
     list_filter = ['role']
     prepopulated_fields = {'slug': ('name_store', )}
+
+    def get_html_avatar(self, obj):
+        """
+        В панели администратора,
+        ссылка на изображение отображается в виде картинки размером 50х 50.
+        """
+        if obj.avatar:
+            return mark_safe(f'<img src="{obj.avatar.url}" alt=""width="50">')
+
+    get_html_avatar.short_description = 'Изображение'
 
     def get_inlines(self, request, obj):
         """

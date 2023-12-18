@@ -21,6 +21,13 @@ from store.utils import (
 )
 
 
+def discount_images_directory_path(instance: 'Discount', filename: str) -> str:
+    """
+    Функция генерирует путь сохранения изображений с привязкой к id скидки
+    """
+    return f'discount/discount{instance.id}/{filename}'
+
+
 class Category(MPTTModel):
     """
     Модель хранения категорий товара
@@ -33,7 +40,7 @@ class Category(MPTTModel):
                               upload_to=category_image_directory_path,
                               verbose_name='Изображение')
     discount = models.ManyToManyField('Discount', related_name='categories', verbose_name='Скидка')
-    slug = models.SlugField()
+    slug = models.SlugField(u"URL", max_length=150, db_index=True, unique=True)
     activity = models.BooleanField(default=True, verbose_name='Активация')
     sort_index = models.IntegerField(verbose_name='Индекс сортировки')
 
@@ -267,17 +274,31 @@ class Reviews(models.Model):
 class Discount(models.Model):
     """
     Модель скидок
-
     """
-
-    name = models.CharField('Название', default='', max_length=70, null=False, blank=False)
+    NAME_CHOICES = [
+        ('DP', 'Скидки на товар'),
+        ('DS', 'Скидки на наборы'),
+        ('DC', 'Скидки на корзину'),
+    ]
+    title = models.CharField('Название', default='', max_length=70, null=False, blank=False)
+    slug = models.SlugField(u"URL", max_length=150, db_index=True, unique=True)
+    name = models.CharField(max_length=2, choices=NAME_CHOICES, default='DP',
+                                     verbose_name='Тип скидки')
     description = models.TextField('Описание', default='', null=False, blank=True)
+    image = ProcessedImageField(
+        blank=True,
+        verbose_name='Изображение скидки',
+        upload_to=discount_images_directory_path,
+        options={"quality": 80},
+        processors=[ResizeToFit(187, 140)],
+        null=True
+    )
     sum_discount = models.FloatField('Сумма скидки', null=False, blank=False)
     total_products = models.IntegerField('Количество товаров', null=True, blank=True)
     sum_cart = models.FloatField(verbose_name='Сумма корзины', null=True, blank=True)
     priority = models.BooleanField(verbose_name='Приоритет', default=False)
     valid_from = models.DateTimeField('Действует с', null=True, blank=True)
-    valid_to = models.DateTimeField('Действует до', blank=False)
+    valid_to = models.DateTimeField('Действует до', null=True, blank=True)
     is_active = models.BooleanField('Активно', default=False)
     created_at = models.DateTimeField('Создана', auto_now_add=True)
 

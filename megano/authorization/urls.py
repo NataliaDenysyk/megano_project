@@ -9,6 +9,7 @@ from .views import (
     UserLoginView,
     UserLogoutView,
     ProfileOrderPage,
+    ProfileHistoryView,
 )
 
 app_name = 'profile'
@@ -17,6 +18,7 @@ urlpatterns = [
     path('personal_account/<slug:slug>/', ProfileDetailView.as_view(), name='profile_details'),
     path('personal_account/<slug:slug>/profile_date_form/', ProfileUpdateView.as_view(), name='profile'),
     path('personal_account/<slug:slug>/history_orders/', ProfileOrders.as_view(), name='history_orders'),
+    path('personal_account/<slug:slug>/history_view/', ProfileHistoryView.as_view(), name='history_view'),
     path('seller/<slug:slug>/', SellerDetail.as_view(), name='seller'),
     path('register/', RegisterView.as_view(), name='register'),
     path('login/', UserLoginView.as_view(), name='login'),

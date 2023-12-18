@@ -56,7 +56,7 @@ class Profile(BaseModel):
     description = models.CharField('Описание', max_length=100)
     avatar = ProcessedImageField(
         blank=True,
-        verbose_name='Фотография товара',
+        verbose_name='Фотография профиля',
         upload_to=profile_images_directory_path,
         options={"quality": 80},
         processors=[ResizeToFit(157, 100)],

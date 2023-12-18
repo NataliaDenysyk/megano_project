@@ -341,14 +341,32 @@ class DiscountAdmin(admin.ModelAdmin):
         ProductInline,
         CategoriesInline
     ]
-    list_display = 'pk', 'name', 'description', 'sum_discount', 'valid_from', 'valid_to', 'is_active'
-    list_display_links = 'pk', 'name'
+    list_display = 'pk', 'title', 'name', 'get_html_images', 'is_active'
+    list_display_links = 'pk', 'name', 'title'
     ordering = 'pk', 'name', 'valid_to', 'is_active'
     search_fields = 'name', 'description'
+    prepopulated_fields = {"slug": ("title",)}
     save_on_top = True
+
+    fieldsets = [
+        (None, {
+            'fields': ('title', 'slug', 'name', 'image', 'description', 'priority', 'sum_discount', 'sum_cart',
+                       'total_products', 'valid_from', 'valid_to', 'is_active'),
+        }),
+    ]
 
     def get_queryset(self, request):
         return Discount.objects.prefetch_related('products')
+
+    def get_html_images(self, obj: Discount):
+        """
+        В панели администратора,
+        ссылка на изображение отображается в виде картинки размером 50х 50.
+        """
+        if obj.image:
+            return mark_safe(f'<img src="{obj.image.url}" alt=""width="50">')
+
+    get_html_images.short_description = "Изображение"
 
 
 @admin.register(BannersCategory)
