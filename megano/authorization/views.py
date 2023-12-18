@@ -3,17 +3,16 @@ from django.contrib import messages
 from django.shortcuts import reverse
 from django.http import HttpResponse
 
-
 from django.db.models import Count, Case, When
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, CreateView, FormView, ListView, UpdateView
 
-from services.services import AuthorizationService, ProfileService, ProfileUpdate
+from services.services import AuthorizationService, ProfileService, ProfileUpdate, ProductsViewService, ProductService
 from .mixins import MenuMixin
 
 from store.configs import settings
-from store.models import Offer, Orders
+from store.models import Offer, Orders, Product
 
 from django.core.cache import cache
 from .forms import UserUpdateForm, ProfileUpdateForm, RegisterForm, LoginForm
@@ -27,7 +26,7 @@ class SellerDetail(DetailView):
     """
 
     model = Profile
-    template_name = 'auth/about-seller.html'
+    template_name = 'authorization/about-seller.html'
     context_object_name = 'seller'
 
     def get_object(self, *args, **kwargs) -> Profile.objects:
@@ -85,18 +84,31 @@ class ProfileDetailView(MenuMixin, DetailView):
     model = Profile
     template_name = 'authorization/profile_detail.html'
 
+    def get_object(self, *args, **kwargs):
+        """
+        Находит профиль продавца по слагу
+        """
+        if self.request.user.is_authenticated:
+            slug = self.kwargs.get('slug')
+            instance = Profile.objects.get(slug=slug)
+            profile = cache.get_or_set(f'profile-{slug}', instance, settings.get_cache_seller())
+            return profile
+        else:
+            return redirect(reverse_lazy("profile:login"))
+
     def get_context_data(self, **kwargs) -> HttpResponse:
         """
         Функция возвращает контекст
         """
-        profile = Profile.objects.get(user=self.request.user)
-        context = super().get_context_data(**kwargs)
-        context.update(ProfileService(profile).get_context())
-        context.update(
-            self.get_menu(id='1')
-        )
-        context['title'] = f'Страница пользователя: {self.request.user.username}'
-        return context
+        if self.request.user.is_authenticated:
+            profile = Profile.objects.get(user=self.request.user)
+            context = super().get_context_data(**kwargs)
+            context.update(ProfileService(profile).get_context())
+            context.update(
+                self.get_menu(id='1')
+            )
+            context['title'] = f'Страница пользователя: {self.request.user.username}'
+            return context
 
 
 class ProfileUpdateView(MenuMixin, UpdateView):
@@ -160,7 +172,7 @@ class ProfileOrderPage(DetailView):
     """
     Представление для просмотра детализации заказов профиля
     """
-    model = Profile
+    model = Orders
     template_name = 'authorization/detailed_order_page.html'
 
     def get_context_data(self, **kwargs):
@@ -168,7 +180,27 @@ class ProfileOrderPage(DetailView):
         Функция возвращает контекст
         """
         context = super().get_context_data(**kwargs)
-        context['orders'] = Orders.objects.select_related('profile').prefetch_related('products')
+        context['order'] = Orders.objects.get(id=self.kwargs['pk'])
+        return context
+
+
+class ProfileHistoryView(ListView, MenuMixin):
+    """
+    Представление истории просмотров профиля
+    """
+
+    model = Product
+    template_name = 'authorization/history_view.html'
+    context_object_name = 'products'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update(
+            self.get_menu(id='4'),
+        )
+        context['products'] = ProductsViewService(self.request).get_viewed_product_list()
+        for product in context['products']:
+            product.price = ProductService(product).get_average_price()
 
         return context
 
