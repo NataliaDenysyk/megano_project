@@ -111,7 +111,6 @@ class ProfileDetailView(MenuMixin, DetailView):
             return context
 
 
-
 class ProfileUpdateView(MenuMixin, UpdateView):
     """
    Представление для редактирования профиля
