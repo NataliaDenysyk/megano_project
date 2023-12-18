@@ -1,3 +1,5 @@
+import logging
+
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.shortcuts import redirect
@@ -10,7 +12,7 @@ from services.slugify import slugify
 
 from .tasks import pay_order
 from .configs import settings
-from .forms import ReviewsForm, SearchForm, OrderCreateForm, RegisterForm
+from .forms import ReviewsForm, OrderCreateForm, RegisterForm
 from .filters import ProductFilter
 from .mixins import ChangeListMixin
 from authorization.models import Profile
@@ -69,10 +71,8 @@ class CatalogListView(ListView):
         Функция возвращает контекст
         """
 
-        form_search = SearchForm(self.request.GET or None)
         context = super().get_context_data(**kwargs)
 
-        context['form_search'] = form_search
         context['filter'] = self.filterset.form
         context['tags'] = CatalogService.get_popular_tags()
 
@@ -103,10 +103,8 @@ class ProductDetailView(DetailView):
         return product
 
     def get_context_data(self, **kwargs) -> HttpResponse:
-        form_search = SearchForm(self.request.GET or None)
         context = super().get_context_data(**kwargs)
 
-        context['form_search'] = form_search
         context['num_reviews'] = ReviewsProduct.get_number_of_reviews_for_product(self.object)
         context['reviews_num3'], context['reviews_all'] = ReviewsProduct.get_list_of_product_reviews(self.object)
         context['form'] = ReviewsForm()
@@ -371,16 +369,19 @@ class MainPage(ListView):
         popular_products = cache.get(cache_key)
 
         if popular_products is None:
-            popular_products = ProductService(self.model).get_popular_products(quantity=5)
-            cache.set(cache_key, popular_products, settings.set_popular_products_cache(1))
+            try:
+                popular_products = ProductService(self.model).get_popular_products(quantity=6)
 
+            except Exception as exception:
+                popular_products = None
+                logging.error(exception)
+
+        cache.set(cache_key, popular_products, settings.set_popular_products_cache(1))
         return popular_products
 
     def get_context_data(self, **kwargs):
-        form_search = SearchForm(self.request.GET or None)
         context = super().get_context_data(**kwargs)
 
-        context['form_search'] = form_search
         context['banners_category'] = BannersCategory.objects.all()[:3]
         context['limited_deals'] = MainService.get_limited_deals()
         context['hot_offers'] = Product.objects.all().filter(discount__is_active=True).distinct('pk')[:9]
