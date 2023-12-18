@@ -95,26 +95,26 @@
               </div>
               {% for product in order.products.all %}
                 <div class="Cart Cart_order">
-                <div class="Cart-product">
-                  <div class="Cart-block Cart-block_row">
-                    <div class="Cart-block Cart-block_pict"><a class="Cart-pict" href="#"><img class="Cart-img"
-                                                                                               src="{{ product.preview.url }}"
-                                                                                               alt="card.jpg"/></a>
-                    </div>
-                    <div class="Cart-block Cart-block_info"><a class="Cart-title"
-                                                               href="{% url 'store:product-detail' product.slug %}">
-                      {{ product.name }}</a>
-                      <div class="Cart-desc">{{ product.description.title }}
+                  <div class="Cart-product">
+                    <div class="Cart-block Cart-block_row">
+                      <div class="Cart-block Cart-block_pict"><a class="Cart-pict" href="#"><img class="Cart-img"
+                                                                                                 src="{{ product.preview.url }}"
+                                                                                                 alt="card.jpg"/></a>
+                      </div>
+                      <div class="Cart-block Cart-block_info"><a class="Cart-title"
+                                                                 href="{% url 'store:product-detail' product.slug %}">
+                        {{ product.name }}</a>
+                        <div class="Cart-desc">{{ product.description.title }}
+                        </div>
+                      </div>
+                      <div class="Cart-block Cart-block_price">
+                        <div class="Cart-price">{{ product.offers.first.unit_price }}$
+                        </div>
                       </div>
                     </div>
-                    <div class="Cart-block Cart-block_price">
-                      <div class="Cart-price">{{ product.offers.first.unit_price }}$
+                    <div class="Cart-block Cart-block_row">
+                      <div class="Cart-block Cart-block_amount">{{ product.cart_set.first.quantity }} шт.
                       </div>
-                    </div>
-                  </div>
-                  <div class="Cart-block Cart-block_row">
-
-                    <div class="Cart-block Cart-block_amount">{{ product.cart_set.first.quantity }} шт.
                     </div>
                   </div>
                 </div>
@@ -124,12 +124,12 @@
                   <strong class="Cart-title">Итого:<span class="Cart-price">{{ order.total_payment }}$</span>
                   </strong>
                 </div>
-                <div class="Cart-block"><a class="btn btn_primary btn_lg" href="">Оплатить</a>
-                  {#                        href="{% url 'store:payment-form' pk=order.id %}"#}
-                </div>
+                {% if order.status != 1 %}
+                  <div class="Cart-block">
+                    <a class="btn btn_primary btn_lg" href="{% url 'store:payment-form' pk=order.id %}">Оплатить</a>
+                  </div>
+                {% endif %}
               </div>
-              </div>
-
             </div>
           </div>
         </div>

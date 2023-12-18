@@ -93,7 +93,7 @@ class AdminOrders(admin.ModelAdmin):
             "fields": ('profile', 'products', 'total_payment', 'delivery_type', 'payment'),
         }),
         ('Extra options', {
-            'fields': ('status',),
+            'fields': ('status', 'status_exception'),
             'classes': ('collapse',),
         })
     ]

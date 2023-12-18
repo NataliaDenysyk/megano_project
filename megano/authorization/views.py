@@ -4,7 +4,7 @@ from django.shortcuts import reverse
 from django.http import HttpResponse
 
 from django.db.models import Count, Case, When
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, CreateView, FormView, ListView, UpdateView
 
@@ -109,7 +109,6 @@ class ProfileDetailView(MenuMixin, DetailView):
             )
             context['title'] = f'Страница пользователя: {self.request.user.username}'
             return context
-
 
 
 class ProfileUpdateView(MenuMixin, UpdateView):

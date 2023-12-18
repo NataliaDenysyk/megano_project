@@ -18,28 +18,39 @@
     </div>
     <div class="Section">
       <div class="wrap">
-        <form class="form Payment" action="" method="post">
-          {% csrf_token %}
-
-          <div class="Payment-card">
-            <div class="form-group">
-              {% if payment_type == 1 %}
-                <label class="form-label">Номер карты </label>
-              {% elif payment_type == 2 %}
-                <label class="form-label">Номер счета</label>
-              {% endif %}
-              {{ form.bill }}
-            </div>
-            {% if payment_type == 2 %}
+        {% if error %}
+          <h2>{{ error }}</h2>
+        {% else %}
+          {% if order_paid %}
+            <div class="Payment-card">
               <div class="form-group">
-                <a class="btn btn_success Payment-generate" href="#">Сгенерировать случайный счет</a>
+                <h2>Заказ №{{ request.resolver_match.kwargs.pk }} уже оплачен</h2>
               </div>
-            {% endif %}
-          </div>
-          <div class="Payment-pay">
-            <button class="btn btn_primary">Оплатить</button>
-          </div>
-        </form>
+            </div>
+          {% else %}
+            <form class="form Payment" action="" method="post">
+              {% csrf_token %}
+              <div class="Payment-card">
+                <div class="form-group">
+                  {% if payment_type == 1 %}
+                    <label class="form-label">Номер карты </label>
+                  {% elif payment_type == 2 %}
+                    <label class="form-label">Номер счета</label>
+                  {% endif %}
+                  {{ form.bill }}
+                </div>
+                {% if payment_type == 2 %}
+                  <div class="form-group">
+                    <a class="btn btn_success Payment-generate" href="#">Сгенерировать случайный счет</a>
+                  </div>
+                {% endif %}
+              </div>
+              <div class="Payment-pay">
+                <button class="btn btn_primary">Оплатить</button>
+              </div>
+            </form>
+          {% endif %}
+        {% endif %}
       </div>
     </div>
   </div>

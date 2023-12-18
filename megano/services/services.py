@@ -1,5 +1,4 @@
 from datetime import datetime, timedelta
-import random
 
 from decimal import Decimal
 from random import choice
@@ -311,7 +310,6 @@ class DiscountProduct:
         return self.calculate_price_with_discount(product, price)
 
 
-# TODO дописать добавление описания ошибки в заказ
 class PaymentService:
     """
     Сервис оплаты
@@ -331,7 +329,7 @@ class PaymentService:
         if result == 'Оплачено':
             Orders.objects.filter(id=self._order_id).update(status=1)
         else:
-            Orders.objects.filter(id=self._order_id).update(status=2)
+            Orders.objects.filter(id=self._order_id).update(status=2, status_exception=result)
 
 
 class FakePaymentService:
@@ -339,7 +337,12 @@ class FakePaymentService:
     Фиктивный сервис оплаты
     """
 
-    EXCEPTIONS = ['Банк недоступен', 'На счете недостаточно средств', 'Введенный счет недействителен']
+    EXCEPTIONS = [
+        'Банк недоступен',
+        'На счете недостаточно средств',
+        'Введенный счет недействителен',
+        'Оплата не выполнена'
+    ]
 
     def __init__(self, card: str) -> str:
         self._card = card
@@ -356,7 +359,7 @@ class FakePaymentService:
         if card_cleaned % 2 == 0 and card_cleaned % 10 != 0:
             return 'Оплачено'
         else:
-            return random.choice(self.EXCEPTIONS)
+            return choice(self.EXCEPTIONS)
 
 
 class ProductsViewService:

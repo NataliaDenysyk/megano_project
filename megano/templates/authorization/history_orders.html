@@ -12,8 +12,8 @@
               <div class="row">
                 <div class="row-block"><a class="Order-title"
                                           href="{% url 'profile:detailed_order' slug=request.user.profile.slug pk=order.id %}">Заказ&#32;<span
-                    class="Order-numberOrder">№{{ order.id }} </span>&#32;от&#32;<span
-                    class="Order-dateOrder">{{ order.created_at|date:"d.m.Y" }}</span></a>
+                        class="Order-numberOrder">№{{ order.id }} </span>&#32;от&#32;<span
+                        class="Order-dateOrder">{{ order.created_at|date:"d.m.Y" }}</span></a>
                 </div>
                 <div class="row-block">
                   <div class="Order-info Order-info_delivery">
@@ -39,20 +39,19 @@
                     </div>
                     <div class="Order-infoContent">{{ order.get_status_display }}
                     </div>
-
-                    {#                  </div>#}
-                    {#                  <div class="Order-info Order-info_error">#}
-                    {#                    <div class="Order-infoType">Оплата не прошла:#}
-                    {#                    </div>#}
-                    {#                    <div class="Order-infoContent">Оплата не выполнена#}
-                    {#                    </div>#}
-
                   </div>
+                  {% if order.status_exception %}
+                    <div class="Order-info Order-info_error">
+                      <div class="Order-infoType">Оплата не прошла:
+                      </div>
+                      <div class="Order-infoContent">{{ order.status_exception }}
+                      </div>
+                    </div>
+                  {% endif %}
                 </div>
               </div>
             </div>
           </div>
-
         </div>
       {% endfor %}
     {% else %}

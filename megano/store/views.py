@@ -2,6 +2,7 @@ import logging
 
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import redirect
 from django.views.generic import ListView, DetailView, TemplateView, UpdateView, CreateView, FormView
 from django.http import HttpResponse, HttpResponseRedirect
@@ -13,8 +14,6 @@ from services.slugify import slugify
 from .tasks import pay_order
 from .configs import settings
 from .forms import ReviewsForm, OrderCreateForm, RegisterForm
-from .filters import ProductFilter
-from .mixins import ChangeListMixin
 from authorization.models import Profile
 from cart.cart import Cart
 from cart.models import Cart as Basket
@@ -532,7 +531,7 @@ class PaymentFormView(FormView):
                 'order_id': self.kwargs['pk'],
                 'card': form.cleaned_data['bill']
             },
-            countdown=30
+            countdown=10
         )
 
         return redirect(reverse_lazy('store:payment-progress', kwargs={'pk': self.kwargs['pk']}))
@@ -542,22 +541,34 @@ class PaymentFormView(FormView):
         Передает в контекст тип оплаты по id заказа
         """
 
-        form_search = SearchForm(self.request.GET or None)
         context = super().get_context_data(**kwargs)
+        try:
+            order_status = Orders.objects.get(id=self.kwargs['pk']).status
+            if order_status == 1:
+                context.update(
+                    {
+                        'order_paid': True,
+                    }
+                )
+            else:
+                payment_type = Orders.objects.get(id=self.kwargs['pk']).payment
+                context.update(
+                    {
+                        'payment_type': payment_type,
+                    }
+                )
 
-        payment_type = Orders.objects.get(id=self.kwargs['pk']).payment
-        context.update(
-            {
-                'payment_type': payment_type
-            }
-        )
+            return context
 
-        context['form_search'] = form_search
+        except ObjectDoesNotExist:
+            context.update(
+                {
+                    'error': f'Заказ с номером {self.kwargs["pk"]} не найден',
+                }
+            )
+            return context
 
-        return context
 
-
-#TODO дописать редирект в детальную страницу заказа
 class PaymentProgressView(TemplateView):
     """
     Вьюшка страницы ожидания оплаты
@@ -570,16 +581,18 @@ class PaymentProgressView(TemplateView):
         Проверяет статус оплаты, если изменился - отправляет на детальную страницу заказа
         """
 
-        status = Orders.objects.get(id=self.kwargs['pk']).status
-        if status != 3:
+        try:
+            status = Orders.objects.get(id=self.kwargs['pk']).status
+            if status != 3:
+                return redirect(reverse_lazy(
+                    'profile:detailed_order',
+                    kwargs={
+                        'slug': self.request.user.profile.slug,
+                        'pk': self.kwargs['pk']
+                    }
+                ))
+
+            return super().get(self.request, *args, **kwargs)
+
+        except ObjectDoesNotExist:
             return redirect(reverse_lazy('store:index'))
-
-        return super().get(self.request, *args, **kwargs)
-
-    def get_context_data(self, **kwargs) -> dict:
-        context = super().get_context_data(**kwargs)
-
-        form_search = SearchForm(self.request.GET or None)
-        context['form_search'] = form_search
-
-        return context
