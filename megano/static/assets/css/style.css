@@ -16,3 +16,12 @@
 .quantity-product {
     font-size: 23px;
 }
+
+.form .form-input-error {
+    border-color: #f26d7d;
+}
+
+input[type="email"] {
+    background: transparent;
+    color: rgb(0, 99, 209);
+}
