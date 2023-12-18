@@ -26,7 +26,7 @@ class SellerDetail(DetailView):
     """
 
     model = Profile
-    template_name = 'auth/about-seller.html'
+    template_name = 'authorization/about-seller.html'
     context_object_name = 'seller'
 
     def get_object(self, *args, **kwargs) -> Profile.objects:
