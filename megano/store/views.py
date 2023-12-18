@@ -1,3 +1,5 @@
+import logging
+
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.shortcuts import redirect
@@ -6,10 +8,12 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.core.cache import cache
+
+from services.check_full_name import check_name
 from services.slugify import slugify
 
 from .configs import settings
-from .forms import ReviewsForm, SearchForm, OrderCreateForm, RegisterForm
+from .forms import ReviewsForm, OrderCreateForm, RegisterForm
 from .filters import ProductFilter
 from .mixins import ChangeListMixin
 from authorization.models import Profile
@@ -63,10 +67,8 @@ class CatalogListView(ListView):
         Функция возвращает контекст
         """
 
-        form_search = SearchForm(self.request.GET or None)
         context = super().get_context_data(**kwargs)
 
-        context['form_search'] = form_search
         context['filter'] = self.filterset.form
         context['tags'] = CatalogService.get_popular_tags()
 
@@ -97,10 +99,8 @@ class ProductDetailView(DetailView):
         return product
 
     def get_context_data(self, **kwargs) -> HttpResponse:
-        form_search = SearchForm(self.request.GET or None)
         context = super().get_context_data(**kwargs)
 
-        context['form_search'] = form_search
         context['num_reviews'] = ReviewsProduct.get_number_of_reviews_for_product(self.object)
         context['reviews_num3'], context['reviews_all'] = ReviewsProduct.get_list_of_product_reviews(self.object)
         context['form'] = ReviewsForm()
@@ -364,17 +364,20 @@ class MainPage(ListView):
         cache_key = 'product_list_cache'
         popular_products = cache.get(cache_key)
 
-        if len(popular_products) == 0:
-            popular_products = ProductService(self.model).get_popular_products(quantity=8)
-            cache.set(cache_key, popular_products, settings.set_popular_products_cache(1))
+        if popular_products is None:
+            try:
+                popular_products = ProductService(self.model).get_popular_products(quantity=6)
 
+            except Exception as exception:
+                popular_products = None
+                logging.error(exception)
+
+        cache.set(cache_key, popular_products, settings.set_popular_products_cache(1))
         return popular_products
 
     def get_context_data(self, **kwargs):
-        form_search = SearchForm(self.request.GET or None)
         context = super().get_context_data(**kwargs)
 
-        context['form_search'] = form_search
         context['banners_category'] = BannersCategory.objects.all()[:3]
         context['limited_deals'] = MainService.get_limited_deals()
         context['hot_offers'] = Product.objects.all().filter(discount__is_active=True).distinct('pk')[:9]
@@ -442,14 +445,12 @@ class OrderView(UpdateView):
 
     def form_valid(self, form):
         cart = Cart(self.request)
-        user = self.request.user
+        user = form.save(commit=False)
         profile = Profile.objects.get(user=user)
-        full_name = form.cleaned_data['name'].split(' ')
+        user.first_name, user.last_name = check_name(form.cleaned_data['name'])
         delivery = form.cleaned_data['delivery']
         payment = form.cleaned_data['payment']
         user.email = form.cleaned_data['email']
-        user.first_name = full_name[0]
-        user.last_name = full_name[1]
         user.save()
 
         profile.phone = form.cleaned_data['phone']
@@ -484,7 +485,7 @@ class OrderView(UpdateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy('store:order_confirm', kwargs={'pk': self.request.user.id})
+        return reverse_lazy('store:order_confirm', kwargs={'pk': self.request.user.profile.orders.last().id})
 
 
 class OrderConfirmView(TemplateView):
@@ -502,6 +503,3 @@ class OrderConfirmView(TemplateView):
             }
         )
         return context
-
-    def get_success_url(self):
-        return reverse_lazy('store:order_confirm', kwargs={'pk': self.kwargs['pk']})

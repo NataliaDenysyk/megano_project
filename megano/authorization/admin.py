@@ -1,5 +1,17 @@
 from django.contrib import admin
+from django.utils.safestring import mark_safe
+from django.http import HttpRequest
 from .models import Profile, StoreSettings
+
+
+@admin.action(description='Archive')
+def mark_archived(modeladmin, request, queryset):#(modeladmin: admin.ModelAdmin, request: HttpRequest, queryset: QuerySet)
+    queryset.update(archived=True)
+
+
+@admin.action(description='Unarchive')
+def mark_unarchived(modeladmin, request, queryset):#(modeladmin: admin.ModelAdmin, request: HttpRequest, queryset: QuerySet)
+    queryset.update(archived=False)
 
 
 class StoreSettingsInline(admin.TabularInline):
@@ -36,6 +48,16 @@ class AuthorAdmin(admin.ModelAdmin):
     list_display_links = ['pk', 'user']
     list_filter = ['role']
     prepopulated_fields = {'slug': ('name_store', )}
+
+    def get_html_avatar(self, obj):
+        """
+        В панели администратора,
+        ссылка на изображение отображается в виде картинки размером 50х 50.
+        """
+        if obj.avatar:
+            return mark_safe(f'<img src="{obj.avatar.url}" alt=""width="50">')
+
+    get_html_avatar.short_description = 'Изображение'
 
     def get_inlines(self, request, obj):
         """
