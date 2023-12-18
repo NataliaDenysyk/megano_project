@@ -131,7 +131,7 @@ class RegisterForm(forms.ModelForm):
     email = forms.EmailField(
         widget=forms.EmailInput(attrs={
             'class': 'user-input',
-            'id': 'login',
+            'id': 'email',
             'name': 'email',
             'placeholder': 'E-mail',
         })
@@ -144,6 +144,32 @@ class RegisterForm(forms.ModelForm):
             'placeholder': 'Пароль',
         })
     )
+    password2 = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'class': 'user-input',
+            'id': 'password2',
+            'name': 'pass',
+            'placeholder': 'Повтор Пароля',
+        })
+    )
+
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        if User.objects.get(username=username):
+            raise forms.ValidationError("Такой логин уже существует")
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError("Данный email уже существует.")
+
+    def clean_password2(self):
+        passw1 = self.cleaned_data['password']
+        passw2 = self.cleaned_data['password2']
+        if passw1 != passw2:
+            raise forms.ValidationError("Пароли не совпадают")
+        if len(passw1) < 6:
+            raise forms.ValidationError("Пароль должен содержать не менее 6 символов")
 
     class Meta:
         model = User
