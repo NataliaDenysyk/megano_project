@@ -34,7 +34,7 @@ class Category(MPTTModel):
                               upload_to=category_image_directory_path,
                               verbose_name='Изображение')
     discount = models.ManyToManyField('Discount', related_name='categories', verbose_name='Скидка')
-    slug = models.SlugField("URL", max_length=150, db_index=True)
+    slug = models.SlugField("URL", max_length=150, db_index=True, unique=True)
     activity = models.BooleanField(default=True, verbose_name='Активация')
     sort_index = models.IntegerField(verbose_name='Индекс сортировки')
 
@@ -79,7 +79,7 @@ class Product(models.Model):
     """
 
     name = models.CharField('Название товара', default='', max_length=150, null=False, db_index=True)
-    slug = models.SlugField(max_length=150, default='')
+    slug = models.SlugField(max_length=150, default='', unique=True)
     category = TreeForeignKey(
         'Category',
         on_delete=models.PROTECT,
@@ -228,7 +228,7 @@ class Banners(models.Model):
     Модель Баннеры
     """
     title = models.CharField(u"Название баннера", max_length=150, db_index=True)
-    slug = models.SlugField("URL", max_length=150, db_index=True)
+    slug = models.SlugField("URL", max_length=150, db_index=True, unique=True)
     product = models.OneToOneField(Product, on_delete=models.CASCADE, verbose_name='Продукт')
     description = models.TextField(u"Описание баннера", blank=True)
     link = models.URLField(max_length=250, blank=True, verbose_name="Ссылка")
@@ -275,7 +275,7 @@ class Discount(models.Model):
         ('DC', 'Скидки на корзину'),
     ]
     title = models.CharField('Название', default='', max_length=70, null=False, blank=False)
-    slug = models.SlugField("URL", max_length=150, db_index=True)
+    slug = models.SlugField("URL", max_length=150, db_index=True, unique=True)
     name = models.CharField(max_length=2, choices=NAME_CHOICES, default='DP',
                                      verbose_name='Тип скидки')
     description = models.TextField('Описание', default='', null=False, blank=True)

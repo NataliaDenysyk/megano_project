@@ -104,47 +104,24 @@ class DiscountProduct:
         """
 
         discounts = Discount.objects.filter(is_active=True)
-        discounts_cart_priority = discounts.filter(
-            name='DC',
-            priority=True
-        )
+        discounts_cart_priority = discounts.filter(name='DC', priority=True)
+        discounts_set_priority = discounts.filter(name='DS', priority=True)
+        discounts_cart = discounts.filter( name='DC', priority=False)
+        discounts_set = discounts.filter(name='DS',priority=False)
         if discounts_cart_priority:
-            price = self.get_discount_on_cart(
-                discounts_cart_priority, cart
-            )
+            price = self.get_discount_on_cart(discounts_cart_priority, cart)
             if price:
                 return price
-
-        discounts_set_priority = discounts.filter(
-            name='DS',
-            priority=True
-        )
-        if discounts_set_priority:
-            price = self.get_discount_on_set(
-                discounts_set_priority, cart
-            )
+        elif discounts_set_priority:
+            price = self.get_discount_on_set(discounts_set_priority, cart)
             if price:
                 return price
-
-        discounts_cart = discounts.filter(
-            name='DC',
-            priority=False
-        )
-        if discounts_cart:
-            price = self.get_discount_on_cart(
-                discounts_cart, cart
-            )
+        elif discounts_cart:
+            price = self.get_discount_on_cart(discounts_cart, cart)
             if price:
                 return price
-
-        discounts_set = discounts.filter(
-            name='DS',
-            priority=False
-        )
-        if discounts_set:
-            price = self.get_discount_on_set(
-                discounts_set, cart
-            )
+        elif discounts_set:
+            price = self.get_discount_on_set(discounts_set, cart)
             if price:
                 return price
         return self.get_discount_on_product(cart)
@@ -245,67 +222,37 @@ class DiscountProduct:
         """
         Функция применяет скидку 'Скидки на товар', если она есть
         """
-        priority_true = True
-        priority_false = False
-        products_priority = self.get_products(priority_true)
-        categories_priority = self.get_categories(priority_true)
-        products = self.get_products(priority_false)
-        categories = self.get_categories(priority_false)
-        if product['product'] in products_priority:
-            return self.get_price_product(product, priority_true)
-        elif product['product'].category in categories_priority:
-            return self.get_price_categories(product, priority_true)
-        elif product['product'] in products:
-            return self.get_price_product(product, priority_false)
-        elif product['product'] in categories:
-            return self.get_price_categories(product, priority_false)
+        products = Product.objects.filter(discount__name='DP',
+                                          discount__is_active=True)
+        categories = Category.objects.filter(discount__name='DP',
+                                             discount__is_active=True)
+        if product['product'] in products:
+            return self.get_price_product(product)
+        elif product['product'].category in categories:
+            return self.get_price_categories(product)
         else:
             return product['total_price']
 
-
-    @staticmethod
-    def get_products(priority):
+    def get_price_product(self, product):
         """
-        Функция для получения товаров с учетом скидки 'Скидки на товар' и приоритетности
-        """
-        return Product.objects.filter(
-            discount__name='DP',
-            discount__priority=priority,
-            discount__is_active=True
-        )
-
-    @staticmethod
-    def get_categories(priority):
-        """
-        Функция для получения категорий с учетом скидки 'Скидки на товар' и приоритетности
-        """
-        return Category.objects.filter(
-            discount__name='DP',
-            discount__priority=priority,
-            discount__is_active=True
-        )
-
-    def get_price_product(self, product, priority):
-        """
-        Функция для получения цены на товар с учетом скидки 'Скидки на товар' и приоритетности
+        Функция для получения цены на товар с учетом скидки 'Скидки на товар'
         """
         price = product['product'].discount.all().filter(
             name='DP',
-            priority=priority
         ).first().sum_discount
         if 1 < price < 99:
             return self.calculate_price_with_discount(product, price)
 
-    def get_price_categories(self, product, priority):
+    def get_price_categories(self, product):
         """"
-         Функция для получения цены на товар с учетом скидки '
-         Скидки на товар' и приоритетности, если товар относится к категории
+         Функция для получения цены на товар с учетом скидки
+         'Скидки на товар', если товар относится к категории
         """
-        price = product['product'].category.discount.all().filter(
-            name='DP',
-            priority=priority
-        ).first().sum_discount
-        return self.calculate_price_with_discount(product, price)
+        price = (product['product'].category.discount.all()
+                 .filter(name='DP')
+                 .first().sum_discount)
+        if 1 < price < 99:
+            return self.calculate_price_with_discount(product, price)
 
 
 class PaymentService:
@@ -433,6 +380,8 @@ class ProductService:
             'price_avg': self.get_average_price(),
             'offers': self._get_offers(),
             'feature': self._get_feature(),
+            'price_discount': self._discount_price()
+            ,
         }
 
         return context
@@ -450,6 +399,24 @@ class ProductService:
                     Avg('unit_price')
                 ).get('unit_price__avg')
             )
+        return None
+
+    def _discount_price(self) -> float:
+        """
+        Функция возвращает среднюю цену товара по всем продавцам
+        со скидкой на товар, если она есть
+        """
+        if self._product.offers.all():
+            discount = DiscountProductOrCategory().discount_on_product(self._product)
+            price = round(
+                Offer.objects.filter(
+                    product=self._product,
+                ).aggregate(
+                    Avg('unit_price' * float(discount) / 100)
+                ).get('unit_price__avg')
+            )
+            # price -= price * discount / 100
+            return price
         return None
 
     def _get_images(self) -> ProductImage.objects:
