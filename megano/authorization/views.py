@@ -4,11 +4,11 @@ from django.shortcuts import reverse
 from django.http import HttpResponse
 
 from django.db.models import Count, Case, When
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, CreateView, FormView, ListView, UpdateView
 
-from services.services import AuthorizationService, ProfileService, ProfileUpdate
+from services.services import AuthorizationService, ProfileService, ProfileUpdate, ProductsViewService, ProductService
 from .mixins import MenuMixin
 
 from store.configs import settings
@@ -26,7 +26,7 @@ class SellerDetail(DetailView):
     """
 
     model = Profile
-    template_name = 'auth/about-seller.html'
+    template_name = 'authorization/about-seller.html'
     context_object_name = 'seller'
 
     def get_object(self, *args, **kwargs) -> Profile.objects:
@@ -111,7 +111,6 @@ class ProfileDetailView(MenuMixin, DetailView):
             return context
 
 
-
 class ProfileUpdateView(MenuMixin, UpdateView):
     """
    Представление для редактирования профиля
@@ -182,6 +181,27 @@ class ProfileOrderPage(DetailView):
         """
         context = super().get_context_data(**kwargs)
         context['order'] = Orders.objects.get(id=self.kwargs['pk'])
+        return context
+
+
+class ProfileHistoryView(ListView, MenuMixin):
+    """
+    Представление истории просмотров профиля
+    """
+
+    model = Product
+    template_name = 'authorization/history_view.html'
+    context_object_name = 'products'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update(
+            self.get_menu(id='4'),
+        )
+        context['products'] = ProductsViewService(self.request).get_viewed_product_list()
+        for product in context['products']:
+            product.price = ProductService(product).get_average_price()
+
         return context
 
 
