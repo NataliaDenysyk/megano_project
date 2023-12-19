@@ -8,6 +8,22 @@ from imagekit.models import ProcessedImageField
 from pilkit.processors import ResizeToFit
 
 
+class BaseModel(models.Model):
+    """"
+    Базовый класс модели
+    """
+    def delete(self, *arg, **kwargs):
+        """"
+        Функция, меняющая поведение delete на мягкое удаление
+        """
+        self.archived = False
+        self.save()
+        return self
+
+    class Meta:
+        abstract = True
+
+
 def profile_images_directory_path(instance: 'Profile', filename: str) -> str:
     """
     Функция генерирует путь сохранения изображений с привязкой к id товара
@@ -20,7 +36,7 @@ def profile_images_directory_path(instance: 'Profile', filename: str) -> str:
     return f'profiles/profile_{instance.id}/{filename}'
 
 
-class Profile(models.Model):
+class Profile(BaseModel):
     """
     Модель профиля всех пользователей
     """

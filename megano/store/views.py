@@ -505,6 +505,9 @@ class OrderConfirmView(TemplateView):
         )
         return context
 
+    def get_success_url(self):
+        return reverse_lazy('store:order_confirm', kwargs={'pk': self.kwargs['pk']})
+
 
 class DiscountList(ListView):
     """
