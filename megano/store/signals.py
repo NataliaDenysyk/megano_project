@@ -2,7 +2,7 @@ from django.core.cache import cache
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 
-from .models import Banners, Product
+from .models import Banners, Category, Product
 
 
 @receiver(post_save, sender=Banners)
@@ -13,6 +13,13 @@ def cache_deleted_banners(**kwargs) -> None:
     except AttributeError:
         pass
 
+@receiver(post_save, sender=Category)
+def cache_deleted_category(**kwargs) -> None:
+    """ Удаление кеша категорий при изменении, добавлении модели """
+    try:
+        cache.delete('Category')
+    except AttributeError:
+        pass
 
 @receiver(post_save, sender=Product)
 def reset_product_list_cache(sender, instance, **kwargs):
