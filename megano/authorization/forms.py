@@ -155,7 +155,7 @@ class RegisterForm(forms.ModelForm):
 
     def clean_username(self):
         username = self.cleaned_data['username']
-        if User.objects.get(username=username):
+        if User.objects.filter(username=username).exists():
             raise forms.ValidationError("Такой логин уже существует")
 
     def clean_email(self):

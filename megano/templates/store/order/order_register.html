@@ -2,12 +2,12 @@
 {% load i18n static %}
 
 {% block order_register %}
+    <header class="Section-header Section-header_sm">
+        <h2 class="Section-title">Шаг 1. Параметры пользователя
+        </h2>
+    </header>
     <form class="form" method="post" action="#">
         {% csrf_token %}
-        <header class="Section-header Section-header_sm">
-            <h2 class="Section-title">Шаг 1. Параметры пользователя
-            </h2>
-        </header>
         <div class="row">
             <div class="row-block">
                 <div class="form-group">
