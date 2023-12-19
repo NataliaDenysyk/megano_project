@@ -354,7 +354,7 @@ class Orders(models.Model):
     archived = models.BooleanField(default=False, verbose_name='Архивация')
 
     def __str__(self) -> str:
-        return f'Order(pk = {self.pk}'
+        return f'Order(pk = {self.pk})'
 
     def get_comparison_id(self):
         return f"{self.id}"
