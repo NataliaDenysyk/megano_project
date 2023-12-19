@@ -233,6 +233,7 @@ class AdminProduct(admin.ModelAdmin):
 
 @admin.register(Offer)
 class OfferAdmin(admin.ModelAdmin):
+
     list_display = 'pk', 'product', 'seller_verbose', 'unit_price', 'amount'
     list_display_links = 'pk', 'seller_verbose'
     ordering = 'pk', 'unit_price', 'amount'

@@ -385,11 +385,15 @@ class ProductsViewService:
         Получить список просмотренных продуктов
         """
 
+        viewed_list = []
         viewed = self.get_cached_products_id()
-        products = Product.objects.filter(id__in=viewed)
 
-        products_dict = {product.id: product for product in products}
-        viewed_list = [products_dict.get(product) for product in viewed]
+        if viewed:
+            products = Product.objects.filter(id__in=viewed)
+
+            if products:
+                products_dict = {product.id: product for product in products}
+                viewed_list = [products_dict.get(product) for product in viewed]
 
         return viewed_list
 

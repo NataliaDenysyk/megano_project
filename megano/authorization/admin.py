@@ -28,7 +28,6 @@ class AuthorAdmin(admin.ModelAdmin):
     list_display = ['pk', 'user', 'role', 'get_html_avatar']
     list_display_links = ['pk', 'user']
     list_filter = ['role']
-    prepopulated_fields = {'slug': ('name_store', )}
 
     def get_html_avatar(self, obj):
         """
