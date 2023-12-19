@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.utils.safestring import mark_safe
 from django.http import HttpRequest
 from .models import Profile, StoreSettings
+from django.db.models import QuerySet
 
 
 @admin.action(description='Archive')
@@ -22,10 +23,13 @@ class StoreSettingsInline(admin.TabularInline):
 
 @admin.register(Profile)
 class AuthorAdmin(admin.ModelAdmin):
+    """
+      Регистрация модели профиля в админ панели.
+      """
     actions = [
         mark_archived, mark_unarchived
     ]
-    list_display = ['pk', 'user', 'role', 'get_html_avatar']
+    list_display = ['pk', 'user', 'get_html_avatar', 'role']
     list_display_links = ['pk', 'user']
     list_filter = ['role']
 
@@ -50,6 +54,16 @@ class AuthorAdmin(admin.ModelAdmin):
             inlines += (StoreSettingsInline,)
 
         return inlines
+
+    def get_html_avatar(self, obj):
+        """
+        В панели администратора,
+        ссылка на изображение отображается в виде картинки размером 50х 50.
+        """
+        if obj.avatar:
+            return mark_safe(f'<img src="{obj.avatar.url}" alt=""width="50">')
+
+    get_html_avatar.short_description = 'Аватар'
 
     def get_actions(self, request):
         """"

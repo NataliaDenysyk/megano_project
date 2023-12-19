@@ -12,14 +12,17 @@ from django.core.cache import cache
 
 from services.check_full_name import check_name
 from services.slugify import slugify
+from  django.core.paginator import Paginator
 
 from .tasks import pay_order
 from .configs import settings
 from .forms import ReviewsForm, OrderCreateForm, RegisterForm
+from .filters import ProductFilter
+from .mixins import ChangeListMixin
 from authorization.models import Profile
 from cart.cart import Cart
 from cart.models import Cart as Basket
-from .models import Product, Orders, Offer, BannersCategory
+from .models import Product, Orders, Offer, BannersCategory, Discount
 from services.services import (
     ProductService,
     CatalogService,
@@ -511,6 +514,24 @@ class OrderConfirmView(TemplateView):
 
     def get_success_url(self):
         return reverse_lazy('store:order_confirm', kwargs={'pk': self.kwargs['pk']})
+
+
+class DiscountList(ListView):
+    """
+    Представление для просмотра страницы скидок
+    """
+    model = Discount
+    template_name = 'store/discount/discount.html'
+
+    def get_context_data(self, **kwargs):
+        """
+        Функция возвращает контекст
+        """
+        context = super().get_context_data(**kwargs)
+        context['page_obj'] = (Paginator(Discount.objects.filter(is_active=True), 12)
+                               .get_page( self.request.GET.get('page')))
+
+        return context
 
 
 class PaymentFormView(FormView):

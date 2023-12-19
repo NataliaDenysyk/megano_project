@@ -7,6 +7,22 @@ from pilkit.processors import ResizeToFit
 from services.slugify import slugify
 
 
+class BaseModel(models.Model):
+    """"
+    Базовый класс модели
+    """
+    def delete(self, *arg, **kwargs):
+        """"
+        Функция, меняющая поведение delete на мягкое удаление
+        """
+        self.archived = False
+        self.save()
+        return self
+
+    class Meta:
+        abstract = True
+
+
 def profile_images_directory_path(instance: 'Profile', filename: str) -> str:
     """
     Функция генерирует путь сохранения изображений с привязкой к id товара
@@ -19,7 +35,7 @@ def profile_images_directory_path(instance: 'Profile', filename: str) -> str:
     return f'profiles/profile_{instance.id}/{filename}'
 
 
-class Profile(models.Model):
+class Profile(BaseModel):
     """
     Модель профиля всех пользователей
     """
@@ -39,7 +55,7 @@ class Profile(models.Model):
     description = models.CharField('Описание', max_length=100)
     avatar = ProcessedImageField(
         blank=True,
-        verbose_name='Фотография товара',
+        verbose_name='Фотография профиля',
         upload_to=profile_images_directory_path,
         options={"quality": 80},
         processors=[ResizeToFit(157, 100)],

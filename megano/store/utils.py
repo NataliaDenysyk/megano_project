@@ -45,3 +45,10 @@ def jsonfield_default_feature() -> Dict:
     """
 
     return {'': ''}
+
+
+def discount_images_directory_path(instance: 'Discount', filename: str) -> str:
+    """
+    Функция генерирует путь сохранения изображений с привязкой к id скидки
+    """
+    return f'discount/discount{instance.id}/{filename}'
