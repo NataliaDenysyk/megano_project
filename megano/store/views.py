@@ -8,6 +8,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.core.cache import cache
+from django.contrib.auth.mixins import PermissionRequiredMixin
 
 from services.check_full_name import check_name
 from services.slugify import slugify
@@ -117,15 +118,13 @@ class ProductDetailView(DetailView):
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
-# Представления для отображения страницы настроек
-# в административной панели
-
-class SettingsView(ChangeListMixin, ListView):
+class SettingsView(PermissionRequiredMixin, ChangeListMixin, ListView):
     """
     Класс SettingsView отображает страницу с настройками
     """
     model = Product
     template_name = 'admin/settings.html'
+    permission_required = 'admin/settings.html'
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
