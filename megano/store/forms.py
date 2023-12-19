@@ -88,8 +88,7 @@ class RegisterForm(UserCreationForm):
 
     def clean_phone(self):
         phone = self.cleaned_data['phone']
-        phone_list = [phone.profile.phone for phone in User.objects.select_related('profile')]
-        if phone in phone_list:
+        if Profile.objects.filter(phone=phone).exists():
             raise forms.ValidationError("Такой телефон уже существует")
 
     def clean_username(self):
