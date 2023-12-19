@@ -31,8 +31,17 @@ class AuthorAdmin(admin.ModelAdmin):
     ]
     list_display = ['pk', 'user', 'get_html_avatar', 'role']
     list_display_links = ['pk', 'user']
-    list_filter = ['role']
-    prepopulated_fields = {'slug': ('name_store', )}
+    list_filter = ['archived', 'role']
+    # prepopulated_fields = {'slug': ('name_store', )}
+    save_on_top = True
+    fieldsets = [
+        (None, {
+            'fields': ('user', 'avatar', 'address', 'phone', 'description', 'viewed_orders', 'role', 'name_store'),
+        }),
+        ('Extra options', {
+            'fields': ('archived',),
+            'classes': ("collapse",)
+        })]
 
     def get_html_avatar(self, obj):
         """

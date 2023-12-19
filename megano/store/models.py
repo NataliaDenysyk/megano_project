@@ -351,6 +351,7 @@ class Orders(models.Model):
     total_payment = models.DecimalField(decimal_places=2, max_digits=10, verbose_name='Стоимость заказа')
     products = models.ManyToManyField(Product, related_name='orders')
     status_exception = models.TextField(null=True, blank=True, verbose_name='Статус ошибки')
+    archived = models.BooleanField(default=False, verbose_name='Архивация')
 
     def __str__(self) -> str:
         return f'Order(pk = {self.pk}'
@@ -362,7 +363,7 @@ class Orders(models.Model):
         """"
        Функция, меняющая поведение delete на мягкое удаление
        """
-        self.archived = False
+        self.archived = True
         self.save()
         return self
 
