@@ -105,7 +105,7 @@ class DiscountProduct:
 
         discounts = Discount.objects.filter(is_active=True)
         discounts_cart_priority = discounts.filter(
-            name='Скидки на корзину',
+            name='DC',
             priority=True
         )
         if discounts_cart_priority:
@@ -116,7 +116,7 @@ class DiscountProduct:
                 return price
 
         discounts_set_priority = discounts.filter(
-            name='Скидки на наборы',
+            name='DS',
             priority=True
         )
         if discounts_set_priority:
@@ -127,7 +127,7 @@ class DiscountProduct:
                 return price
 
         discounts_cart = discounts.filter(
-            name='Скидки на корзину',
+            name='DC',
             priority=False
         )
         if discounts_cart:
@@ -138,7 +138,7 @@ class DiscountProduct:
                 return price
 
         discounts_set = discounts.filter(
-            name='Скидки на наборы',
+            name='DS',
             priority=False
         )
         if discounts_set:
@@ -217,7 +217,6 @@ class DiscountProduct:
         :param cart: карзина с товарами
         :return: стоимость карзины со скидкой 'Скидки на наборы'
         """
-        # cart_product = [crt for crt in cart]
         cart_id = [crt['product'].id for crt in cart]
         cart_categories_id = [crt['product'].category.id for crt in cart]
         for discount in discounts:
@@ -226,7 +225,6 @@ class DiscountProduct:
             if (str(product_ids)[1:-1] in str(cart_id)[1:-1]
                     and str(category_ids)[1:-1] in str(cart_categories_id)[1:-1]):
                 price = self.total_price_cart(cart)
-                # price = sum( [product['price'] for product in cart_product])
                 price -= Decimal(discount.sum_discount)
 
                 return 1 if price <= 1 else price
@@ -271,7 +269,7 @@ class DiscountProduct:
         Функция для получения товаров с учетом скидки 'Скидки на товар' и приоритетности
         """
         return Product.objects.filter(
-            discount__name='Скидки на товар',
+            discount__name='DP',
             discount__priority=priority,
             discount__is_active=True
         )
@@ -282,7 +280,7 @@ class DiscountProduct:
         Функция для получения категорий с учетом скидки 'Скидки на товар' и приоритетности
         """
         return Category.objects.filter(
-            discount__name='Скидки на товар',
+            discount__name='DP',
             discount__priority=priority,
             discount__is_active=True
         )
@@ -292,7 +290,7 @@ class DiscountProduct:
         Функция для получения цены на товар с учетом скидки 'Скидки на товар' и приоритетности
         """
         price = product['product'].discount.all().filter(
-            name='Скидки на товар',
+            name='DP',
             priority=priority
         ).first().sum_discount
         if 1 < price < 99:
@@ -304,7 +302,7 @@ class DiscountProduct:
          Скидки на товар' и приоритетности, если товар относится к категории
         """
         price = product['product'].category.discount.all().filter(
-            name='Скидки на товар',
+            name='DP',
             priority=priority
         ).first().sum_discount
         return self.calculate_price_with_discount(product, price)
