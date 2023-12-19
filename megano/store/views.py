@@ -116,7 +116,8 @@ class ProductDetailView(DetailView):
         numbers = request.POST.get('amount')
         if numbers:
             cart = Cart(request)
-            offer = get_object_or_404(Offer, id=request.user.profile.offers.first().id)
+            product = get_object_or_404(Product, slug=kwargs['slug'])
+            offer = get_object_or_404(Offer, id=product.offers.first().id)
             cart.add_product(offer, quantity=int(numbers))
 
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
