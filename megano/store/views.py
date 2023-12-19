@@ -129,6 +129,7 @@ class SettingsView(PermissionRequiredMixin, ChangeListMixin, ListView):
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
         change_list = self.get_change_list_admin(title="Settings")
+
         return dict(list(context.items()) + list(change_list.items()))
 
 
@@ -142,11 +143,13 @@ class ClearCacheAll(ChangeListMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         cache.clear()
         messages.success(self.request, 'кэш полностью очищен.')  # Добавление сообщения для действия
+
         return context
 
     def dispatch(self, request, *args, **kwargs) -> HttpResponse:
         if cache:
             super().dispatch(request, *args, **kwargs)
+
         return HttpResponseRedirect(reverse_lazy("store:settings"))
 
 
@@ -160,11 +163,13 @@ class ClearCacheBanner(ChangeListMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         cache.delete("banners")
         messages.success(self.request, 'кэш баннера очищен.')
+
         return context
 
     def dispatch(self, request, *args, **kwargs) -> HttpResponse:
         if cache:
             super().dispatch(request, *args, **kwargs)
+
         return HttpResponseRedirect(reverse_lazy("store:settings"))
 
 
@@ -178,11 +183,13 @@ class ClearCacheCart(ChangeListMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         cache.delete("cart")
         messages.success(self.request, 'кэш корзины очищен.')
+
         return context
 
     def dispatch(self, request, *args, **kwargs) -> HttpResponse:
         if cache:
             super().dispatch(request, *args, **kwargs)
+
         return HttpResponseRedirect(reverse_lazy("store:settings"))
 
 
@@ -196,6 +203,7 @@ class ClearCacheProductDetail(ChangeListMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         cache.delete("product_detail")
         messages.success(self.request, 'кэш продукта очищен.')
+
         return context
 
     def dispatch(self, request, *args, **kwargs) -> HttpResponse:
@@ -214,11 +222,13 @@ class ClearCacheSeller(ChangeListMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         cache.delete("seller")
         messages.success(self.request, 'кэш продавца очищен.')
+
         return context
 
     def dispatch(self, request, *args, **kwargs) -> HttpResponse:
         if cache:
             super().dispatch(request, *args, **kwargs)
+
         return HttpResponseRedirect(reverse_lazy("store:settings"))
 
 
@@ -233,11 +243,13 @@ class ClearCacheCatalog(ChangeListMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         cache.delete("catalog")
         messages.success(self.request, 'кэш каталога очищен.')
+
         return context
 
     def dispatch(self, request, *args, **kwargs) -> HttpResponse:
         if cache:
             super().dispatch(request, *args, **kwargs)
+
         return HttpResponseRedirect(reverse_lazy("store:settings"))
 
 
@@ -254,6 +266,7 @@ class SiteName(ChangeListMixin, TemplateView):
             messages.success(self.request, 'Название магазина успешно изменено')
         else:
             messages.warning(self.request, 'Поле не должно быть пустым')
+
         return HttpResponseRedirect(reverse_lazy('store:settings'))
 
 
@@ -271,6 +284,7 @@ class CacheSetupBannerView(ChangeListMixin, TemplateView):
             messages.success(self.request, 'Время кэширование Баннера установлено')
         else:
             messages.warning(self.request, 'Поле не должно быть пустым или содержать только цифры')
+
         return HttpResponseRedirect(reverse_lazy('store:settings'))
 
 
@@ -288,6 +302,7 @@ class CacheSetupCartView(ChangeListMixin, TemplateView):
             messages.success(self.request, 'Время кэширование Корзины установлено')
         else:
             messages.warning(self.request, 'Поле не должно быть пустым или содержать только цифры')
+
         return HttpResponseRedirect(reverse_lazy('store:settings'))
 
 
@@ -305,6 +320,7 @@ class CacheSetupProdDetailView(ChangeListMixin, TemplateView):
             messages.success(self.request, 'Время кэширование детализации продукта установлено')
         else:
             messages.warning(self.request, 'Поле не должно быть пустым или содержать только цифры')
+
         return HttpResponseRedirect(reverse_lazy('store:settings'))
 
 
@@ -322,6 +338,7 @@ class CacheSetupSellerView(ChangeListMixin, TemplateView):
             messages.success(self.request, 'Время кэширование детализации продавца установлено')
         else:
             messages.warning(self.request, 'Поле не должно быть пустым или содержать только цифры')
+
         return HttpResponseRedirect(reverse_lazy('store:settings'))
 
 
@@ -340,6 +357,7 @@ class CacheSetupCatalogView(ChangeListMixin, TemplateView):
             messages.success(self.request, 'Время кэширование детализации продавца установлено')
         else:
             messages.warning(self.request, 'Поле не должно быть пустым или содержать только цифры')
+
         return HttpResponseRedirect(reverse_lazy('store:settings'))
 
 
@@ -373,6 +391,7 @@ class MainPage(ListView):
                 logging.error(exception)
 
         cache.set(cache_key, popular_products, settings.set_popular_products_cache(1))
+
         return popular_products
 
     def get_context_data(self, **kwargs):
@@ -406,6 +425,7 @@ class OrderRegisterView(CreateView):
         )
         user = authenticate(username=username, password=password)
         login(self.request, user)
+
         return redirect(reverse_lazy("store:order_create", kwargs={'pk': user.pk}))
 
 
@@ -427,6 +447,7 @@ class OrderView(UpdateView):
                 'form': self.get_data
             }
         )
+
         return context
 
     def get_data(self):
@@ -441,6 +462,7 @@ class OrderView(UpdateView):
             'address': ' '.join(address[1:])
         }
         form = OrderCreateForm(data)
+
         return form
 
     def form_valid(self, form):
@@ -482,6 +504,7 @@ class OrderView(UpdateView):
             quantity.save()
 
         cart.clear()
+
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -502,6 +525,7 @@ class OrderConfirmView(TemplateView):
                 'order': Orders.objects.get(id=self.kwargs['pk']),
             }
         )
+
         return context
 
     def get_success_url(self):
