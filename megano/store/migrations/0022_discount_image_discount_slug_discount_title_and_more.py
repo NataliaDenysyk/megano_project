@@ -20,7 +20,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='discount',
             name='slug',
-            field=models.SlugField(default=124245345766745342, max_length=150, unique=True, verbose_name='URL'),
+            field=models.SlugField(default='', max_length=150, unique=True, verbose_name='URL'),
             preserve_default=False,
         ),
         migrations.AddField(
