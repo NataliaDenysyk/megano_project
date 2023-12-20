@@ -268,13 +268,13 @@ class AdminProduct(admin.ModelAdmin):
 
     fieldsets = [
         (None, {
-            'fields': ('name', 'description'),
+            'fields': ('name', 'description', 'category'),
         }),
         ('Главное фото', {
             'fields': ('preview',),
         }),
         ('Другие опции', {
-            'fields': ('limited_edition', 'availability', 'slug', 'category'),
+            'fields': ('limited_edition', 'availability', 'slug',),
             "classes": ("collapse",),
         }),
     ]
