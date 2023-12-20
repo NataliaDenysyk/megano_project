@@ -58,7 +58,7 @@ class Profile(BaseModel):
         verbose_name='Фотография профиля',
         upload_to=profile_images_directory_path,
         options={"quality": 80},
-        processors=[ResizeToFit(157, 100)],
+        processors=[ResizeToFit(157, 100, mat_color='white')],
         null=True
     )
     name_store = models.CharField('Имя магазина', max_length=50, blank=True, null=True)
