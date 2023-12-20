@@ -276,15 +276,14 @@ class Discount(models.Model):
     ]
     title = models.CharField('Название', default='', max_length=70, null=False, blank=False)
     slug = models.SlugField("URL", max_length=150, db_index=True, unique=True)
-    name = models.CharField(max_length=2, choices=NAME_CHOICES, default='DP',
-                                     verbose_name='Тип скидки')
+    name = models.CharField(max_length=2, choices=NAME_CHOICES, default='DP', verbose_name='Тип скидки')
     description = models.TextField('Описание', default='', null=False, blank=True)
     image = ProcessedImageField(
         blank=True,
         verbose_name='Изображение скидки',
         upload_to=discount_images_directory_path,
         options={"quality": 80},
-        processors=[ResizeToFit(187, 140)],
+        processors=[ResizeToFit(187, 140, mat_color='white')],
         null=True
     )
     sum_discount = models.FloatField('Сумма скидки', null=False, blank=False)
@@ -297,7 +296,7 @@ class Discount(models.Model):
     created_at = models.DateTimeField('Создана', auto_now_add=True)
 
     def __str__(self) -> str:
-        return f'{self.name}'
+        return f'{self.title}'
 
     class Meta:
         db_table = 'Discounts'

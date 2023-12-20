@@ -45,6 +45,15 @@ def mark_archived(modeladmin: admin.ModelAdmin, request: HttpRequest, queryset: 
 def mark_unarchived(modeladmin: admin.ModelAdmin, request: HttpRequest, queryset: QuerySet):
     queryset.update(archived=False)
 
+@admin.action(description='Доступен')
+def mark_availability(modeladmin: admin.ModelAdmin, request: HttpRequest, queryset: QuerySet):
+    queryset.update(availability=True)
+
+
+@admin.action(description='Не доступен')
+def mark_unavailability(modeladmin: admin.ModelAdmin, request: HttpRequest, queryset: QuerySet):
+    queryset.update(availability=False)
+
 
 @admin.action(description="Сбросить кэш списка товаров")
 def reset_product_list_cache(self, request, queryset):
@@ -190,6 +199,19 @@ class OfferInline(admin.TabularInline):
     model = Offer
     extra = 0
 
+    def formfield_for_foreignkey(self, db_field, request=None, **kwargs):
+        is_seller_field = db_field.name == 'seller'
+
+        if is_seller_field:
+            kwargs['queryset'] = Profile.objects.filter(role='store')
+
+        formfield = super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+        if is_seller_field:
+            formfield.label_from_instance = lambda inst: "{}".format(inst.name_store)
+
+        return formfield
+
 
 class ReviewsInline(admin.TabularInline):
     model = Reviews
@@ -216,7 +238,7 @@ class ProductInlineImages(admin.TabularInline):
 @admin.register(Product)
 class AdminProduct(admin.ModelAdmin):
     actions = [
-        mark_archived, mark_unarchived, reset_product_list_cache
+        mark_availability, mark_unavailability, reset_product_list_cache
     ]
     inlines = [
         OfferInline,

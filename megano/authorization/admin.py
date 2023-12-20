@@ -70,16 +70,6 @@ class AuthorAdmin(admin.ModelAdmin):
 
         return inlines
 
-    def get_html_avatar(self, obj):
-        """
-        В панели администратора,
-        ссылка на изображение отображается в виде картинки размером 50х 50.
-        """
-        if obj.avatar:
-            return mark_safe(f'<img src="{obj.avatar.url}" alt=""width="50">')
-
-    get_html_avatar.short_description = 'Аватар'
-
     def get_actions(self, request):
         """"
         Функкция удаляет 'delete_selected' из actions(действие) в панели администратора
