@@ -276,15 +276,14 @@ class Discount(models.Model):
     ]
     title = models.CharField('Название', default='', max_length=70, null=False, blank=False)
     slug = models.SlugField("URL", max_length=150, db_index=True, unique=True)
-    name = models.CharField(max_length=2, choices=NAME_CHOICES, default='DP',
-                                     verbose_name='Тип скидки')
+    name = models.CharField(max_length=2, choices=NAME_CHOICES, default='DP', verbose_name='Тип скидки')
     description = models.TextField('Описание', default='', null=False, blank=True)
     image = ProcessedImageField(
         blank=True,
         verbose_name='Изображение скидки',
         upload_to=discount_images_directory_path,
         options={"quality": 80},
-        processors=[ResizeToFit(187, 140)],
+        processors=[ResizeToFit(187, 140, mat_color='white')],
         null=True
     )
     sum_discount = models.FloatField('Сумма скидки', null=False, blank=False)
@@ -297,7 +296,7 @@ class Discount(models.Model):
     created_at = models.DateTimeField('Создана', auto_now_add=True)
 
     def __str__(self) -> str:
-        return f'{self.name}'
+        return f'{self.title}'
 
     class Meta:
         db_table = 'Discounts'
@@ -351,9 +350,10 @@ class Orders(models.Model):
     total_payment = models.DecimalField(decimal_places=2, max_digits=10, verbose_name='Стоимость заказа')
     products = models.ManyToManyField(Product, related_name='orders')
     status_exception = models.TextField(null=True, blank=True, verbose_name='Статус ошибки')
+    archived = models.BooleanField(default=False, verbose_name='Архивация')
 
     def __str__(self) -> str:
-        return f'Order(pk = {self.pk}'
+        return f'Order(pk = {self.pk})'
 
     def get_comparison_id(self):
         return f"{self.id}"
@@ -362,7 +362,7 @@ class Orders(models.Model):
         """"
        Функция, меняющая поведение delete на мягкое удаление
        """
-        self.archived = False
+        self.archived = True
         self.save()
         return self
 
