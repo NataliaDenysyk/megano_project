@@ -55,7 +55,8 @@ class AddProductView(TemplateView):
 
     def get(self, request, *args, **kwargs) -> HttpResponseRedirect:
         cart = Cart(request)
-        cart.add(get_object_or_404(Product, slug=kwargs['slug']))
+        product = get_object_or_404(Product, slug=kwargs['slug'])
+        cart.add(get_object_or_404(Offer, product=product.id))
         return HttpResponseRedirect(self.request.META.get('HTTP_REFERER'))
 
 
@@ -67,7 +68,8 @@ class TakeProductView(TemplateView):
 
     def get(self, request, *args, **kwargs) -> HttpResponseRedirect:
         cart = Cart(request)
-        cart.take(get_object_or_404(Product, slug=kwargs['slug']))
+        product = get_object_or_404(Product, slug=kwargs['slug'])
+        cart.take(get_object_or_404(Offer, product=product.id))
         return HttpResponseRedirect(self.request.META.get('HTTP_REFERER'))
 
 
