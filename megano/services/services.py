@@ -418,8 +418,6 @@ class ProductService:
             'price_avg': self.get_average_price(),
             'offers': self._get_offers(),
             'feature': self._get_feature(),
-            'price_discount': self._discount_price()
-            ,
         }
 
         return context
@@ -437,24 +435,6 @@ class ProductService:
                     Avg('unit_price')
                 ).get('unit_price__avg')
             )
-        return None
-
-    def _discount_price(self) -> float:
-        """
-        Функция возвращает среднюю цену товара по всем продавцам
-        со скидкой на товар, если она есть
-        """
-        if self._product.offers.all():
-            discount = DiscountProductOrCategory().discount_on_product(self._product)
-            price = round(
-                Offer.objects.filter(
-                    product=self._product,
-                ).aggregate(
-                    Avg('unit_price' * float(discount) / 100)
-                ).get('unit_price__avg')
-            )
-            # price -= price * discount / 100
-            return price
         return None
 
     def _get_images(self) -> ProductImage.objects:

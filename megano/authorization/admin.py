@@ -1,8 +1,9 @@
 from django.contrib import admin
 from django.utils.safestring import mark_safe
-from django.http import HttpRequest
+
 from .models import Profile, StoreSettings
-from django.db.models import QuerySet
+
+from store.models import Orders
 
 
 @admin.action(description='Archive')
@@ -31,8 +32,16 @@ class AuthorAdmin(admin.ModelAdmin):
     ]
     list_display = ['pk', 'user', 'get_html_avatar', 'role']
     list_display_links = ['pk', 'user']
-    list_filter = ['role']
-    prepopulated_fields = {'slug': ('name_store', )}
+    list_filter = ['archived', 'role']
+    save_on_top = True
+    fieldsets = [
+        (None, {
+            'fields': ('user', 'avatar', 'address', 'phone', 'description', 'viewed_orders', 'role', 'name_store'),
+        }),
+        ('Extra options', {
+            'fields': ('archived',),
+            'classes': ("collapse",)
+        })]
 
     def get_html_avatar(self, obj):
         """
@@ -43,6 +52,11 @@ class AuthorAdmin(admin.ModelAdmin):
             return mark_safe(f'<img src="{obj.avatar.url}" alt=""width="50">')
 
     get_html_avatar.short_description = 'Изображение'
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == 'viewed_orders':
+            kwargs['queryset'] = Orders.objects.filter(profile=request.user.profile)
+        return super(AuthorAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
     def get_inlines(self, request, obj):
         """
@@ -55,16 +69,6 @@ class AuthorAdmin(admin.ModelAdmin):
             inlines += (StoreSettingsInline,)
 
         return inlines
-
-    def get_html_avatar(self, obj):
-        """
-        В панели администратора,
-        ссылка на изображение отображается в виде картинки размером 50х 50.
-        """
-        if obj.avatar:
-            return mark_safe(f'<img src="{obj.avatar.url}" alt=""width="50">')
-
-    get_html_avatar.short_description = 'Аватар'
 
     def get_actions(self, request):
         """"

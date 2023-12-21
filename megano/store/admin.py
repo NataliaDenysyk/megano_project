@@ -33,6 +33,8 @@ from compare.admin import (TVSetCharacteristicInline,
                            MicrowaveOvenCharacteristicInline,
                            MobileCharacteristicInline)
 
+from authorization.models import Profile
+
 
 @admin.action(description='Архивировать')
 def mark_archived(modeladmin: admin.ModelAdmin, request: HttpRequest, queryset: QuerySet):
@@ -42,6 +44,15 @@ def mark_archived(modeladmin: admin.ModelAdmin, request: HttpRequest, queryset: 
 @admin.action(description='Разархивировать')
 def mark_unarchived(modeladmin: admin.ModelAdmin, request: HttpRequest, queryset: QuerySet):
     queryset.update(archived=False)
+
+@admin.action(description='Доступен')
+def mark_availability(modeladmin: admin.ModelAdmin, request: HttpRequest, queryset: QuerySet):
+    queryset.update(availability=True)
+
+
+@admin.action(description='Не доступен')
+def mark_unavailability(modeladmin: admin.ModelAdmin, request: HttpRequest, queryset: QuerySet):
+    queryset.update(availability=False)
 
 
 @admin.action(description="Сбросить кэш списка товаров")
@@ -72,7 +83,7 @@ class AdminBanner(admin.ModelAdmin):
 
     fieldsets = [
         (None, {
-            "fields": ('title', 'link', 'get_html_images','slug', 'product', 'description'),
+            "fields": ('title', 'link', 'get_html_images', 'slug', 'product', 'description'),
         }),
         ("Extra options", {
             "fields": ("is_active",),
@@ -107,19 +118,20 @@ class AdminOrders(admin.ModelAdmin):
         ProductInline,
         CartInline,
     ]
-    list_display = 'pk', 'profile_url', 'delivery_type', 'created_at', 'total_payment',
-    list_display_links = 'pk', 'delivery_type'
-    ordering = 'pk', 'created_at',
-    search_fields = 'delivery_type', 'created_at'
-    readonly_fields = ('total_payment',)
+    list_display = ['pk', 'profile_url', 'status', 'total_payment']
+    list_display_links = ['pk',]
+    ordering = ['pk', 'created_at',]
+    search_fields = ['delivery_type', 'created_at']
+    readonly_fields = ['created_at',]
     save_on_top = True
 
     fieldsets = [
         (None, {
-            "fields": ('profile', 'products', 'total_payment', 'delivery_type', 'payment'),
+            "fields": ('profile', 'total_payment', 'delivery_type',
+                       'payment', 'created_at', 'address', 'status_exception'),
         }),
         ('Extra options', {
-            'fields': ('status', 'status_exception'),
+            'fields': ('status', 'status_exception', 'archived'),
             'classes': ('collapse',),
         })
     ]
@@ -140,15 +152,17 @@ class AdminOrders(admin.ModelAdmin):
         link = reverse('admin:authorization_profile_change', args=(obj.profile.id,))
         return format_html('<a href="{}">{}</a>', link, obj.profile.user.username)
 
+    profile_url.short_description = 'Покупатель'
+
 
 @admin.register(Category)
 class AdminCategory(DjangoMpttAdmin):
     actions = [
         mark_archived, mark_unarchived
     ]
-    list_display = 'pk', 'name', 'image', 'parent', 'activity', 'sort_index', 'slug'
-    list_display_links = 'pk', 'name'
-    ordering = 'pk', 'name', 'activity'
+    list_display = ['pk', 'name', 'image', 'parent', 'activity', 'sort_index', 'slug']
+    list_display_links = ['pk', 'name']
+    ordering = ['pk', 'name', 'activity']
     list_filter = ['activity']
     search_fields = ['name']
     prepopulated_fields = {'slug': ('name',)}
@@ -185,6 +199,19 @@ class OfferInline(admin.TabularInline):
     model = Offer
     extra = 0
 
+    def formfield_for_foreignkey(self, db_field, request=None, **kwargs):
+        is_seller_field = db_field.name == 'seller'
+
+        if is_seller_field:
+            kwargs['queryset'] = Profile.objects.filter(role='store')
+
+        formfield = super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+        if is_seller_field:
+            formfield.label_from_instance = lambda inst: "{}".format(inst.name_store)
+
+        return formfield
+
 
 class ReviewsInline(admin.TabularInline):
     model = Reviews
@@ -211,7 +238,7 @@ class ProductInlineImages(admin.TabularInline):
 @admin.register(Product)
 class AdminProduct(admin.ModelAdmin):
     actions = [
-        mark_archived, mark_unarchived, reset_product_list_cache
+        mark_availability, mark_unavailability, reset_product_list_cache
     ]
     inlines = [
         OfferInline,
@@ -230,24 +257,24 @@ class AdminProduct(admin.ModelAdmin):
         MicrowaveOvenCharacteristicInline,
         MobileCharacteristicInline,
     ]
-    list_display = ('pk', 'name', 'category_url', 'description_short', 'created_time', 'update_time', 'availability', 'limited_edition')
+    list_display = ['pk', 'name', 'category_url', 'description_short', 'limited_edition']
     list_display_links = 'pk', 'name'
     list_filter = ['availability']
-    ordering = 'pk', 'name', 'created_at'
-    search_fields = 'name', 'description'
+    ordering = ['pk', 'availability', 'name', 'created_at']
+    search_fields = ['name', 'description']
     prepopulated_fields = {'slug': ('name',)}
-    readonly_fields = ('created_time', 'update_time')
+    readonly_fields = ['created_time', 'update_time']
     save_on_top = True
 
     fieldsets = [
         (None, {
-            'fields': ('name', 'description'),
+            'fields': ('name', 'description', 'category'),
         }),
         ('Главное фото', {
             'fields': ('preview',),
         }),
         ('Другие опции', {
-            'fields': ('limited_edition', 'availability', 'slug', 'category'),
+            'fields': ('limited_edition', 'availability', 'slug',),
             "classes": ("collapse",),
         }),
     ]
@@ -294,23 +321,20 @@ class AdminProduct(admin.ModelAdmin):
 
 @admin.register(Offer)
 class OfferAdmin(admin.ModelAdmin):
+    list_display = ['pk', 'seller', 'product_url', 'unit_price', 'amount']
+    list_display_links = ['pk', 'seller']
+    ordering = ['pk', 'unit_price', 'amount']
+    search_fields = ['product', 'seller', 'unit_price', 'amount']
 
-    list_display = 'pk', 'seller_verbose', 'product_url', 'unit_price', 'amount'
-    list_display_links = 'pk', 'seller_verbose'
-    ordering = 'pk', 'unit_price', 'amount'
-    search_fields = 'product', 'seller_verbose', 'unit_price', 'amount'
-
-    def get_queryset(self, request):
-        return Offer.objects.filter(seller__role='store').select_related('product', 'seller')
-
-    def seller_verbose(self, obj: Offer) -> str:
-        return obj.seller.name_store
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == 'seller':
+            kwargs['queryset'] = Profile.objects.filter(role='store')
+        return super(OfferAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
     def product_url(self, obj: Product) -> str:
         link = reverse('admin:store_product_change', args=(obj.product.id,))
         return format_html('<a href="{}">{}</a>', link, obj.product.name)
 
-    seller_verbose.short_description = 'Продавец'
     product_url.short_description = 'Товар'
 
 
@@ -342,10 +366,10 @@ class DiscountAdmin(admin.ModelAdmin):
         ProductInline,
         CategoriesInline
     ]
-    list_display = 'pk', 'title', 'name', 'get_html_images', 'is_active'
-    list_display_links = 'pk', 'name', 'title'
-    ordering = 'pk', 'name', 'valid_to', 'is_active'
-    search_fields = 'name', 'description'
+    list_display = ['pk', 'title', 'name', 'get_html_images', 'is_active']
+    list_display_links = ['pk', 'name', 'title']
+    ordering = ['pk', 'name', 'valid_to', 'is_active']
+    search_fields = ['name', 'description']
     prepopulated_fields = {"slug": ("title",)}
     save_on_top = True
 
@@ -387,4 +411,3 @@ class AdminBanner(admin.ModelAdmin):
             return 'not url'
 
     get_html_images.short_description = "Изображение"
-
