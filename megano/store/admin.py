@@ -128,7 +128,7 @@ class AdminOrders(admin.ModelAdmin):
     fieldsets = [
         (None, {
             "fields": ('profile', 'total_payment', 'delivery_type',
-                       'payment', 'created_at', 'address', 'status_exception'),
+                       'payment', 'created_at', 'address'),
         }),
         ('Extra options', {
             'fields': ('status', 'status_exception', 'archived'),

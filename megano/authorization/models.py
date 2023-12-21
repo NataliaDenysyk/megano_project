@@ -72,6 +72,7 @@ class Profile(BaseModel):
         on_delete=models.CASCADE
     )
     role = models.CharField('Роль', default=Role.BUYER, choices=Role.choices)
+    archived = models.BooleanField(default=True, verbose_name='Архивация')
 
     def __str__(self) -> str:
         return f'{self.user}'
