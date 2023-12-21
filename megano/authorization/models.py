@@ -50,7 +50,7 @@ class Profile(BaseModel):
         BUYER = 'buyer'
 
     user = models.OneToOneField(User, verbose_name='Пользователь', on_delete=models.CASCADE)
-    slug = models.SlugField('Слаг', max_length=150, default='')
+    slug = models.SlugField('Слаг', max_length=150, default='', null=True, blank=True)
     phone = models.CharField('Teleфон', null=True, blank=True, unique=True)
     description = models.CharField('Описание', max_length=100)
     avatar = ProcessedImageField(
@@ -72,10 +72,17 @@ class Profile(BaseModel):
         on_delete=models.CASCADE
     )
     role = models.CharField('Роль', default=Role.BUYER, choices=Role.choices)
-    archived = models.BooleanField(default=True, verbose_name='Архивация')
 
     def __str__(self) -> str:
         return f'{self.user}'
+
+    def save(self, *args, **kwargs):
+        if self.role == 'store' and self.name_store:
+            self.slug = slugify(self.name_store)
+        else:
+            self.slug = slugify(self.user.username)
+
+        super(Profile, self).save(*args, **kwargs)
 
     class Meta:
         db_table = 'Profiles'
