@@ -16,7 +16,7 @@ class BaseModel(models.Model):
         """"
         Функция, меняющая поведение delete на мягкое удаление
         """
-        self.archived = False
+        self.archived = True
         self.save()
         return self
 
@@ -62,6 +62,7 @@ class Profile(BaseModel):
         processors=[ResizeToFit(157, 100)],
         null=True
     )
+    archived = models.BooleanField(default=False, verbose_name='Архивация')
     name_store = models.CharField('Имя магазина', max_length=50, blank=True, null=True)
     address = models.CharField('Адрес', max_length=100)
     viewed_orders = models.ForeignKey(
