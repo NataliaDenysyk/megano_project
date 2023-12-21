@@ -9,6 +9,7 @@ from django.urls import reverse_lazy
 from django.contrib import messages
 from django.core.cache import cache
 
+from services.check_count_product import CheckCountProduct
 from services.check_full_name import check_name
 from services.slugify import slugify
 from  django.core.paginator import Paginator
@@ -475,12 +476,8 @@ class OrderView(UpdateView):
                 products=item['product'],
                 quantity=item['quantity'],
             )
-            # product = Product.objects.get(slug=item['product'].slug)
-            # TODO: added function for checking counter products
 
-            quantity = Offer.objects.get(id=item['offer_id'])
-            quantity.amount -= int(item['quantity'])
-            quantity.save()
+            CheckCountProduct(item['offer_id']).calculating_amount_of_basket(item, item['offer_id'])
 
         cart.clear()
         return super().form_valid(form)
