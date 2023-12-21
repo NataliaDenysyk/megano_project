@@ -1,4 +1,4 @@
-from store.models import Offer
+from store.models import Offer, Product
 
 
 class CheckCountProduct:
@@ -11,9 +11,11 @@ class CheckCountProduct:
         Проверка товара на отсутствие (кол-во на складе = 0).
         Если товар отсутствует, значение поля "availability" меняется на False.
         """
+        # self.offer = offer
         if self.offer.amount == 0:
-            self.offer.product.availability = False
-            self.offer.save()
+            product = Product.objects.get(id=self.offer.id)
+            product.availability = False
+            product.save()
             # TODO: добавить сообщение, что товар отсутствует на складе
             return False
 
@@ -30,11 +32,13 @@ class CheckCountProduct:
 
         return True
 
-    @staticmethod
-    def calculating_amount_of_basket(item, offer):
+    def calculating_amount_of_basket(self, item, offer):
         """
         Вычисление количества товара в корзине из запасов на складе.
         """
-        _offer = Offer.objects.get(id=offer)
-        _offer.amount -= int(item['quantity'])
-        _offer.save()
+        self.offer = offer
+        self.offer = Offer.objects.get(id=offer)
+        self.offer.amount -= int(item['quantity'])
+        self.offer.save()
+
+        self.checking_product_for_zero()
