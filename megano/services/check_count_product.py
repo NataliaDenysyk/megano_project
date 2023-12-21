@@ -11,7 +11,6 @@ class CheckCountProduct:
         Проверка товара на отсутствие (кол-во на складе = 0).
         Если товар отсутствует, значение поля "availability" меняется на False.
         """
-        # self.offer = offer
         if self.offer.amount == 0:
             product = Product.objects.get(id=self.offer.id)
             product.availability = False
@@ -26,9 +25,9 @@ class CheckCountProduct:
         Проверка товара в корзине на попытку заказать больше,
         чем имеется на складе.
         """
-        if item['quantity'] > self.offer.amount:
+        if item['quantity'] >= self.offer.amount:
             # TODO: добавить сообщение, что заказанного товара больше чем на складе
-            return item['quantity']
+            return False
 
         return True
 
