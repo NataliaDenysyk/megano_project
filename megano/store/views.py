@@ -1,9 +1,10 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
-from django.shortcuts import redirect, render, get_object_or_404
-from django.views.generic import ListView, DetailView, TemplateView, UpdateView, CreateView
+from django.core.exceptions import ObjectDoesNotExist
+from django.shortcuts import redirect, get_object_or_404
+from django.views.generic import ListView, DetailView, TemplateView, UpdateView, CreateView, FormView
 from django.http import HttpResponse, HttpResponseRedirect
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse_lazy
 from django.contrib import messages
 from django.core.cache import cache
 
@@ -13,7 +14,7 @@ from  django.core.paginator import Paginator
 
 from .tasks import pay_order
 from .configs import settings
-from .forms import ReviewsForm, OrderCreateForm, RegisterForm
+from .forms import ReviewsForm, OrderCreateForm, RegisterForm, PaymentForm
 from .filters import ProductFilter
 from .mixins import ChangeListMixin
 from authorization.models import Profile
