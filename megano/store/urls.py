@@ -21,6 +21,9 @@ from .views import (
     OrderRegisterView,
     OrderConfirmView,
     DiscountList,
+    DiscountDetail,
+    PaymentFormView,
+    PaymentProgressView,
 )
 
 
@@ -31,6 +34,8 @@ urlpatterns = [
     path('catalog/<slug:slug>/', CatalogListView.as_view(), name='category'),
     path('product/<slug:slug>/', ProductDetailView.as_view(), name='product-detail'),
     path('', MainPage.as_view(), name='index'),
+    path('order/<int:pk>/payment/', PaymentFormView.as_view(), name='payment-form'),
+    path('order/<int:pk>/payment/progress/', PaymentProgressView.as_view(), name='payment-progress'),
     path('order-reg/', OrderRegisterView.as_view(), name='order_reg'),
     path('order-create/<int:pk>/', OrderView.as_view(), name='order_create'),
     path('order-confirm/<int:pk>/', OrderConfirmView.as_view(), name='order_confirm'),
@@ -48,5 +53,5 @@ urlpatterns = [
     path('cache-time-seller/', CacheSetupSellerView.as_view(), name='cache_time_seller'),
     path('cache-time-catalog/', CacheSetupCatalogView.as_view(), name='cache_time_catalog'),
     path('discounts/', DiscountList.as_view(), name='discounts'),
-
+    path('discounts/<slug:slug>/', DiscountDetail.as_view(), name='discount_details'),
 ]
