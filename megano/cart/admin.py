@@ -13,6 +13,8 @@ class CartAdmin(admin.ModelAdmin):
     search_fields = ['order', 'products']
     list_editable = ['quantity', ]
     list_per_page = 20
+    readonly_fields = ['created_at', 'updated_at']
+
 
     def product_name(self, obj: Cart) -> str:
         """

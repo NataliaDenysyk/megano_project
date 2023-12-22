@@ -22,16 +22,16 @@
                     <div class="Card-cost">
                       {% if product.price != None %}
                         <span class="Card-price">${{ product.price }}</span>
+                        {% else %}
+                        <span>Не в продаже</span>
                       {% endif %}
                     </div>
                     <div class="Card-category">
-                      {% for tag in product.tags.all %}
-                        {% if not forloop.last %}
-                          {{ tag }}/
-                        {% else %}
-                          {{ tag }}
-                        {% endif %}
-                      {% endfor %}
+                      {% if product.tags.all %}
+                        {% for tag in product.tags.all %}
+                          {% if not forloop.last %}{{ tag }}/{% else %}{{ tag }}{% endif %}
+                        {% endfor %}
+                      {% endif %}
                     </div>
                     <div class="Card-hover">
                       {% if product.offers.all %}
@@ -40,11 +40,11 @@
                         </a>
                       {% endif %}
                       <a class="Card-btn" href="">
-                            <form action="{% url 'compare:add_to_comparison' product.id %}" method="get">
-                              <button type="submit">
-                                <img src="{% static 'assets/img/icons/card/change.svg' %}" alt="change.svg"/>
-                              </button>
-                            </form>
+                        <form action="{% url 'compare:add_to_comparison' product.id %}" method="get">
+                          <button type="submit">
+                            <img src="{% static 'assets/img/icons/card/change.svg' %}" alt="change.svg"/>
+                          </button>
+                        </form>
                       </a>
                     </div>
                   </div>

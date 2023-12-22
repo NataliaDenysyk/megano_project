@@ -17,15 +17,9 @@ from store.utils import (
     category_image_directory_path,
     jsonfield_default_description,
     jsonfield_default_feature,
-    product_images_directory_path
+    product_images_directory_path,
+    discount_images_directory_path
 )
-
-
-def discount_images_directory_path(instance: 'Discount', filename: str) -> str:
-    """
-    Функция генерирует путь сохранения изображений с привязкой к id скидки
-    """
-    return f'discount/discount{instance.id}/{filename}'
 
 
 class Category(MPTTModel):
@@ -40,7 +34,7 @@ class Category(MPTTModel):
                               upload_to=category_image_directory_path,
                               verbose_name='Изображение')
     discount = models.ManyToManyField('Discount', related_name='categories', verbose_name='Скидка')
-    slug = models.SlugField(u"URL", max_length=150, db_index=True, unique=True)
+    slug = models.SlugField("URL", max_length=150, db_index=True, unique=True)
     activity = models.BooleanField(default=True, verbose_name='Активация')
     sort_index = models.IntegerField(verbose_name='Индекс сортировки')
 
@@ -60,7 +54,13 @@ class Category(MPTTModel):
 
         return offers.unit_price
 
-
+    def delete(self, *arg, **kwargs):
+        """"
+       Функция, меняющая поведение delete на мягкое удаление
+       """
+        self.activity = False
+        self.save()
+        return self
 
     class Meta:
         unique_together = [['parent', 'slug']]
@@ -79,7 +79,7 @@ class Product(models.Model):
     """
 
     name = models.CharField('Название товара', default='', max_length=150, null=False, db_index=True)
-    slug = models.SlugField(max_length=150, default='')
+    slug = models.SlugField(max_length=150, default='', unique=True)
     category = TreeForeignKey(
         'Category',
         on_delete=models.PROTECT,
@@ -99,7 +99,7 @@ class Product(models.Model):
         verbose_name='Основное фото',
         upload_to="products/product/%y/%m/%d/",
         options={"quality": 80},
-        processors=[ResizeToFit(200, 200)],
+        processors=[ResizeToFit(250, 167, mat_color='white')],
         blank=True,
         null=True
     )
@@ -138,6 +138,14 @@ class Product(models.Model):
         if discount:
             return self.get_average_price() - discount[0].sum_discount
 
+    def delete(self, *arg, **kwargs):
+        """"
+       Функция, меняющая поведение delete на мягкое удаление
+       """
+        self.availability = False
+        self.save()
+        return self
+
     class Meta:
         db_table = 'Products'
         ordering = ['id', 'name']
@@ -155,7 +163,7 @@ class ProductImage(models.Model):
         verbose_name='Фотография товара',
         upload_to=product_images_directory_path,
         options={"quality": 80},
-        processors=[ResizeToFit(200, 200)],
+        processors=[ResizeToFit(220, 167, mat_color='white')],
     )
 
     def __str__(self) -> str:
@@ -220,7 +228,7 @@ class Banners(models.Model):
     Модель Баннеры
     """
     title = models.CharField(u"Название баннера", max_length=150, db_index=True)
-    slug = models.SlugField(u"URL", max_length=150, db_index=True)
+    slug = models.SlugField("URL", max_length=150, db_index=True, unique=True)
     product = models.OneToOneField(Product, on_delete=models.CASCADE, verbose_name='Продукт')
     description = models.TextField(u"Описание баннера", blank=True)
     link = models.URLField(max_length=250, blank=True, verbose_name="Ссылка")
@@ -267,16 +275,15 @@ class Discount(models.Model):
         ('DC', 'Скидки на корзину'),
     ]
     title = models.CharField('Название', default='', max_length=70, null=False, blank=False)
-    slug = models.SlugField(u"URL", max_length=150, db_index=True, unique=True)
-    name = models.CharField(max_length=2, choices=NAME_CHOICES, default='DP',
-                                     verbose_name='Тип скидки')
+    slug = models.SlugField("URL", max_length=150, db_index=True, unique=True)
+    name = models.CharField(max_length=2, choices=NAME_CHOICES, default='DP', verbose_name='Тип скидки')
     description = models.TextField('Описание', default='', null=False, blank=True)
     image = ProcessedImageField(
         blank=True,
         verbose_name='Изображение скидки',
         upload_to=discount_images_directory_path,
         options={"quality": 80},
-        processors=[ResizeToFit(187, 140)],
+        processors=[ResizeToFit(187, 140, mat_color='white')],
         null=True
     )
     sum_discount = models.FloatField('Сумма скидки', null=False, blank=False)
@@ -289,7 +296,7 @@ class Discount(models.Model):
     created_at = models.DateTimeField('Создана', auto_now_add=True)
 
     def __str__(self) -> str:
-        return f'{self.name}'
+        return f'{self.title}'
 
     class Meta:
         db_table = 'Discounts'
@@ -343,12 +350,21 @@ class Orders(models.Model):
     total_payment = models.DecimalField(decimal_places=2, max_digits=10, verbose_name='Стоимость заказа')
     products = models.ManyToManyField(Product, related_name='orders')
     status_exception = models.TextField(null=True, blank=True, verbose_name='Статус ошибки')
+    archived = models.BooleanField(default=False, verbose_name='Архивация')
 
     def __str__(self) -> str:
-        return f'Order(pk = {self.pk}'
+        return f'Order(pk = {self.pk})'
 
     def get_comparison_id(self):
         return f"{self.id}"
+
+    def delete(self, *arg, **kwargs):
+        """"
+       Функция, меняющая поведение delete на мягкое удаление
+       """
+        self.archived = True
+        self.save()
+        return self
 
     class Meta:
         db_table = "Orders"
