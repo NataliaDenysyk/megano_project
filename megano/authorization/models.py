@@ -1,11 +1,10 @@
 from django.contrib.auth.models import User
 from django.db import models
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 
-from django.core.exceptions import ObjectDoesNotExist
 from imagekit.models import ProcessedImageField
 from pilkit.processors import ResizeToFit
+
+from services.slugify import slugify
 
 
 class BaseModel(models.Model):
@@ -51,7 +50,7 @@ class Profile(BaseModel):
         BUYER = 'buyer'
 
     user = models.OneToOneField(User, verbose_name='Пользователь', on_delete=models.CASCADE)
-    slug = models.SlugField('Слаг', max_length=150, default='')
+    slug = models.SlugField('Слаг', max_length=150, default='', null=True, blank=True)
     phone = models.CharField('Teleфон', null=True, blank=True, unique=True)
     description = models.CharField('Описание', max_length=100)
     avatar = ProcessedImageField(
@@ -59,7 +58,7 @@ class Profile(BaseModel):
         verbose_name='Фотография профиля',
         upload_to=profile_images_directory_path,
         options={"quality": 80},
-        processors=[ResizeToFit(157, 100)],
+        processors=[ResizeToFit(157, 100, mat_color='white')],
         null=True
     )
     archived = models.BooleanField(default=False, verbose_name='Архивация')
@@ -76,6 +75,14 @@ class Profile(BaseModel):
 
     def __str__(self) -> str:
         return f'{self.user}'
+
+    def save(self, *args, **kwargs):
+        if self.role == 'store' and self.name_store:
+            self.slug = slugify(self.name_store)
+        else:
+            self.slug = slugify(self.user.username)
+
+        super(Profile, self).save(*args, **kwargs)
 
     class Meta:
         db_table = 'Profiles'

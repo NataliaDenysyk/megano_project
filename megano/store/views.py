@@ -2,10 +2,11 @@ import logging
 
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import redirect
-from django.views.generic import ListView, DetailView, TemplateView, UpdateView, CreateView
+from django.views.generic import ListView, DetailView, TemplateView, UpdateView, CreateView, FormView
 from django.http import HttpResponse, HttpResponseRedirect
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.contrib import messages
 from django.core.cache import cache
 
@@ -13,6 +14,7 @@ from services.check_full_name import check_name
 from services.slugify import slugify
 from  django.core.paginator import Paginator
 
+from .tasks import pay_order
 from .configs import settings
 from .forms import ReviewsForm, OrderCreateForm, RegisterForm
 from .filters import ProductFilter
@@ -33,6 +35,11 @@ from services.services import (
 
 import re
 from typing import Any
+
+from .configs import settings
+from .forms import ReviewsForm, SearchForm, PaymentForm
+from .filters import ProductFilter
+from .mixins import ChangeListMixin
 
 
 class CatalogListView(ListView):
@@ -542,3 +549,88 @@ class DiscountDetail(DetailView):
         context['discount'] = Discount.objects.get(slug=self.kwargs['slug'])
 
         return context
+
+
+class PaymentFormView(FormView):
+    """
+    Вьюшка формы оплаты
+    """
+
+    template_name = 'store/order/payment.html'
+    form_class = PaymentForm
+
+    def form_valid(self, form: PaymentForm) -> HttpResponse:
+        """
+        Отправляет оплату в очередь, если форма прошла валидацию
+        """
+
+        pay_order.apply_async(
+            kwargs={
+                'order_id': self.kwargs['pk'],
+                'card': form.cleaned_data['bill']
+            },
+            countdown=10
+        )
+
+        return redirect(reverse_lazy('store:payment-progress', kwargs={'pk': self.kwargs['pk']}))
+
+    def get_context_data(self, **kwargs) -> dict:
+        """
+        Передает в контекст тип оплаты по id заказа
+        """
+
+        context = super().get_context_data(**kwargs)
+        try:
+            order_status = Orders.objects.get(id=self.kwargs['pk']).status
+            if order_status == 1:
+                context.update(
+                    {
+                        'order_paid': True,
+                    }
+                )
+            else:
+                payment_type = Orders.objects.get(id=self.kwargs['pk']).payment
+                context.update(
+                    {
+                        'payment_type': payment_type,
+                    }
+                )
+
+            return context
+
+        except ObjectDoesNotExist:
+            context.update(
+                {
+                    'error': f'Заказ с номером {self.kwargs["pk"]} не найден',
+                }
+            )
+            return context
+
+
+class PaymentProgressView(TemplateView):
+    """
+    Вьюшка страницы ожидания оплаты
+    """
+
+    template_name = 'store/order/payment_progress.html'
+
+    def get(self, *args, **kwargs) -> HttpResponse:
+        """
+        Проверяет статус оплаты, если изменился - отправляет на детальную страницу заказа
+        """
+
+        try:
+            status = Orders.objects.get(id=self.kwargs['pk']).status
+            if status != 3:
+                return redirect(reverse_lazy(
+                    'profile:detailed_order',
+                    kwargs={
+                        'slug': self.request.user.profile.slug,
+                        'pk': self.kwargs['pk']
+                    }
+                ))
+
+            return super().get(self.request, *args, **kwargs)
+
+        except ObjectDoesNotExist:
+            return redirect(reverse_lazy('store:index'))

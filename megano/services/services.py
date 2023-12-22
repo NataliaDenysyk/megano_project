@@ -259,16 +259,52 @@ class PaymentService:
     """
     Сервис оплаты
     """
-    def _get_payment_status(self, order) -> str:
-        if order.is_paid == True:
-            return 'Оплаченый заказ'
-        else:
-            return 'Заказ не оплачен'
 
-    def _pay_order(self, order) -> str:
-        order.is_paid = True
-        order.save()
-        return 'Оплачено'
+    def __init__(self, order_id: int, card: str):
+        self._order_id = order_id
+        self._card = card
+
+    def get_payment(self):
+        """
+        Меняет статус заказа
+        """
+
+        result = FakePaymentService(self._card).pay_order()
+
+        if result == 'Оплачено':
+            Orders.objects.filter(id=self._order_id).update(status=1)
+        else:
+            Orders.objects.filter(id=self._order_id).update(status=2, status_exception=result)
+
+
+class FakePaymentService:
+    """
+    Фиктивный сервис оплаты
+    """
+
+    EXCEPTIONS = [
+        'Банк недоступен',
+        'На счете недостаточно средств',
+        'Введенный счет недействителен',
+        'Оплата не выполнена'
+    ]
+
+    def __init__(self, card: str) -> str:
+        self._card = card
+
+    def pay_order(self) -> str:
+        """
+        Проверяет валидность номера счета или карты
+
+        :return: статут Оплачено или имя случайной ошибки
+        """
+
+        card_cleaned = int(self._card.replace(" ", ""))
+
+        if card_cleaned % 2 == 0 and card_cleaned % 10 != 0:
+            return 'Оплачено'
+        else:
+            return choice(self.EXCEPTIONS)
 
 
 class ProductsViewService:
@@ -294,11 +330,15 @@ class ProductsViewService:
         Получить список просмотренных продуктов
         """
 
+        viewed_list = []
         viewed = self.get_cached_products_id()
-        products = Product.objects.filter(id__in=viewed)
 
-        products_dict = {product.id: product for product in products}
-        viewed_list = [products_dict.get(product) for product in viewed]
+        if viewed:
+            products = Product.objects.filter(id__in=viewed)
+
+            if products:
+                products_dict = {product.id: product for product in products}
+                viewed_list = [products_dict.get(product) for product in viewed]
 
         return viewed_list
 
@@ -357,8 +397,6 @@ class ProductsViewService:
         return 0
 
 
-# TODO Добавить расчет цены с учетом скидки
-# TODO Добавить отображение отзывов на страницу товара
 class ProductService:
     """
     Сервис по работе с продуктами
@@ -704,6 +742,7 @@ class ReviewsProduct:
     """
     Сервис для добавления отзыва к товару
     """
+
     @staticmethod
     def add_review_to_product(request, form, slug) -> None:
         # добавить отзыв к товару
@@ -748,6 +787,7 @@ class GetParamService:
         """
         Возвращает новый url
         """
+
         return self._parsed_url._replace(query=urlencode(self._query, True)).geturl()
 
     def remove_param(self, param_name: str) -> 'GetParamService':
@@ -876,6 +916,3 @@ class ProfileUpdate:
             form.add_error('phone', 'Телефон должен быть уникальным')
 
         return phone
-
-
-
