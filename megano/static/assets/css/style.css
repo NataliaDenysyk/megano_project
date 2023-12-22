@@ -16,3 +16,8 @@
 .quantity-product {
     font-size: 23px;
 }
+
+.non-product {
+    font-size: 25px;
+    color: #bca6bb;
+}
