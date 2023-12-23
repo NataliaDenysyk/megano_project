@@ -127,4 +127,18 @@ class SearchForm(forms.ModelForm):
 
     class Meta:
         model = Product
-        fields = ['name', ]
+        fields = ['name',]
+
+
+class PaymentForm(forms.Form):
+    bill = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-input Payment-bill',
+            'id': 'numero1',
+            'name': 'numero1',
+            'type': 'text',
+            'placeholder': '9999 9999',
+            'data-mask': "9999 9999",
+            'data-validate': "require pay",
+        })
+    )

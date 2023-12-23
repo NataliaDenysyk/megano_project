@@ -17,6 +17,10 @@
     font-size: 23px;
 }
 
+.banner-img {
+    height: 100%
+}
+
 .form .form-input-error {
     border-color: #f26d7d;
 }
