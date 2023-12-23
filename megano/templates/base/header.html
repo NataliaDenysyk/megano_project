@@ -228,5 +228,20 @@ block
       </div>
     </div>
   {% endif %}
-</header>
+<link rel="stylesheet" href="{% static 'assets/css/toast.min.css' %}">
+<script src='{% static "assets/js/toast.min.js" %}'></script>
+{% if list_message %}
+    {% for message in list_message %}
+        <script>
+        new ToastMin({
+          title: '{{ message.title }}',
+          text: '{{ message.text }}',
+          theme: 'light',
+          autohide: true,
+          interval: 10000
+        });
+        </script>
+    {% endfor %}
+{% endif %}
 
+</header>

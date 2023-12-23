@@ -1,3 +1,4 @@
+from services.message_toast import ToastMessage
 from store.models import Offer, Product
 
 
@@ -15,7 +16,8 @@ class CheckCountProduct:
             product = Product.objects.get(id=self.offer.id)
             product.availability = False
             product.save()
-            # TODO: добавить сообщение, что товар отсутствует на складе
+            message = ToastMessage()
+            message.toast_message('Ошибка', 'Товар отсутствует на складе')
             return False
 
         return True
@@ -26,7 +28,8 @@ class CheckCountProduct:
         чем имеется на складе.
         """
         if item['quantity'] >= self.offer.amount:
-            # TODO: добавить сообщение, что заказанного товара больше чем на складе
+            message = ToastMessage()
+            message.toast_message('Ошибка', f'Больше {self.offer.amount} нет на складе')
             return False
 
         return True
