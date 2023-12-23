@@ -58,7 +58,7 @@ class Profile(BaseModel):
         verbose_name='Фотография профиля',
         upload_to=profile_images_directory_path,
         options={"quality": 80},
-        processors=[ResizeToFit(157, 100, mat_color='white')],
+        processors=[ResizeToFit(200, 155, mat_color='white')],
         null=True
     )
     archived = models.BooleanField(default=False, verbose_name='Архивация')
