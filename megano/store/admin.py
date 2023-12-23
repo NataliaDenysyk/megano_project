@@ -1,9 +1,14 @@
 from django.contrib import admin
 from django.contrib.contenttypes.admin import GenericStackedInline
+from django.shortcuts import reverse
+from django.utils.html import format_html
 
 from django.core.cache import cache
 from django.utils.safestring import mark_safe
 from django_mptt_admin.admin import DjangoMpttAdmin
+
+from django.db.models import QuerySet
+from django.http import HttpRequest
 
 from cart.models import Cart
 from .models import (
@@ -28,6 +33,33 @@ from compare.admin import (TVSetCharacteristicInline,
                            MicrowaveOvenCharacteristicInline,
                            MobileCharacteristicInline)
 
+from authorization.models import Profile
+
+
+@admin.action(description='Архивировать')
+def mark_archived(modeladmin: admin.ModelAdmin, request: HttpRequest, queryset: QuerySet):
+    queryset.update(archived=True)
+
+
+@admin.action(description='Разархивировать')
+def mark_unarchived(modeladmin: admin.ModelAdmin, request: HttpRequest, queryset: QuerySet):
+    queryset.update(archived=False)
+
+@admin.action(description='Доступен')
+def mark_availability(modeladmin: admin.ModelAdmin, request: HttpRequest, queryset: QuerySet):
+    queryset.update(availability=True)
+
+
+@admin.action(description='Не доступен')
+def mark_unavailability(modeladmin: admin.ModelAdmin, request: HttpRequest, queryset: QuerySet):
+    queryset.update(availability=False)
+
+
+@admin.action(description="Сбросить кэш списка товаров")
+def reset_product_list_cache(self, request, queryset):
+    cache.clear()
+    self.message_user(request, "кэш списка товаров сброшен.")
+
 
 class CartInline(admin.TabularInline):
     model = Cart
@@ -47,10 +79,11 @@ class AdminBanner(admin.ModelAdmin):
     list_display_links = ['title']
     list_filter = ['is_active']
     prepopulated_fields = {'slug': ('title',)}
+    save_on_top = True
 
     fieldsets = [
         (None, {
-            "fields": ('title', 'link', 'slug', 'product', 'description'),
+            "fields": ('title', 'link', 'get_html_images', 'slug', 'product', 'description'),
         }),
         ("Extra options", {
             "fields": ("is_active",),
@@ -78,22 +111,27 @@ class ProductInline(admin.TabularInline):
 
 @admin.register(Orders)
 class AdminOrders(admin.ModelAdmin):
+    actions = [
+        mark_archived, mark_unarchived
+    ]
     inlines = [
         ProductInline,
         CartInline,
     ]
-    list_display = 'pk', 'profile', 'delivery_type', 'created_at', 'total_payment',
-    list_display_links = 'pk', 'delivery_type'
-    ordering = 'pk', 'created_at',
-    search_fields = 'delivery_type', 'created_at'
-    # readonly_fields = ('total_payment',)
+    list_display = ['pk', 'profile_url', 'status', 'total_payment']
+    list_display_links = ['pk',]
+    ordering = ['pk', 'created_at',]
+    search_fields = ['delivery_type', 'created_at']
+    readonly_fields = ['created_at',]
+    save_on_top = True
 
     fieldsets = [
         (None, {
-            "fields": ('profile', 'products', 'total_payment', 'delivery_type', 'payment'),
+            "fields": ('profile', 'total_payment', 'delivery_type',
+                       'payment', 'created_at', 'address', 'status', 'status_exception',),
         }),
         ('Extra options', {
-            'fields': ('status',),
+            'fields': ('archived',),
             'classes': ('collapse',),
         })
     ]
@@ -101,12 +139,30 @@ class AdminOrders(admin.ModelAdmin):
     def get_queryset(self, request):
         return Orders.objects.select_related('profile').prefetch_related('products')
 
+    def get_actions(self, request):
+        """"
+        Функкция удаляет 'delete_selected' из actions(действие) в панели администратора
+        """
+        actions = super(self.__class__, self).get_actions(request)
+        if 'delete_selected' in actions:
+            del actions['delete_selected']
+        return actions
+
+    def profile_url(self, obj: Product) -> str:
+        link = reverse('admin:authorization_profile_change', args=(obj.profile.id,))
+        return format_html('<a href="{}">{}</a>', link, obj.profile.user.username)
+
+    profile_url.short_description = 'Покупатель'
+
 
 @admin.register(Category)
 class AdminCategory(DjangoMpttAdmin):
-    list_display = 'pk', 'name', 'image', 'parent', 'activity', 'sort_index', 'slug'
-    list_display_links = 'pk', 'name'
-    ordering = 'pk', 'name', 'activity'
+    actions = [
+        mark_archived, mark_unarchived
+    ]
+    list_display = ['pk', 'name', 'image', 'parent', 'activity', 'sort_index', 'slug']
+    list_display_links = ['pk', 'name']
+    ordering = ['pk', 'name', 'activity']
     list_filter = ['activity']
     search_fields = ['name']
     prepopulated_fields = {'slug': ('name',)}
@@ -122,6 +178,15 @@ class AdminCategory(DjangoMpttAdmin):
         })
     ]
 
+    def get_actions(self, request):
+        """"
+        Функкция удаляет 'delete_selected' из actions(действие) в панели администратора
+        """
+        actions = super(self.__class__, self).get_actions(request)
+        if 'delete_selected' in actions:
+            del actions['delete_selected']
+        return actions
+
 
 class TagInline(admin.TabularInline):
     model = Product.tags.through
@@ -133,6 +198,19 @@ class TagInline(admin.TabularInline):
 class OfferInline(admin.TabularInline):
     model = Offer
     extra = 0
+
+    def formfield_for_foreignkey(self, db_field, request=None, **kwargs):
+        is_seller_field = db_field.name == 'seller'
+
+        if is_seller_field:
+            kwargs['queryset'] = Profile.objects.filter(role='store')
+
+        formfield = super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+        if is_seller_field:
+            formfield.label_from_instance = lambda inst: "{}".format(inst.name_store)
+
+        return formfield
 
 
 class ReviewsInline(admin.TabularInline):
@@ -159,6 +237,9 @@ class ProductInlineImages(admin.TabularInline):
 
 @admin.register(Product)
 class AdminProduct(admin.ModelAdmin):
+    actions = [
+        mark_availability, mark_unavailability, reset_product_list_cache
+    ]
     inlines = [
         OfferInline,
         DiscountInline,
@@ -176,25 +257,24 @@ class AdminProduct(admin.ModelAdmin):
         MicrowaveOvenCharacteristicInline,
         MobileCharacteristicInline,
     ]
-    list_display = ('pk', 'name', 'category', 'description_short', 'created_time', 'update_time', 'availability', 'limited_edition')
+    list_display = ['pk', 'name', 'category_url', 'description_short', 'limited_edition']
     list_display_links = 'pk', 'name'
     list_filter = ['availability']
-    ordering = 'pk', 'name', 'created_at'
-    search_fields = 'name', 'description'
+    ordering = ['pk', 'availability', 'name', 'created_at']
+    search_fields = ['name', 'description']
     prepopulated_fields = {'slug': ('name',)}
-    readonly_fields = ('created_time', 'update_time')
-    actions = ['reset_product_list_cache']
+    readonly_fields = ['created_time', 'update_time']
     save_on_top = True
 
     fieldsets = [
         (None, {
-            'fields': ('name', 'description'),
+            'fields': ('name', 'description', 'category'),
         }),
         ('Главное фото', {
             'fields': ('preview',),
         }),
         ('Другие опции', {
-            'fields': ('limited_edition', 'availability', 'slug', 'category'),
+            'fields': ('limited_edition', 'availability', 'slug',),
             "classes": ("collapse",),
         }),
     ]
@@ -220,37 +300,42 @@ class AdminProduct(admin.ModelAdmin):
     def update_time(self, obj: Product):
         return obj.update_at.strftime("%d %B %Y")
 
+    def category_url(self, obj: Product) -> str:
+        link = reverse('admin:store_category_change', args=(obj.category.id,))
+        return format_html('<a href="{}">{}</a>', link, obj.category.name)
+
     description_short.short_description = 'Описание'
     created_time.short_description = 'Создан'
     update_time.short_description = 'Отредактирован'
+    category_url.short_description = 'Категория'
 
-    def reset_product_list_cache(self, request, queryset):
-        cache.clear()
-        self.message_user(request, "кэш списка товаров сброшен.")
-
-    reset_product_list_cache.short_description = "Сбросить кэш списка товаров"
+    def get_actions(self, request):
+        """"
+        Функкция удаляет 'delete_selected' из actions(действие) в панели администратора
+        """
+        actions = super(self.__class__, self).get_actions(request)
+        if 'delete_selected' in actions:
+            del actions['delete_selected']
+        return actions
 
 
 @admin.register(Offer)
 class OfferAdmin(admin.ModelAdmin):
-    list_display = 'pk', 'product', 'seller_verbose', 'unit_price', 'amount'
-    list_display_links = 'pk', 'seller_verbose'
-    ordering = 'pk', 'unit_price', 'amount'
-    search_fields = 'product', 'seller_verbose', 'unit_price', 'amount'
+    list_display = ['pk', 'seller', 'product_url', 'unit_price', 'amount']
+    list_display_links = ['pk', 'seller']
+    ordering = ['pk', 'unit_price', 'amount']
+    search_fields = ['product', 'seller', 'unit_price', 'amount']
 
-    fieldsets = [
-        (None, {
-            'fields': ('product', 'unit_price', 'amount'),
-        }),
-    ]
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == 'seller':
+            kwargs['queryset'] = Profile.objects.filter(role='store')
+        return super(OfferAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
-    def get_queryset(self, request):
-        return Offer.objects.filter(seller__role='store').select_related('product', 'seller')
+    def product_url(self, obj: Product) -> str:
+        link = reverse('admin:store_product_change', args=(obj.product.id,))
+        return format_html('<a href="{}">{}</a>', link, obj.product.name)
 
-    def seller_verbose(self, obj: Offer) -> str:
-        return obj.seller.name_store
-
-    seller_verbose.short_description = 'Продавец'
+    product_url.short_description = 'Товар'
 
 
 class ProductInline(admin.TabularInline):
@@ -281,10 +366,10 @@ class DiscountAdmin(admin.ModelAdmin):
         ProductInline,
         CategoriesInline
     ]
-    list_display = 'pk', 'title', 'name', 'get_html_images', 'is_active'
-    list_display_links = 'pk', 'name', 'title'
-    ordering = 'pk', 'name', 'valid_to', 'is_active'
-    search_fields = 'name', 'description'
+    list_display = ['pk', 'title', 'name', 'get_html_images', 'is_active']
+    list_display_links = ['pk', 'name', 'title']
+    ordering = ['pk', 'name', 'valid_to', 'is_active']
+    search_fields = ['name', 'description']
     prepopulated_fields = {"slug": ("title",)}
     save_on_top = True
 
@@ -326,4 +411,3 @@ class AdminBanner(admin.ModelAdmin):
             return 'not url'
 
     get_html_images.short_description = "Изображение"
-

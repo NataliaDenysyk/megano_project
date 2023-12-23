@@ -10,10 +10,8 @@
     <div class="Section">
       <div class="wrap">
         <div class="Cards Cards_blog">
-          {% for discount in page_obj %}
-            <div class="Card"><a class="Card-picture" href="#">
+            <div class="Card"><a class="Card-picture" href="{% url 'store:discounts' %}">
               {% if discount.image %}<img src="{{ discount.image.url }}" alt="product.png"/>{% endif %}</a>
-
               {% if discount.valid_from %}
                 <div class="Card-date">
                   <strong class="Card-date-number">{{ discount.valid_from|date:"d" }}
@@ -30,17 +28,13 @@
               <div class="Card-content">
                 <strong class="Card-title"><a href="#">{{ discount.title }}</a>
                 </strong>
-                <div class="Card-description">{{ discount.description|truncatewords:10 }}
+                <div class="Card-description">{{ discount.description }}
                 </div>
               </div>
             </div>
-          {% endfor %}
         </div>
       </div>
     </div>
-  </div>
-  <div class="Pagination">
-    {% include 'store/paginator.html' %}
   </div>
 
 {% endblock %}

@@ -8,6 +8,7 @@
 * [Переменные окружения](#установка-и-настройка-переменных-окружения)
 * [Установка PostrgreSQL](#установка-postrgresql)
 * [Подключение базы к Django](#подключение-базы-к-django)
+* [Установка Celery и Redis](#установка-и-подключение-celery-и-redis)
 * [Путеводитель](#getting-started)
 
 <hr>
@@ -280,6 +281,40 @@ __________
         pip manage.py makemigrations
         pip manage.py migrate
     ```
+
+## Установка и подключение Celery и Redis
+
+Начните установку с Redis. Перейдите по следующей ссылке на [официальный сайт](https://redis.io/docs/install/install-redis/) и выберите установку, соответствующую вашей системе.
+
+<hr>
+
+<img src="./related_docs/warning-xxl.png" alt="11" width="21"> ВАЖНО!
+Не забудьте запустить Redis
+<hr>
+
+Далее установите Celery командой
+```
+pip install celery
+```
+
+В файле .env пропишите константы:
+  - REDIS_NAME – номер базы данных для Celery;
+  - REDIS_HOST – адрес Redis;
+  - REDIS_PORT – порт Redis.
+
+Стандартные настройки:
+```
+REDIS_HOST=localhost
+REDIS_PORT=6379
+REDIS_NAME=0
+```
+
+Запустите рабочий сервер Celery
+```
+celery -A megano worker --loglevel=INFO
+```
+
+
 
 #### Поздравляем вы установили проект и базу данных!
 
