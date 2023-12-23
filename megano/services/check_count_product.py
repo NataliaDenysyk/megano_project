@@ -29,7 +29,7 @@ class CheckCountProduct:
         """
         if item['quantity'] >= self.offer.amount:
             message = ToastMessage()
-            message.toast_message('Ошибка', f'Больше {self.offer.amount} нет на складе')
+            message.toast_message('Ошибка', f'Больше {self.offer.amount}шт. нет на складе')
             return False
 
         return True
