@@ -133,8 +133,9 @@ class ProfileUpdateView(MenuMixin, UpdateView):
         profile = Profile.objects.get(user=self.request.user)
         response = ProfileUpdate(profile).update_profile(
             request=self.request, form=form, context=context)
-        if response is not None:
-            return response
+
+        if response:
+            return render(self.request, 'authorization/profile_update_form.html', context=context)
 
         messages.success(self.request, 'Профиль успешно сохранен ')
         return super().form_valid(form)

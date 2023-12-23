@@ -12,7 +12,7 @@ from django.db import transaction
 from django.http import HttpRequest
 from django.shortcuts import get_object_or_404, render
 
-
+from services.check_full_name import check_name
 from authorization.forms import RegisterForm, LoginForm
 from authorization.models import Profile
 from store.models import Product, Offer, Category, Reviews, Discount, ProductImage, Tag, Orders
@@ -851,68 +851,23 @@ class ProfileUpdate:
     def __init__(self, profile: Profile):
         self.profile = profile
 
-    def update_profile(self, request, form, context):
+    @staticmethod
+    def update_profile(request, form, context):
         user = request.user
         user_form = context['user_form']
         with transaction.atomic():
             if all([form.is_valid(), user_form.is_valid()]):
-                self.profile = form.save()
-                self.profile.phone = self.get_phone(form)
-                password = self.get_password_valid(user_form)
-                names = self.get_full_name(user_form)
-                user.email = user_form.cleaned_data['mail']
-                self.profile.avatar = form.cleaned_data['avatar']
-                if user_form.errors or form.errors:
-                    context.update({'user_form': user_form})
-                    return render(request,
-                                  'authorization/profile_update_form.html',
-                                  context=context)
-                user.set_password(password)
-                user.first_name, user.last_name = names[1], names[0]
+                user.first_name, user.last_name = check_name(user_form.cleaned_data['name'])
+                user.email = user_form.cleaned_data['email']
+                if not user_form.errors and not form.errors:
+                    form.save()
+                    user.set_password(user_form.cleaned_data['password'])
+                    user.save()
 
-                user.save()
-                self.profile.save()
-
-                user = authenticate(username=user.username, password=password)
-                login(request, user)
+                    user = authenticate(username=user.username, password=user.password)
+                    login(request, user)
             else:
-                context.update({'user_form': user_form})
-                return render(request,
-                              'authorization/profile_update_form.html',
-                              context=context)
+                context.update({'user_form': user_form, 'form': form})
+                return context
 
-    @staticmethod
-    def get_password_valid(form):
-        """"
-        Функция для проверки одинаковости ввода password и passwordReply в форму
-        """
-        if form.cleaned_data['password'] and form.cleaned_data['passwordReply']:
-            if form.cleaned_data['password'] == form.cleaned_data['passwordReply']:
-                return form.cleaned_data['password']
-            else:
-                form.add_error('password', 'Пароли не совпадают')
-        else:
-            form.add_error('password', 'Введите пароль и подтверждение пароля')
 
-    @staticmethod
-    def get_full_name(form):
-        """"
-        Функция для определения first_name и last_name пользователя из формы
-        """
-        name = form.cleaned_data['name'].split(' ')
-        return [name[0], ' '.join(name[1:])]
-
-    @staticmethod
-    def get_phone(form):
-        """"
-        Функция для очистки номера проверки его на уникальность и приведения к int
-        """
-        phone_str = form.cleaned_data['phone']
-        chars_to_remove = ['(', ')']
-        for char in chars_to_remove:
-            phone_str = phone_str.replace(char, '')
-        phone = phone_str[2:]
-        if Profile.objects.filter(phone=phone).exists():
-            form.add_error('phone', 'Телефон должен быть уникальным')
-
-        return phone
