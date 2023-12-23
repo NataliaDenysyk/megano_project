@@ -73,10 +73,6 @@ class CatalogListView(ListView):
 
         context['filter'] = self.filterset.form
         context['tags'] = CatalogService.get_popular_tags()
-
-        for product in context['products']:
-            product.price = ProductService(product).get_average_price()
-
         context['full_path'] = GetParamService(self.request.get_full_path()).remove_param('sorting').get_url()
 
         return context

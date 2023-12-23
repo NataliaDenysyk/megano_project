@@ -235,23 +235,23 @@ class DiscountProduct:
 
     def get_price_product(self, product):
         """
-        Функция для получения цены на товар с учетом скидки 'Скидки на товар'
+        Функция для получения скидки на товар с учетом скидки 'Скидки на товар'
         """
         price = product['product'].discount.all().filter(
             name='DP',
         ).first().sum_discount
-        if 1 < price < 99:
+        if 1 <= price <= 99:
             return self.calculate_price_with_discount(product, price)
 
     def get_price_categories(self, product):
         """"
-         Функция для получения цены на товар с учетом скидки
+         Функция для получения скидки на товар с учетом скидки
          'Скидки на товар', если товар относится к категории
         """
         price = (product['product'].category.discount.all()
                  .filter(name='DP')
                  .first().sum_discount)
-        if 1 < price < 99:
+        if 1 <= price <= 99:
             return self.calculate_price_with_discount(product, price)
 
 
@@ -415,27 +415,11 @@ class ProductService:
 
         context = {
             'images': self._get_images(),
-            'price_avg': self.get_average_price(),
             'offers': self._get_offers(),
             'feature': self._get_feature(),
         }
 
         return context
-
-    def get_average_price(self) -> float:
-        """
-        Функция возвращает среднюю цену товара по всем продавцам
-        """
-
-        if self._product.offers.all():
-            return round(
-                Offer.objects.filter(
-                    product=self._product,
-                ).aggregate(
-                    Avg('unit_price')
-                ).get('unit_price__avg')
-            )
-        return None
 
     def _get_images(self) -> ProductImage.objects:
         """
