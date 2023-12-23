@@ -32,8 +32,13 @@
                     <div class="Order-info">
                       <div class="Order-infoType">ФИО:
                       </div>
-                      <div class="Order-infoContent"> {{ user.first_name }} {{ user.last_name }}
+                      <div class="Order-infoContent"> {% if user.first_name and user.last_name %}
+                        {{ user.first_name }} {{ user.last_name }}
+                      {% else %}
+                        {% firstof user.first_name user.username %}
+                      {% endif %}
                       </div>
+
                     </div>
                     <div class="Order-info">
                       <div class="Order-infoType">Телефон:
