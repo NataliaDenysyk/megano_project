@@ -128,10 +128,10 @@ class AdminOrders(admin.ModelAdmin):
     fieldsets = [
         (None, {
             "fields": ('profile', 'total_payment', 'delivery_type',
-                       'payment', 'created_at', 'address', 'status_exception'),
+                       'payment', 'created_at', 'address', 'status', 'status_exception',),
         }),
         ('Extra options', {
-            'fields': ('status', 'archived'),
+            'fields': ('archived',),
             'classes': ('collapse',),
         })
     ]
@@ -411,4 +411,3 @@ class AdminBanner(admin.ModelAdmin):
             return 'not url'
 
     get_html_images.short_description = "Изображение"
-

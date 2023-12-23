@@ -17,6 +17,10 @@
     font-size: 23px;
 }
 
+.banner-img {
+    height: 100%
+}
+
 .non-product {
     font-size: 25px;
     color: #bca6bb;

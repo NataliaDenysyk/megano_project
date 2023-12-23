@@ -1,9 +1,8 @@
-import logging
-
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
-from django.shortcuts import redirect
-from django.views.generic import ListView, DetailView, TemplateView, UpdateView, CreateView
+from django.core.exceptions import ObjectDoesNotExist
+from django.shortcuts import redirect, get_object_or_404
+from django.views.generic import ListView, DetailView, TemplateView, UpdateView, CreateView, FormView
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.contrib import messages
@@ -14,8 +13,9 @@ from services.check_full_name import check_name
 from services.slugify import slugify
 from  django.core.paginator import Paginator
 
+from .tasks import pay_order
 from .configs import settings
-from .forms import ReviewsForm, OrderCreateForm, RegisterForm
+from .forms import ReviewsForm, OrderCreateForm, RegisterForm, PaymentForm
 from .filters import ProductFilter
 from .mixins import ChangeListMixin
 from authorization.models import Profile
@@ -32,6 +32,7 @@ from services.services import (
     MainService,
 )
 
+import logging
 import re
 from typing import Any
 
@@ -115,11 +116,15 @@ class ProductDetailView(DetailView):
         if form.is_valid():
             ReviewsProduct.add_review_to_product(request, form, self.kwargs['slug'])
 
+        numbers = request.POST.get('amount')
+        if numbers:
+            cart = Cart(request)
+            product = get_object_or_404(Product, slug=kwargs['slug'])
+            offer = get_object_or_404(Offer, id=product.offers.first().id)
+            cart.add_product(offer, quantity=int(numbers))
+
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
-
-# Представления для отображения страницы настроек
-# в административной панели
 
 class SettingsView(ChangeListMixin, ListView):
     """
@@ -539,3 +544,88 @@ class DiscountDetail(DetailView):
         context['discount'] = Discount.objects.get(slug=self.kwargs['slug'])
 
         return context
+
+
+class PaymentFormView(FormView):
+    """
+    Вьюшка формы оплаты
+    """
+
+    template_name = 'store/order/payment.html'
+    form_class = PaymentForm
+
+    def form_valid(self, form: PaymentForm) -> HttpResponse:
+        """
+        Отправляет оплату в очередь, если форма прошла валидацию
+        """
+
+        pay_order.apply_async(
+            kwargs={
+                'order_id': self.kwargs['pk'],
+                'card': form.cleaned_data['bill']
+            },
+            countdown=10
+        )
+
+        return redirect(reverse_lazy('store:payment-progress', kwargs={'pk': self.kwargs['pk']}))
+
+    def get_context_data(self, **kwargs) -> dict:
+        """
+        Передает в контекст тип оплаты по id заказа
+        """
+
+        context = super().get_context_data(**kwargs)
+        try:
+            order_status = Orders.objects.get(id=self.kwargs['pk']).status
+            if order_status == 1:
+                context.update(
+                    {
+                        'order_paid': True,
+                    }
+                )
+            else:
+                payment_type = Orders.objects.get(id=self.kwargs['pk']).payment
+                context.update(
+                    {
+                        'payment_type': payment_type,
+                    }
+                )
+
+            return context
+
+        except ObjectDoesNotExist:
+            context.update(
+                {
+                    'error': f'Заказ с номером {self.kwargs["pk"]} не найден',
+                }
+            )
+            return context
+
+
+class PaymentProgressView(TemplateView):
+    """
+    Вьюшка страницы ожидания оплаты
+    """
+
+    template_name = 'store/order/payment_progress.html'
+
+    def get(self, *args, **kwargs) -> HttpResponse:
+        """
+        Проверяет статус оплаты, если изменился - отправляет на детальную страницу заказа
+        """
+
+        try:
+            status = Orders.objects.get(id=self.kwargs['pk']).status
+            if status != 3:
+                return redirect(reverse_lazy(
+                    'profile:detailed_order',
+                    kwargs={
+                        'slug': self.request.user.profile.slug,
+                        'pk': self.kwargs['pk']
+                    }
+                ))
+
+            return super().get(self.request, *args, **kwargs)
+
+        except ObjectDoesNotExist:
+            return redirect(reverse_lazy('store:index'))
