@@ -1,35 +1,39 @@
 {% extends 'base/base.html' %}
 
 {% block content %}
-  <div class="wrapper">
-    {% if not user.is_authenticated %}
-      <div class="header">
-        <h3 class="sign-in">Регистрация</h3>
-      </div>
-      <div class="clear"></div>
-      <form action="#" method="post">
-        {% csrf_token %}
-        <div>
-          {{ form.username }}
-        </div>
-        <div>
-          {{ form.email }}
-        </div>
-        <div>
-          {{ form.password }}
-        </div>
-        <input type="submit" value="Зарегистрироваться"/>
+    <div class="wrapper">
+        {% if not user.is_authenticated %}
+            <div class="header">
+                <h3 class="sign-in">Регистрация</h3>
+            </div>
+            <div class="clear"></div>
+            <form action="#" method="post">
+                {% csrf_token %}
+                <div {% if form.username.errors %}class="form-input_error"{% endif %}>
+                    {{ form.username }}
+                </div>
+                <div class="form-error">{{ form.username.errors }}</div>
+                <div {% if form.username.errors %}class="form-input_error"{% endif %}>
+                    {{ form.email }}
+                </div>
+                <div class="form-error">{{ form.email.errors }}</div>
+                <div {% if form.username.errors %}class="form-input_error"{% endif %}>
+                    {{ form.password }}
+                </div>
+                <div class="form-error">{{ form.password.errors }}</div>
+                <div {% if form.username.errors %}class="form-input_error"{% endif %}>
+                    {{ form.password2 }}
+                </div>
+                <div class="form-error">{{ form.password2.errors }}</div>
+                <input type="submit" value="Зарегистрироваться"/>
 
-        <a class="registr" href="{% url 'profile:login' %}">
-          Вход
-        </a>
-        <div class="clear"></div>
-      </form>
-    {% else %}
-      <h2>Вы уже зарегистрированы и авторизованы :)</h2>
-    {% endif %}
-  {% if error %}
-    <p>{{ error }}</p>
-  {% endif %}
-  </div>
+                <a class="registr" href="{% url 'profile:login' %}">
+                    Вход
+                </a>
+                <div class="clear"></div>
+            </form>
+        {% else %}
+            <h2>Вы уже зарегистрированы и авторизованы :)</h2>
+        {% endif %}
+    </div>
 {% endblock %}
