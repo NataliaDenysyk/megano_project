@@ -31,7 +31,8 @@ class Cart(object):
         product_id = str(offer.product.id)
         if product_id not in self.cart:
             self.cart[product_id] = {'quantity': 0, 'price': str(offer.unit_price),
-                                     'offer_id': str(offer.id), 'offer_name': str(offer.seller.name_store)}
+                                     'offer_id': str(offer.id), 'offer_name': str(offer.seller.name_store),
+                                     'd_price': str(offer.get_discount_price())}
         if update:
             self.cart[product_id]['quantity'] = quantity
         else:
@@ -92,6 +93,7 @@ class Cart(object):
         for item in cart.values():
             item['price'] = Decimal(item['price'])
             item['total_price'] = item['price'] * item['quantity']
+
             yield item
 
     def get_total_price(self) -> [int, float]:
