@@ -1,20 +1,18 @@
-from typing import Any
-
 from django.shortcuts import get_object_or_404, redirect
 from django.http import HttpResponseRedirect
 from django.views.generic import TemplateView
 
 from services.services import DiscountProduct
-from store.forms import SearchForm
 from .cart import Cart
 from store.models import Product, Offer
+
+from typing import Any
 
 
 class CartListView(TemplateView):
     template_name = 'store/cart.html'
 
     def get_context_data(self, **kwargs) -> dict[str, Any]:
-        form_search = SearchForm(self.request.GET or None)
         context = super().get_context_data(**kwargs)
         discount = DiscountProduct()
         context.update(
