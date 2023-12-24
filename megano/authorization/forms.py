@@ -59,17 +59,17 @@ class UserUpdateForm(forms.ModelForm):
         Проверка email на уникальность
         """
         email = self.cleaned_data.get('email')
-        if User.objects.filter(email__iexact=email).exists():
-            self.add_error('email', 'Email адрес должен быть уникальным')
+        if email and User.objects.filter(email=email).exclude(username=self.instance.username).exists():
+            raise forms.ValidationError('Email адрес должен быть уникальным')
         return email
 
     def clean_password_2(self):
         passw1 = self.cleaned_data['password']
         passw2 = self.cleaned_data['password_2']
         if passw1 != passw2:
-            self.add_error('password_2', 'Пароли не совпадают')
+            raise forms.ValidationError('Пароли не совпадают')
         if len(passw1) < 6:
-            self.add_error('password_2', 'Пароль должен содержать не менее 6 символов')
+            raise forms.ValidationError('Пароль должен содержать не менее 6 символов')
 
     class Meta:
         model = User
@@ -112,10 +112,10 @@ class ProfileUpdateForm(forms.ModelForm):
         image = self.cleaned_data.get('avatar', False)
         if image:
             if image.size > 2.5 * 1024 * 1024:
-                self.add_error('avatar', 'Размер изображения слишком большой ( > 2.5mb )')
+                raise forms.ValidationError('Размер изображения слишком большой ( > 2.5mb )')
             return image
         else:
-            self.add_error('avatar', 'Не удалось прочитать загруженное изображение')
+            raise forms.ValidationError('Не удалось прочитать загруженное изображение')
 
     def clean_phone(self):
         """"
@@ -126,10 +126,9 @@ class ProfileUpdateForm(forms.ModelForm):
         for char in chars_to_remove:
             phone_str = phone_str.replace(char, '')
         phone = phone_str[2:]
-        if not Profile.objects.filter(phone=phone).exists():
-            return phone
-        else:
-            self.add_error('phone', 'Телефон должен быть уникальным')
+        if phone and Profile.objects.filter(phone=phone).exclude(id=self.instance.id).exists():
+            raise forms.ValidationError('Телефон должен быть уникальным')
+        return phone
 
     class Meta:
         model = Profile

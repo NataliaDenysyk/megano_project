@@ -1,14 +1,17 @@
 from django.contrib.auth.views import LogoutView
+from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.shortcuts import reverse
 from django.http import HttpResponse
 
+from django.db import transaction
 from django.db.models import Count, Case, When
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, CreateView, FormView, ListView, UpdateView
 
-from services.services import AuthorizationService, ProfileService, ProfileUpdate, ProductsViewService, ProductService
+from services.check_full_name import check_name
+from services.services import AuthorizationService, ProductsViewService, ProductService
 from .mixins import MenuMixin
 
 from store.configs import settings
@@ -101,12 +104,11 @@ class ProfileDetailView(MenuMixin, DetailView):
         Функция возвращает контекст
         """
         if self.request.user.is_authenticated:
-            profile = Profile.objects.get(user=self.request.user)
             context = super().get_context_data(**kwargs)
-            context.update(ProfileService(profile).get_context())
             context.update(
                 self.get_menu(id='1')
             )
+            context['order'] = Orders.objects.filter(profile=self.request.user.profile.id).order_by('-created_at')[:1]
             context['title'] = f'Страница пользователя: {self.request.user.username}'
             return context
 
@@ -130,13 +132,20 @@ class ProfileUpdateView(MenuMixin, UpdateView):
         Функция обрабатывает валидную форму
         """
         context = self.get_context_data()
-        profile = Profile.objects.get(user=self.request.user)
-        response = ProfileUpdate(profile).update_profile(
-            request=self.request, form=form, context=context)
-
-        if response:
-            return render(self.request, 'authorization/profile_update_form.html', context=context)
-
+        user_form = context['user_form']
+        with transaction.atomic():
+            if all([form.is_valid(), user_form.is_valid()]):
+                user = self.request.user
+                user.first_name, user.last_name = check_name(user_form.cleaned_data['name'])
+                user.email = user_form.cleaned_data['email']
+                user.set_password(user_form.cleaned_data['password'])
+                form.save()
+                user.save()
+            else:
+                context.update({'user_form': user_form})
+                return render(self.request, 'authorization/profile_update_form.html', context=context)
+        user = authenticate(username=user.username, password=user.password)
+        login(self.request, user)
         messages.success(self.request, 'Профиль успешно сохранен ')
         return super().form_valid(form)
 
@@ -149,7 +158,7 @@ class ProfileUpdateView(MenuMixin, UpdateView):
             {'error': "Некорректный ввод данных. Попробуйте еще раз."}
         )
 
-        return render(self.request, 'profile/profile_update_form.html', context=context)
+        return render(self.request, 'authorization/profile_update_form.html', context=context)
 
     def get_context_data(self, **kwargs):
         """

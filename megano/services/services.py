@@ -826,48 +826,5 @@ class MainService:
             return limited_cache
 
 
-class ProfileService:
-    """
-    Сервис по работе с профилем
-    """
-
-    def __init__(self, profile: Profile):
-        self.profile = profile
-
-    def get_context(self):
-        """
-        Функция собирает контекст для рендера шаблона 'profile_details'
-        """
-        context = {
-            'order': Orders.objects.filter(profile=self.profile).order_by('-created_at')[:1],
-        }
-        return context
-
-
-class ProfileUpdate:
-    """
-    Сервис для редактирования профиля
-    """
-    def __init__(self, profile: Profile):
-        self.profile = profile
-
-    @staticmethod
-    def update_profile(request, form, context):
-        user = request.user
-        user_form = context['user_form']
-        with transaction.atomic():
-            if all([form.is_valid(), user_form.is_valid()]):
-                user.first_name, user.last_name = check_name(user_form.cleaned_data['name'])
-                user.email = user_form.cleaned_data['email']
-                if not user_form.errors and not form.errors:
-                    form.save()
-                    user.set_password(user_form.cleaned_data['password'])
-                    user.save()
-
-                    user = authenticate(username=user.username, password=user.password)
-                    login(request, user)
-            else:
-                context.update({'user_form': user_form, 'form': form})
-                return context
 
 
