@@ -132,7 +132,7 @@ class SettingsView(PermissionRequiredMixin, ChangeListMixin, ListView):
     """
     model = Product
     template_name = 'admin/settings.html'
-    permission_required = 'admin/settings.html'
+    permission_required = 'authorization.view_storesettings'
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
