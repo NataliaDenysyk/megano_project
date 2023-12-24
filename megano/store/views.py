@@ -107,6 +107,7 @@ class ProductDetailView(DetailView):
         context['num_reviews'] = ReviewsProduct.get_number_of_reviews_for_product(self.object)
         context['reviews_num3'], context['reviews_all'] = ReviewsProduct.get_list_of_product_reviews(self.object)
         context['form'] = ReviewsForm()
+        context.update({'toast_message': cache.get('toast_message')})
         context.update(ProductService(context['product']).get_context())
 
         return context
