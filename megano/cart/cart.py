@@ -29,7 +29,7 @@ class Cart(object):
         """
         Метод добавления товара в корзину на странице сайта
         """
-        if CheckCountProduct(offer=offer.id).checking_product_for_zero():
+        if CheckCountProduct(offer=offer.id).checking_product_for_zero(quantity):
             product_id = str(offer.product.id)
             if product_id not in self.cart:
                 self.cart[product_id] = {'quantity': 0, 'price': str(offer.unit_price),
