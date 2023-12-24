@@ -6,8 +6,9 @@ class CheckCountProduct:
 
     def __init__(self, offer):
         self.offer = Offer.objects.get(id=offer)
+        self.message = ToastMessage()
 
-    def checking_product_for_zero(self) -> bool:
+    def checking_product_for_zero(self, quantity) -> bool:
         """
         Проверка товара на отсутствие (кол-во на складе = 0).
         Если товар отсутствует, значение поля "availability" меняется на False.
@@ -16,10 +17,12 @@ class CheckCountProduct:
             product = Product.objects.get(id=self.offer.id)
             product.availability = False
             product.save()
-            message = ToastMessage()
-            message.toast_message('Ошибка', 'Товар отсутствует на складе')
+            self.message.toast_message('Ошибка', 'Товар отсутствует на складе')
             return False
-
+        else:
+            if quantity > self.offer.amount:
+                self.message.toast_message('Ошибка', f'Товара  доступно {self.offer.amount}шт.')
+                return False
         return True
 
     def check_more_than_it_is(self, item):
@@ -28,8 +31,7 @@ class CheckCountProduct:
         чем имеется на складе.
         """
         if item['quantity'] >= self.offer.amount:
-            message = ToastMessage()
-            message.toast_message('Ошибка', f'Больше {self.offer.amount}шт. нет на складе')
+            self.message.toast_message('Ошибка', f'Больше {self.offer.amount}шт. нет на складе')
             return False
 
         return True
