@@ -25,9 +25,14 @@
             <div class="ProductCard-info">
                 <div class="ProductCard-cost">
                     <div class="ProductCard-price">
-                        {% if price_avg != None %}
-                            <span class="Card-price">${{ price_avg }}</span>
-                        {% endif %}
+                         {% if product.get_average_price != None %}
+              {% if product.get_discount_price %}
+                <span class="Card-price">${{ product.get_discount_price }}</span>
+                <span class="ProductCard-priceOld">${{ product.get_average_price }}</span>
+              {% else %}
+                <span class="Card-price">${{ product.get_average_price }}</span>
+              {% endif %}
+            {% endif %}
                     </div>
                 </div>
             </div>
