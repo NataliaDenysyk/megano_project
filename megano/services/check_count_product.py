@@ -45,4 +45,4 @@ class CheckCountProduct:
         self.offer.amount -= int(item['quantity'])
         self.offer.save()
 
-        self.checking_product_for_zero()
+        self.checking_product_for_zero(item['quantity'])
