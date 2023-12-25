@@ -21,6 +21,11 @@
     height: 100%
 }
 
+.non-product {
+    font-size: 25px;
+    color: #bca6bb;
+}
+
 .form .form-input-error {
     border-color: #f26d7d;
 }

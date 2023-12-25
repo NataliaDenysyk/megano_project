@@ -2,7 +2,8 @@ import copy
 from decimal import Decimal
 from django.conf import settings
 
-from store.models import Product, Offer, Orders
+from store.models import Product, Offer
+from services.check_count_product import CheckCountProduct
 
 MAX_COUNT = 21
 
@@ -28,31 +29,33 @@ class Cart(object):
         """
         Метод добавления товара в корзину на странице сайта
         """
-        product_id = str(offer.product.id)
-        if product_id not in self.cart:
-            self.cart[product_id] = {'quantity': 0, 'price': str(offer.unit_price),
-                                     'offer_id': str(offer.id), 'offer_name': str(offer.seller.name_store),
-                                     'd_price': str(offer.get_discount_price())}
-        if update:
-            self.cart[product_id]['quantity'] = quantity
-        else:
-            self.cart[product_id]['quantity'] += quantity
-        self.save()
+        if CheckCountProduct(offer=offer.id).checking_product_for_zero(quantity):
+            product_id = str(offer.product.id)
+            if product_id not in self.cart:
+                self.cart[product_id] = {'quantity': 0, 'price': str(offer.unit_price),
+                                         'offer_id': str(offer.id), 'offer_name': str(offer.seller.name_store),
+                                         'd_price': str(offer.get_discount_price())}
+            if update:
+                self.cart[product_id]['quantity'] = quantity
+            else:
+                self.cart[product_id]['quantity'] += quantity
+            self.save()
 
-    def add(self, product: Product, quantity: int = 1) -> None:
+    def add(self, offer: Offer, quantity: int = 1) -> None:
         """
         Добавление кол-ва товара на странице корзины (+1 шт.)
         """
-        product_id = self.__check_product_to_cart(product)
-        if 1 <= self.cart[product_id]['quantity'] < MAX_COUNT:
-            self.cart[product_id]['quantity'] += quantity
-        self.save()
+        product_id = self.__check_product_to_cart(offer.product)
+        if CheckCountProduct(offer=offer.id).check_more_than_it_is(self.cart[product_id]):
+            if 1 <= self.cart[product_id]['quantity'] < MAX_COUNT:
+                self.cart[product_id]['quantity'] += quantity
+            self.save()
 
-    def take(self, product: Product, quantity: int = 1) -> None:
+    def take(self, offer: Offer, quantity: int = 1) -> None:
         """
         Удаление кол-ва товара на странице корзины (-1 шт.)
         """
-        product_id = self.__check_product_to_cart(product)
+        product_id = self.__check_product_to_cart(offer.product)
         if 1 < self.cart[product_id]['quantity'] <= MAX_COUNT:
             self.cart[product_id]['quantity'] -= quantity
         self.save()
@@ -93,7 +96,6 @@ class Cart(object):
         for item in cart.values():
             item['price'] = Decimal(item['price'])
             item['total_price'] = item['price'] * item['quantity']
-
             yield item
 
     def get_total_price(self) -> [int, float]:

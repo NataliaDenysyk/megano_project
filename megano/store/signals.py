@@ -13,6 +13,7 @@ def cache_deleted_banners(**kwargs) -> None:
     except AttributeError:
         pass
 
+
 @receiver(post_save, sender=Category)
 def cache_deleted_category(**kwargs) -> None:
     """ Удаление кеша категорий при изменении, добавлении модели """
@@ -20,6 +21,7 @@ def cache_deleted_category(**kwargs) -> None:
         cache.delete('Category')
     except AttributeError:
         pass
+
 
 @receiver(post_save, sender=Product)
 def reset_product_list_cache(sender, instance, **kwargs):

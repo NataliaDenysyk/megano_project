@@ -3,6 +3,7 @@ from datetime import datetime
 from store.configs import settings
 from store.forms import SearchForm
 
+from services.message_toast import ToastMessage
 
 def store(request):
     """
@@ -16,10 +17,8 @@ def store(request):
     }
 
 
-def name_shop(request) -> dict:
-    """
-    Контекстный процессор позволяет воспользоваться переменной "title_site"
-    для вывода названия магазина в "header" любого шаблона сайта
-    """
-
-    return {'title_site': settings.get_site_name()}
+def toast_message(request):
+    toast = ToastMessage()
+    return {
+        'list_message': toast.get(),
+    }
