@@ -28,7 +28,7 @@
 
     ```
 ```html
-    pythom -m venv (your_name_env)
+    python -m venv (your_name_env)
 ```
 
 * После установки активируйте виртуальное окружение
@@ -38,8 +38,9 @@
     ```
     - <b>в UNIX system</b>
     ```html
-        source venv/bin/activate
+        source (your_name_env)/bin/activate
     ```
+    
 * Установите все зависимости для запуска проекта
 ```html
     pip install -r requirements.txt

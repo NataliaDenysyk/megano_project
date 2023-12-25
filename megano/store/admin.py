@@ -86,7 +86,7 @@ class AdminBanner(admin.ModelAdmin):
 
     fieldsets = [
         (None, {
-            "fields": ('title', 'link', 'get_html_images', 'slug', 'product', 'description'),
+            "fields": ('title', 'link', 'slug', 'product', 'description'),
         }),
         ("Extra options", {
             "fields": ("is_active",),
@@ -438,7 +438,7 @@ class DiscountAdmin(admin.ModelAdmin):
 
 
 @admin.register(BannersCategory)
-class AdminBanner(admin.ModelAdmin):
+class AdminBannerCategory(admin.ModelAdmin):
     list_display = ['category', 'get_html_images', 'is_active']
     list_display_links = ['category']
     list_filter = ['is_active']

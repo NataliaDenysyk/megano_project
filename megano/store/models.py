@@ -1,5 +1,6 @@
 from django.db import models
-from django.db.models import Avg
+from decimal import Decimal
+from django.db.models import Avg, Sum, F
 
 from django.contrib.contenttypes.fields import GenericRelation
 from imagekit.models import ProcessedImageField
@@ -130,13 +131,27 @@ class Product(models.Model):
             )
 
     def get_discount_price(self):
-        discount = self.discount.filter(priority=True).order_by('-sum_discount')
-        if discount:
-            return self.get_average_price() - discount[0].sum_discount
-
-        discount = self.discount.order_by('sum_discount')
-        if discount:
-            return self.get_average_price() - discount[0].sum_discount
+        discount_pr = self.discount.filter(name='DP', is_active=True).order_by('-sum_discount').first()
+        discount_cat = self.category.discount.filter(name='DP', is_active=True).order_by('-sum_discount').first()
+        if discount_pr:
+            if 1 <= discount_pr.sum_discount <= 99:
+                return round(
+                    Offer.objects.filter(
+                        product=self).annotate(
+                        d_price=F('unit_price') - F('unit_price') * Decimal(discount_pr.sum_discount / 100)).aggregate(
+                        Avg('d_price')
+                    ).get('d_price__avg')
+                )
+        elif discount_cat:
+            if 1 <= discount_cat.sum_discount <= 99:
+                return round(
+                    Offer.objects.filter(
+                        product=self).annotate(
+                        d_price=F('unit_price') - F('unit_price') * Decimal(discount_cat.sum_discount / 100)).aggregate(
+                        Avg('d_price')
+                    ).get('d_price__avg')
+                )
+        return None
 
     def delete(self, *arg, **kwargs):
         """"
@@ -198,6 +213,22 @@ class Offer(models.Model):
 
     def __str__(self) -> str:
         return f"Предложение от {self.seller.name_store}"
+
+    def get_discount_price(self):
+        discount_pr = self.product.discount.filter(name='DP', is_active=True).order_by('-sum_discount').first()
+        discount_cat = (self.product.category.discount.filter(name='DP', is_active=True)
+                        .order_by('-sum_discount').first())
+        if discount_pr:
+            if 1 <= discount_pr.sum_discount <= 99:
+                return round(
+                    self.unit_price - self.unit_price * Decimal(discount_pr.sum_discount / 100)
+                )
+        elif discount_cat:
+            if 1 <= discount_cat.sum_discount <= 99:
+                return round(
+                    self.unit_price - self.unit_price * Decimal(discount_cat.sum_discount / 100)
+                )
+        return None
 
     class Meta:
         db_table = 'Offer'

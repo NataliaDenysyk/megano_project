@@ -17,7 +17,7 @@ class Settings:
 
     def __init__(self):
         """ Значения по умолчанию """
-        self.__site_name = 'Megan'
+        self.__site_name = 'Megano'
         self.__cache_banner = SECOND * 10  # 10 min
         self.__cache_cart = SECOND * 10  # 10 min
         self.__cache_product = DAYS  # 1 day

@@ -18,12 +18,12 @@ class UserUpdateForm(forms.ModelForm):
             'data-validate': "require"
         })
     )
-    mail = forms.EmailField(
-        label='mail',
+    email = forms.EmailField(
+        label='email',
         widget=forms.EmailInput(attrs={
             'class': "form-input",
-            'id': "mail",
-            'name': "mail",
+            'id': "email",
+            'name': "email",
             'type': "email",
             'data-validate': "require",
             'placeholder': "send@test.test"
@@ -41,31 +41,39 @@ class UserUpdateForm(forms.ModelForm):
             'placeholder': "Тут можно изменить пароль"
         })
     )
-    passwordReply = forms.CharField(
-        label='passwordReply',
+    password_2 = forms.CharField(
+        label='password_2',
         min_length=8,
         max_length=50,
         widget=forms.PasswordInput(attrs={
             'class': "form-input",
-            'id': "passwordReply",
-            'name': "passwordReply",
+            'id': "password_2",
+            'name': "password_2",
             'type': "password",
             'placeholder': "Введите пароль повторно"
         })
     )
 
-    def clean_mail(self):
+    def clean_email(self):
         """
         Проверка email на уникальность
         """
-        email = self.cleaned_data.get('mail')
-        if User.objects.filter(email__iexact=email).exists():
-            self.add_error('mail', 'Email адрес должен быть уникальным')
+        email = self.cleaned_data.get('email')
+        if email and User.objects.filter(email=email).exclude(username=self.instance.username).exists():
+            raise forms.ValidationError('Email адрес должен быть уникальным')
         return email
+
+    def clean_password_2(self):
+        passw1 = self.cleaned_data['password']
+        passw2 = self.cleaned_data['password_2']
+        if passw1 != passw2:
+            raise forms.ValidationError('Пароли не совпадают')
+        if len(passw1) < 6:
+            raise forms.ValidationError('Пароль должен содержать не менее 6 символов')
 
     class Meta:
         model = User
-        fields = ('name', 'email', 'password', 'passwordReply')
+        fields = ('name', 'email', 'password', 'password_2')
 
 
 class ProfileUpdateForm(forms.ModelForm):
@@ -104,10 +112,23 @@ class ProfileUpdateForm(forms.ModelForm):
         image = self.cleaned_data.get('avatar', False)
         if image:
             if image.size > 2.5 * 1024 * 1024:
-                self.add_error('avatar', 'Размер изображения слишком большой ( > 2.5mb )')
+                raise forms.ValidationError('Размер изображения слишком большой ( > 2.5mb )')
             return image
         else:
-            self.add_error('avatar', 'Не удалось прочитать загруженное изображение')
+            raise forms.ValidationError('Не удалось прочитать загруженное изображение')
+
+    def clean_phone(self):
+        """"
+        Функция для очистки номера проверки его на уникальность и приведения к int
+        """
+        phone_str = self.cleaned_data['phone']
+        chars_to_remove = ['(', ')']
+        for char in chars_to_remove:
+            phone_str = phone_str.replace(char, '')
+        phone = phone_str[2:]
+        if phone and Profile.objects.filter(phone=phone).exclude(id=self.instance.id).exists():
+            raise forms.ValidationError('Телефон должен быть уникальным')
+        return phone
 
     class Meta:
         model = Profile
@@ -131,7 +152,7 @@ class RegisterForm(forms.ModelForm):
     email = forms.EmailField(
         widget=forms.EmailInput(attrs={
             'class': 'user-input',
-            'id': 'login',
+            'id': 'email',
             'name': 'email',
             'placeholder': 'E-mail',
         })
@@ -144,6 +165,32 @@ class RegisterForm(forms.ModelForm):
             'placeholder': 'Пароль',
         })
     )
+    password2 = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'class': 'user-input',
+            'id': 'password2',
+            'name': 'pass',
+            'placeholder': 'Повтор Пароля',
+        })
+    )
+
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        if User.objects.filter(username=username).exists():
+            raise forms.ValidationError("Такой логин уже существует")
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError("Данный email уже существует.")
+
+    def clean_password2(self):
+        passw1 = self.cleaned_data['password']
+        passw2 = self.cleaned_data['password2']
+        if passw1 != passw2:
+            raise forms.ValidationError("Пароли не совпадают")
+        if len(passw1) < 6:
+            raise forms.ValidationError("Пароль должен содержать не менее 6 символов")
 
     class Meta:
         model = User

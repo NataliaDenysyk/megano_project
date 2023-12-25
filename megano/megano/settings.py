@@ -94,6 +94,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'cart.context_processors.cart',
                 'store.context_processors.store',
+                'store.context_processors.toast_message',
                 'megano.context_processors.get_static_template_category',
             ],
         },
