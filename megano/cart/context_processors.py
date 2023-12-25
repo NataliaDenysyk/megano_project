@@ -10,4 +10,3 @@ def cart(request) -> dict:
 
     return {'cart': cart,
             'total_price': DiscountProduct().get_priority_discount(cart)}
-
