@@ -9,6 +9,7 @@ from django.contrib import messages
 from django.core.cache import cache
 from django.contrib.auth.mixins import PermissionRequiredMixin
 
+from services.check_count_product import CheckCountProduct
 from services.check_full_name import check_name
 from services.slugify import slugify
 from  django.core.paginator import Paginator
@@ -107,6 +108,7 @@ class ProductDetailView(DetailView):
         context['num_reviews'] = ReviewsProduct.get_number_of_reviews_for_product(self.object)
         context['reviews_num3'], context['reviews_all'] = ReviewsProduct.get_list_of_product_reviews(self.object)
         context['form'] = ReviewsForm()
+        context.update({'toast_message': cache.get('toast_message')})
         context.update(ProductService(context['product']).get_context())
 
         return context
@@ -504,12 +506,8 @@ class OrderView(UpdateView):
                 products=item['product'],
                 quantity=item['quantity'],
             )
-            # product = Product.objects.get(slug=item['product'].slug)
-            # TODO: added function for checking counter products
 
-            quantity = Offer.objects.get(id=item['offer_id'])
-            quantity.amount -= int(item['quantity'])
-            quantity.save()
+            CheckCountProduct(item['offer_id']).calculating_amount_of_basket(item, item['offer_id'])
 
         cart.clear()
 

@@ -1,4 +1,5 @@
 {% load static %}
+{% load cache %}
 
 <div class="ProductCard">
     <div class="ProductCard-look">
@@ -58,19 +59,21 @@
                     Купить
                 </button>
             </div>
-            <div id="modal_open" class="my_modal">
-                <div class="my_modal-dialog">
-                    <div class="my_modal-content">
-                        <div class="my_modal-header">
-                            <p class="my_modal-title">Поздравляем!</p>
-                            <a href="#" title="Закрыть модальное окно" class="close">×</a>
-                        </div>
-                        <div class="my_modal-body">
-                            <p>Товар успешно добавлен в корзину!</p>
+            {% if not toast_message %}
+                <div id="modal_open" class="my_modal">
+                    <div class="my_modal-dialog">
+                        <div class="my_modal-content">
+                            <div class="my_modal-header">
+                                <p class="my_modal-title">Поздравляем!</p>
+                                <a href="#" title="Закрыть модальное окно" class="close">×</a>
+                            </div>
+                            <div class="my_modal-body">
+                                <p>Товар успешно добавлен в корзину!</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            {% endif %}
         </div>
         <div class="ProductCard-footer">
             <div class="ProductCard-tags">
