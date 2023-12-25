@@ -1,6 +1,7 @@
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.contrib.contenttypes.admin import GenericStackedInline
-from django.shortcuts import reverse
+from django.shortcuts import reverse, render, redirect
+from django.urls import path
 from django.utils.html import format_html
 
 from django.core.cache import cache
@@ -8,9 +9,11 @@ from django.utils.safestring import mark_safe
 from django_mptt_admin.admin import DjangoMpttAdmin
 
 from django.db.models import QuerySet
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponse
 
 from cart.models import Cart
+from services.services import ImportJSONService
+from .forms import JSONImportForm
 from .models import (
     Banners,
     Product,
@@ -237,6 +240,7 @@ class ProductInlineImages(admin.TabularInline):
 
 @admin.register(Product)
 class AdminProduct(admin.ModelAdmin):
+    change_list_template = 'store/products_changelist.html'
     actions = [
         mark_availability, mark_unavailability, reset_product_list_cache
     ]
@@ -317,6 +321,45 @@ class AdminProduct(admin.ModelAdmin):
         if 'delete_selected' in actions:
             del actions['delete_selected']
         return actions
+
+    def import_json(self, request: HttpRequest) -> HttpResponse:
+        if request.method == 'GET':
+            form = JSONImportForm()
+            context = {
+                'form': form,
+            }
+            return render(request, 'admin/json_form.html', context)
+
+        form = JSONImportForm(request.POST, request.FILES)
+        if not form.is_valid():
+            context = {
+                'form': form,
+            }
+            return render(request, 'admin/json_form.html', context, status=400)
+
+        result = ImportJSONService().import_json(
+            file=form.files['json_file'].file,
+            file_name=form.files['json_file'].name,
+        )
+        # TODO: дописать отправку результата по email
+        if result[1]:
+            message = result[0] + str(result[1][0])
+            self.message_user(request, message, level=messages.ERROR)
+        else:
+            self.message_user(request, result[0])
+
+        return redirect('..')
+
+    def get_urls(self):
+        urls = super().get_urls()
+        new_urls = [
+            path(
+                'import-offers-json/',
+                self.import_json,
+                name='import_json_file',
+            ),
+        ]
+        return new_urls + urls
 
 
 @admin.register(Offer)

@@ -167,7 +167,7 @@ class ProductImage(models.Model):
     )
 
     def __str__(self) -> str:
-        return f"{self.pk})"
+        return f"{self.pk}"
 
     class Meta:
         db_table = 'Images'

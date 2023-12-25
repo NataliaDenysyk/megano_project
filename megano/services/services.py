@@ -1,3 +1,9 @@
+import json
+import logging
+from json import JSONDecodeError
+
+from compare.models import *
+
 from datetime import datetime, timedelta
 from decimal import Decimal
 from random import choice
@@ -8,16 +14,17 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from urllib.parse import urlparse, parse_qs, urlencode
 from django.db.models import Avg, Count, When, Case
-from django.db import transaction
+from django.db import transaction, IntegrityError
 from django.http import HttpRequest
 from django.shortcuts import get_object_or_404, render
-
 
 from authorization.forms import RegisterForm, LoginForm
 from authorization.models import Profile
 from store.models import Product, Offer, Category, Reviews, Discount, ProductImage, Tag, Orders
 from .slugify import slugify
-from store.models import Orders
+
+
+log = logging.getLogger(__name__)
 
 
 class AuthorizationService:
@@ -106,8 +113,8 @@ class DiscountProduct:
         discounts = Discount.objects.filter(is_active=True)
         discounts_cart_priority = discounts.filter(name='DC', priority=True)
         discounts_set_priority = discounts.filter(name='DS', priority=True)
-        discounts_cart = discounts.filter( name='DC', priority=False)
-        discounts_set = discounts.filter(name='DS',priority=False)
+        discounts_cart = discounts.filter(name='DC', priority=False)
+        discounts_set = discounts.filter(name='DS', priority=False)
         if discounts_cart_priority:
             price = self.get_discount_on_cart(discounts_cart_priority, cart)
             if price:
@@ -449,7 +456,7 @@ class ProductService:
         Функция возвращает всех продавцов товара
         """
 
-        return Offer.objects.filter(product=self._product)
+        return Offer.objects.filter(product=self._product).exclude(amount=0)
 
     def get_popular_products(self, quantity):
         popular_products = self._product.objects.filter(orders__status=True). \
@@ -848,6 +855,7 @@ class ProfileUpdate:
     """
     Сервис для редактирования профиля
     """
+
     def __init__(self, profile: Profile):
         self.profile = profile
 
@@ -916,3 +924,162 @@ class ProfileUpdate:
             form.add_error('phone', 'Телефон должен быть уникальным')
 
         return phone
+
+
+class ImportJSONService:
+    """
+    Сервис импорта JSON файлов
+    """
+
+    def import_json(self, file, file_name) -> str:
+        """
+        Выполняет импорт продуктов
+        """
+
+        error_message = []
+        try:
+            json_file = json.loads(file.read().decode())
+
+            for info in json_file:
+                category = None
+
+                try:
+                    if info['product'].get('category'):
+                        category = Category.objects.get(name=info['product'].get('category'))
+
+                except Category.DoesNotExist as e:
+                    error_message.append(e)
+                    log.warning(f'Категория {info["product"].get("category")} не найдена в базе данных. Ошибка: {e}')
+
+                if category:
+                    try:
+                        result = self.get_or_create_product(category, info)
+
+                        if result:
+                            error_message.append(result)
+
+                    except IntegrityError as e:
+                        error_message += e
+                        log.warning(e, f'Товар {info.get("product").get("name")} уже существует')
+
+        except JSONDecodeError as e:
+            error_message.append(e)
+            log.error(f'Передан неправильный формат файла')
+
+        except KeyError as e:
+            error_message.append(e)
+            log.error(f'Нет совпадения по ключу в переданном JSON')
+
+        if error_message:
+            log.info(f'Неуспешный импорт {file_name}')
+            message = 'Внимание! Данные не импортированы, либо импортированы не полностью. '
+        else:
+            log.info(f'{file_name} импортирован успешно')
+            message = 'Данные импортированы'
+
+        return [message, error_message]
+
+    def get_or_create_product(self, category: Category, info: dict) -> Product:
+        """
+        Находит продукт по полю name, либо создает новый и создает связанные данные
+        """
+
+        error_message = []
+        product_data = info.get('product')
+        product_data['category'] = category
+        product_data['slug'] = slugify(product_data.get('name'))
+
+        product, created = Product.objects.get_or_create(name=product_data['name'], defaults=product_data)
+
+        try:
+            if info.get('tags'):
+                tags = self.get_or_create_tags(info.get('tags'))
+                product.tags.set(tags)
+
+        except Exception as e:
+            error_message.append(e)
+            log.warning(e, f'Не удалось импортировать теги для {product.name}')
+
+        try:
+            self.create_feature(info.get('feature'), product, category)
+
+        except Exception as e:
+            error_message.append(e)
+            log.warning(e, f'Не удалось импортировать характеристики для {product.name}')
+
+        try:
+            self.create_offer(info.get('offer'), info.get('seller'), product)
+
+        except Profile.DoesNotExist as e:
+            error_message.append(e)
+            logging.warning(e, f'{info.get("seller")} не найден в базе данных\n')
+
+        except ValueError as e:
+            error_message.append(e)
+            log.warning(e, f'Не удалось импортировать предложение от {info.get("seller")} для {product.name}')
+
+        return error_message
+
+    @staticmethod
+    def get_or_create_tags(tags_data: list) -> list[Tag]:
+        """
+        Находит в базе данных теги по полю name, если совпадений нет - создает новые,
+        и возвращает список Tag objects
+        """
+
+        result = [Tag.objects.get_or_create(name=tag) for tag in tags_data]
+        tags = [tag[0] for tag in result]
+
+        return tags
+
+    @staticmethod
+    def create_feature(feature_data: dict, product: Product, category: Category) -> None:
+        """
+        Создает характеристики продукта с учетом переданной категории
+        """
+
+        feature_data['object_id'] = product.id
+        feature_data['content_type_id'] = product.feature.core_filters.get('content_type__pk')
+        category_name = category.name.lower()
+
+        if category_name == 'телевизоры':
+            TVSetCharacteristic.objects.create(**feature_data)
+        elif category_name == 'наушники':
+            HeadphonesCharacteristic.objects.create(**feature_data)
+        elif category_name == 'мобильные телефоны':
+            MobileCharacteristic.objects.create(**feature_data)
+        elif category_name == 'стиральные машины':
+            WashMachineCharacteristic.objects.create(**feature_data)
+        elif category_name == 'фотоаппараты':
+            PhotoCamCharacteristic.objects.create(**feature_data)
+        elif category_name == 'ноутбуки':
+            NotebookCharacteristic.objects.create(**feature_data)
+        elif category_name == 'электроника':
+            ElectroCharacteristic.objects.create(**feature_data)
+        elif category_name == 'микроволновые печи':
+            MicrowaveOvenCharacteristic.objects.create(**feature_data)
+        elif category_name == 'кухонная техника':
+            KitchenCharacteristic.objects.create(**feature_data)
+        elif category_name == 'торшеры':
+            TorchereCharacteristic.objects.create(**feature_data)
+
+    @staticmethod
+    def create_offer(offer: dict, seller_name: str, product: Product) -> str:
+        """
+        Обновляет или создает предложение продавца на конкретный товар
+        """
+
+        seller = Profile.objects.get(name_store=seller_name)
+
+        Offer.objects.update_or_create(
+            seller=seller,
+            product=product,
+            defaults={
+                'unit_price': offer.get('unit_price'),
+                'amount': offer.get('amount'),
+            },
+        )
+
+        if not product.availability:
+            product.availability = True
+            product.save()

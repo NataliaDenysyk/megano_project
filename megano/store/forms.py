@@ -119,3 +119,12 @@ class PaymentForm(forms.Form):
             'data-validate': "require pay",
         })
     )
+
+
+class JSONImportForm(forms.Form):
+    """
+    Вьюшка импорта JSON файлов
+    """
+
+    json_file = forms.FileField()
+    email = forms.EmailField()

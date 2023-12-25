@@ -1,0 +1,44 @@
+[
+  {
+    "product": {
+      "name": "6.1\" Смартфон Apple iPhone",
+      "category": "Телевизоры",
+      "description": {
+        "title": "iPhone 15 Pro - выкован из Титана",
+        "card_text": [
+          "Передовая система камер",
+          "Новая кнопка «Action» — самый быстрый путь к любимой функции вашего iPhone.",
+          "Новый разъем USB-C"
+        ],
+        "text_bottom": "Смартфон Apple iPhone 15 привлекает внимание безрамочным дисплеем 6.1. Разрешение 2556x1179 dpi сохраняет четкость и насыщенность картинки, точную передачу цвета при любом освещении. 6-ядерный процессор Apple A16 Bionic с ОЗУ 6 ГБ гарантирует высокий уровень производительности. 2 тыловые камеры 48 +12 Мп позволяют делать эффектные фото и видео с углом обзора 120° и 4K-разрешением.",
+        "text_bottom_ul": [
+        ]
+      },
+      "limited_edition": false
+    },
+    "tags": [
+      "iphone",
+      "Смартфон"
+    ],
+    "feature": {
+      "made_in": "Вьетная",
+      "production_year": 2020,
+      "color": null,
+      "weight": null,
+      "name": "TVSet",
+      "screen": null,
+      "resolution": null,
+      "country": null,
+      "freq": null,
+      "wi_fi": "Нет",
+      "hdmi": "Нет",
+      "description": "блаблаблабла"
+    },
+    "seller": "test_admin",
+    "offer":
+      {
+        "unit_price": "3450.00",
+        "amount": 120
+      }
+  }
+]
