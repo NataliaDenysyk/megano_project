@@ -40,3 +40,7 @@ input[type="email"] {
     flex-direction: column;
     align-items: center;
 }
+
+.cart-empty-img {
+    border-radius: 10px;
+}
