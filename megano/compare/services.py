@@ -67,7 +67,7 @@ def get_compare_info(products, prev_prod_category=None) -> dict:
             model_info = return_model(product, id_model_characterisrics)
 
             prev_prod_category = product.category.name
-            product_price = ProductService(product).get_average_price()
+            product_price = product.get_average_price()
             result[product.name] = {
                 'product_preview_url': product.preview.url,
                 'product_slug': product.slug,
