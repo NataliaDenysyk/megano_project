@@ -1,6 +1,12 @@
 import json
 import logging
+
 from json import JSONDecodeError
+
+from django.core.files.temp import NamedTemporaryFile
+from django.core.files import File
+from urllib.request import urlopen
+from urllib.error import HTTPError
 
 from compare.models import *
 
@@ -858,7 +864,7 @@ class ImportJSONService:
 
                     except IntegrityError as e:
                         error_message += e
-                        log.warning(e, f'Товар {info.get("product").get("name")} уже существует')
+                        log.warning(f'Товар {info.get("product").get("name")} уже существует. Ошибка: {e}')
 
         except JSONDecodeError as e:
             error_message.append(e)
@@ -887,6 +893,20 @@ class ImportJSONService:
         product_data['category'] = category
         product_data['slug'] = slugify(product_data.get('name'))
 
+        try:
+            product_data['preview'] = self.get_img_from_url(product_data['preview'])
+
+        except ValueError as e:
+            error_message.append(e)
+            log.warning(f'Неправильно указан адрес для загрузки главного изображения '
+                        f'продукта {product_data.get("name")}. Ошибка: {e}')
+            product_data['preview'] = ''
+
+        except HTTPError as e:
+            error_message.append(e)
+            log.warning(f'Не удалось загрузить главное изображение для {product_data.get("name")}. Ошибка: {e}')
+            product_data['preview'] = ''
+
         product, created = Product.objects.get_or_create(name=product_data['name'], defaults=product_data)
 
         try:
@@ -896,25 +916,36 @@ class ImportJSONService:
 
         except Exception as e:
             error_message.append(e)
-            log.warning(e, f'Не удалось импортировать теги для {product.name}')
+            log.warning(f'Не удалось импортировать теги для {product.name}. Ошибка: {e}')
 
         try:
             self.create_feature(info.get('feature'), product, category)
 
         except Exception as e:
             error_message.append(e)
-            log.warning(e, f'Не удалось импортировать характеристики для {product.name}')
+            log.warning(f'Не удалось импортировать характеристики для {product.name}. Ошибка: {e}')
+
+        try:
+            self.create_product_images(product, info.get('images'))
+
+        except ValueError as e:
+            error_message.append(e)
+            log.warning(f'Неправильно указан адрес для загрузки изображений продукта {product.name}. Ошибка: {e}')
+
+        except HTTPError as e:
+            error_message.append(e)
+            log.warning(f'Не удалось загрузить изображения для {product.name}. Ошибка: {e}')
 
         try:
             self.create_offer(info.get('offer'), info.get('seller'), product)
 
         except Profile.DoesNotExist as e:
             error_message.append(e)
-            logging.warning(e, f'{info.get("seller")} не найден в базе данных\n')
+            logging.warning(f'{info.get("seller")} не найден в базе данных. Ошибка: {e}')
 
         except ValueError as e:
             error_message.append(e)
-            log.warning(e, f'Не удалось импортировать предложение от {info.get("seller")} для {product.name}')
+            log.warning(f'Не удалось импортировать предложение от {info.get("seller")} для {product.name}. Ошибка: {e}')
 
         return error_message
 
@@ -981,3 +1012,33 @@ class ImportJSONService:
         if not product.availability:
             product.availability = True
             product.save()
+
+    def create_product_images(self, product: Product, img_data: list):
+        """
+        Добавляет изображения продукта в базу данных
+        """
+
+        images = [self.get_img_from_url(img) for img in img_data]
+
+        [
+            ProductImage.objects.create(
+                product=product,
+                image=img,
+            )
+            for img in images
+        ]
+
+    def get_img_from_url(self, image_url: str) -> File:
+        """
+        Возвращает изображение из переданного url
+        """
+
+        file_name = image_url.split('/')[-1]
+        img_tmp = NamedTemporaryFile(delete=True)
+
+        with urlopen(image_url) as uo:
+            assert uo.status == 200
+            img_tmp.write(uo.read())
+            img_tmp.flush()
+
+        File(img_tmp, name=file_name)
