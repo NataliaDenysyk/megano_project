@@ -14,3 +14,6 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         name_file = options.get('file')
         # TODO: здесь метод который будет считывать файл
+        test = True
+        if test:
+            self.stdout.write(f"Файл {name_file}, успешно загружен!")
