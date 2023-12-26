@@ -582,6 +582,8 @@ class PaymentFormView(FormView):
         Отправляет оплату в очередь, если форма прошла валидацию
         """
 
+        Orders.objects.filter(id=self.kwargs['pk']).update(status=3)
+
         pay_order.apply_async(
             kwargs={
                 'order_id': self.kwargs['pk'],

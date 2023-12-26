@@ -280,7 +280,13 @@ class PaymentService:
         result = FakePaymentService(self._card).pay_order()
 
         if result == 'Оплачено':
-            Orders.objects.filter(id=self._order_id).update(status=1)
+            order = Orders.objects.get(id=self._order_id)
+            if order.status_exception:
+                order.status_exception = ''
+
+            order.status = 1
+            order.save()
+
         else:
             Orders.objects.filter(id=self._order_id).update(status=2, status_exception=result)
 
