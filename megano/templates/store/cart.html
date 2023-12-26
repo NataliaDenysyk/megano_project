@@ -25,8 +25,15 @@
                                             <div class="Cart-desc">{{ cart.description.text_bottom }}</div>
                                         </div>
                                         <div class="Cart-block Cart-block_price">
-                                            <div class="Cart-price">{{ item.price }}$
-                                            </div>
+                                            {% if item.d_price != 'None' %}
+                                                <div class="Cart-price Cart-price_old">{{ item.price }}$
+                                                </div>
+                                                <div class="Cart-price">{{ item.d_price }}$
+                                                </div>
+                                            {% else %}
+                                                <div class="Cart-price">{{ item.price }}$
+                                                </div>
+                                            {% endif %}
                                         </div>
                                     </div>
                                     <div class="Cart-block Cart-block_row">
@@ -71,7 +78,12 @@
                         <div class="Cart-total">
                             <div class="Cart-block Cart-block_total">
                                 <strong class="Cart-title">Итого:
-                                </strong><span class="Cart-price">{{ total_price }}$</span>
+                                    {% if total_price != item.total_price %}
+                                        </strong><span class="Cart-price">{{ total_price }}$</span>
+                                        <span class="Cart-price_old">{{ cart.get_total_price }}$</span>
+                                    {% else %}
+                                        </strong><span class="Cart-price">{{ total_price }}$</span>
+                                    {% endif %}
                             </div>
                             <div class="Cart-block">
                                 {% if user.is_authenticated %}
@@ -89,7 +101,8 @@
                 {% else %}
                     <div class="cart-empty">
                         <h1 class="form-title">Корзина пуста</h1>
-                        <img class="cart-empty-img" src="{% static 'assets/img/content/home/VBWY.gif' %}" alt="cart_empty">
+                        <img class="cart-empty-img" src="{% static 'assets/img/content/home/VBWY.gif' %}"
+                             alt="cart_empty">
                     </div>
                 {% endif %}
             </div>

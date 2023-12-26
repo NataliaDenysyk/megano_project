@@ -7,14 +7,18 @@
     <div class="Account">
       <div class="Account-group">
         <div class="Account-column">
-          {% if profile.avatar %}
-            <div class="Account-avatar"><img src="{{ profile.avatar.url }}" alt="card.jpg"/>
+          {% if user.profile.avatar %}
+            <div class="Account-avatar"><img src="{{ user.profile.avatar.url }}" alt="card.jpg"/>
             </div>
           {% endif %}
         </div>
         <div class="Account-column">
           <div class="Account-name">
-            {% firstof object.first_name and object.last_name profile.user.first_name object.username %}
+            {% if user.first_name and user.last_name %}
+              {{ user.first_name }} {{ user.last_name }}
+            {% else %}
+              {% firstof user.first_name user.username %}
+            {% endif %}
           </div>
           <a class="Account-editLink" href="{% url 'profile:profile' slug=user.profile.slug %}">Редактировать
             профиль</a>
