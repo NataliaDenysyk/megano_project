@@ -6,6 +6,7 @@ def cart(request) -> dict:
     """
     Контекстный процессор позволяет воспользоваться переменной "cart" в любом шаблоне сайта
     """
+
     cart = Cart(request)
 
     return {'cart': cart,

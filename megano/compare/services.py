@@ -1,10 +1,17 @@
 from django.core.handlers.wsgi import WSGIRequest
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse_lazy
 
-from compare.models import HeadphonesCharacteristic, TVSetCharacteristic, WashMachineCharacteristic, \
-    MobileCharacteristic, PhotoCamCharacteristic, NotebookCharacteristic, KitchenCharacteristic, TorchereCharacteristic
+from compare.models import (HeadphonesCharacteristic,
+                            TVSetCharacteristic,
+                            WashMachineCharacteristic,
+                            MobileCharacteristic,
+                            PhotoCamCharacteristic,
+                            NotebookCharacteristic,
+                            KitchenCharacteristic,
+                            TorchereCharacteristic,
+                            )
 from services.services import ProductService
 from store.models import Product
 
@@ -32,7 +39,7 @@ def _add_product_to_comparison(request: WSGIRequest, comparison_id) -> HttpRespo
     # Проверка, чтобы не было больше 4 продуктов для сравнения и не добавлять 1 товар несколько раз
     if len(set(comparison_list)) >= 4:
         comparison_list.pop(0)
-        # comparison_list.clear()
+
     # Проверка, чтобы избежать добавления одного товара несколько раз
     if comparison_id not in comparison_list:
         comparison_list.append(comparison_id)
@@ -42,10 +49,30 @@ def _add_product_to_comparison(request: WSGIRequest, comparison_id) -> HttpRespo
             request.session['comparison_list'] = comparison_list
         else:
             # Если пользователь не авторизован, сохраняем в куки
-            response = HttpResponseRedirect(reverse('store:catalog'))
+            response = redirect('store:catalog')
             response.set_cookie('comparison_list', ','.join(comparison_list))
 
             return response
+
+
+def _remove_product_from_comparison(request):
+    """
+    Добавить одну единицу товара в корзине
+
+    :param request: запрос
+    :return: HttpResponse - текущая страница
+    """
+
+    if request.user.is_authenticated:
+        # Если пользователь авторизован, очищаем сессию
+        request.session['comparison_list'] = []
+    else:
+        # Если пользователь не авторизован, очищаем куки
+        response = redirect('store:catalog')
+        response.delete_cookie('comparison_list')
+        return response
+
+    return redirect('store:comparison')
 
 
 def get_comparison_list(comparison_list):
@@ -85,6 +112,10 @@ def get_compare_info(products, prev_prod_category=None) -> dict:
 
 
 def return_model(product, id_model_characteristics) -> dict:
+    """
+    Проверка наименования категории и выбор модели
+    """
+
     if product.category.name == 'наушники' or product.category.name == 'Наушники':
         return characteristic_headset(id_model_characteristics)
     if product.category.name == 'Телевизоры' or product.category.name == 'телевизоры':
@@ -108,6 +139,10 @@ def return_model(product, id_model_characteristics) -> dict:
 
 
 def characteristic_headset(id_model_characteristics) -> dict:
+    """
+    Подготовка данных для возврата на фронт
+    """
+
     model_info = HeadphonesCharacteristic.objects.get(id=id_model_characteristics)
     characteristic = {'Беспроводные': model_info.wireless,
                       'Наличие микрофона': model_info.mic,
@@ -120,6 +155,10 @@ def characteristic_headset(id_model_characteristics) -> dict:
 
 
 def characteristic_wm(id_model_characteristics) -> dict:
+    """
+    Подготовка данных для возврата на фронт
+    """
+
     model_info = WashMachineCharacteristic.objects.get(id=id_model_characteristics)
     characteristic = {'Высота': model_info.height,
                       'Ширина': model_info.width,
@@ -132,6 +171,10 @@ def characteristic_wm(id_model_characteristics) -> dict:
 
 
 def characteristic_mobile(id_model_characteristics) -> dict:
+    """
+    Подготовка данных для возврата на фронт
+    """
+
     model_info = MobileCharacteristic.objects.get(id=id_model_characteristics)
     characteristic = {'Тип мобильного телефона': model_info.phone_type,
                       'Размер экрана в дюймах': model_info.screen_size,
@@ -143,6 +186,10 @@ def characteristic_mobile(id_model_characteristics) -> dict:
 
 
 def characteristic_tv(id_model_characteristics) -> dict:
+    """
+    Подготовка данных для возврата на фронт
+    """
+
     model_info = TVSetCharacteristic.objects.get(id=id_model_characteristics)
     characteristic = {'Название': model_info.name,
                       'Размер экрана': model_info.screen,
@@ -157,6 +204,10 @@ def characteristic_tv(id_model_characteristics) -> dict:
 
 
 def characteristic_photo(id_model_characteristics) -> dict:
+    """
+    Подготовка данных для возврата на фронт
+    """
+
     model_info = PhotoCamCharacteristic.objects.get(id=id_model_characteristics)
     characteristic = {'Тип фотоаппарата': model_info.type,
                       'Количество мегапикселей': model_info.mp,
@@ -168,6 +219,10 @@ def characteristic_photo(id_model_characteristics) -> dict:
 
 
 def characteristic_nb(id_model_characteristics) -> dict:
+    """
+    Подготовка данных для возврата на фронт
+    """
+
     model_info = NotebookCharacteristic.objects.get(id=id_model_characteristics)
     characteristic = {'Тип ноутбука': model_info.laptop_type,
                       'Размер экрана в дюймах': model_info.screen_size,
@@ -180,6 +235,10 @@ def characteristic_nb(id_model_characteristics) -> dict:
 
 
 def characteristic_mw(id_model_characteristics) -> dict:
+    """
+    Подготовка данных для возврата на фронт
+    """
+
     model_info = NotebookCharacteristic.objects.get(id=id_model_characteristics)
     characteristic = {'Объём загрузки': model_info.capacity,
                       'Мощность Вт': model_info.power,
@@ -192,6 +251,10 @@ def characteristic_mw(id_model_characteristics) -> dict:
 
 
 def characteristic_kitchen_technik(id_model_characteristics) -> dict:
+    """
+    Подготовка данных для возврата на фронт
+    """
+
     model_info = KitchenCharacteristic.objects.get(id=id_model_characteristics)
     characteristic = {'Тип техники': model_info.type,
                       'Дополнительное описание': model_info.description,
@@ -200,6 +263,10 @@ def characteristic_kitchen_technik(id_model_characteristics) -> dict:
 
 
 def characteristic_electro(id_model_characteristics) -> dict:
+    """
+    Подготовка данных для возврата на фронт
+    """
+
     model_info = TorchereCharacteristic.objects.get(id=id_model_characteristics)
     characteristic = {'Тип электроники': model_info.type_product,
                       'Тип питания': model_info.power,
@@ -209,6 +276,10 @@ def characteristic_electro(id_model_characteristics) -> dict:
 
 
 def characteristic_torchere(id_model_characteristics) -> dict:
+    """
+    Подготовка данных для возврата на фронт
+    """
+
     model_info = TorchereCharacteristic.objects.get(id=id_model_characteristics)
     characteristic = {'Тип лампочки': model_info.led_type,
                       'Высота': model_info.height,
@@ -218,6 +289,10 @@ def characteristic_torchere(id_model_characteristics) -> dict:
 
 
 def get_characteristic_from_common_info(data) -> dict:
+    """
+    Подготовка данных для возврата на фронт
+    """
+
     characteristic_info = {'Страна производства': data.get('made_in'),
                            'Год производства': data.get('production_year'),
                            'Цвет': data.get('color'),

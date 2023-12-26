@@ -1,16 +1,19 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
 from django.views import View
-from django.http import HttpResponseRedirect
 from django.views.generic import TemplateView
 
 from compare.services import (get_comparison_list,
                               _add_product_to_comparison,
-                              get_compare_info)
+                              get_compare_info,
+                              )
 from store.models import Product
 
 
 class AddToComparisonView(View):
+    """
+    Контроллер добавления товаров к сравнению
+    """
 
     def get(self, request, *args, **kwargs):
         product_id = self.kwargs.get('product_id')
@@ -21,10 +24,33 @@ class AddToComparisonView(View):
         # сервис по добавлению товара к сравнению
         _add_product_to_comparison(request, comparison_id)
 
-        return HttpResponseRedirect(reverse('store:catalog'))
+        return redirect(reverse('store:catalog'))
+
+
+class ClearComparisonView(View):
+    """
+    Контроллер для очистки страницы сравнения
+    """
+
+    def get(self, request, *args, **kwargs):
+
+        if request.user.is_authenticated:
+            # Если пользователь авторизован, очищаем сессию
+            request.session['comparison_list'] = []
+        else:
+            # Если пользователь не авторизован, очищаем куки
+            response = redirect('store:catalog')
+            response.delete_cookie('comparison_list')
+            return response
+
+        return redirect('compare:comparison')
 
 
 class ComparisonView(View):
+    """
+    Контроллер сравнения товаров
+    """
+
     template_name = 'compare/compare_products.html'
 
     def get(self, request, *args, **kwargs):
@@ -45,6 +71,10 @@ class ComparisonView(View):
 
 
 class ComparisonErrorView(TemplateView):
+    """
+    Контроллер происходит при ошибке сравнения товаров
+    """
+
     template_name = 'compare/compare_error.html'
 
     def get(self, request, *args, **kwargs):
@@ -56,10 +86,15 @@ class ComparisonErrorView(TemplateView):
             # Если пользователь не авторизован, используем куки
             comparison_list = request.COOKIES.get('comparison_list', '').split(',')
         comparison_list.clear()
+
         return render(request, self.template_name, context={'message': message})
 
 
 class ComparisonNoneView(TemplateView):
+    """
+    Контроллер если нечего сравнивать
+    """
+
     template_name = 'compare/compare_none.html'
 
     def get(self, request, *args, **kwargs):

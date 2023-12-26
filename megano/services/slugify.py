@@ -54,6 +54,7 @@ def cleaned_text(data: str) -> str:
     :rtype : str.
     :return : str.
     """
+
     own_text = ''.join(re.findall(r'[ \w*0-9]', data))
     return own_text
 
@@ -65,6 +66,7 @@ def slugify(text: str) -> str:
     :param text: Отформатированный текст.
     :return: str.
     """
+
     _res = []
     own_text = cleaned_text(data=text)
     _text = own_text.replace(' ', '-').lower()
