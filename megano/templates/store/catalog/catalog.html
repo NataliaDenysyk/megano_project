@@ -27,8 +27,13 @@
                   </strong>
                   <div class="Card-description">
                     <div class="Card-cost">
-                      {% if product.price != None %}
-                        <span class="Card-price">${{ product.price }}</span>
+                      {% if product.get_average_price != None %}
+                        {% if product.get_discount_price %}
+                          <span class="Card-priceOld">${{ product.get_average_price }}</span>
+                          <span class="Card-price">${{ product.get_discount_price }}</span>
+                        {% else %}
+                          <span class="Card-price">${{ product.get_average_price }}</span>
+                        {% endif %}
                       {% else %}
                         <span>Не в продаже</span>
                       {% endif %}
