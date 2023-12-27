@@ -1,5 +1,5 @@
 from django.contrib import admin, messages
-from django.contrib.contenttypes.admin import GenericStackedInline
+from django.core.mail import send_mail
 from django.shortcuts import reverse, render, redirect
 from django.urls import path
 from django.utils.html import format_html
@@ -328,9 +328,11 @@ class AdminProduct(admin.ModelAdmin):
             context = {
                 'form': form,
             }
+
             return render(request, 'admin/json_form.html', context)
 
         form = JSONImportForm(request.POST, request.FILES)
+
         if not form.is_valid():
             context = {
                 'form': form,
@@ -341,12 +343,8 @@ class AdminProduct(admin.ModelAdmin):
             file=form.files['json_file'].file,
             file_name=form.files['json_file'].name,
         )
-        # TODO: дописать отправку результата по email
-        if result[1]:
-            message = result[0] + str(result[1][0])
-            self.message_user(request, message, level=messages.ERROR)
-        else:
-            self.message_user(request, result[0])
+
+        self.send_message(request, result, form.cleaned_data.get('email'))
 
         return redirect('..')
 
@@ -359,7 +357,31 @@ class AdminProduct(admin.ModelAdmin):
                 name='import_json_file',
             ),
         ]
+
         return new_urls + urls
+
+    def send_message(self, request: HttpRequest, result: list, email: str) -> None:
+        """
+        Отправляет уведомление о результате импорта в админку и на указанную почту
+        """
+
+        if result[1]:
+            message = result[0] + str(result[1][0])
+            self.message_user(request, message, level=messages.ERROR)
+            send_mail(
+                subject='Import',
+                message=message,
+                from_email='admin@admin.test',
+                recipient_list=[email],
+            )
+
+        self.message_user(request, result[0])
+        send_mail(
+            subject='Import',
+            message=result[0],
+            from_email=None,
+            recipient_list=[email],
+        )
 
 
 @admin.register(Offer)

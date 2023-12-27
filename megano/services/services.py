@@ -875,11 +875,12 @@ class ImportJSONService:
             log.error(f'Нет совпадения по ключу в переданном JSON')
 
         if error_message:
-            log.info(f'Неуспешный импорт {file_name}')
-            message = 'Внимание! Данные не импортированы, либо импортированы не полностью. '
+            message = f'Внимание! Данные {file_name} не импортированы, либо импортированы не полностью. '
+            log.info(message)
+
         else:
-            log.info(f'{file_name} импортирован успешно')
-            message = 'Данные импортированы'
+            message = f'{file_name} импортирован успешно'
+            log.info(message)
 
         return [message, error_message]
 
@@ -941,7 +942,7 @@ class ImportJSONService:
 
         except Profile.DoesNotExist as e:
             error_message.append(e)
-            logging.warning(f'{info.get("seller")} не найден в базе данных. Ошибка: {e}')
+            log.warning(f'{info.get("seller")} не найден в базе данных. Ошибка: {e}')
 
         except ValueError as e:
             error_message.append(e)
