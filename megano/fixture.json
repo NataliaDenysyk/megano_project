@@ -1,0 +1,4658 @@
+[
+  {
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$igfdQOf0hR4fyPOKjDuS1N$Q/Q3tMuX505Q7WKzn48TA5wUdtr+Ble1xLG07sI/uFA=",
+      "last_login": "2023-12-23T07:36:44Z",
+      "is_superuser": true,
+      "username": "admin",
+      "first_name": "Alex",
+      "last_name": "Serb",
+      "email": "seg.alex@gmail.com",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2023-12-23T07:36:34Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 2,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$Iep21qk3zDv1KZuPaL9Ags$Wr3asVQANRGFt82arBt+at0ruTQ3SMj42A422JK6778=",
+      "last_login": "2023-12-26T02:25:58Z",
+      "is_superuser": false,
+      "username": "user1",
+      "first_name": "John",
+      "last_name": "Doe",
+      "email": "john.doe@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-26T02:25:14Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 3,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$EZjpE9iMsL7nxs1XxvX13z$IymidITshkyOWPjf5mQqNnhC3YpyFY1P4Tu6ECwmn2M=",
+      "last_login": "2023-12-26T02:27:02Z",
+      "is_superuser": false,
+      "username": "user2",
+      "first_name": "Jane",
+      "last_name": "Smith",
+      "email": "jane.smith@example.com",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2023-12-26T02:26:26Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 4,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$XPiuiHOOhX6pCCkjD1LjMq$vWr3R5y+mSKiZrRV7KyJ8kObtdNljmq6yoEAc/Cfz/I=",
+      "last_login": "2023-12-26T02:28:41Z",
+      "is_superuser": false,
+      "username": "user3",
+      "first_name": "Elena",
+      "last_name": "Petrova",
+      "email": "elena.petrova@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-26T02:28:06Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 5,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$t9EF76s9St17epeF8EwSed$LISqzNq33HglvM7Wq2M4ipRyGL924P47EYKe7vlkC+Y=",
+      "last_login": null,
+      "is_superuser": true,
+      "username": "user4",
+      "first_name": "Maxim",
+      "last_name": "Ivanov",
+      "email": "maxim.ivanov@example.com",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2023-12-26T02:29:02Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 6,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$FshhktBX7j3eQeH31kGp10$Zc4Hk2xFdRj3Q/cTlvPCYlB5PTZmyvs6vbAGGWeGub0=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "user5",
+      "first_name": "Olga",
+      "last_name": "Sidorova",
+      "email": "olga.sidorova@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-27T08:45:20Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 7,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$YI2bXrjkG45Y+9Z54+KvV0$jOKe3oKbFRdxG5mG6ATRBYl1QDwZteHt+jXKvxCR2+o=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "user6",
+      "first_name": "Ivan",
+      "last_name": "Kuznetsov",
+      "email": "ivan.kuznetsov@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-27T09:20:55Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 8,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$bdmBFnI2WcxI4XMACh91Pv$3qo3wwv4Cq1N2dAhk9se4FCXRWubJTBa/x1IKZMWLIY=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "user7",
+      "first_name": "Sophia",
+      "last_name": "Lee",
+      "email": "sophia.lee@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-27T10:15:42Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 9,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$XPMaXU5HhuUPYi0OzrB7Xi$y1UofyG+dQ2tnt4D7S46+zp0Cb0ebOCJOBeEOeKOiLE=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "user8",
+      "first_name": "David",
+      "last_name": "Wang",
+      "email": "david.wang@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-27T11:05:18Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 10,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$1HyjZOmjktffu6VPlYCDM9$CRt4yIeRQdX3/rflkHVZtKzLlTJoDQATV9cLrR6nN04=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "emma12",
+      "first_name": "Emma",
+      "last_name": "Johnson",
+      "email": "emma.johnson@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-27T11:50:36Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 11,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$VQVTbyMqcMBhxK7ncFdLHJ$1b5/xEOxIhjRW3DRaTlFZOzgEGYXMopS3NvlK9FjGhE=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "alexander34",
+      "first_name": "Alexander",
+      "last_name": "Ivanov",
+      "email": "alexander.ivanov@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-27T12:30:15Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 12,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$JrFFwrRUkZJNq4Nfiqr1kW$AWE8tHwwmL2T+x4D2K/qltKWaUzqj0q/lHpOajwHTSM=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "megan_smith",
+      "first_name": "Megan",
+      "last_name": "Smith",
+      "email": "megan.smith@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-27T13:15:42Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 13,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$Bqy5ZZXyDpEmD7qQx1cfWp$9dILttHZQDj/Ofl3v9nUz5e5SALGjRsE0ny6pwrJKoQ=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "peter_jones",
+      "first_name": "Peter",
+      "last_name": "Jones",
+      "email": "peter.jones@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-27T14:05:18Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 14,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$GA3VsxIlf0Uc/N5NwRpsVH$3TAMmKxph3uHlyOBK0b2vcJ9D54nOeOBzXGGQ0Hnx/k=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "susan_miller",
+      "first_name": "Susan",
+      "last_name": "Miller",
+      "email": "susan.miller@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-27T14:50:36Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 15,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$A6WwCTtQjx8lsqN0wygA3v$fsrS3z+eET16VJ/f4R+KFFfB76ihZM+3g1sGzF/z4zI=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "daniel_brown",
+      "first_name": "Daniel",
+      "last_name": "Brown",
+      "email": "daniel.brown@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-27T15:30:20Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 16,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$0LbdhBUOTWkfLvNJWUwVgG$3PQJjnCoYFGqr5sbk3nHhP1UcT1f1zUaz1X8JOqlgkU=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "natalie_wang",
+      "first_name": "Natalie",
+      "last_name": "Wang",
+      "email": "natalie.wang@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-27T16:15:15Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 17,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$tl2fYLarBnqo6VTz1jptvJ$P6UCG/HkqFHDfjR8Nc7RSoOshPG4nAtGqXilJmygcn4=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "jackson_doe",
+      "first_name": "Jackson",
+      "last_name": "Doe",
+      "email": "jackson.doe@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-27T17:00:42Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 18,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$yfq8Xds4oHFW1pquTBjEhe$9wGslzFJVSU4gGpR8voVdzIb1uIfLqDD6/t8NZ7Ko7s=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "victoria_smith",
+      "first_name": "Victoria",
+      "last_name": "Smith",
+      "email": "victoria.smith@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-27T17:45:18Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 19,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$jxdH0kEJNbdZzNMM9Rq4H4$6DZj6fVxBPtogG2EaP2FtC4W/46k5u1Vg9J4mHtrNMQ=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "charles_brown",
+      "first_name": "Charles",
+      "last_name": "Brown",
+      "email": "charles.brown@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-27T18:30:36Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 20,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$pM27sHd1SRQFmK9VEyXg1h$tM/hph07DTWFcHE4FBoVcTzdSdLjEnF0K7ILexRvjX4=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "sophie_miller",
+      "first_name": "Sophie",
+      "last_name": "Miller",
+      "email": "sophie.miller@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-27T19:15:20Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 21,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$uOfD6qIUzzL7uEY0MMya20$wOg8FROGz9ivv2iQP0BoFkyOrsBlKBmzyZZeZs0O/A8=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "andrew_smith",
+      "first_name": "Andrew",
+      "last_name": "Smith",
+      "email": "andrew.smith@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-27T20:00:15Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 22,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$X9TdmlFSjY8VnlrWzdP0WX$sm/8TNSUKLuIjR3sUEZ3YcYZexzrt+WQkWl/dpFXZwM=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "elizabeth_green",
+      "first_name": "Elizabeth",
+      "last_name": "Green",
+      "email": "elizabeth.green@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-27T20:45:42Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 23,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$XpV88OBAdqXZPSYPtF9wbu$G12AsYgXD29FGVyzl/Dy6bh8h8Am4QRDl1YfcuA/lWY=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "michael_jackson",
+      "first_name": "Michael",
+      "last_name": "Jackson",
+      "email": "michael.jackson@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-27T21:30:18Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 24,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$EufUf2P18ljDnwRACuCHb7$jR7qqKpVJ1y9cWtERyt/tWocDUTLDfqFv0f41ajRp+Y=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "lucas_miller",
+      "first_name": "Lucas",
+      "last_name": "Miller",
+      "email": "lucas.miller@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-27T22:15:36Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 25,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$E72sO1qqE6PPM3weVBJY9s$hGir76mFUVawWvQg8SvRHbjZfpE4QkXAzMsNlV0oE94=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "olivia_adams",
+      "first_name": "Olivia",
+      "last_name": "Adams",
+      "email": "olivia.adams@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-27T23:00:20Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 26,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$lyc0uFD8l9sHvP11X9pr8c$JDkY6eP9UwZHQ1gYPiZIiy1P8DgM9FtBfndjVrbWygA=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "violet_williams",
+      "first_name": "Violet",
+      "last_name": "Williams",
+      "email": "violet.williams@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-28T00:15:15Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 27,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$R71PjbgUugJb2oECptA29n$u3BTRON2wL1dXZgF9Wmz37zOjPSR3ps3V3E1xdWekbU=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "nathan_anderson",
+      "first_name": "Nathan",
+      "last_name": "Anderson",
+      "email": "nathan.anderson@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-28T01:00:42Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 28,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$W2hnt3pGdwV2bxqJYmRWu0$zd4Paw6WSRFMSmZzL2VeUCh/LeLcH8kMaM+fREb6cOY=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "samantha_jones",
+      "first_name": "Samantha",
+      "last_name": "Jones",
+      "email": "samantha.jones@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-28T01:45:18Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 29,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$A7ql4SdsX6zuepnrsgRkUn$bjI6i7A0u3j1KTHX3j9qMbdtVTEVNDle0u+LUzV8WpI=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "william_roberts",
+      "first_name": "William",
+      "last_name": "Roberts",
+      "email": "william.roberts@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-28T02:30:36Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 30,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$COTWVE2SgOl8JG9YXIDTte$z/E+vqBKsZ20cfsdqldg14mAmEG1GKnU1pmR1RF5mu0=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "evan_davis",
+      "first_name": "Evan",
+      "last_name": "Davis",
+      "email": "evan.davis@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-28T03:15:20Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 31,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$uj1E4XTnHvyyZmrv8mC+6o$So6d8lDFNxlZvOJ9gYDRYjY2rBwwfnt2EjHh/n4bSIs=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "oliver_thompson",
+      "first_name": "Oliver",
+      "last_name": "Thompson",
+      "email": "oliver.thompson@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-28T04:00:15Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 32,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$wm1KuY2xVKdL3eEl0SZ+/P$RXkPzL89D8UINjxvYcxT2ZMeYvx5yfrxW6oX3GJInKo=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "emily_hall",
+      "first_name": "Emily",
+      "last_name": "Hall",
+      "email": "emily.hall@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-28T04:45:42Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 33,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$vn38a5eGWOMVViyfiLRaWv$thvNydB7oT89VQQaRe3Gw7ojXt17A1n2mU2B+AR2s9M=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "nora_baker",
+      "first_name": "Nora",
+      "last_name": "Baker",
+      "email": "nora.baker@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-28T05:30:18Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 34,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$zTLTj6M7BVYQmP9YHs34Af$Xf5IyM43D8bhPHOMsy/kfCfUEGt3tu7XVL66m0HYxIs=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "dylan_morris",
+      "first_name": "Dylan",
+      "last_name": "Morris",
+      "email": "dylan.morris@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-28T06:15:36Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 35,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$kVXEc7dp4fXPKQXfj/YA6c$dM31LbjFV0Pb/W4Y8twSZUzR0iH7gWSZMZj6YHM82UM=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "mia_jackson",
+      "first_name": "Mia",
+      "last_name": "Jackson",
+      "email": "mia.jackson@example.com",
+      "is_staff": false,
+      "is_active": false,
+      "date_joined": "2023-12-28T07:00:20Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 36,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$bd1HKd9t8hThi5w9fZrXwC$zAVkyj6onSSylc2Vg/t0JnlYXU02wG3t/CEU5K2PfD0=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "noah_clark",
+      "first_name": "Noah",
+      "last_name": "Clark",
+      "email": "noah.clark@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-28T08:15:15Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 37,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$CUsq1tu+LeH8x0FGaLStcP$7F1rXrZNNR5x6BFgEx+KLt2W3PTz2lphfLH0k6vKijY=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "scarlett_white",
+      "first_name": "Scarlett",
+      "last_name": "White",
+      "email": "scarlett.white@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-28T09:00:42Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 38,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$Q8dUVg2JcsgsYxy1qYkgIk$hA9YL4Zbl2mQkgZVCuHfFet4bSeW/OL/i4odRu2t37Y=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "logan_martin",
+      "first_name": "Logan",
+      "last_name": "Martin",
+      "email": "logan.martin@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-28T09:45:18Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 39,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$BGOs/0Rs/r28VJbggRfZ9m$nSgJb9Ev89vPxCzKyXSy1lmylEh6UFS3p0ULRIKgVVk=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "aubrey_miller",
+      "first_name": "Aubrey",
+      "last_name": "Miller",
+      "email": "aubrey.miller@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-28T10:30:36Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 40,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$gUh/n1b2kEwlQffM+I+rJu$M7rhM6U5m8SP3RrtLmtGj+Rc/4tLuQwWcd56UzRUgYs=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "zoey_carter",
+      "first_name": "Zoey",
+      "last_name": "Carter",
+      "email": "zoey.carter@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-28T11:15:20Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 41,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$WtuQ9orKgiGZZ1hx6usA1n$lrq6XtNRb6c3NBKLsGHYJ2IfQn9CtjJLW/rOfr7nv7A=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "elijah_ward",
+      "first_name": "Elijah",
+      "last_name": "Ward",
+      "email": "elijah.ward@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-28T12:00:15Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 42,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$RdbJZnlELXERFyBKB2vgJL$jBdgmIYJ6icSt5HtnDEJ2bXcvf4gmK2fns/3dZcpY54=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "riley_morgan",
+      "first_name": "Riley",
+      "last_name": "Morgan",
+      "email": "riley.morgan@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-28T12:45:42Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 43,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$xyOguW45YXChpZDBLsn9Lp$Eja8RHcMMyZ7Nm+j8Ml8vL2dbpWVW1+06UyLndm5zGo=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "leah_hall",
+      "first_name": "Leah",
+      "last_name": "Hall",
+      "email": "leah.hall@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-28T13:30:18Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 44,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$nJ3pDnXSkGJZmX1C8Jc7M0$OwrKfQ7qyNjMgQiH69U6I3YBpSAm1+7bexY+cKFEkzM=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "grace_thomas",
+      "first_name": "Grace",
+      "last_name": "Thomas",
+      "email": "grace.thomas@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-28T14:15:36Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 45,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$mlH48lsbmlr8gFEKgXHVxu$eKkzzXYFC6qWw0AbqzZMLIACWkXzXCjM+OHEWvpxwhY=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "jacob_evans",
+      "first_name": "Jacob",
+      "last_name": "Evans",
+      "email": "jacob.evans@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-28T15:00:20Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 46,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$9WEvTy3fT4gIFdU/H9Oehi$CwS8MFx9utzy0x/cokT9XxwwhZCx/LjMV2LUwA0fwPc=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "emma_davis",
+      "first_name": "Emma",
+      "last_name": "Davis",
+      "email": "emma.davis@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-28T15:45:42Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 47,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$Zmb3q3rsAU82jXw6I8P9wn$cd4+RYpBbGXgOqD6A1ZKWGbT7RzAqomlZf3rSG1DIWw=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "owen_hernandez",
+      "first_name": "Owen",
+      "last_name": "Hernandez",
+      "email": "owen.hernandez@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-28T16:30:18Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 48,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$IFkpxGZ5jqhXgj9cb06zMu$gSvhvcfAL5rMPQx20zEzp/Ywv4Y5o0lsI5jvoEi1iNU=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "ella_miller",
+      "first_name": "Ella",
+      "last_name": "Miller",
+      "email": "ella.miller@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-28T17:15:36Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 49,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$yxJvzrlSnwsCVW1oy9O0Le$8tTYz2n1s0pMvKpHpPZ8IyE+uHPP6c6jRpkQK26bX9E=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "liam_brown",
+      "first_name": "Liam",
+      "last_name": "Brown",
+      "email": "liam.brown@example.com",
+      "is_staff": false,
+      "is_active": false,
+      "date_joined": "2023-12-28T18:00:15Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 50,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$5yRuz1d8oIjMIeKHQ8PEc5$UxXUjTeH52fuIt8J9Jg4rXUmsC/1tIftOlNRJ6MTx3Y=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "zoey_wood",
+      "first_name": "Zoey",
+      "last_name": "Wood",
+      "email": "zoey.wood@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-28T18:45:42Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 51,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$JgTyrj95M9rJl0ZGpCBKPG$Wjrt4jn5YO4TuoEPPY1cvUZrb83iUyIUVkmV2V9zEMo=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "ethan_king",
+      "first_name": "Ethan",
+      "last_name": "King",
+      "email": "ethan.king@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-28T19:30:18Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 52,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$Xk/X9sQKyJ+1lNC+7VgsAu$R9MlD8gXImtcgPge5GKUg5RarYh86fAGLg1J6Sg05Vo=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "jackson_walker",
+      "first_name": "Jackson",
+      "last_name": "Walker",
+      "email": "jackson.walker@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-28T20:15:15Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 53,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$q7U8TW8PFmxjaHndar2kgY$Z8udsoYdQ0e11w5eVJjWiBjYLzXYBf14yG5g3PTfWM4=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "aubrey_roberts",
+      "first_name": "Aubrey",
+      "last_name": "Roberts",
+      "email": "aubrey.roberts@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-28T21:00:42Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 54,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$59f8GKt3se5BWMLkZzujdA$FSgVqV4lFNz8yLV3oB+WSq0vdFh3HFr4ks9DLp5dGz8=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "harper_anderson",
+      "first_name": "Harper",
+      "last_name": "Anderson",
+      "email": "harper.anderson@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-28T21:45:18Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 55,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$SlJhoijT4VXs4aaW6jBNWM$INy0xjoOnZMKYxiCVw9fDKynpvLGekzvi3xGtRk+K9Y=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "logan_morris",
+      "first_name": "Logan",
+      "last_name": "Morris",
+      "email": "logan.morris@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-28T22:30:36Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 56,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$Ab17kBNRh5PPOMlz4XPPa2$VNT2IcvtbfZzAm3qHXSEd/cMeFfKEJxv7c2C8ORShls=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "olivia_davis",
+      "first_name": "Olivia",
+      "last_name": "Davis",
+      "email": "olivia.davis@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-28T23:15:20Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 57,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$EvYZk9tIffNZsFVoEMp3Ve$2wWh9aKuUZjphQ3sH+/t9awGpCw0e1UfrLiNCjZ3yzA=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "ethan_morgan",
+      "first_name": "Ethan",
+      "last_name": "Morgan",
+      "email": "ethan.morgan@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-29T00:00:15Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 58,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$VUBHfPemNrkGg9PYLFA9nV$8dMB9X57FVJYBjLz20t0AgsFZ0UD3z4K5F3RWoXjQ2c=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "amelia_wilson",
+      "first_name": "Amelia",
+      "last_name": "Wilson",
+      "email": "amelia.wilson@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-29T00:45:42Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 59,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$nAalgsydMLwYk2U+VNTZve$Lg0eRxTJqHGoGZfS7sA3/4mpKuvjjF/3YrBsRk/VNkI=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "carter_jackson",
+      "first_name": "Carter",
+      "last_name": "Jackson",
+      "email": "carter.jackson@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-29T01:30:18Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 60,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$HNiQp8hGK2a7Y4QK6IAcLi$MNw8fl8QYxwQJ8ZCOACxQXCl0Gt69alQ6+OeRBeTxw8=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "aiden_thompson",
+      "first_name": "Aiden",
+      "last_name": "Thompson",
+      "email": "aiden.thompson@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-29T02:15:36Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 61,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$PVOO2pN1PEtjEwA6Wohq0i$QDGXkN/lWZbqlpfV0e8fZ2Xy8/1uGmLK6B9Mruv2WSo=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "madison_hall",
+      "first_name": "Madison",
+      "last_name": "Hall",
+      "email": "madison.hall@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-29T03:00:20Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 62,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$acu2h22KQSKfz1+eA68cQS$GnhxFI84Ffl7RnN9qUdozqcmY94PqljE4B/c/Y/vyC0=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "lucass123_miller",
+      "first_name": "Lucas",
+      "last_name": "Miller",
+      "email": "lucas.miller@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-29T03:45:42Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 63,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$Ov0wYZmlsKsU3F2O2IfXl0$VePv0qlTRhxR47B0VwffkGsZHm/HpHVwInRiPpUEsYQ=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "hannah_davis",
+      "first_name": "Hannah",
+      "last_name": "Davis",
+      "email": "hannah.davis@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-12-29T04:30:18Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "store.category",
+    "pk": 1,
+    "fields": {
+      "name": "Мобильные телефоны",
+      "parent": null,
+      "image": "",
+      "slug": "lol",
+      "activity": true,
+      "sort_index": 1,
+      "lft": 1,
+      "rght": 2,
+      "tree_id": 3,
+      "level": 0,
+      "discount": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "store.category",
+    "pk": 2,
+    "fields": {
+      "name": "Ноутбуки",
+      "parent": null,
+      "image": "",
+      "slug": "laptop",
+      "activity": true,
+      "sort_index": 1,
+      "lft": 1,
+      "rght": 2,
+      "tree_id": 5,
+      "level": 0,
+      "discount": []
+    }
+  },
+  {
+    "model": "store.category",
+    "pk": 3,
+    "fields": {
+      "name": "Телевизоры",
+      "parent": null,
+      "image": "",
+      "slug": "tv",
+      "activity": true,
+      "sort_index": 1,
+      "lft": 1,
+      "rght": 2,
+      "tree_id": 7,
+      "level": 0,
+      "discount": []
+    }
+  },
+  {
+    "model": "store.category",
+    "pk": 4,
+    "fields": {
+      "name": "Стиральные машины",
+      "parent": null,
+      "image": "",
+      "slug": "load-washer",
+      "activity": true,
+      "sort_index": 1,
+      "lft": 1,
+      "rght": 4,
+      "tree_id": 6,
+      "level": 0,
+      "discount": []
+    }
+  },
+  {
+    "model": "store.category",
+    "pk": 5,
+    "fields": {
+      "name": "Электроника",
+      "parent": null,
+      "image": "",
+      "slug": "electronics",
+      "activity": true,
+      "sort_index": 1,
+      "lft": 1,
+      "rght": 2,
+      "tree_id": 10,
+      "level": 0,
+      "discount": []
+    }
+  },
+  {
+    "model": "store.category",
+    "pk": 6,
+    "fields": {
+      "name": "Микроволновые печи",
+      "parent": null,
+      "image": "",
+      "slug": "microwave",
+      "activity": true,
+      "sort_index": 1,
+      "lft": 1,
+      "rght": 2,
+      "tree_id": 2,
+      "level": 0,
+      "discount": []
+    }
+  },
+  {
+    "model": "store.category",
+    "pk": 7,
+    "fields": {
+      "name": "Фотоаппараты",
+      "parent": null,
+      "image": "",
+      "slug": "cameras",
+      "activity": true,
+      "sort_index": 1,
+      "lft": 1,
+      "rght": 2,
+      "tree_id": 9,
+      "level": 0,
+      "discount": []
+    }
+  },
+  {
+    "model": "store.category",
+    "pk": 8,
+    "fields": {
+      "name": "Торшеры",
+      "parent": null,
+      "image": "",
+      "slug": "floor-lamps",
+      "activity": true,
+      "sort_index": 1,
+      "lft": 1,
+      "rght": 6,
+      "tree_id": 8,
+      "level": 0,
+      "discount": []
+    }
+  },
+  {
+    "model": "store.category",
+    "pk": 9,
+    "fields": {
+      "name": "Кухонная техника",
+      "parent": null,
+      "image": "",
+      "slug": "kitchen-appliances",
+      "activity": true,
+      "sort_index": 1,
+      "lft": 1,
+      "rght": 2,
+      "tree_id": 1,
+      "level": 0,
+      "discount": []
+    }
+  },
+  {
+    "model": "store.category",
+    "pk": 10,
+    "fields": {
+      "name": "Сумки",
+      "parent": 8,
+      "image": "",
+      "slug": "bags",
+      "activity": false,
+      "sort_index": 2,
+      "lft": 4,
+      "rght": 5,
+      "tree_id": 8,
+      "level": 1,
+      "discount": []
+    }
+  },
+  {
+    "model": "store.category",
+    "pk": 11,
+    "fields": {
+      "name": "Аксесуары",
+      "parent": 8,
+      "image": "",
+      "slug": "accessories",
+      "activity": true,
+      "sort_index": 2,
+      "lft": 2,
+      "rght": 3,
+      "tree_id": 8,
+      "level": 1,
+      "discount": []
+    }
+  },
+  {
+    "model": "store.category",
+    "pk": 12,
+    "fields": {
+      "name": "Covers",
+      "parent": 4,
+      "image": "",
+      "slug": "covers",
+      "activity": true,
+      "sort_index": 1,
+      "lft": 2,
+      "rght": 3,
+      "tree_id": 6,
+      "level": 1,
+      "discount": []
+    }
+  },
+  {
+    "model": "store.category",
+    "pk": 13,
+    "fields": {
+      "name": "Наушники",
+      "parent": null,
+      "image": "",
+      "slug": "headphones",
+      "activity": true,
+      "sort_index": 1,
+      "lft": 1,
+      "rght": 2,
+      "tree_id": 4,
+      "level": 0,
+      "discount": []
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 1,
+    "fields": {
+      "name": "iphone red",
+      "slug": "iphone",
+      "category": 1,
+      "description": {
+        "title": "title",
+        "card_text": [],
+        "text_bottom": "text_bottom",
+        "text_bottom_ul": []
+      },
+      "preview": "products/product/23/12/26/images-3.jpeg",
+      "availability": false,
+      "created_at": "2023-12-23T07:46:10.345Z",
+      "update_at": "2023-12-27T01:47:38.280Z",
+      "limited_edition": true,
+      "tags": [
+        1,
+        2
+      ],
+      "discount": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 3,
+    "fields": {
+      "name": "Electric Guitar Fender Strat",
+      "slug": "electric-guitar-fender-strat",
+      "category": 5,
+      "description": {
+        "title": "Fender Stratocaster",
+        "card_text": [
+          "Classic Design",
+          "Customizable Sound"
+        ],
+        "text_bottom": "A favorite among musicians.",
+        "text_bottom_ul": [
+          "Versatile sound",
+          "Timeless style"
+        ]
+      },
+      "preview": "products/product/23/12/28/0972023200_gtr_frt_001_rr-2.jpg",
+      "availability": true,
+      "created_at": "2023-12-20T10:50:29.123Z",
+      "update_at": "2023-12-28T02:00:20.381Z",
+      "limited_edition": false,
+      "tags": [],
+      "discount": []
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 4,
+    "fields": {
+      "name": "Samsung QLED TV",
+      "slug": "samsung-qled-tv",
+      "category": 3,
+      "description": {
+        "title": "Samsung QLED Smart TV",
+        "card_text": [
+          "Quantum Dot Technology",
+          "Smart Connectivity"
+        ],
+        "text_bottom": "Experience a world of colors.",
+        "text_bottom_ul": [
+          "Brilliant colors",
+          "Deep contrasts"
+        ]
+      },
+      "preview": "products/product/23/12/26/images-4.jpeg",
+      "availability": true,
+      "created_at": "2023-12-21T09:33:47.561Z",
+      "update_at": "2023-12-28T02:33:38.951Z",
+      "limited_edition": false,
+      "tags": [],
+      "discount": []
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 12,
+    "fields": {
+      "name": "Leather Wallet",
+      "slug": "leather-wallet",
+      "category": 11,
+      "description": {
+        "title": "Handcrafted Leather Wallet",
+        "card_text": [
+          "Genuine leather",
+          "Elegant design"
+        ],
+        "text_bottom": "Slim yet spacious.",
+        "text_bottom_ul": [
+          "Durable material",
+          "Refined look"
+        ]
+      },
+      "preview": "products/product/23/12/26/images.jpeg",
+      "availability": true,
+      "created_at": "2023-12-26T15:00:33.250Z",
+      "update_at": "2023-12-27T02:26:24.195Z",
+      "limited_edition": false,
+      "tags": [],
+      "discount": []
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 13,
+    "fields": {
+      "name": "Athletic Running Shoes",
+      "slug": "athletic-running-shoes",
+      "category": 11,
+      "description": {
+        "title": "High-Performance Athletic Shoes",
+        "card_text": [
+          "Breathable material",
+          "Ergonomic design"
+        ],
+        "text_bottom": "Designed for comfort and endurance.",
+        "text_bottom_ul": [
+          "Enhanced cushioning",
+          "Superior traction"
+        ]
+      },
+      "preview": "",
+      "availability": false,
+      "created_at": "2023-12-26T16:15:22.100Z",
+      "update_at": "2023-12-27T02:27:10.657Z",
+      "limited_edition": false,
+      "tags": [],
+      "discount": []
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 14,
+    "fields": {
+      "name": "Bluetooth Headphones",
+      "slug": "bluetooth-headphones",
+      "category": 13,
+      "description": {
+        "title": "Wireless Bluetooth Headphones",
+        "card_text": [
+          "High fidelity sound",
+          "Long-lasting battery"
+        ],
+        "text_bottom": "Unleash the music.",
+        "text_bottom_ul": [
+          "No wires. No fuss.",
+          "Quick charge feature"
+        ]
+      },
+      "preview": "products/product/23/12/26/Unknown.jpeg",
+      "availability": true,
+      "created_at": "2023-12-26T17:20:55.500Z",
+      "update_at": "2023-12-28T02:21:27.772Z",
+      "limited_edition": false,
+      "tags": [],
+      "discount": []
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 22,
+    "fields": {
+      "name": "Smart Home Speaker",
+      "slug": "smart-home-speaker",
+      "category": 5,
+      "description": {
+        "title": "Voice-Activated Smart Speaker",
+        "card_text": [
+          "Intelligent assistant",
+          "Room-filling sound"
+        ],
+        "text_bottom": "Control your home with your voice.",
+        "text_bottom_ul": [
+          "Smart home integration",
+          "Customizable skills"
+        ]
+      },
+      "preview": "products/product/23/12/26/images_uku2AoA.jpeg",
+      "availability": true,
+      "created_at": "2023-12-26T22:45:13.550Z",
+      "update_at": "2023-12-27T02:28:30.872Z",
+      "limited_edition": false,
+      "tags": [],
+      "discount": []
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 23,
+    "fields": {
+      "name": "Ergonomic Office Chair",
+      "slug": "ergonomic-office-chair",
+      "category": 11,
+      "description": {
+        "title": "Comfortable Ergonomic Chair",
+        "card_text": [
+          "Adjustable posture support",
+          "Breathable mesh fabric"
+        ],
+        "text_bottom": "Stay comfortable throughout your workday.",
+        "text_bottom_ul": [
+          "Reclines and locks",
+          "Height and armrest adjustment"
+        ]
+      },
+      "preview": "products/product/23/12/26/productimg.jpeg",
+      "availability": true,
+      "created_at": "2023-12-27T08:25:17.612Z",
+      "update_at": "2023-12-27T02:29:04.305Z",
+      "limited_edition": false,
+      "tags": [],
+      "discount": []
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 24,
+    "fields": {
+      "name": "Compact Digital Camera",
+      "slug": "compact-digital-camera",
+      "category": 7,
+      "description": {
+        "title": "High-Quality Compact Camera",
+        "card_text": [
+          "20 MP Sensor",
+          "5x Optical Zoom"
+        ],
+        "text_bottom": "Capture your memories in stunning detail.",
+        "text_bottom_ul": [
+          "Easy to carry",
+          "One-touch sharing to social media"
+        ]
+      },
+      "preview": "products/product/23/12/26/images_hMtPcp7.jpeg",
+      "availability": true,
+      "created_at": "2023-12-27T10:30:42.900Z",
+      "update_at": "2023-12-28T01:33:04.707Z",
+      "limited_edition": false,
+      "tags": [],
+      "discount": []
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 32,
+    "fields": {
+      "name": "Wireless Gaming Mouse",
+      "slug": "wireless-gaming-mouse",
+      "category": 5,
+      "description": {
+        "title": "Pro Wireless Gaming Mouse",
+        "card_text": [
+          "High-precision sensor",
+          "Customizable buttons"
+        ],
+        "text_bottom": "Aim better, win more.",
+        "text_bottom_ul": [
+          "Ergonomic design",
+          "RGB lighting"
+        ]
+      },
+      "preview": "products/product/23/12/26/Unknown_wxN28RO.jpeg",
+      "availability": true,
+      "created_at": "2023-12-28T14:45:11.730Z",
+      "update_at": "2023-12-27T02:29:26.383Z",
+      "limited_edition": false,
+      "tags": [],
+      "discount": []
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 33,
+    "fields": {
+      "name": "Wireless Earbuds",
+      "slug": "wireless-earbuds",
+      "category": 13,
+      "description": {
+        "title": "True Wireless Earbuds",
+        "card_text": [
+          "High-quality audio",
+          "Secure and comfortable fit"
+        ],
+        "text_bottom": "Enjoy your music without limits.",
+        "text_bottom_ul": [
+          "Noise cancellation",
+          "Long battery life"
+        ]
+      },
+      "preview": "products/product/23/12/26/Unknown_JO5HvaU.jpeg",
+      "availability": true,
+      "created_at": "2023-12-28T16:10:55.244Z",
+      "update_at": "2023-12-27T02:29:34.858Z",
+      "limited_edition": false,
+      "tags": [],
+      "discount": []
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 34,
+    "fields": {
+      "name": "Smartwatch",
+      "slug": "smartwatch",
+      "category": 5,
+      "description": {
+        "title": "Smart Fitness Watch",
+        "card_text": [
+          "Activity tracking",
+          "Heart rate monitor"
+        ],
+        "text_bottom": "Stay connected and active.",
+        "text_bottom_ul": [
+          "Notifications on your wrist",
+          "Waterproof and durable"
+        ]
+      },
+      "preview": "products/product/23/12/26/Unknown_2SKzl75.jpeg",
+      "availability": true,
+      "created_at": "2023-12-28T18:30:12.556Z",
+      "update_at": "2023-12-27T02:29:44.883Z",
+      "limited_edition": true,
+      "tags": [],
+      "discount": []
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 42,
+    "fields": {
+      "name": "Portable External SSD",
+      "slug": "portable-external-ssd",
+      "category": 5,
+      "description": {
+        "title": "High-Speed Portable SSD",
+        "card_text": [
+          "Fast data transfer",
+          "Compact and durable"
+        ],
+        "text_bottom": "Carry your files with ease.",
+        "text_bottom_ul": [
+          "Large storage capacity",
+          "USB 3.0 compatibility"
+        ]
+      },
+      "preview": "products/product/23/12/26/6327027933.jpg",
+      "availability": true,
+      "created_at": "2023-12-30T09:45:21.800Z",
+      "update_at": "2023-12-27T02:29:54.529Z",
+      "limited_edition": false,
+      "tags": [],
+      "discount": []
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 43,
+    "fields": {
+      "name": "Bluetooth Speaker",
+      "slug": "bluetooth-speaker",
+      "category": 13,
+      "description": {
+        "title": "Portable Bluetooth Speaker",
+        "card_text": [
+          "Powerful sound",
+          "Wireless connectivity"
+        ],
+        "text_bottom": "Take the party wherever you go.",
+        "text_bottom_ul": [
+          "Long battery life",
+          "Built-in microphone"
+        ]
+      },
+      "preview": "products/product/23/12/26/cc8ab6909211a27a0892cb19387da619c86e1b28f95344644d385cf323059034.jpeg",
+      "availability": true,
+      "created_at": "2023-12-30T11:30:17.412Z",
+      "update_at": "2023-12-27T02:30:06.777Z",
+      "limited_edition": false,
+      "tags": [],
+      "discount": []
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 44,
+    "fields": {
+      "name": "Wireless Charger",
+      "slug": "wireless-charger",
+      "category": 11,
+      "description": {
+        "title": "Fast Wireless Charger",
+        "card_text": [
+          "Convenient and cable-free",
+          "Universal compatibility"
+        ],
+        "text_bottom": "Charge your devices with ease.",
+        "text_bottom_ul": [
+          "Safe and reliable",
+          "LED charging indicator"
+        ]
+      },
+      "preview": "products/product/23/12/26/252371_0_l2v5dy.png.webp",
+      "availability": true,
+      "created_at": "2023-12-30T12:45:38.902Z",
+      "update_at": "2023-12-27T02:30:15.398Z",
+      "limited_edition": false,
+      "tags": [],
+      "discount": []
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 50,
+    "fields": {
+      "name": "Wireless Bluetooth Headphones",
+      "slug": "wireless-bluetooth-headphones",
+      "category": 13,
+      "description": {
+        "title": "Wireless Over-Ear Headphones",
+        "card_text": [
+          "Immersive audio experience",
+          "Comfortable cushioning"
+        ],
+        "text_bottom": "Enjoy your music without distractions.",
+        "text_bottom_ul": [
+          "Long battery life",
+          "Built-in controls"
+        ]
+      },
+      "preview": "products/product/23/12/26/15611_HYG_Vibe_Wireless_Headphones_Blue_001.jpg.webp",
+      "availability": true,
+      "created_at": "2023-12-31T09:15:27.601Z",
+      "update_at": "2023-12-27T02:30:23.848Z",
+      "limited_edition": false,
+      "tags": [],
+      "discount": []
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 51,
+    "fields": {
+      "name": "iPhone 13 Pro",
+      "slug": "iphone-13-pro",
+      "category": 1,
+      "description": {
+        "title": "Apple iPhone 13 Pro",
+        "card_text": [
+          "Super Retina XDR display",
+          "A15 Bionic chip"
+        ],
+        "text_bottom": "Capture moments like a pro.",
+        "text_bottom_ul": [
+          "Triple camera system",
+          "Ceramic Shield front cover"
+        ]
+      },
+      "preview": "products/product/23/12/26/istockphoto-1197063336-612x612.jpg",
+      "availability": true,
+      "created_at": "2023-12-31T10:30:12.876Z",
+      "update_at": "2023-12-27T01:55:37.936Z",
+      "limited_edition": false,
+      "tags": [],
+      "discount": []
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 52,
+    "fields": {
+      "name": "Samsung Galaxy S21",
+      "slug": "samsung-galaxy-s21",
+      "category": 1,
+      "description": {
+        "title": "Samsung Galaxy S21",
+        "card_text": [
+          "Dynamic AMOLED 2X display",
+          "Exynos 2100/Snapdragon 888"
+        ],
+        "text_bottom": "Experience the next generation.",
+        "text_bottom_ul": [
+          "Versatile camera system",
+          "5G connectivity"
+        ]
+      },
+      "preview": "products/product/23/12/26/istockphoto-1400133914-612x612.jpg",
+      "availability": true,
+      "created_at": "2023-12-31T12:15:05.309Z",
+      "update_at": "2023-12-27T02:07:44.363Z",
+      "limited_edition": false,
+      "tags": [],
+      "discount": []
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 53,
+    "fields": {
+      "name": "Google Pixel 6",
+      "slug": "google-pixel-6",
+      "category": 1,
+      "description": {
+        "title": "Google Pixel 6",
+        "card_text": [
+          "Full HD+ OLED display",
+          "Google Tensor processor"
+        ],
+        "text_bottom": "Capture stunning photos and videos.",
+        "text_bottom_ul": [
+          "Advanced camera system",
+          "Android 12"
+        ]
+      },
+      "preview": "products/product/23/12/26/Unknown_tOeXemN.jpeg",
+      "availability": true,
+      "created_at": "2023-12-31T14:20:19.512Z",
+      "update_at": "2023-12-26T14:58:34.830Z",
+      "limited_edition": false,
+      "tags": [],
+      "discount": []
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 60,
+    "fields": {
+      "name": "OnePlus 9",
+      "slug": "oneplus-9",
+      "category": 1,
+      "description": {
+        "title": "OnePlus 9",
+        "card_text": [
+          "Fluid AMOLED display",
+          "Snapdragon 888 processor"
+        ],
+        "text_bottom": "Fast and smooth performance.",
+        "text_bottom_ul": [
+          "Triple camera system",
+          "Warp Charge 65T"
+        ]
+      },
+      "preview": "products/product/23/12/26/OnePlus_9_Pro_5G_Green.jpeg",
+      "availability": true,
+      "created_at": "2024-01-01T09:40:51.726Z",
+      "update_at": "2023-12-26T14:59:10.027Z",
+      "limited_edition": false,
+      "tags": [],
+      "discount": []
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 62,
+    "fields": {
+      "name": "Sony Xperia 1 III",
+      "slug": "sony-xperia-1-iii",
+      "category": 1,
+      "description": {
+        "title": "Sony Xperia 1 III",
+        "card_text": [
+          "6.5\" 4K OLED display",
+          "Snapdragon 888 processor"
+        ],
+        "text_bottom": "Cinema-quality visuals.",
+        "text_bottom_ul": [
+          "Triple camera system",
+          "High-res audio"
+        ]
+      },
+      "preview": "products/product/23/12/26/Unknown_SdIfGpf.jpeg",
+      "availability": true,
+      "created_at": "2024-01-01T11:20:48.554Z",
+      "update_at": "2023-12-27T02:12:37.384Z",
+      "limited_edition": false,
+      "tags": [],
+      "discount": []
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 63,
+    "fields": {
+      "name": "Huawei P40 Pro",
+      "slug": "huawei-p40-pro",
+      "category": 1,
+      "description": {
+        "title": "Huawei P40 Pro",
+        "card_text": [
+          "6.58\" Quad-Curve OLED display",
+          "Kirin 990 5G processor"
+        ],
+        "text_bottom": "Capture the beauty around you.",
+        "text_bottom_ul": [
+          "50MP Ultra Vision Leica camera",
+          "Water and dust resistant"
+        ]
+      },
+      "preview": "products/product/23/12/26/3d96418688662dfbbfe38a3b2665b2ca6d75103e3a261bbd9a112a702b88e14a.jpeg",
+      "availability": true,
+      "created_at": "2024-01-01T12:40:22.176Z",
+      "update_at": "2023-12-27T02:14:17.139Z",
+      "limited_edition": false,
+      "tags": [],
+      "discount": []
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 70,
+    "fields": {
+      "name": "LG Velvet",
+      "slug": "lg-velvet",
+      "category": 1,
+      "description": {
+        "title": "LG Velvet",
+        "card_text": [
+          "6.8\" OLED display",
+          "Snapdragon 845 processor"
+        ],
+        "text_bottom": "Sleek design and great performance.",
+        "text_bottom_ul": [
+          "48MP triple camera",
+          "Fast charging"
+        ]
+      },
+      "preview": "products/product/23/12/26/LG_Velvet_Aurora_Green_version.jpeg",
+      "availability": true,
+      "created_at": "2024-01-02T09:15:27.601Z",
+      "update_at": "2023-12-27T02:15:23.631Z",
+      "limited_edition": false,
+      "tags": [],
+      "discount": []
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 71,
+    "fields": {
+      "name": "MacBook Pro 14",
+      "slug": "macbook-pro-14",
+      "category": 2,
+      "description": {
+        "title": "MacBook Pro 14",
+        "card_text": [
+          "Apple M1 Pro chip",
+          "Retina display"
+        ],
+        "text_bottom": "Powerful performance in a portable package.",
+        "text_bottom_ul": [
+          "Up to 32GB unified memory",
+          "Up to 8TB SSD storage"
+        ]
+      },
+      "preview": "products/product/23/12/26/Unknown_Ry8Dyrg.jpeg",
+      "availability": true,
+      "created_at": "2024-01-02T10:20:49.205Z",
+      "update_at": "2023-12-28T02:47:55.034Z",
+      "limited_edition": false,
+      "tags": [],
+      "discount": []
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 72,
+    "fields": {
+      "name": "Dell XPS 15",
+      "slug": "dell-xps-15",
+      "category": 2,
+      "description": {
+        "title": "Dell XPS 15",
+        "card_text": [
+          "15.6\" 4K UHD display",
+          "Intel Core i7 processor"
+        ],
+        "text_bottom": "Immersive visuals and powerful performance.",
+        "text_bottom_ul": [
+          "NVIDIA GeForce GTX graphics",
+          "Fingerprint reader"
+        ]
+      },
+      "preview": "products/product/23/12/26/800x600_856182251a372f23da4d859d704483d9.png",
+      "availability": true,
+      "created_at": "2024-01-02T11:10:25.782Z",
+      "update_at": "2023-12-26T15:03:29.249Z",
+      "limited_edition": false,
+      "tags": [],
+      "discount": []
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 73,
+    "fields": {
+      "name": "HP Envy 13",
+      "slug": "hp-envy-13",
+      "category": 2,
+      "description": {
+        "title": "HP Envy 13",
+        "card_text": [
+          "13.3\" FHD display",
+          "Intel Core i5 processor"
+        ],
+        "text_bottom": "Sleek design and reliable performance.",
+        "text_bottom_ul": [
+          "Thin and lightweight",
+          "Fast charging support"
+        ]
+      },
+      "preview": "products/product/23/12/26/Unknown_DtkypP0.jpeg",
+      "availability": true,
+      "created_at": "2024-01-02T12:05:33.429Z",
+      "update_at": "2023-12-26T15:04:16.849Z",
+      "limited_edition": false,
+      "tags": [],
+      "discount": []
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 80,
+    "fields": {
+      "name": "Lenovo ThinkPad X1 Carbon",
+      "slug": "lenovo-thinkpad-x1-carbon",
+      "category": 2,
+      "description": {
+        "title": "Lenovo ThinkPad X1 Carbon",
+        "card_text": [
+          "14\" WQHD display",
+          "Intel Core i7 processor"
+        ],
+        "text_bottom": "Premium performance and durability.",
+        "text_bottom_ul": [
+          "Up to 16GB memory",
+          "Up to 1TB PCIe SSD storage"
+        ]
+      },
+      "preview": "products/product/23/12/26/Unknown_L3r6P0F.jpeg",
+      "availability": true,
+      "created_at": "2024-01-03T09:30:12.946Z",
+      "update_at": "2023-12-26T15:05:33.497Z",
+      "limited_edition": false,
+      "tags": [],
+      "discount": []
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 81,
+    "fields": {
+      "name": "Samsung QLED Q90R",
+      "slug": "samsung-qled-q90r",
+      "category": 3,
+      "description": {
+        "title": "Samsung QLED Q90R",
+        "card_text": [
+          "65\" QLED display",
+          "4K resolution"
+        ],
+        "text_bottom": "Immersive entertainment experience.",
+        "text_bottom_ul": [
+          "Quantum HDR 16X",
+          "Ultra Viewing Angle"
+        ]
+      },
+      "preview": "products/product/23/12/26/images-5.jpeg",
+      "availability": true,
+      "created_at": "2024-01-03T10:30:49.205Z",
+      "update_at": "2023-12-26T03:19:00.922Z",
+      "limited_edition": false,
+      "tags": [],
+      "discount": []
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 82,
+    "fields": {
+      "name": "LG OLED C1",
+      "slug": "lg-oled-c1",
+      "category": 3,
+      "description": {
+        "title": "LG OLED C1",
+        "card_text": [
+          "55\" OLED display",
+          "4K resolution"
+        ],
+        "text_bottom": "Cinematic visuals with perfect black.",
+        "text_bottom_ul": [
+          "α9 Gen4 AI Processor",
+          "Dolby Vision IQ"
+        ]
+      },
+      "preview": "products/product/23/12/26/images-7.jpeg",
+      "availability": true,
+      "created_at": "2024-01-03T11:20:25.782Z",
+      "update_at": "2023-12-26T03:19:36.813Z",
+      "limited_edition": false,
+      "tags": [],
+      "discount": []
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 83,
+    "fields": {
+      "name": "Sony Bravia A90J",
+      "slug": "sony-bravia-a90j",
+      "category": 3,
+      "description": {
+        "title": "Sony Bravia A90J",
+        "card_text": [
+          "65\" OLED display",
+          "4K resolution"
+        ],
+        "text_bottom": "The best of Sony visuals and sound.",
+        "text_bottom_ul": [
+          "Cognitive Processor XR",
+          "Acoustic Surface Audio+"
+        ]
+      },
+      "preview": "products/product/23/12/26/images-8.jpeg",
+      "availability": true,
+      "created_at": "2024-01-03T12:10:33.429Z",
+      "update_at": "2023-12-26T03:19:49.908Z",
+      "limited_edition": false,
+      "tags": [],
+      "discount": []
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 90,
+    "fields": {
+      "name": "TCL 6-Series",
+      "slug": "tcl-6-series",
+      "category": 3,
+      "description": {
+        "title": "TCL 6-Series",
+        "card_text": [
+          "55\" QLED display",
+          "4K resolution"
+        ],
+        "text_bottom": "Vibrant colors and great value.",
+        "text_bottom_ul": [
+          "Dolby Vision",
+          "Full Array Local Dimming"
+        ]
+      },
+      "preview": "products/product/23/12/26/images-9.jpeg",
+      "availability": true,
+      "created_at": "2024-01-04T09:50:12.946Z",
+      "update_at": "2023-12-26T03:20:02.827Z",
+      "limited_edition": false,
+      "tags": [],
+      "discount": []
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 91,
+    "fields": {
+      "name": "LG Front Load Washer",
+      "slug": "lg-front-load-washer",
+      "category": 4,
+      "description": {
+        "title": "LG Front Load Washer",
+        "card_text": [
+          "4.5 cu. ft. capacity",
+          "SmartThinQ technology"
+        ],
+        "text_bottom": "Efficient and convenient laundry solution.",
+        "text_bottom_ul": [
+          "Steam technology",
+          "Allergiene cycle"
+        ]
+      },
+      "preview": "products/product/23/12/26/istockphoto-172485535-612x612.jpg",
+      "availability": true,
+      "created_at": "2024-01-04T10:50:49.205Z",
+      "update_at": "2023-12-27T02:41:49.422Z",
+      "limited_edition": false,
+      "tags": [],
+      "discount": []
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 92,
+    "fields": {
+      "name": "Samsung Top Load Washer",
+      "slug": "samsung-top-load-washer",
+      "category": 4,
+      "description": {
+        "title": "Samsung Top Load Washer",
+        "card_text": [
+          "5.0 cu. ft. capacity",
+          "Active WaterJet"
+        ],
+        "text_bottom": "Powerful cleaning performance.",
+        "text_bottom_ul": [
+          "Deep Fill option",
+          "VRT Plus technology"
+        ]
+      },
+      "preview": "products/product/23/12/26/istockphoto-1337206643-612x612.jpg",
+      "availability": true,
+      "created_at": "2024-01-04T11:40:25.782Z",
+      "update_at": "2023-12-27T02:43:27.373Z",
+      "limited_edition": false,
+      "tags": [],
+      "discount": []
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 93,
+    "fields": {
+      "name": "Whirlpool Front Load Washer",
+      "slug": "whirlpool-front-load-washer",
+      "category": 4,
+      "description": {
+        "title": "Whirlpool Front Load Washer",
+        "card_text": [
+          "4.3 cu. ft. capacity",
+          "Load & Go XL dispenser"
+        ],
+        "text_bottom": "Simplify your laundry routine.",
+        "text_bottom_ul": [
+          "12-Hour FanFresh option",
+          "Sanitize cycle"
+        ]
+      },
+      "preview": "products/product/23/12/26/istockphoto-1328117297-612x612.jpg",
+      "availability": true,
+      "created_at": "2024-01-04T12:30:33.429Z",
+      "update_at": "2023-12-27T02:44:53.423Z",
+      "limited_edition": false,
+      "tags": [],
+      "discount": []
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 100,
+    "fields": {
+      "name": "Electrolux Front Load Washer",
+      "slug": "electrolux-front-load-washer",
+      "category": 4,
+      "description": {
+        "title": "Electrolux Front Load Washer",
+        "card_text": [
+          "4.4 cu. ft. capacity",
+          "LuxCare wash system"
+        ],
+        "text_bottom": "Gentle and thorough cleaning.",
+        "text_bottom_ul": [
+          "SmartBoost technology",
+          "15-Minute Fast Wash"
+        ]
+      },
+      "preview": "products/product/23/12/26/istockphoto-165090223-612x612.jpg",
+      "availability": true,
+      "created_at": "2024-01-05T10:20:12.946Z",
+      "update_at": "2023-12-27T02:50:10.059Z",
+      "limited_edition": false,
+      "tags": [],
+      "discount": []
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 101,
+    "fields": {
+      "name": "Apple iPhone 13 Pro",
+      "slug": "apple-iphone-13-pro",
+      "category": 1,
+      "description": {
+        "title": "Apple iPhone 13 Pro",
+        "card_text": [
+          "6.1\" Super Retina XDR display",
+          "A15 Bionic chip"
+        ],
+        "text_bottom": "Pro-level features and performance.",
+        "text_bottom_ul": [
+          "ProMotion technology",
+          "Ceramic Shield front cover"
+        ]
+      },
+      "preview": "products/product/23/12/26/istockphoto-1364620309-612x612.jpg",
+      "availability": true,
+      "created_at": "2024-01-05T11:30:49.205Z",
+      "update_at": "2023-12-26T03:28:17.141Z",
+      "limited_edition": false,
+      "tags": [],
+      "discount": []
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 102,
+    "fields": {
+      "name": "Samsung Galaxy S20",
+      "slug": "samsung-galaxy-s20",
+      "category": 1,
+      "description": {
+        "title": "Samsung Galaxy S20",
+        "card_text": [
+          "6.2\" Dynamic AMOLED 2X display",
+          "Exynos 2100/Snapdragon 888"
+        ],
+        "text_bottom": "Versatile and powerful smartphone.",
+        "text_bottom_ul": [
+          "Triple camera system",
+          "120Hz refresh rate"
+        ]
+      },
+      "preview": "products/product/23/12/26/istockphoto-1169842299-612x612.jpg",
+      "availability": true,
+      "created_at": "2024-01-05T12:20:25.782Z",
+      "update_at": "2023-12-26T03:29:11.942Z",
+      "limited_edition": false,
+      "tags": [],
+      "discount": []
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 103,
+    "fields": {
+      "name": "Sony PlayStation 5",
+      "slug": "sony-playstation-5",
+      "category": 5,
+      "description": {
+        "title": "Sony PlayStation 5",
+        "card_text": [
+          "Ultra-High Speed SSD",
+          "Custom AMD CPU & GPU"
+        ],
+        "text_bottom": "Next-gen gaming console.",
+        "text_bottom_ul": [
+          "Ray tracing capabilities",
+          "DualSense wireless controller"
+        ]
+      },
+      "preview": "products/product/23/12/26/1peqbcaop1i1d11qp04a2fgalm6w2aon.jpg",
+      "availability": true,
+      "created_at": "2024-01-05T13:10:33.429Z",
+      "update_at": "2023-12-26T03:27:04.396Z",
+      "limited_edition": false,
+      "tags": [],
+      "discount": []
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 110,
+    "fields": {
+      "name": "DJI Mavic Air 2S",
+      "slug": "dji-mavic-air-2s",
+      "category": 5,
+      "description": {
+        "title": "DJI Mavic Air 2S",
+        "card_text": [
+          "1\" CMOS sensor",
+          "4K video"
+        ],
+        "text_bottom": "Compact and powerful drone.",
+        "text_bottom_ul": [
+          "Obstacle sensing",
+          "8GB internal storage"
+        ]
+      },
+      "preview": "products/product/23/12/26/istockphoto-911190112-612x612.jpg",
+      "availability": true,
+      "created_at": "2024-01-06T10:50:12.946Z",
+      "update_at": "2023-12-26T03:27:38.801Z",
+      "limited_edition": false,
+      "tags": [],
+      "discount": []
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 111,
+    "fields": {
+      "name": "Panasonic Countertop Microwave",
+      "slug": "panasonic-countertop-microwave",
+      "category": 6,
+      "description": {
+        "title": "Panasonic Countertop Microwave",
+        "card_text": [
+          "1.2 cu. ft. capacity",
+          "Inverter technology"
+        ],
+        "text_bottom": "Efficient and reliable microwave.",
+        "text_bottom_ul": [
+          "Sensor cooking",
+          "Inverter Turbo Defrost"
+        ]
+      },
+      "preview": "products/product/23/12/26/istockphoto-489937746-612x612.jpg",
+      "availability": true,
+      "created_at": "2024-01-07T09:30:49.205Z",
+      "update_at": "2023-12-28T02:11:52.707Z",
+      "limited_edition": false,
+      "tags": [],
+      "discount": []
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 112,
+    "fields": {
+      "name": "LG Over-the-Range Microwave",
+      "slug": "lg-over-the-range-microwave",
+      "category": 6,
+      "description": {
+        "title": "LG Over-the-Range Microwave",
+        "card_text": [
+          "2.0 cu. ft. capacity",
+          "EasyClean interior"
+        ],
+        "text_bottom": "Versatile microwave with range hood.",
+        "text_bottom_ul": [
+          "Sensor cooking",
+          "Ventilation system"
+        ]
+      },
+      "preview": "products/product/23/12/26/istockphoto-182915079-612x612.jpg",
+      "availability": true,
+      "created_at": "2024-01-07T10:20:25.782Z",
+      "update_at": "2023-12-28T02:10:23.392Z",
+      "limited_edition": false,
+      "tags": [],
+      "discount": []
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 113,
+    "fields": {
+      "name": "Samsung Smart Microwave",
+      "slug": "samsung-smart-microwave",
+      "category": 6,
+      "description": {
+        "title": "Samsung Smart Microwave",
+        "card_text": [
+          "1.6 cu. ft. capacity",
+          "SmartThings integration"
+        ],
+        "text_bottom": "Convenient and connected microwave.",
+        "text_bottom_ul": [
+          "Voice control",
+          "PowerGrill Duo technology"
+        ]
+      },
+      "preview": "products/product/23/12/26/istockphoto-139406154-612x612.jpg",
+      "availability": true,
+      "created_at": "2024-01-07T11:10:33.429Z",
+      "update_at": "2023-12-26T03:24:48.266Z",
+      "limited_edition": false,
+      "tags": [],
+      "discount": []
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 120,
+    "fields": {
+      "name": "KitchenAid Built-In Microwave",
+      "slug": "kitchenaid-built-in-microwave",
+      "category": 6,
+      "description": {
+        "title": "KitchenAid Built-In Microwave",
+        "card_text": [
+          "1.4 cu. ft. capacity",
+          "Crispwave technology"
+        ],
+        "text_bottom": "Sleek and powerful built-in microwave.",
+        "text_bottom_ul": [
+          "9 Quick-Touch cycles",
+          "Keep Warm function"
+        ]
+      },
+      "preview": "products/product/23/12/26/istockphoto-183139801-612x612.jpg",
+      "availability": true,
+      "created_at": "2024-01-08T10:50:12.946Z",
+      "update_at": "2023-12-26T03:25:02.320Z",
+      "limited_edition": false,
+      "tags": [],
+      "discount": []
+    }
+  },
+  {
+    "model": "store.productimage",
+    "pk": 1,
+    "fields": {
+      "product": 3,
+      "image": "products/product_3/0972023200_gtr_frt_001_rr.jpg"
+    }
+  },
+  {
+    "model": "store.productimage",
+    "pk": 2,
+    "fields": {
+      "product": 3,
+      "image": "products/product_3/0972023200_gtr_back_001_rl.jpg"
+    }
+  },
+  {
+    "model": "store.productimage",
+    "pk": 3,
+    "fields": {
+      "product": 3,
+      "image": "products/product_3/0972023200_gtr_hdstckfrt_001_nr.jpg"
+    }
+  },
+  {
+    "model": "store.offer",
+    "pk": 1,
+    "fields": {
+      "unit_price": "100.00",
+      "amount": 2,
+      "seller": 6,
+      "product": 1
+    }
+  },
+  {
+    "model": "store.tag",
+    "pk": 1,
+    "fields": {
+      "name": "phone"
+    }
+  },
+  {
+    "model": "store.tag",
+    "pk": 2,
+    "fields": {
+      "name": "iphone"
+    }
+  },
+  {
+    "model": "store.tag",
+    "pk": 3,
+    "fields": {
+      "name": "laptop"
+    }
+  },
+  {
+    "model": "store.tag",
+    "pk": 4,
+    "fields": {
+      "name": "new"
+    }
+  },
+  {
+    "model": "store.tag",
+    "pk": 5,
+    "fields": {
+      "name": "4К"
+    }
+  },
+  {
+    "model": "store.tag",
+    "pk": 6,
+    "fields": {
+      "name": "TV"
+    }
+  },
+  {
+    "model": "store.tag",
+    "pk": 7,
+    "fields": {
+      "name": "washer"
+    }
+  },
+  {
+    "model": "store.tag",
+    "pk": 8,
+    "fields": {
+      "name": "laundry"
+    }
+  },
+  {
+    "model": "store.tag",
+    "pk": 9,
+    "fields": {
+      "name": "smartphone"
+    }
+  },
+  {
+    "model": "store.tag",
+    "pk": 10,
+    "fields": {
+      "name": "drone"
+    }
+  },
+  {
+    "model": "store.tag",
+    "pk": 11,
+    "fields": {
+      "name": "camera"
+    }
+  },
+  {
+    "model": "store.tag",
+    "pk": 12,
+    "fields": {
+      "name": "gaming"
+    }
+  },
+  {
+    "model": "store.tag",
+    "pk": 13,
+    "fields": {
+      "name": "console"
+    }
+  },
+  {
+    "model": "store.tag",
+    "pk": 14,
+    "fields": {
+      "name": "galaxy"
+    }
+  },
+  {
+    "model": "store.tag",
+    "pk": 15,
+    "fields": {
+      "name": "kitchen"
+    }
+  },
+  {
+    "model": "store.tag",
+    "pk": 16,
+    "fields": {
+      "name": "microwave"
+    }
+  },
+  {
+    "model": "store.banners",
+    "pk": 1,
+    "fields": {
+      "title": "скидка",
+      "slug": "skidka",
+      "product": 1,
+      "description": "скидки на айфон",
+      "link": "http://127.0.0.1:8000/auth/personal_account/lol/history_orders/",
+      "is_active": true,
+      "created_at": "2023-12-26T01:50:31.922Z",
+      "update_at": "2023-12-26T01:50:31.922Z"
+    }
+  },
+  {
+    "model": "store.reviews",
+    "pk": 1,
+    "fields": {
+      "comment_text": "super phone",
+      "author": 6,
+      "created_at": "2023-12-26T01:41:40.773Z",
+      "product": 1
+    }
+  },
+  {
+    "model": "store.reviews",
+    "pk": 2,
+    "fields": {
+      "comment_text": "норм",
+      "author": 6,
+      "created_at": "2023-12-27T02:08:29.124Z",
+      "product": 52
+    }
+  },
+  {
+    "model": "store.discount",
+    "pk": 1,
+    "fields": {
+      "title": "sale",
+      "slug": "sale",
+      "name": "DP",
+      "description": "скидки на iPhone",
+      "image": "",
+      "sum_discount": 10.0,
+      "total_products": 1,
+      "sum_cart": 100.0,
+      "priority": true,
+      "valid_from": "2023-12-01T01:48:46Z",
+      "valid_to": "2023-12-31T01:48:48Z",
+      "is_active": true,
+      "created_at": "2023-12-26T01:49:09.038Z"
+    }
+  },
+  {
+    "model": "store.orders",
+    "pk": 1,
+    "fields": {
+      "delivery_type": 1,
+      "payment": 1,
+      "profile": 6,
+      "created_at": "2023-12-26T01:34:17.764Z",
+      "status": 1,
+      "address": "Country\tUSA\r\nAddress\t1427 Twin House Lane\tCity\tSpringfield\r\nState\tMissouri\tZip Code\t  65802",
+      "total_payment": "100.00",
+      "status_exception": "",
+      "archived": false,
+      "products": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "store.bannerscategory",
+    "pk": 1,
+    "fields": {
+      "category": 1,
+      "preview": "category/23/12/26/images-3.jpeg",
+      "is_active": true
+    }
+  },
+  {
+    "model": "cart.cart",
+    "pk": 1,
+    "fields": {
+      "order": 1,
+      "products": 1,
+      "quantity": 1,
+      "created_at": "2023-12-26T01:36:07.995Z",
+      "updated_at": "2023-12-26T01:36:07.995Z"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 6,
+    "fields": {
+      "user": 1,
+      "slug": "alex-shop",
+      "phone": "43554",
+      "description": "shop",
+      "avatar": "profiles/profile_6/магазин2_0IlGuwe.png",
+      "archived": false,
+      "name_store": "Alex shop",
+      "address": "Address\t1653 Glen Street\tCity\tGasconade State\tMissouri\tZip Code\t  65036",
+      "viewed_orders": null,
+      "role": "store"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 7,
+    "fields": {
+      "user": 2,
+      "slug": "user1",
+      "phone": "1234567890",
+      "description": "user profile description",
+      "avatar": "profiles/profile_7/магазин1.png",
+      "archived": false,
+      "name_store": "John's Store",
+      "address": "Street 123, City, Country, Zipcode",
+      "viewed_orders": null,
+      "role": "buyer"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 8,
+    "fields": {
+      "user": 3,
+      "slug": "janes-boutique",
+      "phone": "0987654321",
+      "description": "another user profile description",
+      "avatar": "profiles/profile_8/магазин3.jpeg",
+      "archived": false,
+      "name_store": "Jane's Boutique",
+      "address": "Avenue 321, Big City, Country, Postal Code",
+      "viewed_orders": null,
+      "role": "store"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 9,
+    "fields": {
+      "user": 4,
+      "slug": "user3",
+      "phone": "1122334455",
+      "description": "Personal profile for Elena",
+      "avatar": "profiles/profile_9/магазин4.jpeg",
+      "archived": false,
+      "name_store": "Elena's Flowers",
+      "address": "123 Petal Pusher Lane, City, Country, 12345",
+      "viewed_orders": null,
+      "role": "buyer"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 10,
+    "fields": {
+      "user": 5,
+      "slug": "user4",
+      "phone": "5544332211",
+      "description": "Personal profile for Maxim",
+      "avatar": "profiles/profile_10/admin.png",
+      "archived": false,
+      "name_store": null,
+      "address": "321 Techno Park, City, Country, 67890",
+      "viewed_orders": null,
+      "role": "admin"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 11,
+    "fields": {
+      "user": 6,
+      "slug": "foxs-boutique",
+      "phone": "9876543210",
+      "description": "Profile for Test User",
+      "avatar": "profiles/profile_11/images6.png",
+      "archived": false,
+      "name_store": "Fox's Boutique",
+      "address": "456 Test Lane, Test City, Test Country, 54321",
+      "viewed_orders": null,
+      "role": "store"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 12,
+    "fields": {
+      "user": 7,
+      "slug": "mikes-electronics",
+      "phone": "6543210987",
+      "description": "Mike's Electronics",
+      "avatar": "profiles/profile_12/магазин_6.png",
+      "archived": false,
+      "name_store": "Mike's Electronics",
+      "address": "789 Circuit Street, Tech City, Digital Country, 98765",
+      "viewed_orders": null,
+      "role": "store"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 13,
+    "fields": {
+      "user": 8,
+      "slug": "electro-market",
+      "phone": "1122334885",
+      "description": "User Six Profile",
+      "avatar": "profiles/profile_13/магазин_7.jpeg",
+      "archived": false,
+      "name_store": "Electro market",
+      "address": "789 Main Street, Cityville, Countryland, 54321",
+      "viewed_orders": null,
+      "role": "store"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 14,
+    "fields": {
+      "user": 9,
+      "slug": "chic-trends",
+      "phone": "9988776655",
+      "description": "Trendy Fashion Boutique",
+      "avatar": "profiles/profile_14/магазин_8.png",
+      "archived": false,
+      "name_store": "Chic Trends",
+      "address": "321 Fashion Avenue, Style City, Trendy Country, 11222",
+      "viewed_orders": null,
+      "role": "store"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 15,
+    "fields": {
+      "user": 10,
+      "slug": "elektro-trends",
+      "phone": "7654321098",
+      "description": "User Seven Profile",
+      "avatar": "profiles/profile_15/магазин_9.png",
+      "archived": false,
+      "name_store": "Elektro Trends",
+      "address": "456 Oak Street, Green City, Nature Country, 87654",
+      "viewed_orders": null,
+      "role": "store"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 16,
+    "fields": {
+      "user": 60,
+      "slug": "aiden_thompson",
+      "phone": "0987777777",
+      "description": "Life is wonderful",
+      "avatar": "profiles/profile_None/images2.jpeg",
+      "archived": false,
+      "name_store": null,
+      "address": "569 Circuit Street, Tech City, Digital Country, 98765",
+      "viewed_orders": null,
+      "role": "buyer"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 17,
+    "fields": {
+      "user": 61,
+      "slug": "madison_hall",
+      "phone": "7654321001",
+      "description": "Bella's Accessories",
+      "avatar": "profiles/profile_17/images1.jpeg",
+      "archived": false,
+      "name_store": null,
+      "address": "123 Fashion Avenue, Style City, Trendy Country, 11222",
+      "viewed_orders": null,
+      "role": "buyer"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 18,
+    "fields": {
+      "user": 62,
+      "slug": "lucass123_miller",
+      "phone": "1122334466",
+      "description": "User Eight Profile",
+      "avatar": "profiles/profile_18/фм37.jpeg",
+      "archived": false,
+      "name_store": null,
+      "address": "789 Park Street, Urban City, Modern Country, 54321",
+      "viewed_orders": null,
+      "role": "buyer"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 19,
+    "fields": {
+      "user": 63,
+      "slug": "hannah_davis",
+      "phone": "9988776633",
+      "description": "Gourmet Delight",
+      "avatar": "profiles/profile_19/фм36.jpeg",
+      "archived": false,
+      "name_store": null,
+      "address": "321 Gourmet Lane, Food City, Culinary Country, 11222",
+      "viewed_orders": null,
+      "role": "buyer"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 20,
+    "fields": {
+      "user": 11,
+      "slug": "alexander34",
+      "phone": "7654321010",
+      "description": "User Nine Profile",
+      "avatar": "profiles/profile_20/фм35.jpeg",
+      "archived": false,
+      "name_store": null,
+      "address": "456 Maple Street, Woodland City, Nature Country, 87654",
+      "viewed_orders": null,
+      "role": "buyer"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 21,
+    "fields": {
+      "user": 12,
+      "slug": "megan_smith",
+      "phone": "1122334499",
+      "description": "Tech Hub Electronics",
+      "avatar": "profiles/profile_21/av52.jpeg",
+      "archived": false,
+      "name_store": null,
+      "address": "789 Tech Street, Digital City, Innovation Country, 54321",
+      "viewed_orders": null,
+      "role": "buyer"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 22,
+    "fields": {
+      "user": 13,
+      "slug": "peter_jones",
+      "phone": "9876534210",
+      "description": "Green Living Store",
+      "avatar": "profiles/profile_22/av51.jpeg",
+      "archived": false,
+      "name_store": null,
+      "address": "234 Eco Avenue, Sustainability City, Eco-Friendly Country, 11222",
+      "viewed_orders": null,
+      "role": "buyer"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 23,
+    "fields": {
+      "user": 14,
+      "slug": "susan_miller",
+      "phone": "1122334477",
+      "description": "User Ten Profile",
+      "avatar": "profiles/profile_23/av50.jpeg",
+      "archived": false,
+      "name_store": null,
+      "address": "567 Oak Street, Tranquil City, Serene Country, 87654",
+      "viewed_orders": null,
+      "role": "buyer"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 24,
+    "fields": {
+      "user": 15,
+      "slug": "daniel_brown",
+      "phone": "9988776644",
+      "description": "Fashion Guru Boutique",
+      "avatar": "profiles/profile_24/av49.jpeg",
+      "archived": false,
+      "name_store": null,
+      "address": "321 Chic Lane, Style City, Trendy Country, 54321",
+      "viewed_orders": null,
+      "role": "buyer"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 25,
+    "fields": {
+      "user": 16,
+      "slug": "natalie_wang",
+      "phone": "8765432101",
+      "description": "User Eleven Profile",
+      "avatar": "profiles/profile_25/av48.jpeg",
+      "archived": false,
+      "name_store": null,
+      "address": "789 Pine Street, Forest City, Natural Country, 11222",
+      "viewed_orders": null,
+      "role": "buyer"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 26,
+    "fields": {
+      "user": 17,
+      "slug": "jackson_doe",
+      "phone": "1122333455",
+      "description": "Electro Mart",
+      "avatar": "profiles/profile_26/av47.jpeg",
+      "archived": false,
+      "name_store": null,
+      "address": "456 Circuit Street, Tech City, Digital Country, 87654",
+      "viewed_orders": null,
+      "role": "buyer"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 27,
+    "fields": {
+      "user": 18,
+      "slug": "victoria_smith",
+      "phone": "9998887777",
+      "description": "Organic Haven",
+      "avatar": "profiles/profile_27/av46.jpeg",
+      "archived": false,
+      "name_store": null,
+      "address": "890 Garden Avenue, Nature City, Organic Country, 54321",
+      "viewed_orders": null,
+      "role": "buyer"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 28,
+    "fields": {
+      "user": 19,
+      "slug": "charles_brown",
+      "phone": "1122333466",
+      "description": "User Twelve Profile",
+      "avatar": "profiles/profile_28/av45.jpeg",
+      "archived": false,
+      "name_store": null,
+      "address": "123 Maple Street, Tranquil City, Serene Country, 11222",
+      "viewed_orders": null,
+      "role": "store"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 29,
+    "fields": {
+      "user": 20,
+      "slug": "sophie_miller",
+      "phone": "9876543222",
+      "description": "Tech World Gadgets",
+      "avatar": "profiles/profile_29/av44.jpeg",
+      "archived": false,
+      "name_store": null,
+      "address": "456 Silicon Avenue, Innovation City, Digital Country, 87654",
+      "viewed_orders": null,
+      "role": "buyer"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 30,
+    "fields": {
+      "user": 21,
+      "slug": "andrew_smith",
+      "phone": "1122334488",
+      "description": "User Thirteen Profile",
+      "avatar": "profiles/profile_30/av43.jpeg",
+      "archived": false,
+      "name_store": null,
+      "address": "789 Birch Street, Forest City, Natural Country, 11222",
+      "viewed_orders": null,
+      "role": "buyer"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 31,
+    "fields": {
+      "user": 22,
+      "slug": "elizabeth_green",
+      "phone": "9998886666",
+      "description": "Furniture Hub",
+      "avatar": "profiles/profile_31/av42.jpeg",
+      "archived": false,
+      "name_store": null,
+      "address": "890 Oak Avenue, Style City, Trendy Country, 54321",
+      "viewed_orders": null,
+      "role": "buyer"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 32,
+    "fields": {
+      "user": 23,
+      "slug": "michael_jackson",
+      "phone": "5554443333",
+      "description": "Pet Paradise",
+      "avatar": "profiles/profile_32/av41.jpeg",
+      "archived": false,
+      "name_store": null,
+      "address": "123 Paws Street, Animal City, Pet Country, 54321",
+      "viewed_orders": null,
+      "role": "buyer"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 33,
+    "fields": {
+      "user": 24,
+      "slug": "lucas_miller",
+      "phone": "1122333499",
+      "description": "User Fourteen Profile",
+      "avatar": "profiles/profile_33/av40.jpeg",
+      "archived": false,
+      "name_store": null,
+      "address": "456 Pine Street, Tranquil City, Serene Country, 11222",
+      "viewed_orders": null,
+      "role": "buyer"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 34,
+    "fields": {
+      "user": 25,
+      "slug": "olivia_adams",
+      "phone": "9998885555",
+      "description": "Fitness Fusion",
+      "avatar": "profiles/profile_34/av39.jpeg",
+      "archived": false,
+      "name_store": null,
+      "address": "789 Gym Lane, Health City, Active Country, 54321",
+      "viewed_orders": null,
+      "role": "buyer"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 36,
+    "fields": {
+      "user": 26,
+      "slug": "violet_williams",
+      "phone": "5554442222",
+      "description": "Book Nook",
+      "avatar": "profiles/profile_36/av38.jpeg",
+      "archived": false,
+      "name_store": null,
+      "address": "123 Library Avenue, Literary City, Bookish Country, 54321",
+      "viewed_orders": null,
+      "role": "buyer"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 37,
+    "fields": {
+      "user": 27,
+      "slug": "nathan_anderson",
+      "phone": "7776665555",
+      "description": "Gaming Guru",
+      "avatar": "profiles/profile_37/av34.jpeg",
+      "archived": false,
+      "name_store": null,
+      "address": "456 Pixel Street, Game City, Virtual Country, 54321",
+      "viewed_orders": null,
+      "role": "buyer"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 38,
+    "fields": {
+      "user": 28,
+      "slug": "samantha_jones",
+      "phone": "1122334501",
+      "description": "User Sixteen Profile",
+      "avatar": "profiles/profile_38/av33.jpeg",
+      "archived": false,
+      "name_store": null,
+      "address": "789 Console Avenue, Player City, Gamer Country, 11222",
+      "viewed_orders": null,
+      "role": "buyer"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 39,
+    "fields": {
+      "user": 29,
+      "slug": "william_roberts",
+      "phone": "9998884444",
+      "description": "Green Thumb",
+      "avatar": "profiles/profile_39/av32.jpeg",
+      "archived": false,
+      "name_store": null,
+      "address": "890 Garden Lane, Botanical City, Eco Country, 54321",
+      "viewed_orders": null,
+      "role": "buyer"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 40,
+    "fields": {
+      "user": 30,
+      "slug": "evan_davis",
+      "phone": "1122334502",
+      "description": "User Seventeen Profile",
+      "avatar": "profiles/profile_40/av31.jpeg",
+      "archived": false,
+      "name_store": null,
+      "address": "123 Flower Street, Bloom City, Nature Country, 11222",
+      "viewed_orders": null,
+      "role": "buyer"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 41,
+    "fields": {
+      "user": 31,
+      "slug": "oliver_thompson",
+      "phone": "5554441111",
+      "description": "Artisan Crafts",
+      "avatar": "profiles/profile_41/av30.jpeg",
+      "archived": false,
+      "name_store": null,
+      "address": "456 Handmade Avenue, Crafty City, Artistic Country, 54321",
+      "viewed_orders": null,
+      "role": "buyer"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 42,
+    "fields": {
+      "user": 32,
+      "slug": "emily_hall",
+      "phone": "1122334503",
+      "description": "User Eighteen Profile",
+      "avatar": "profiles/profile_42/av29.jpeg",
+      "archived": false,
+      "name_store": null,
+      "address": "789 Art Street, Creative City, Imagination Country, 11222",
+      "viewed_orders": null,
+      "role": "buyer"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 43,
+    "fields": {
+      "user": 33,
+      "slug": "nora_baker",
+      "phone": "6665554444",
+      "description": "Tech Innovator",
+      "avatar": "profiles/profile_43/av28.jpeg",
+      "archived": false,
+      "name_store": null,
+      "address": "890 Innovation Lane, Tech City, Silicon Country, 54321",
+      "viewed_orders": null,
+      "role": "buyer"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 44,
+    "fields": {
+      "user": 34,
+      "slug": "dylan_morris",
+      "phone": "1122334504",
+      "description": "User Nineteen Profile",
+      "avatar": "profiles/profile_44/av27.jpeg",
+      "archived": false,
+      "name_store": null,
+      "address": "123 Code Street, Developer City, Coding Country, 11222",
+      "viewed_orders": null,
+      "role": "buyer"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 45,
+    "fields": {
+      "user": 35,
+      "slug": "mia_jackson",
+      "phone": "3332221111",
+      "description": "Style Icon",
+      "avatar": "profiles/profile_45/av26.jpeg",
+      "archived": false,
+      "name_store": null,
+      "address": "456 Fashion Avenue, Trendy City, Chic Country, 54321",
+      "viewed_orders": null,
+      "role": "buyer"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 46,
+    "fields": {
+      "user": 36,
+      "slug": "noah_clark",
+      "phone": "1122334505",
+      "description": "User Twenty Profile",
+      "avatar": "profiles/profile_46/av25.jpeg",
+      "archived": false,
+      "name_store": null,
+      "address": "789 Trend Street, Fashion City, Couture Country, 11222",
+      "viewed_orders": null,
+      "role": "buyer"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 47,
+    "fields": {
+      "user": 37,
+      "slug": "scarlett_white",
+      "phone": "7778889999",
+      "description": "Adventure Seeker",
+      "avatar": "profiles/profile_47/av24.jpeg",
+      "archived": false,
+      "name_store": null,
+      "address": "123 Explore Lane, Adventurous City, Wanderlust Country, 99999",
+      "viewed_orders": null,
+      "role": "buyer"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 48,
+    "fields": {
+      "user": 38,
+      "slug": "logan_martin",
+      "phone": "5553443333",
+      "description": "Gourmet Chef",
+      "avatar": "profiles/profile_48/av23.jpeg",
+      "archived": false,
+      "name_store": null,
+      "address": "456 Culinary Street, Foodie City, Flavor Country, 33333",
+      "viewed_orders": null,
+      "role": "buyer"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 49,
+    "fields": {
+      "user": 39,
+      "slug": "aubrey_miller",
+      "phone": "1122334506",
+      "description": "User Twenty-One Profile",
+      "avatar": "profiles/profile_49/av22.jpeg",
+      "archived": false,
+      "name_store": null,
+      "address": "789 Nature Street, Eco City, Green Country, 11222",
+      "viewed_orders": null,
+      "role": "buyer"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 50,
+    "fields": {
+      "user": 40,
+      "slug": "zoey_carter",
+      "phone": "3332221112",
+      "description": "Creative Artist",
+      "avatar": "profiles/profile_50/av21.jpeg",
+      "archived": false,
+      "name_store": null,
+      "address": "123 Canvas Lane, Art City, Imagination Country, 54321",
+      "viewed_orders": null,
+      "role": "buyer"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 51,
+    "fields": {
+      "user": 41,
+      "slug": "elijah_ward",
+      "phone": "1122334507",
+      "description": "User Twenty-Two Profile",
+      "avatar": "profiles/profile_51/av20.jpeg",
+      "archived": false,
+      "name_store": null,
+      "address": "456 Music Street, Melody City, Harmony Country, 11222",
+      "viewed_orders": null,
+      "role": "buyer"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 52,
+    "fields": {
+      "user": 42,
+      "slug": "riley_morgan",
+      "phone": "9998887776",
+      "description": "Fitness Enthusiast",
+      "avatar": "profiles/profile_52/av19.jpeg",
+      "archived": false,
+      "name_store": null,
+      "address": "123 Workout Lane, Fit City, Health Country, 98765",
+      "viewed_orders": null,
+      "role": "buyer"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 53,
+    "fields": {
+      "user": 43,
+      "slug": "leah_hall",
+      "phone": "1233567890",
+      "description": "Tech Guru",
+      "avatar": "profiles/profile_53/av18.jpeg",
+      "archived": false,
+      "name_store": null,
+      "address": "456 Innovation Street, Tech City, Digital Country, 56789",
+      "viewed_orders": null,
+      "role": "buyer"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 54,
+    "fields": {
+      "user": 44,
+      "slug": "grace_thomas",
+      "phone": "1122334508",
+      "description": "User Twenty-Three Profile",
+      "avatar": "profiles/profile_54/av17.jpeg",
+      "archived": false,
+      "name_store": null,
+      "address": "789 Code Lane, Developer City, Binary Country, 11222",
+      "viewed_orders": null,
+      "role": "buyer"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 55,
+    "fields": {
+      "user": 45,
+      "slug": "jacob_evans",
+      "phone": "5554443332",
+      "description": "Traveler Adventurer",
+      "avatar": "profiles/profile_55/av16.jpeg",
+      "archived": false,
+      "name_store": null,
+      "address": "123 Explore Lane, Wanderlust City, Adventure Country, 33322",
+      "viewed_orders": null,
+      "role": "buyer"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 56,
+    "fields": {
+      "user": 46,
+      "slug": "emma_davis",
+      "phone": "3333221111",
+      "description": "Book Lover",
+      "avatar": "profiles/profile_56/av15.jpeg",
+      "archived": false,
+      "name_store": null,
+      "address": "456 Literary Street, Reader City, Story Country, 11111",
+      "viewed_orders": null,
+      "role": "buyer"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 57,
+    "fields": {
+      "user": 47,
+      "slug": "owen_hernandez",
+      "phone": "7776665550",
+      "description": "Pro Gamer",
+      "avatar": "profiles/profile_57/av14.jpeg",
+      "archived": false,
+      "name_store": null,
+      "address": "789 Pixel Lane, Game City, Virtual Country, 55500",
+      "viewed_orders": null,
+      "role": "buyer"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 58,
+    "fields": {
+      "user": 48,
+      "slug": "ella_miller",
+      "phone": "1239876543",
+      "description": "Organic Farmer",
+      "avatar": "profiles/profile_58/av13.jpeg",
+      "archived": false,
+      "name_store": null,
+      "address": "456 Eco Street, Farming City, Organic Country, 87654",
+      "viewed_orders": null,
+      "role": "buyer"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 59,
+    "fields": {
+      "user": 49,
+      "slug": "liam_brown",
+      "phone": "1122334077",
+      "description": "User Twenty-Seven Profile",
+      "avatar": "profiles/profile_59/av12.jpeg",
+      "archived": false,
+      "name_store": null,
+      "address": "123 Byte Lane, Tech City, Digital Country, 44077",
+      "viewed_orders": null,
+      "role": "buyer"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 60,
+    "fields": {
+      "user": 50,
+      "slug": "zoey_wood",
+      "phone": "5552221111",
+      "description": "Pet Lover",
+      "avatar": "profiles/profile_60/av11.jpeg",
+      "archived": false,
+      "name_store": null,
+      "address": "789 Pet Street, Animal City, Pet Country, 21111",
+      "viewed_orders": null,
+      "role": "buyer"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 61,
+    "fields": {
+      "user": 51,
+      "slug": "ethan_king",
+      "phone": "3338885555",
+      "description": "Music Maestro",
+      "avatar": "profiles/profile_61/av10.jpeg",
+      "archived": false,
+      "name_store": null,
+      "address": "456 Melody Lane, Harmony City, Song Country, 85555",
+      "viewed_orders": null,
+      "role": "buyer"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 62,
+    "fields": {
+      "user": 52,
+      "slug": "jackson_walker",
+      "phone": "9994443333",
+      "description": "Fitness Guru",
+      "avatar": "profiles/profile_62/av9.jpeg",
+      "archived": false,
+      "name_store": null,
+      "address": "789 Gym Avenue, Fit City, Health Country, 33333",
+      "viewed_orders": null,
+      "role": "buyer"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 63,
+    "fields": {
+      "user": 53,
+      "slug": "aubrey_roberts",
+      "phone": "1231231234",
+      "description": "Tech Enthusiast",
+      "avatar": "profiles/profile_63/av8.jpeg",
+      "archived": false,
+      "name_store": null,
+      "address": "456 Byte Street, Tech City, Digital Country, 12345",
+      "viewed_orders": null,
+      "role": "buyer"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 64,
+    "fields": {
+      "user": 54,
+      "slug": "harper_anderson",
+      "phone": "5551110000",
+      "description": "Artistic Soul",
+      "avatar": "profiles/profile_64/av7.jpeg",
+      "archived": false,
+      "name_store": null,
+      "address": "123 Artistic Lane, Artsy City, Colorful Country, 00000",
+      "viewed_orders": null,
+      "role": "buyer"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 65,
+    "fields": {
+      "user": 55,
+      "slug": "logan_morris",
+      "phone": "7779998888",
+      "description": "Bookworm",
+      "avatar": "profiles/profile_65/av6.jpeg",
+      "archived": false,
+      "name_store": null,
+      "address": "789 Library Street, Book City, Literary Country, 88888",
+      "viewed_orders": null,
+      "role": "buyer"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 66,
+    "fields": {
+      "user": 56,
+      "slug": "olivia_davis",
+      "phone": "1122334355",
+      "description": "Fashionista",
+      "avatar": "profiles/profile_66/av5.jpeg",
+      "archived": false,
+      "name_store": null,
+      "address": "456 Style Avenue, Trend City, Fashion Country, 44555",
+      "viewed_orders": null,
+      "role": "buyer"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 67,
+    "fields": {
+      "user": 57,
+      "slug": "ethan_morgan",
+      "phone": "9876543110",
+      "description": "Wanderlust Traveler",
+      "avatar": "profiles/profile_67/av4.jpeg",
+      "archived": false,
+      "name_store": null,
+      "address": "123 Globe Street, Explorer City, Travel Country, 54321",
+      "viewed_orders": null,
+      "role": "buyer"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 68,
+    "fields": {
+      "user": 58,
+      "slug": "amelia_wilson",
+      "phone": "5554444333",
+      "description": "Gaming Enthusiast",
+      "avatar": "profiles/profile_68/av3.jpeg",
+      "archived": false,
+      "name_store": null,
+      "address": "456 Console Lane, Game City, Digital Country, 33333",
+      "viewed_orders": null,
+      "role": "buyer"
+    }
+  },
+  {
+    "model": "authorization.profile",
+    "pk": 69,
+    "fields": {
+      "user": 59,
+      "slug": "carter_jackson",
+      "phone": "1112223333",
+      "description": "Cooking Passion",
+      "avatar": "profiles/profile_69/av2.jpeg",
+      "archived": false,
+      "name_store": null,
+      "address": "789 Chef Street, Culinary City, Flavorful Country, 22222",
+      "viewed_orders": null,
+      "role": "buyer"
+    }
+  },
+  {
+    "model": "authorization.storesettings",
+    "pk": 1,
+    "fields": {
+      "profile": 6,
+      "delivery_type": 2,
+      "payment": 1
+    }
+  },
+  {
+    "model": "authorization.storesettings",
+    "pk": 2,
+    "fields": {
+      "profile": 8,
+      "delivery_type": 1,
+      "payment": 1
+    }
+  },
+  {
+    "model": "compare.abstractcharacteristicmodel",
+    "pk": 1,
+    "fields": {
+      "made_in": "USA",
+      "production_year": 2022,
+      "color": "REd",
+      "weight": "300",
+      "content_type": 9,
+      "object_id": 1
+    }
+  },
+  {
+    "model": "compare.abstractcharacteristicmodel",
+    "pk": 2,
+    "fields": {
+      "made_in": "USA",
+      "production_year": 2022,
+      "color": "REd",
+      "weight": "300",
+      "content_type": 9,
+      "object_id": 51
+    }
+  },
+  {
+    "model": "compare.abstractcharacteristicmodel",
+    "pk": 3,
+    "fields": {
+      "made_in": "South Korea",
+      "production_year": 2021,
+      "color": "Phantom Gray",
+      "weight": "171",
+      "content_type": 9,
+      "object_id": 52
+    }
+  },
+  {
+    "model": "compare.abstractcharacteristicmodel",
+    "pk": 4,
+    "fields": {
+      "made_in": "Unknown",
+      "production_year": 2021,
+      "color": "Sorta Seafoam",
+      "weight": "207",
+      "content_type": 9,
+      "object_id": 53
+    }
+  },
+  {
+    "model": "compare.abstractcharacteristicmodel",
+    "pk": 5,
+    "fields": {
+      "made_in": "China",
+      "production_year": 2021,
+      "color": "Winter Mist",
+      "weight": "183",
+      "content_type": 9,
+      "object_id": 60
+    }
+  },
+  {
+    "model": "compare.abstractcharacteristicmodel",
+    "pk": 6,
+    "fields": {
+      "made_in": "Thailand",
+      "production_year": 2021,
+      "color": "Frosted Black",
+      "weight": "186",
+      "content_type": 9,
+      "object_id": 62
+    }
+  },
+  {
+    "model": "compare.abstractcharacteristicmodel",
+    "pk": 7,
+    "fields": {
+      "made_in": "China",
+      "production_year": 2020,
+      "color": "Silver Frost",
+      "weight": "209",
+      "content_type": 9,
+      "object_id": 63
+    }
+  },
+  {
+    "model": "compare.abstractcharacteristicmodel",
+    "pk": 8,
+    "fields": {
+      "made_in": "Китай",
+      "production_year": 2023,
+      "color": "серый",
+      "weight": "1400",
+      "content_type": 9,
+      "object_id": 3
+    }
+  },
+  {
+    "model": "compare.abstractcharacteristicmodel",
+    "pk": 9,
+    "fields": {
+      "made_in": "Япония",
+      "production_year": 2023,
+      "color": "черный",
+      "weight": "18900",
+      "content_type": 10,
+      "object_id": 12
+    }
+  },
+  {
+    "model": "compare.abstractcharacteristicmodel",
+    "pk": 10,
+    "fields": {
+      "made_in": "South Korea",
+      "production_year": 2020,
+      "color": "Aurora Silver",
+      "weight": "180",
+      "content_type": 9,
+      "object_id": 70
+    }
+  },
+  {
+    "model": "compare.abstractcharacteristicmodel",
+    "pk": 11,
+    "fields": {
+      "made_in": "South Korea",
+      "production_year": 2023,
+      "color": "white",
+      "weight": "70 kg",
+      "content_type": 9,
+      "object_id": 91
+    }
+  },
+  {
+    "model": "compare.abstractcharacteristicmodel",
+    "pk": 12,
+    "fields": {
+      "made_in": "Thailand",
+      "production_year": 2023,
+      "color": "silver",
+      "weight": "65 kg",
+      "content_type": 9,
+      "object_id": 92
+    }
+  },
+  {
+    "model": "compare.abstractcharacteristicmodel",
+    "pk": 13,
+    "fields": {
+      "made_in": "USA",
+      "production_year": 2023,
+      "color": "graphite",
+      "weight": "75 kg",
+      "content_type": 9,
+      "object_id": 93
+    }
+  },
+  {
+    "model": "compare.abstractcharacteristicmodel",
+    "pk": 14,
+    "fields": {
+      "made_in": "Sweden",
+      "production_year": 2023,
+      "color": "white",
+      "weight": "70 kg",
+      "content_type": 9,
+      "object_id": 100
+    }
+  },
+  {
+    "model": "compare.abstractcharacteristicmodel",
+    "pk": 15,
+    "fields": {
+      "made_in": "Moscow",
+      "production_year": 2013,
+      "color": "red",
+      "weight": "222",
+      "content_type": 9,
+      "object_id": 24
+    }
+  },
+  {
+    "model": "compare.abstractcharacteristicmodel",
+    "pk": 16,
+    "fields": {
+      "made_in": "china",
+      "production_year": 2023,
+      "color": "white",
+      "weight": "3000",
+      "content_type": 9,
+      "object_id": 111
+    }
+  },
+  {
+    "model": "compare.abstractcharacteristicmodel",
+    "pk": 17,
+    "fields": {
+      "made_in": "США",
+      "production_year": 2023,
+      "color": "серебристый",
+      "weight": "15 кг",
+      "content_type": 9,
+      "object_id": 112
+    }
+  },
+  {
+    "model": "compare.abstractcharacteristicmodel",
+    "pk": 18,
+    "fields": {
+      "made_in": "Южная Корея",
+      "production_year": 2023,
+      "color": "черный",
+      "weight": "12 кг",
+      "content_type": 9,
+      "object_id": 113
+    }
+  },
+  {
+    "model": "compare.abstractcharacteristicmodel",
+    "pk": 19,
+    "fields": {
+      "made_in": "США",
+      "production_year": 2023,
+      "color": "сталь",
+      "weight": "20 кг",
+      "content_type": 9,
+      "object_id": 120
+    }
+  },
+  {
+    "model": "compare.abstractcharacteristicmodel",
+    "pk": 20,
+    "fields": {
+      "made_in": "Japan",
+      "production_year": 2023,
+      "color": "white",
+      "weight": "15 kg",
+      "content_type": 9,
+      "object_id": 111
+    }
+  },
+  {
+    "model": "compare.abstractcharacteristicmodel",
+    "pk": 21,
+    "fields": {
+      "made_in": "Китай",
+      "production_year": 2023,
+      "color": "черный",
+      "weight": "200",
+      "content_type": 9,
+      "object_id": 14
+    }
+  },
+  {
+    "model": "compare.abstractcharacteristicmodel",
+    "pk": 22,
+    "fields": {
+      "made_in": "Корея",
+      "production_year": 2023,
+      "color": "белый",
+      "weight": "50 г",
+      "content_type": 9,
+      "object_id": 33
+    }
+  },
+  {
+    "model": "compare.abstractcharacteristicmodel",
+    "pk": 23,
+    "fields": {
+      "made_in": "Вьетнам",
+      "production_year": 2023,
+      "color": "серебристый",
+      "weight": "1500 г",
+      "content_type": 9,
+      "object_id": 43
+    }
+  },
+  {
+    "model": "compare.abstractcharacteristicmodel",
+    "pk": 24,
+    "fields": {
+      "made_in": "Япония",
+      "production_year": 2023,
+      "color": "титановый",
+      "weight": "310 г",
+      "content_type": 9,
+      "object_id": 50
+    }
+  },
+  {
+    "model": "compare.abstractcharacteristicmodel",
+    "pk": 25,
+    "fields": {
+      "made_in": "china",
+      "production_year": 2023,
+      "color": "black",
+      "weight": "3000",
+      "content_type": 9,
+      "object_id": 4
+    }
+  },
+  {
+    "model": "compare.abstractcharacteristicmodel",
+    "pk": 27,
+    "fields": {
+      "made_in": "Корея",
+      "production_year": 2023,
+      "color": "черный",
+      "weight": "21500",
+      "content_type": 9,
+      "object_id": 81
+    }
+  },
+  {
+    "model": "compare.abstractcharacteristicmodel",
+    "pk": 28,
+    "fields": {
+      "made_in": "Корея",
+      "production_year": 2023,
+      "color": "черный",
+      "weight": "18900",
+      "content_type": 9,
+      "object_id": 82
+    }
+  },
+  {
+    "model": "compare.abstractcharacteristicmodel",
+    "pk": 30,
+    "fields": {
+      "made_in": "Япония",
+      "production_year": 2023,
+      "color": "черный",
+      "weight": "18900",
+      "content_type": 10,
+      "object_id": 13
+    }
+  },
+  {
+    "model": "compare.abstractcharacteristicmodel",
+    "pk": 31,
+    "fields": {
+      "made_in": "Япония",
+      "production_year": 2023,
+      "color": "черный",
+      "weight": "18900",
+      "content_type": 10,
+      "object_id": 23
+    }
+  },
+  {
+    "model": "compare.abstractcharacteristicmodel",
+    "pk": 32,
+    "fields": {
+      "made_in": "Япония",
+      "production_year": 2023,
+      "color": "черный",
+      "weight": "18900",
+      "content_type": 10,
+      "object_id": 34
+    }
+  },
+  {
+    "model": "compare.abstractcharacteristicmodel",
+    "pk": 33,
+    "fields": {
+      "made_in": "Япония",
+      "production_year": 2023,
+      "color": "черный",
+      "weight": "18900",
+      "content_type": 10,
+      "object_id": 42
+    }
+  },
+  {
+    "model": "compare.abstractcharacteristicmodel",
+    "pk": 34,
+    "fields": {
+      "made_in": "Япония",
+      "production_year": 2023,
+      "color": "черный",
+      "weight": "18900",
+      "content_type": 10,
+      "object_id": 44
+    }
+  },
+  {
+    "model": "compare.abstractcharacteristicmodel",
+    "pk": 72,
+    "fields": {
+      "made_in": "Китай",
+      "production_year": 2022,
+      "color": "черный",
+      "weight": "200",
+      "content_type": 9,
+      "object_id": 72
+    }
+  },
+  {
+    "model": "compare.abstractcharacteristicmodel",
+    "pk": 73,
+    "fields": {
+      "made_in": "Китай",
+      "production_year": 2023,
+      "color": "серебристый",
+      "weight": "1300",
+      "content_type": 9,
+      "object_id": 73
+    }
+  },
+  {
+    "model": "compare.abstractcharacteristicmodel",
+    "pk": 80,
+    "fields": {
+      "made_in": "Китай",
+      "production_year": 2023,
+      "color": "черный",
+      "weight": "1100",
+      "content_type": 9,
+      "object_id": 80
+    }
+  },
+  {
+    "model": "compare.abstractcharacteristicmodel",
+    "pk": 83,
+    "fields": {
+      "made_in": "Япония",
+      "production_year": 2023,
+      "color": "черный",
+      "weight": "18900",
+      "content_type": 9,
+      "object_id": 83
+    }
+  },
+  {
+    "model": "compare.abstractcharacteristicmodel",
+    "pk": 90,
+    "fields": {
+      "made_in": "Китай",
+      "production_year": 2023,
+      "color": "черный",
+      "weight": "18000",
+      "content_type": 9,
+      "object_id": 90
+    }
+  },
+  {
+    "model": "compare.abstractcharacteristicmodel",
+    "pk": 91,
+    "fields": {
+      "made_in": "china",
+      "production_year": 2022,
+      "color": "black",
+      "weight": "200",
+      "content_type": 9,
+      "object_id": 71
+    }
+  },
+  {
+    "model": "compare.tvsetcharacteristic",
+    "pk": 25,
+    "fields": {
+      "name": "TVSet",
+      "screen": "26",
+      "resolution": "1080",
+      "country": "china",
+      "freq": 60,
+      "wi_fi": "да",
+      "hdmi": "да",
+      "description": "супер тв"
+    }
+  },
+  {
+    "model": "compare.tvsetcharacteristic",
+    "pk": 27,
+    "fields": {
+      "name": "Samsung QLED Q90R",
+      "screen": "65",
+      "resolution": "4K",
+      "country": "Корея",
+      "freq": 120,
+      "wi_fi": "да",
+      "hdmi": "да",
+      "description": "Флагманский 4K QLED телевизор с высочайшим качеством изображения и функциями умного ТВ."
+    }
+  },
+  {
+    "model": "compare.tvsetcharacteristic",
+    "pk": 28,
+    "fields": {
+      "name": "LG OLED C1",
+      "screen": "55",
+      "resolution": "4K",
+      "country": "Корея",
+      "freq": 120,
+      "wi_fi": "да",
+      "hdmi": "да",
+      "description": "4K OLED телевизор LG с яркими цветами, глубокими черными тонами и умными функциями."
+    }
+  },
+  {
+    "model": "compare.tvsetcharacteristic",
+    "pk": 83,
+    "fields": {
+      "name": "Sony Bravia A90J",
+      "screen": "55",
+      "resolution": "4K",
+      "country": "Япония",
+      "freq": 120,
+      "wi_fi": "да",
+      "hdmi": "да",
+      "description": "4K OLED телевизор Sony Bravia A90J с яркими цветами, глубокими черными тонами и умными функциями."
+    }
+  },
+  {
+    "model": "compare.tvsetcharacteristic",
+    "pk": 90,
+    "fields": {
+      "name": "TCL 6-Series",
+      "screen": "55",
+      "resolution": "4K",
+      "country": "Китай",
+      "freq": 60,
+      "wi_fi": "да",
+      "hdmi": "да",
+      "description": "4K LED телевизор TCL 6-Series с яркими цветами, четким изображением и умными функциями."
+    }
+  },
+  {
+    "model": "compare.headphonescharacteristic",
+    "pk": 21,
+    "fields": {
+      "wireless": "да",
+      "mic": "да",
+      "fit": "в ушах",
+      "bluetooth": "да",
+      "resistance": 2,
+      "hdmi": "Нет",
+      "description": "Супер наушники"
+    }
+  },
+  {
+    "model": "compare.headphonescharacteristic",
+    "pk": 22,
+    "fields": {
+      "wireless": "да",
+      "mic": "да",
+      "fit": "в ушах",
+      "bluetooth": "Bluetooth 5.2",
+      "resistance": 16,
+      "hdmi": "Нет",
+      "description": "Высококачественные беспроводные наушники с активным шумоподавлением"
+    }
+  },
+  {
+    "model": "compare.headphonescharacteristic",
+    "pk": 23,
+    "fields": {
+      "wireless": "да",
+      "mic": "да",
+      "fit": "в ушах",
+      "bluetooth": "Bluetooth 5.2",
+      "resistance": 16,
+      "hdmi": "Нет",
+      "description": "Портативная колонка с высококачественным звуком и долгим временем работы от аккумулятора"
+    }
+  },
+  {
+    "model": "compare.headphonescharacteristic",
+    "pk": 24,
+    "fields": {
+      "wireless": "да",
+      "mic": "да",
+      "fit": "на голове",
+      "bluetooth": "5.1",
+      "resistance": 16,
+      "hdmi": "Нет",
+      "description": "Премиальные беспроводные наушники с активным шумоподавлением и длительным временем работы"
+    }
+  },
+  {
+    "model": "compare.washmachinecharacteristic",
+    "pk": 11,
+    "fields": {
+      "height": 850,
+      "width": 600,
+      "depth": 560,
+      "type_loading": "front",
+      "capacity": 7,
+      "description": "LG Front Load Washer with AI Direct Drive technology for enhanced cleaning."
+    }
+  },
+  {
+    "model": "compare.washmachinecharacteristic",
+    "pk": 12,
+    "fields": {
+      "height": 1050,
+      "width": 610,
+      "depth": 675,
+      "type_loading": "top",
+      "capacity": 8,
+      "description": "Samsung Top Load Washer with Wobble technology for gentle care of fabrics."
+    }
+  },
+  {
+    "model": "compare.washmachinecharacteristic",
+    "pk": 13,
+    "fields": {
+      "height": 840,
+      "width": 600,
+      "depth": 590,
+      "type_loading": "front",
+      "capacity": 9,
+      "description": "Whirlpool Front Load Washer with advanced steam cycle options and energy efficiency."
+    }
+  },
+  {
+    "model": "compare.washmachinecharacteristic",
+    "pk": 14,
+    "fields": {
+      "height": 850,
+      "width": 600,
+      "depth": 560,
+      "type_loading": "front",
+      "capacity": 7,
+      "description": "Electrolux Front Load Washer with high efficiency, multiple wash programs, and advanced fabric care."
+    }
+  },
+  {
+    "model": "compare.mobilecharacteristic",
+    "pk": 1,
+    "fields": {
+      "phone_type": "smartphone",
+      "screen_size": 6,
+      "screen_resolution": "2532x1170",
+      "screen_technology": "OLED",
+      "op_system": "iOS 15"
+    }
+  },
+  {
+    "model": "compare.mobilecharacteristic",
+    "pk": 2,
+    "fields": {
+      "phone_type": "smartphone",
+      "screen_size": 6,
+      "screen_resolution": "2532x1170",
+      "screen_technology": "OLED",
+      "op_system": "iOS 15"
+    }
+  },
+  {
+    "model": "compare.mobilecharacteristic",
+    "pk": 3,
+    "fields": {
+      "phone_type": "smartphone",
+      "screen_size": 6,
+      "screen_resolution": "2400x1080",
+      "screen_technology": "AMOLED 2X",
+      "op_system": "Android 11"
+    }
+  },
+  {
+    "model": "compare.mobilecharacteristic",
+    "pk": 4,
+    "fields": {
+      "phone_type": "smartphone",
+      "screen_size": 6,
+      "screen_resolution": "2400x1080",
+      "screen_technology": "AMOLED",
+      "op_system": "Android 12"
+    }
+  },
+  {
+    "model": "compare.mobilecharacteristic",
+    "pk": 5,
+    "fields": {
+      "phone_type": "smartphone",
+      "screen_size": 6,
+      "screen_resolution": "2400x1080",
+      "screen_technology": "AMOLED",
+      "op_system": "Android 11"
+    }
+  },
+  {
+    "model": "compare.mobilecharacteristic",
+    "pk": 6,
+    "fields": {
+      "phone_type": "smartphone",
+      "screen_size": 6,
+      "screen_resolution": "3840x1644",
+      "screen_technology": "OLED",
+      "op_system": "Android 11"
+    }
+  },
+  {
+    "model": "compare.mobilecharacteristic",
+    "pk": 7,
+    "fields": {
+      "phone_type": "smartphone",
+      "screen_size": 6,
+      "screen_resolution": "2640x1200",
+      "screen_technology": "OLED",
+      "op_system": "Android 10 (AOSP)"
+    }
+  },
+  {
+    "model": "compare.mobilecharacteristic",
+    "pk": 10,
+    "fields": {
+      "phone_type": "smartphone",
+      "screen_size": 6,
+      "screen_resolution": "2460x1080",
+      "screen_technology": "POLED",
+      "op_system": "Android 10"
+    }
+  },
+  {
+    "model": "compare.photocamcharacteristic",
+    "pk": 15,
+    "fields": {
+      "type": "Информации нет",
+      "mp": 2,
+      "max_iso": 2,
+      "min_iso": 2,
+      "video_resolution": 123
+    }
+  },
+  {
+    "model": "compare.microwaveovencharacteristic",
+    "pk": 16,
+    "fields": {
+      "capacity": 200,
+      "power": 220,
+      "grill": "Информации нет",
+      "height": 300,
+      "width": 400,
+      "depth": 350
+    }
+  },
+  {
+    "model": "compare.microwaveovencharacteristic",
+    "pk": 17,
+    "fields": {
+      "capacity": 25,
+      "power": 1200,
+      "grill": "Есть",
+      "height": 300,
+      "width": 600,
+      "depth": 400
+    }
+  },
+  {
+    "model": "compare.microwaveovencharacteristic",
+    "pk": 18,
+    "fields": {
+      "capacity": 28,
+      "power": 1350,
+      "grill": "Нет",
+      "height": 320,
+      "width": 540,
+      "depth": 380
+    }
+  },
+  {
+    "model": "compare.microwaveovencharacteristic",
+    "pk": 19,
+    "fields": {
+      "capacity": 32,
+      "power": 1500,
+      "grill": "Есть",
+      "height": 400,
+      "width": 600,
+      "depth": 480
+    }
+  },
+  {
+    "model": "compare.microwaveovencharacteristic",
+    "pk": 20,
+    "fields": {
+      "capacity": 25,
+      "power": 1200,
+      "grill": "No",
+      "height": 310,
+      "width": 520,
+      "depth": 350
+    }
+  },
+  {
+    "model": "compare.notebookcharacteristic",
+    "pk": 72,
+    "fields": {
+      "laptop_type": "Информации нет",
+      "screen_size": 15,
+      "screen_resolution": "1920",
+      "ppi": 141,
+      "op_system": "Windows",
+      "op_version": "10"
+    }
+  },
+  {
+    "model": "compare.notebookcharacteristic",
+    "pk": 73,
+    "fields": {
+      "laptop_type": "Информации нет",
+      "screen_size": 13,
+      "screen_resolution": "1920",
+      "ppi": 166,
+      "op_system": "Windows",
+      "op_version": "11"
+    }
+  },
+  {
+    "model": "compare.notebookcharacteristic",
+    "pk": 80,
+    "fields": {
+      "laptop_type": "Информации нет",
+      "screen_size": 14,
+      "screen_resolution": "2560",
+      "ppi": 157,
+      "op_system": "Windows",
+      "op_version": "11"
+    }
+  },
+  {
+    "model": "compare.notebookcharacteristic",
+    "pk": 91,
+    "fields": {
+      "laptop_type": "Информации нет",
+      "screen_size": 13,
+      "screen_resolution": "1280",
+      "ppi": 66,
+      "op_system": "macOS",
+      "op_version": "15"
+    }
+  }
+]

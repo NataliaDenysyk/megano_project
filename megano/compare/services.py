@@ -4,7 +4,7 @@ from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
 
 from compare.models import HeadphonesCharacteristic, TVSetCharacteristic, WashMachineCharacteristic, \
-    MobileCharacteristic, PhotoCamCharacteristic, NotebookCharacteristic, KitchenCharacteristic, TorchereCharacteristic
+    MobileCharacteristic, PhotoCamCharacteristic, NotebookCharacteristic, KitchenCharacteristic, TorchereCharacteristic, MicrowaveOvenCharacteristic, ElectroCharacteristic
 from services.services import ProductService
 from store.models import Product
 
@@ -180,7 +180,7 @@ def characteristic_nb(id_model_characteristics) -> dict:
 
 
 def characteristic_mw(id_model_characteristics) -> dict:
-    model_info = NotebookCharacteristic.objects.get(id=id_model_characteristics)
+    model_info = MicrowaveOvenCharacteristic.objects.get(id=id_model_characteristics)
     characteristic = {'Объём загрузки': model_info.capacity,
                       'Мощность Вт': model_info.power,
                       'Гриль': model_info.grill,
@@ -200,7 +200,7 @@ def characteristic_kitchen_technik(id_model_characteristics) -> dict:
 
 
 def characteristic_electro(id_model_characteristics) -> dict:
-    model_info = TorchereCharacteristic.objects.get(id=id_model_characteristics)
+    model_info = ElectroCharacteristic.objects.get(id=id_model_characteristics)
     characteristic = {'Тип электроники': model_info.type_product,
                       'Тип питания': model_info.power,
                       'Дополнительное описание': model_info.description,
