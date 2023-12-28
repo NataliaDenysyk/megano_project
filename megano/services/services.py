@@ -3,6 +3,7 @@ import logging
 
 from json import JSONDecodeError
 
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.temp import NamedTemporaryFile
 from django.core.files import File
 from urllib.request import urlopen
@@ -20,11 +21,10 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from urllib.parse import urlparse, parse_qs, urlencode
 from django.db.models import Avg, Count, When, Case
-from django.db import transaction, IntegrityError
+from django.db import IntegrityError
 from django.http import HttpRequest
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404
 
-from services.check_full_name import check_name
 from authorization.forms import RegisterForm, LoginForm
 from authorization.models import Profile
 from store.models import Product, Offer, Category, Reviews, Discount, ProductImage, Tag, Orders
@@ -470,7 +470,11 @@ class ProductService:
         try:
             id_model_characteristics = self._product.feature.values()[0].get('id')
             general_characteristics = get_characteristic_from_common_info(self._product.feature.values()[0])
-            model_info = return_model(self._product, id_model_characteristics)
+            try:
+                model_info = return_model(self._product, id_model_characteristics)
+
+            except ObjectDoesNotExist:
+                model_info = None
 
             feature = {
                 'characteristics': general_characteristics,
