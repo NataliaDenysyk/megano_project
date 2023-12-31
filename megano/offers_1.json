@@ -92,7 +92,7 @@
   {"model": "store.offer", "pk": 94, "fields": {"unit_price": "115.00", "amount": 10, "seller": 8, "product": 111}},
   {"model": "store.offer", "pk": 95, "fields": {"unit_price": "85.00", "amount": 34, "seller": 9, "product": 112}},
   {"model": "store.offer", "pk": 96, "fields": {"unit_price": "125.00", "amount": 5, "seller": 11, "product": 112}},
-  {"model": "store.offer", "pk": 97, "fields": {"unit_price": "90.00", "amount": 12, "seller": 12, "product": 111}},
+  {"model": "store.offer", "pk": 97, "fields": {"unit_price": "90.00", "amount": 12, "seller": 12, "product": 34}},
   {"model": "store.offer", "pk": 98, "fields": {"unit_price": "105.00", "amount": 7, "seller": 12, "product": 113}},
   {"model": "store.offer", "pk": 99, "fields": {"unit_price": "110.00", "amount": 56, "seller": 13, "product": 120}},
   {"model": "store.offer", "pk": 100, "fields": {"unit_price": "85.00", "amount": 12, "seller": 14, "product": 113}},
