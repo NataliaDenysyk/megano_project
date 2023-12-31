@@ -42,7 +42,10 @@
                     <div class="Order-infoType">Стоимость:
                     </div>
                     <div class="Order-infoContent">
-                      <span class="Order-price">{{ offer.get_discount_price }}$</span>
+                      <span class="Order-price">{% if offer.get_discount_price != None %}
+                        {{ offer.get_discount_price }}{% else %}
+                          {{ offer.unit_price }}
+                        {% endif %}$</span>
                     </div>
                   </div>
                 </div>
