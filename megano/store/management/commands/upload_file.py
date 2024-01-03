@@ -43,9 +43,7 @@ class Command(BaseCommand):
         for root, dirs, files in os.walk(path_work_dir):
             for file in files:
                 __file = re.findall(r'.json', file)
-                if __file and file_name == file:
-                    return os.path.join(root, file)
-                elif __file and dir_name:
+                if (__file and file_name == file) or (__file and dir_name):
                     return os.path.join(root, file)
 
     @staticmethod
