@@ -100,7 +100,7 @@ class Product(models.Model):
         verbose_name='Основное фото',
         upload_to="products/product/%y/%m/%d/",
         options={"quality": 80},
-        processors=[ResizeToFit(250, 167, mat_color='white')],
+        processors=[ResizeToFit(250, 226, mat_color='white')],
         blank=True,
         null=True
     )
@@ -178,11 +178,11 @@ class ProductImage(models.Model):
         verbose_name='Фотография товара',
         upload_to=product_images_directory_path,
         options={"quality": 80},
-        processors=[ResizeToFit(220, 167, mat_color='white')],
+        processors=[ResizeToFit(250, 226, mat_color='white')],
     )
 
     def __str__(self) -> str:
-        return f"{self.pk})"
+        return f"{self.pk}"
 
     class Meta:
         db_table = 'Images'

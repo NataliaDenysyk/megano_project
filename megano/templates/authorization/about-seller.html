@@ -161,7 +161,12 @@
                   {% for offer in top_offers %}
                     <div class="Card">
                       <a class="Card-picture" href="#">
-                        <img src="{{ offer.product.preview.url }}" alt="card.jpg"/>
+                        {% if offer.product.preview %}
+                          <img src="{{ offer.product.preview.url }}"/>
+                        {% else %}
+                          <img src="{% static 'assets/img/content/home/placeholder.png' %}"
+                               alt="empty_photo"/>
+                        {% endif %}
                       </a>
                       <div class="Card-content">
                         <strong class="Card-title">
