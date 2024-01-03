@@ -842,7 +842,7 @@ class ImportJSONService:
 
         error_message = []
         try:
-            json_file = json.loads(file.read().decode())
+            json_file = json.loads(file.read())
 
             for info in json_file:
                 category = None

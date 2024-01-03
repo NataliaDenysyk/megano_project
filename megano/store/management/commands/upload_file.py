@@ -24,11 +24,12 @@ class Command(BaseCommand):
         name_file = self.cleaned_name(file)
         import_file = ImportJSONService()
 
-        try:
-            import_file.import_json(file, name_file)
-            self.stdout.write(f"Файл {file}, успешно загружен!")
-        except Exception as err:
-            self.stdout.write(f'Файл <<{file}>>: Загружен с ошибкой.\nОШИБКА: {err}')
+        with open(file, 'r', encoding='utf-8') as file_json:
+            try:
+                import_file.import_json(file_json, name_file)
+                self.stdout.write(f"Файл {file_name}, успешно загружен!")
+            except Exception as err:
+                self.stdout.write(f'Файл <<{file_name}>>: Загружен с ошибкой.\nОШИБКА: {err}')
 
     @staticmethod
     def search_file(path_work_dir, file_name):
