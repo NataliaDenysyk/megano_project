@@ -34,3 +34,8 @@ input[type="email"] {
     background: transparent;
     color: rgb(0, 99, 209);
 }
+
+.not-sale {
+    padding-right: 5px;
+    font-size: 10px;
+}
