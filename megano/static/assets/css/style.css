@@ -35,6 +35,10 @@ input[type="email"] {
     color: rgb(0, 99, 209);
 }
 
+.seller {
+    font-size:22px;
+}
+
 .not-sale {
     padding-right: 5px;
     font-size: 10px;
