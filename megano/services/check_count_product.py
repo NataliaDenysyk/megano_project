@@ -14,9 +14,6 @@ class CheckCountProduct:
         Если товар отсутствует, значение поля "availability" меняется на False.
         """
         if self.offer.amount == 0:
-            product = Product.objects.get(id=self.offer.id)
-            product.availability = False
-            product.save()
             self.message.toast_message('Ошибка', 'Товар отсутствует на складе')
             return False
         else:
