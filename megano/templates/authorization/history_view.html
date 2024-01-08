@@ -19,7 +19,7 @@
               <div class="Card-description">
                 <div class="Card-cost">
                   {% if product.price %}
-                    <span class="Card-price">${{ product.price }}</span>
+                    <span class="Card-price">${{ product.get_average_price }}</span>
                   {% endif %}
                 </div>
                 <div class="Card-category">

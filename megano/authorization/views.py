@@ -209,8 +209,6 @@ class ProfileHistoryView(ListView, MenuMixin):
             self.get_menu(id='4'),
         )
         context['products'] = ProductsViewService(self.request).get_viewed_product_list()
-        for product in context['products']:
-            product.price = ProductService(product).get_average_price()
 
         return context
 
