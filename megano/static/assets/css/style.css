@@ -34,3 +34,13 @@ input[type="email"] {
     background: transparent;
     color: rgb(0, 99, 209);
 }
+
+.cart-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.cart-empty-img {
+    border-radius: 10px;
+}

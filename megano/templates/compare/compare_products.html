@@ -39,6 +39,7 @@
                                                 <td class="comparis">Тип</td>
                                                 <td class="comparis">{{ details.product_category }}</td>
                                                 {% for key, value in details.characterisctics.items %}
+
                                             <tr>
                                                 <td>{{ key }}</td>
                                                 <td>{{ value }}</td>
@@ -79,5 +80,10 @@
     </div>
 </div>
 
+<form action="{% url 'compare:clear_comparison' %}" method="get">
+    <button type="submit">Очистить сравнение</button>
+</form>
+
 {% endblock %}
+
 {% include 'base/footer.html' %}

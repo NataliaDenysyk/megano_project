@@ -9,7 +9,6 @@ from store.widgets import CustomCheckboxMultiple, CustomRadioSelect
 class ProductFilter(django_filters.FilterSet):
     """
     Фильтр продуктов в каталоге
-
     """
 
     CHOICES = (
