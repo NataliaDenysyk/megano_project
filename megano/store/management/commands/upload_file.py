@@ -1,10 +1,13 @@
-import re
-
 from django.core.management.base import BaseCommand
+from django.core.mail import send_mail
 
 from services.services import ImportJSONService
 
 import os
+import re
+import logging
+
+log = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
@@ -16,6 +19,7 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument('file', type=str, help="Указывает имя файла")
+        parser.add_argument('-e', '--email', action='store_true', help="Подключает отправку сообщений на почту")
 
     def handle(self, *args, **options):
         path_work_dir = os.path.abspath(os.path.join(''))
@@ -26,10 +30,15 @@ class Command(BaseCommand):
 
         with open(file, 'r', encoding='utf-8') as file_json:
             try:
-                import_file.import_json(file_json, name_file)
-                self.stdout.write(f"Файл {file_name}, успешно загружен!")
+                messages = import_file.import_json(file_json, name_file)
+                if options['email']:
+                    send_mail(f'Загрузка файла "{file_name}"',
+                              f'Отчет по загрузке файла "{file_name}":\n'
+                              f'{[mes for mes in messages]}',
+                              'megano@qwe.com', ['root@qwe.ru'], fail_silently=False)
+                self.stdout.write(f'Файл "{file_name}", успешно загружен!')
             except Exception as err:
-                self.stdout.write(f'Файл <<{file_name}>>: Загружен с ошибкой.\nОШИБКА: {err}')
+                self.stdout.write(f'Файл "{file_name}": Загружен с ошибкой.\nОШИБКА: {err}')
 
     @staticmethod
     def search_file(path_work_dir, file_name):
