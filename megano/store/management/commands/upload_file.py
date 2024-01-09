@@ -5,9 +5,6 @@ from services.services import ImportJSONService
 
 import os
 import re
-import logging
-
-log = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
