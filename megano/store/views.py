@@ -12,7 +12,7 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from services.check_count_product import CheckCountProduct
 from services.check_full_name import check_name
 from services.slugify import slugify
-from  django.core.paginator import Paginator
+from django.core.paginator import Paginator
 
 from .tasks import pay_order
 from .configs import settings
@@ -62,6 +62,7 @@ class CatalogListView(ListView):
             )
 
         self.filterset = ProductFilter(self.request.GET, queryset=queryset)
+        # ???? переопределение переменной
         self.filterset = CatalogService().catalog_processing(self.request, self.filterset)
 
         return self.filterset.qs
@@ -128,6 +129,7 @@ class SettingsView(PermissionRequiredMixin, ChangeListMixin, ListView):
     """
     Класс SettingsView отображает страницу с настройками
     """
+
     model = Product
     template_name = 'admin/settings.html'
     permission_required = 'authorization.view_storesettings'
@@ -143,6 +145,7 @@ class ClearCacheAll(ChangeListMixin, TemplateView):
     """
     Класс ClearCacheAll позволяет очистить весь кэш сайта
     """
+
     template_name = 'admin/settings.html'
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
@@ -163,6 +166,7 @@ class ClearCacheBanner(ChangeListMixin, TemplateView):
     """
     Класс ClearCacheBanner позволяет очистить кэш Баннера
     """
+
     template_name = 'admin/settings.html'
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
@@ -183,6 +187,7 @@ class ClearCacheCart(ChangeListMixin, TemplateView):
     """
     Класс ClearCacheCart позволяет очистить кэш Корзины
     """
+
     template_name = 'admin/settings.html'
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
@@ -203,6 +208,7 @@ class ClearCacheProductDetail(ChangeListMixin, TemplateView):
     """
     Класс ClearCacheProductDetail позволяет очистить кэш детализации продуктов
     """
+
     template_name = 'admin/settings.html'
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
@@ -222,6 +228,7 @@ class ClearCacheSeller(ChangeListMixin, TemplateView):
     """
     Класс ClearCacheProductDetail позволяет очистить кэш детализации продуктов
     """
+
     template_name = 'admin/settings.html'
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
@@ -263,6 +270,7 @@ class SiteName(ChangeListMixin, TemplateView):
     """
     Класс SiteName позволяет задать новое название интернет магазина
     """
+
     template_name = 'admin/settings.html'
 
     def post(self, request) -> HttpResponse:
@@ -280,6 +288,7 @@ class CacheSetupBannerView(ChangeListMixin, TemplateView):
     """
     Класс CacheSetupBannerView позволяет задать или обновить время кэширования Баннера
     """
+
     template_name = 'admin/settings.html'
 
     def post(self, request) -> HttpResponse:
@@ -298,6 +307,7 @@ class CacheSetupCartView(ChangeListMixin, TemplateView):
     """
     Класс CacheSetupCartView позволяет задать или обновить время кэширования Корзины
     """
+
     template_name = 'admin/settings.html'
 
     def post(self, request) -> HttpResponse:
@@ -316,6 +326,7 @@ class CacheSetupProdDetailView(ChangeListMixin, TemplateView):
     """
     Класс CacheSetupProdDetailView позволяет задать или обновить время кэширования детальной информации продукта
     """
+
     template_name = 'admin/settings.html'
 
     def post(self, request) -> HttpResponse:
@@ -334,6 +345,7 @@ class CacheSetupSellerView(ChangeListMixin, TemplateView):
     """
     Класс CacheSetupSellerView позволяет задать или обновить время кэширования детальной информации продавца
     """
+
     template_name = 'admin/settings.html'
 
     def post(self, request) -> HttpResponse:
@@ -385,6 +397,7 @@ class MainPage(ListView):
             'offer__unit_price': Decimal,
             'count': int
         """
+
         cache_key = 'product_list_cache'
         popular_products = cache.get(cache_key)
 
@@ -416,6 +429,7 @@ class OrderRegisterView(CreateView):
     Класс регистрации пользователя.
     После регистрации пользователь авторизуется.
     """
+
     template_name = 'store/order/order_register.html'
     form_class = RegisterForm
 
@@ -442,6 +456,7 @@ class OrderView(UpdateView):
     1. Проверка на отсутствие товара.
     2. Проверка на кол-во заказанного товара больше, чем доступно в магазине.
     """
+
     model = User
     template_name = 'store/order/order_create.html'
     form_class = OrderCreateForm
@@ -517,6 +532,7 @@ class OrderConfirmView(TemplateView):
     """
     Подтверждение заказа и переход на страницу оплаты
     """
+
     model = Orders
     template_name = 'store/order/order_confirm.html'
 
@@ -538,6 +554,7 @@ class DiscountList(ListView):
     """
     Представление для просмотра страницы скидок
     """
+
     model = Discount
     template_name = 'store/discount/discount_list.html'
 
@@ -547,7 +564,7 @@ class DiscountList(ListView):
         """
         context = super().get_context_data(**kwargs)
         context['page_obj'] = (Paginator(Discount.objects.filter(is_active=True), 12)
-                               .get_page( self.request.GET.get('page')))
+                               .get_page(self.request.GET.get('page')))
 
         return context
 
@@ -556,6 +573,7 @@ class DiscountDetail(DetailView):
     """
     Представление для просмотра детальной страницы скидок
     """
+
     model = Discount
     template_name = 'store/discount/discount_details.html'
 

@@ -1,4 +1,3 @@
-from django.contrib import admin
 from django.contrib.contenttypes.admin import GenericStackedInline
 
 from .models import (
@@ -10,7 +9,8 @@ from .models import (
     NotebookCharacteristic,
     TorchereCharacteristic,
     MicrowaveOvenCharacteristic,
-    MobileCharacteristic, )
+    MobileCharacteristic,
+)
 
 
 class AbstractCharacteristicInline(GenericStackedInline):

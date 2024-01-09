@@ -11,6 +11,7 @@ class Cart(models.Model):
     Orders  - :model:`store.Orders`\n
     Product - :model:`store.Product`
     """
+
     order = models.ForeignKey(Orders, on_delete=models.CASCADE, verbose_name='Заказ')
     products = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Продукты')
     quantity = models.IntegerField(default=1, verbose_name='Количество')
@@ -22,12 +23,14 @@ class Cart(models.Model):
         Возвращает имя пользователя и название продукта в виде:
         username: product_name
         """
+
         return f'Заказ №_{self.order.id}'
 
     def get_absolute_url(self) -> str:
         """
         Возвращает путь на детальную страницу товаров корзины.
         """
+
         return reverse('detail', kwargs={'id': self.id})
 
     class Meta:

@@ -1,4 +1,4 @@
-from django.db import models
+
 from decimal import Decimal
 from django.db.models import Avg, Sum, F
 
@@ -10,14 +10,13 @@ from authorization.models import Profile
 from django.urls import reverse
 from mptt.models import MPTTModel, TreeForeignKey
 
-import compare
+
 import compare.models
-from compare.models import *
+from django.db import models
 
 from store.utils import (
     category_image_directory_path,
     jsonfield_default_description,
-    jsonfield_default_feature,
     product_images_directory_path,
     discount_images_directory_path
 )
@@ -27,6 +26,7 @@ class Category(MPTTModel):
     """
     Модель хранения категорий товара
     """
+
     name = models.CharField(max_length=50, unique=True, verbose_name='Название')
     parent = TreeForeignKey('self', on_delete=models.PROTECT,
                             null=True, blank=True, related_name='children',
@@ -157,6 +157,7 @@ class Product(models.Model):
         """"
        Функция, меняющая поведение delete на мягкое удаление
        """
+
         self.availability = False
         self.save()
         return self
@@ -258,6 +259,7 @@ class Banners(models.Model):
     """
     Модель Баннеры
     """
+
     title = models.CharField(u"Название баннера", max_length=150, db_index=True)
     slug = models.SlugField("URL", max_length=150, db_index=True, unique=True)
     product = models.OneToOneField(Product, on_delete=models.CASCADE, verbose_name='Продукт')
@@ -300,6 +302,7 @@ class Discount(models.Model):
     """
     Модель скидок
     """
+
     NAME_CHOICES = [
         ('DP', 'Скидки на товар'),
         ('DS', 'Скидки на наборы'),
@@ -344,6 +347,7 @@ class Orders(models.Model):
     """
     Модель хранения заказов
     """
+
     class Delivery(models.IntegerChoices):
         """
         Модель вариантов доставки
@@ -366,8 +370,9 @@ class Orders(models.Model):
 
     class Status(models.IntegerChoices):
         """
-       Модель вариантов оплаты
-       """
+        Модель вариантов оплаты
+        """
+
         PAID = 1, 'Оплачено'
         UNPAID = 2, 'Не оплачено'
         PROCESS = 3, 'Доставляется'
@@ -390,9 +395,10 @@ class Orders(models.Model):
         return f"{self.id}"
 
     def delete(self, *arg, **kwargs):
-        """"
-       Функция, меняющая поведение delete на мягкое удаление
-       """
+        """
+        Функция, меняющая поведение delete на мягкое удаление
+        """
+
         self.archived = True
         self.save()
         return self

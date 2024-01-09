@@ -97,8 +97,9 @@ class DiscountProduct:
     """
 
     def get_priority_discount(self, cart):
-        """"
+        """
         Функция проверяет наличие скидки в корзине
+
         :param cart: корзина с товарами
         :return: общая стоимость корзины
         """
@@ -106,8 +107,8 @@ class DiscountProduct:
         discounts = Discount.objects.filter(is_active=True)
         discounts_cart_priority = discounts.filter(name='DC', priority=True)
         discounts_set_priority = discounts.filter(name='DS', priority=True)
-        discounts_cart = discounts.filter( name='DC', priority=False)
-        discounts_set = discounts.filter(name='DS',priority=False)
+        discounts_cart = discounts.filter(name='DC', priority=False)
+        discounts_set = discounts.filter(name='DS', priority=False)
         if discounts_cart_priority:
             price = self.get_discount_on_cart(discounts_cart_priority, cart)
             if price:
@@ -130,6 +131,7 @@ class DiscountProduct:
     def calculate_price_with_discount(product, price) -> float:
         """"
        Функция расчитывает стоимость товара со скидкой
+
        :param product: товар
        :param price: цена продукта
        :return: цена продукта со сидкой
@@ -147,10 +149,11 @@ class DiscountProduct:
     def total_price_cart(cart):
         """"
         Функция расчитывает стоимость карзины без скидки 'Скидки на товары'
+
         :param cart: карзина с товарами
         :return: стоимость карзины без скидок
-
         """
+
         cart_product = [crt for crt in cart]
         price = sum([product['price'] * product['quantity'] for product in cart_product])
         return price
@@ -160,6 +163,7 @@ class DiscountProduct:
         """
         Функция для получения списка id товаров в скидке
         """
+
         discount_products = discount.products.all()
         return [product.id for product in discount_products]
 
@@ -168,16 +172,19 @@ class DiscountProduct:
         """
         Функция для получения списка id категорий в скидке
         """
+
         discount_products = discount.categories.all()
         return [category.id for category in discount_products]
 
     def get_discount_on_cart(self, discounts, cart):
-        """"
+        """
         Функция расчитывает стоимость карзины со скидкой 'Скидки на корзину'
+
         :param discounts: список скидок 'Скидки на корзину'
         :param cart: карзина с товарами
         :return: стоимость карзины со скидкой 'Скидки на корзину'
         """
+
         total_products = len(cart)
         total_price = self.total_price_cart(cart)
         for discount in discounts:
@@ -188,12 +195,14 @@ class DiscountProduct:
                     return discount.sum_discount
 
     def get_discount_on_set(self, discounts, cart):
-        """"
+        """
         Функция расчитывает стоимость карзины со скидкой 'Скидки на наборы'
+
         :param discounts: список скидок 'Скидки на наборы'
         :param cart: карзина с товарами
         :return: стоимость карзины со скидкой 'Скидки на наборы'
         """
+
         cart_id = [crt['product'].id for crt in cart]
         cart_categories_id = [crt['product'].category.id for crt in cart]
         for discount in discounts:
@@ -207,11 +216,13 @@ class DiscountProduct:
                 return 1 if price <= 1 else price
 
     def get_discount_on_product(self, cart):
-        """"
+        """
        Функция расчитывает стоимость карзины со скидкой 'Скидки на товар'
+
        :param cart: карзина с товарами
        :return: стоимость карзины со скидкой 'Скидки на товар'
        """
+
         cart_product = [crt for crt in cart]
         price = 0
         for product in cart_product:
@@ -222,6 +233,7 @@ class DiscountProduct:
         """
         Функция применяет скидку 'Скидки на товар', если она есть
         """
+
         products = Product.objects.filter(discount__name='DP',
                                           discount__is_active=True)
         categories = Category.objects.filter(discount__name='DP',
@@ -237,6 +249,7 @@ class DiscountProduct:
         """
         Функция для получения скидки на товар с учетом скидки 'Скидки на товар'
         """
+
         price = product['product'].discount.all().filter(
             name='DP',
         ).first().sum_discount
@@ -244,10 +257,11 @@ class DiscountProduct:
             return self.calculate_price_with_discount(product, price)
 
     def get_price_categories(self, product):
-        """"
+        """
          Функция для получения скидки на товар с учетом скидки
          'Скидки на товар', если товар относится к категории
         """
+
         price = (product['product'].category.discount.all()
                  .filter(name='DP')
                  .first().sum_discount)
@@ -311,6 +325,7 @@ class ProductsViewService:
     """
     Сервис просмотренных товаров
     """
+
     LIMIT_PRODUCTS = 20
 
     def __init__(self, request: HttpRequest):
@@ -792,6 +807,10 @@ class GetParamService:
 
 
 class MainService:
+    """
+    Класс проверки и установки продуктов в ограниченных предложениях
+    """
+
     @staticmethod
     def get_limited_deals() -> Product:
         limited_cache = cache.get('product_limited_edition')
@@ -808,7 +827,3 @@ class MainService:
                 return product_l_e
         else:
             return limited_cache
-
-
-
-
