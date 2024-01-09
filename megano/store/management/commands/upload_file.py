@@ -22,35 +22,41 @@ class Command(BaseCommand):
         path_work_dir = os.path.abspath(os.path.join(''))
         file_name = options.get('file')
         file = self.search_file(path_work_dir, file_name)
-        name_file = self.cleaned_name(file)
         import_file = ImportJSONService()
 
-        with open(file, 'r', encoding='utf-8') as file_json:
-            try:
-                messages = import_file.import_json(file_json, name_file)
-                if options['email']:
-                    send_mail(f'Загрузка файла "{file_name}"',
-                              f'Отчет по загрузке файла "{file_name}":\n'
-                              f'{[mes for mes in messages]}',
-                              'megano@qwe.com', ['root@qwe.ru'], fail_silently=False)
-                self.stdout.write(f'Файл "{file_name}", успешно загружен!')
-            except Exception as err:
-                self.stdout.write(f'Файл "{file_name}": Загружен с ошибкой.\nОШИБКА: {err}')
+        for _file in file:
+            name_file = self.cleaned_name(_file)
+            with open(_file, 'r', encoding='utf-8') as file_json:
+                try:
+                    messages = import_file.import_json(file_json, name_file)
+                    if options['email']:
+                        send_mail(f'Загрузка файла "{name_file}"',
+                                  f'Отчет по загрузке файла "{name_file}":\n'
+                                  f'{[mes for mes in messages]}',
+                                  'megano@qwe.com', ['root@qwe.ru'], fail_silently=False)
+                    self.stdout.write(f'Файл "{name_file}", успешно загружен!')
+                except Exception as err:
+                    self.stdout.write(f'Файл "{name_file}": Загружен с ошибкой.\nОШИБКА: {err}')
 
     @staticmethod
     def search_file(path_work_dir, file_name):
         """
         Поиск файла по названию или в переданной директории
         """
+        file_list = []
         dir_name = os.path.isdir(file_name)
         if dir_name:
             path_work_dir = os.path.join(path_work_dir, file_name)
 
         for root, dirs, files in os.walk(path_work_dir):
             for file in files:
-                __file = re.findall(r'.json', file)
-                if (__file and file_name == file) or (__file and dir_name):
-                    yield os.path.join(root, file)
+                if dir_name:
+                    if re.findall(r'json', file):
+                        file_list.append(os.path.join(root, file))
+                if file_name in files:
+                    file_list.append(os.path.join(root, file_name))
+
+        return file_list
 
     @staticmethod
     def cleaned_name(file):
