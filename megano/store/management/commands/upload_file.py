@@ -51,7 +51,7 @@ class Command(BaseCommand):
         for root, dirs, files in os.walk(path_work_dir):
             for file in files:
                 if dir_name:
-                    if re.findall(r'json', file):
+                    if re.findall(r'.json', file):
                         file_list.append(os.path.join(root, file))
                 if file_name in files:
                     file_list.append(os.path.join(root, file_name))
