@@ -5,9 +5,6 @@ from services.services import ImportJSONService
 
 import os
 import re
-import logging
-
-log = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
@@ -53,7 +50,7 @@ class Command(BaseCommand):
             for file in files:
                 __file = re.findall(r'.json', file)
                 if (__file and file_name == file) or (__file and dir_name):
-                    return os.path.join(root, file)
+                    yield os.path.join(root, file)
 
     @staticmethod
     def cleaned_name(file):
