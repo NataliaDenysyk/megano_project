@@ -1033,7 +1033,8 @@ class ImportJSONService:
             for img in images
         ]
 
-    def get_img_from_url(self, image_url: str) -> File:
+    @staticmethod
+    def get_img_from_url(image_url: str) -> File:
         """
         Возвращает изображение из переданного url
         """
@@ -1046,4 +1047,6 @@ class ImportJSONService:
             img_tmp.write(uo.read())
             img_tmp.flush()
 
-        File(img_tmp, name=file_name)
+        result = File(img_tmp, name=file_name)
+
+        return result
