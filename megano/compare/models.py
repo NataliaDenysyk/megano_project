@@ -131,7 +131,7 @@ class NotebookCharacteristic(AbstractCharacteristicModel):
 
 class ElectroCharacteristic(AbstractCharacteristicModel):
     """
-    Characteristic model
+    Модель характеристик электирческого прибора
     """
 
     type_product = models.CharField(max_length=20, default='Информации нет', verbose_name='Тип электроники')

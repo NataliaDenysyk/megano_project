@@ -5,6 +5,7 @@ class Message:
     """
     Класс всплывающего сообщения
     """
+
     def __init__(self):
         self.title = str()
         self.text = str()
@@ -14,6 +15,7 @@ class ToastMessage:
     """
     Класс для создания всплывающих сообщений и сохранения их в кэш
     """
+
     @staticmethod
     def get() -> cache:
         # Функции запроса кэша

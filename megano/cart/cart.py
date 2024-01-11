@@ -29,6 +29,7 @@ class Cart(object):
         """
         Метод добавления товара в корзину на странице сайта
         """
+
         if CheckCountProduct(offer=offer.id).checking_product_for_zero(quantity):
             product_id = str(offer.product.id)
             if product_id not in self.cart:
@@ -45,6 +46,7 @@ class Cart(object):
         """
         Добавление кол-ва товара на странице корзины (+1 шт.)
         """
+
         product_id = self.__check_product_to_cart(offer.product)
         if CheckCountProduct(offer=offer.id).check_more_than_it_is(self.cart[product_id]):
             if 1 <= self.cart[product_id]['quantity'] < MAX_COUNT:
@@ -55,6 +57,7 @@ class Cart(object):
         """
         Удаление кол-ва товара на странице корзины (-1 шт.)
         """
+
         product_id = self.__check_product_to_cart(offer.product)
         if 1 < self.cart[product_id]['quantity'] <= MAX_COUNT:
             self.cart[product_id]['quantity'] -= quantity
@@ -64,12 +67,14 @@ class Cart(object):
         """
         Сохранение объекта
         """
+
         self.session.modified = True
 
     def remove(self, product: Product) -> None:
         """
         Удаление товара из корзины
         """
+
         product_id = str(product.id)
         if product_id in self.cart:
             del self.cart[product_id]
@@ -81,12 +86,14 @@ class Cart(object):
 
         :return: int
         """
+
         return sum(item['quantity'] for item in self.cart.values())
 
     def __iter__(self):
         """
         Итератор для перебора товаров в корзине
         """
+
         product_id = self.cart.keys()
         products = Product.objects.filter(id__in=product_id)
 
@@ -102,6 +109,7 @@ class Cart(object):
         """
         Возвращает общую стоимость всей корзины
         """
+
         return sum(
             Decimal(item['price']) * item['quantity']
             for item in self.cart.values()
@@ -118,5 +126,6 @@ class Cart(object):
         """
         Очищает всю корзину
         """
+
         del self.session[settings.CART_ID]
         self.save()

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.contrib.contenttypes.admin import GenericStackedInline
+
 from django.shortcuts import reverse
 from django.utils.html import format_html
 
@@ -11,18 +11,17 @@ from django.db.models import QuerySet
 from django.http import HttpRequest
 
 from cart.models import Cart
-from .models import (
-    Banners,
-    Product,
-    Discount,
-    Offer,
-    Orders,
-    Category,
-    Reviews,
-    Tag,
-    ProductImage,
-    BannersCategory,
-)
+from .models import (Banners,
+                     Product,
+                     Discount,
+                     Offer,
+                     Orders,
+                     Category,
+                     Reviews,
+                     Tag,
+                     ProductImage,
+                     BannersCategory,
+                     )
 from compare.admin import (TVSetCharacteristicInline,
                            HeadphonesCharacteristicInline,
                            PhotoCamCharacteristicInline,
@@ -31,7 +30,8 @@ from compare.admin import (TVSetCharacteristicInline,
                            NotebookCharacteristicInline,
                            TorchereCharacteristicInline,
                            MicrowaveOvenCharacteristicInline,
-                           MobileCharacteristicInline)
+                           MobileCharacteristicInline,
+                           ElectroCharacteristicInline,)
 
 from authorization.models import Profile
 
@@ -44,6 +44,7 @@ def mark_archived(modeladmin: admin.ModelAdmin, request: HttpRequest, queryset: 
 @admin.action(description='Разархивировать')
 def mark_unarchived(modeladmin: admin.ModelAdmin, request: HttpRequest, queryset: QuerySet):
     queryset.update(archived=False)
+
 
 @admin.action(description='Доступен')
 def mark_availability(modeladmin: admin.ModelAdmin, request: HttpRequest, queryset: QuerySet):
@@ -96,6 +97,7 @@ class AdminBanner(admin.ModelAdmin):
         В панели администратора,
         ссылка на изображение отображается в виде картинки размером 60х 60.
         """
+
         if obj.product:
             return mark_safe(f'<img src="{obj.product.preview.url}" alt=""width="60">')
         else:
@@ -119,10 +121,10 @@ class AdminOrders(admin.ModelAdmin):
         CartInline,
     ]
     list_display = ['pk', 'profile_url', 'status', 'total_payment']
-    list_display_links = ['pk',]
-    ordering = ['pk', 'created_at',]
+    list_display_links = ['pk', ]
+    ordering = ['pk', 'created_at', ]
     search_fields = ['delivery_type', 'created_at']
-    readonly_fields = ['created_at',]
+    readonly_fields = ['created_at', ]
     save_on_top = True
 
     fieldsets = [
@@ -143,6 +145,7 @@ class AdminOrders(admin.ModelAdmin):
         """"
         Функкция удаляет 'delete_selected' из actions(действие) в панели администратора
         """
+
         actions = super(self.__class__, self).get_actions(request)
         if 'delete_selected' in actions:
             del actions['delete_selected']
@@ -182,6 +185,7 @@ class AdminCategory(DjangoMpttAdmin):
         """"
         Функкция удаляет 'delete_selected' из actions(действие) в панели администратора
         """
+
         actions = super(self.__class__, self).get_actions(request)
         if 'delete_selected' in actions:
             del actions['delete_selected']
@@ -256,6 +260,7 @@ class AdminProduct(admin.ModelAdmin):
         TorchereCharacteristicInline,
         MicrowaveOvenCharacteristicInline,
         MobileCharacteristicInline,
+        ElectroCharacteristicInline,
     ]
     list_display = ['pk', 'name', 'category_url', 'description_short', 'limited_edition']
     list_display_links = 'pk', 'name'
@@ -313,6 +318,7 @@ class AdminProduct(admin.ModelAdmin):
         """"
         Функкция удаляет 'delete_selected' из actions(действие) в панели администратора
         """
+
         actions = super(self.__class__, self).get_actions(request)
         if 'delete_selected' in actions:
             del actions['delete_selected']
@@ -388,6 +394,7 @@ class DiscountAdmin(admin.ModelAdmin):
         В панели администратора,
         ссылка на изображение отображается в виде картинки размером 50х 50.
         """
+
         if obj.image:
             return mark_safe(f'<img src="{obj.image.url}" alt=""width="50">')
 
@@ -405,6 +412,7 @@ class AdminBannerCategory(admin.ModelAdmin):
         В панели администратора,
         ссылка на изображение отображается в виде картинки размером 60х 60.
         """
+
         if obj.preview:
             return mark_safe(f'<img src="{obj.preview.url}" alt=""width="60">')
         else:
