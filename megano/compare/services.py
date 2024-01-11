@@ -1,7 +1,7 @@
 from django.core.handlers.wsgi import WSGIRequest
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 
 from compare.models import (HeadphonesCharacteristic,
                             TVSetCharacteristic,
@@ -11,8 +11,9 @@ from compare.models import (HeadphonesCharacteristic,
                             NotebookCharacteristic,
                             KitchenCharacteristic,
                             TorchereCharacteristic,
-                            )
-from services.services import ProductService
+                            ElectroCharacteristic,
+                            MicrowaveOvenCharacteristic)
+
 from store.models import Product
 
 """
@@ -94,7 +95,7 @@ def get_compare_info(products, prev_prod_category=None) -> dict:
             model_info = return_model(product, id_model_characterisrics)
 
             prev_prod_category = product.category.name
-            product_price = ProductService(product).get_average_price()
+            product_price = product.get_average_price()
             result[product.name] = {
                 'product_preview_url': product.preview.url,
                 'product_slug': product.slug,
@@ -235,11 +236,7 @@ def characteristic_nb(id_model_characteristics) -> dict:
 
 
 def characteristic_mw(id_model_characteristics) -> dict:
-    """
-    Подготовка данных для возврата на фронт
-    """
-
-    model_info = NotebookCharacteristic.objects.get(id=id_model_characteristics)
+    model_info = MicrowaveOvenCharacteristic.objects.get(id=id_model_characteristics)
     characteristic = {'Объём загрузки': model_info.capacity,
                       'Мощность Вт': model_info.power,
                       'Гриль': model_info.grill,
@@ -263,11 +260,7 @@ def characteristic_kitchen_technik(id_model_characteristics) -> dict:
 
 
 def characteristic_electro(id_model_characteristics) -> dict:
-    """
-    Подготовка данных для возврата на фронт
-    """
-
-    model_info = TorchereCharacteristic.objects.get(id=id_model_characteristics)
+    model_info = ElectroCharacteristic.objects.get(id=id_model_characteristics)
     characteristic = {'Тип электроники': model_info.type_product,
                       'Тип питания': model_info.power,
                       'Дополнительное описание': model_info.description,

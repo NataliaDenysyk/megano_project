@@ -10,7 +10,7 @@ from .models import (
     TorchereCharacteristic,
     MicrowaveOvenCharacteristic,
     MobileCharacteristic,
-)
+    ElectroCharacteristic, )
 
 
 class AbstractCharacteristicInline(GenericStackedInline):
@@ -29,6 +29,10 @@ class AbstractCharacteristicInline(GenericStackedInline):
 
 class TVSetCharacteristicInline(AbstractCharacteristicInline):
     model = TVSetCharacteristic
+
+
+class ElectroCharacteristicInline(AbstractCharacteristicInline):
+    model = ElectroCharacteristic
 
 
 class PhotoCamCharacteristicInline(AbstractCharacteristicInline):

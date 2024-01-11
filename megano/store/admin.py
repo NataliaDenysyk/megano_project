@@ -31,7 +31,7 @@ from compare.admin import (TVSetCharacteristicInline,
                            TorchereCharacteristicInline,
                            MicrowaveOvenCharacteristicInline,
                            MobileCharacteristicInline,
-                           )
+                           ElectroCharacteristicInline,)
 
 from authorization.models import Profile
 
@@ -260,6 +260,7 @@ class AdminProduct(admin.ModelAdmin):
         TorchereCharacteristicInline,
         MicrowaveOvenCharacteristicInline,
         MobileCharacteristicInline,
+        ElectroCharacteristicInline,
     ]
     list_display = ['pk', 'name', 'category_url', 'description_short', 'limited_edition']
     list_display_links = 'pk', 'name'
