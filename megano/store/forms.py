@@ -35,6 +35,7 @@ class OrderCreateForm(forms.ModelForm):
             'name': "phone",
             'type': "text",
             'placeholder': "+79991230000",
+            'data-mask': "+7(999)9999999",
         }),
     )
     delivery = forms.ChoiceField(
@@ -59,6 +60,19 @@ class OrderCreateForm(forms.ModelForm):
     city = forms.CharField(max_length=100, label='Город', help_text='Город проживания')
     address = forms.CharField(max_length=200, label='Адрес', help_text='Адрес доставки')
     email = forms.EmailField(max_length=80, label='Почта', help_text='Почта')
+
+    def clean_phone(self):
+        """"
+        Функция для очистки номера проверки его на уникальность и приведения к int
+        """
+        phone_str = self.cleaned_data['phone']
+        chars_to_remove = ['(', ')']
+        for char in chars_to_remove:
+            phone_str = phone_str.replace(char, '')
+        phone = phone_str[2:]
+        if phone and Profile.objects.filter(phone=phone).exclude(id=self.instance.id).exists():
+            raise forms.ValidationError('Телефон должен быть уникальным')
+        return phone
 
     class Meta:
         model = Profile
