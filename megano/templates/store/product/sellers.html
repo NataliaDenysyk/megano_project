@@ -28,15 +28,13 @@
                                 </div>
                                 <div class="row-block">
                                     <div class="Order-info Order-info_delivery">
-                                        <div class="Order-infoType">Тип доставки:
-                                        </div>
+                                        <div class="Order-infoType">Тип доставки:</div>
                                         <div class="Order-infoContent">
                                             {{ offer.seller.store_settings.get_delivery_type_display }}
                                         </div>
                                     </div>
                                     <div class="Order-info Order-info_pay">
-                                        <div class="Order-infoType">Оплата:
-                                        </div>
+                                        <div class="Order-infoType">Оплата:</div>
                                         <div class="Order-infoContent">
                                             <div class="Order-infoContent">
                                                 {{ offer.seller.store_settings.get_payment_display }}
@@ -44,10 +42,15 @@
                                         </div>
                                     </div>
                                     <div class="Order-info">
-                                        <div class="Order-infoType">Стоимость:
-                                        </div>
+                                        <div class="Order-infoType">Стоимость:</div>
                                         <div class="Order-infoContent">
-                                            <span class="Order-price">{{ offer.get_discount_price }}$</span>
+                                            <span class="Order-price">
+                                                {% if offer.get_discount_price != None %}
+                                                    {{ offer.get_discount_price }}
+                                                {% else %}
+                                                    {{ offer.unit_price }}
+                                                {% endif %}$
+                                            </span>
                                         </div>
                                     </div>
                                 </div>

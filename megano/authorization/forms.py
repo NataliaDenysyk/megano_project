@@ -99,8 +99,8 @@ class ProfileUpdateForm(forms.ModelForm):
             'id': "phone",
             'name': "phone",
             'type': "text",
-            'placeholder': '+7(999)9999999',
-            "data-mask": '+7(999)9999999',
+            'placeholder': "+7(999)9999999",
+            'data-mask': "+7(999)9999999",
 
         })
     )

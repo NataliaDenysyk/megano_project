@@ -3,6 +3,9 @@ from store.models import Offer, Product
 
 
 class CheckCountProduct:
+    """
+    Класс проверки стоимости продукта
+    """
 
     def __init__(self, offer):
         self.offer = Offer.objects.get(id=offer)
@@ -13,6 +16,7 @@ class CheckCountProduct:
         Проверка товара на отсутствие (кол-во на складе = 0).
         Если товар отсутствует, значение поля "availability" меняется на False.
         """
+
         if self.offer.amount == 0:
             self.message.toast_message('Ошибка', 'Товар отсутствует на складе')
             return False
@@ -27,6 +31,7 @@ class CheckCountProduct:
         Проверка товара в корзине на попытку заказать больше,
         чем имеется на складе.
         """
+
         if item['quantity'] >= self.offer.amount:
             self.message.toast_message('Ошибка', f'Больше {self.offer.amount}шт. нет на складе')
             return False
@@ -37,6 +42,7 @@ class CheckCountProduct:
         """
         Вычисление количества товара в корзине из запасов на складе.
         """
+
         self.offer = offer
         self.offer = Offer.objects.get(id=offer)
         self.offer.amount -= int(item['quantity'])

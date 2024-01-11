@@ -36,6 +36,7 @@ class AddProductToCartView(TemplateView):
     """
     Добавление товара в корзину
     """
+
     template_name = 'store/cart.html'
 
     def get(self, request, *args, **kwargs) -> HttpResponseRedirect:
@@ -49,6 +50,7 @@ class AddProductView(TemplateView):
     """
     Добавить одну единицу товара в корзине (+1шт.)
     """
+
     template_name = 'store/cart.html'
 
     def get(self, request, *args, **kwargs) -> HttpResponseRedirect:
@@ -62,6 +64,7 @@ class TakeProductView(TemplateView):
     """
     Убрать одну единицу товара в корзине (-1шт.)
     """
+
     template_name = 'store/cart.html'
 
     def get(self, request, *args, **kwargs) -> HttpResponseRedirect:
@@ -75,6 +78,7 @@ class DeleteProductFromCartView(TemplateView):
     """
     Удаление продукта из корзины
     """
+
     template_name = 'store/cart.html'
 
     def get(self, request, *args, **kwargs) -> HttpResponseRedirect:
@@ -87,6 +91,7 @@ class ClearCartView(TemplateView):
     """
     Очистка корзины от всех продуктов
     """
+
     template_name = 'store/cart.html'
 
     def get(self, request, *args, **kwargs) -> HttpResponseRedirect:

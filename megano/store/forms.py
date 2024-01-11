@@ -14,6 +14,7 @@ class OrderCreateForm(forms.ModelForm):
     """
     Класс формы для оформления Заказа.
     """
+
     name = forms.CharField(
         max_length=100,
         label='ФИО',
@@ -34,6 +35,7 @@ class OrderCreateForm(forms.ModelForm):
             'name': "phone",
             'type': "text",
             'placeholder': "+79991230000",
+            'data-mask': "+7(999)9999999",
         }),
     )
     delivery = forms.ChoiceField(
@@ -59,6 +61,19 @@ class OrderCreateForm(forms.ModelForm):
     address = forms.CharField(max_length=200, label='Адрес', help_text='Адрес доставки')
     email = forms.EmailField(max_length=80, label='Почта', help_text='Почта')
 
+    def clean_phone(self):
+        """"
+        Функция для очистки номера проверки его на уникальность и приведения к int
+        """
+        phone_str = self.cleaned_data['phone']
+        chars_to_remove = ['(', ')']
+        for char in chars_to_remove:
+            phone_str = phone_str.replace(char, '')
+        phone = phone_str[2:]
+        if phone and Profile.objects.filter(phone=phone).exclude(id=self.instance.id).exists():
+            raise forms.ValidationError('Телефон должен быть уникальным')
+        return phone
+
     class Meta:
         model = Profile
         fields = [
@@ -71,6 +86,7 @@ class RegisterForm(UserCreationForm):
     """
     Класс формы для регистрации пользователя
     """
+
     username = forms.CharField(label='Логин', widget=forms.TextInput(attrs={'class': 'form-input'}))
     password1 = forms.CharField(label='Пароль', widget=forms.PasswordInput(attrs={'class': 'form-input'}))
     password2 = forms.CharField(label='Повтор пароля', widget=forms.PasswordInput(attrs={'class': 'form-input'}))
