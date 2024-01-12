@@ -15,11 +15,20 @@ class Command(BaseCommand):
     help = "Позволяет загрузить файл в бд"
 
     def add_arguments(self, parser):
-        parser.add_argument('file', type=str, help="Указывает имя файла")
-        parser.add_argument('-e', '--email', action='store_true', help="Подключает отправку сообщений на почту")
+        parser.add_argument(
+            'file',
+            type=str,
+            help="Указывает имя файла"
+        )
+        parser.add_argument(
+            '-e',
+            '--email',
+            action='store_true',
+            help="Подключает отправку сообщений на почту"
+        )
 
     def handle(self, *args, **options):
-        path_work_dir = os.path.abspath(os.path.join(''))
+        path_work_dir = os.path.abspath(os.path.join('import'))
         file_name = options.get('file')
         file = self.search_file(path_work_dir, file_name)
         import_file = ImportJSONService()
@@ -33,7 +42,7 @@ class Command(BaseCommand):
                         send_mail(f'Загрузка файла "{name_file}"',
                                   f'Отчет по загрузке файла "{name_file}":\n'
                                   f'{[mes for mes in messages]}',
-                                  'megano@qwe.com', ['root@qwe.ru'], fail_silently=False)
+                                  'qwerty@qwe.com', ['root@qwe.ru'], fail_silently=False)
                     self.stdout.write(f'Файл "{name_file}", успешно загружен!')
                 except Exception as err:
                     self.stdout.write(f'Файл "{name_file}": Загружен с ошибкой.\nОШИБКА: {err}')
@@ -44,9 +53,9 @@ class Command(BaseCommand):
         Поиск файла по названию или в переданной директории
         """
         file_list = []
-        dir_name = os.path.isdir(file_name)
+        dir_name = os.path.isdir(os.path.join(path_work_dir, file_name))
         if dir_name:
-            path_work_dir = os.path.join(path_work_dir, file_name)
+            path_work_dir = os.path.abspath(os.path.join(path_work_dir, file_name))
 
         for root, dirs, files in os.walk(path_work_dir):
             for file in files:
@@ -55,7 +64,7 @@ class Command(BaseCommand):
                         file_list.append(os.path.join(root, file))
                 if file_name in files:
                     file_list.append(os.path.join(root, file_name))
-
+                    break
         return file_list
 
     @staticmethod
