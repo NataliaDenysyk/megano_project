@@ -21,15 +21,15 @@ class Command(BaseCommand):
             help="Указывает имя файла"
         )
         parser.add_argument(
-            '-e',
-            '--email',
-            action='store_true',
-            help="Подключает отправку сообщений на почту"
+            'email',
+            type=str,
+            help="Указывает адресата для отправки сообщений на почту"
         )
 
     def handle(self, *args, **options):
         path_work_dir = os.path.abspath(os.path.join('import'))
         file_name = options.get('file')
+        addressee = options.get('email')
         file = self.search_file(path_work_dir, file_name)
         import_file = ImportJSONService()
 
@@ -38,11 +38,10 @@ class Command(BaseCommand):
             with open(_file, 'r', encoding='utf-8') as file_json:
                 try:
                     messages = import_file.import_json(file_json, name_file)
-                    if options['email']:
-                        send_mail(f'Загрузка файла "{name_file}"',
-                                  f'Отчет по загрузке файла "{name_file}":\n'
-                                  f'{[mes for mes in messages]}',
-                                  'qwerty@qwe.com', ['root@qwe.ru'], fail_silently=False)
+                    send_mail(f'Загрузка файла "{name_file}"',
+                              f'Отчет по загрузке файла "{name_file}":\n'
+                              f'{[mes for mes in messages]}',
+                              f'{addressee}', ['root@qwe.ru'], fail_silently=False)
                     self.stdout.write(f'Файл "{name_file}", успешно загружен!')
                 except Exception as err:
                     self.stdout.write(f'Файл "{name_file}": Загружен с ошибкой.\nОШИБКА: {err}')
