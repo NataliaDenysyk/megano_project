@@ -1,5 +1,6 @@
 {% extends 'base/base.html' %}
 {% load static %}
+{% load full_count_products %}
 
 {% block content %}
     <div class="Middle Middle_top">
@@ -23,17 +24,17 @@
                                         <div class="Card-description">
                                             <div class="Card-cost">
                                                 {% if product.get_average_price != None %}
-                        {% if product.get_discount_price %}
-                          <span class="Card-priceOld">${{ product.get_average_price }}</span>
-                          <span class="Card-price">${{ product.get_discount_price }}</span>
+                                                    {% if product.get_discount_price %}
+                                                        <span class="Card-priceOld">${{ product.get_average_price }}</span>
+                                                        <span class="Card-price">${{ product.get_discount_price }}</span>
 
-                        {% else %}
-                          <span class="Card-price">${{ product.get_average_price }}</span>
-                          {% endif %}
+                                                    {% else %}
+                                                        <span class="Card-price">${{ product.get_average_price }}</span>
+                                                    {% endif %}
 
-                        {% else %}
-                        <span>Не в продаже</span>
-                      {% endif %}
+                                                {% else %}
+                                                    <span>Не в продаже</span>
+                                                {% endif %}
                                             </div>
                                             <div class="Card-category">
                                                 {% for tag in product.tags.all %}
@@ -46,13 +47,15 @@
                                             </div>
                                             {% if product.offers.all %}
                                                 <div class="Card-hover">
-
-                                                    <a class="Card-btn"
-                                                       href="{% url 'cart:add_product_to_cart' product.offers.first.id %}">
-                                                        <img src="{% static 'assets/img/icons/card/cart.svg' %}"
-                                                             alt="cart.svg"/>
-                                                    </a>
-
+                                                    {% if total_number|count:product.offers.all > 0 %}
+                                                        <a class="Card-btn"
+                                                           href="{% url 'cart:add_product_to_cart' product.offers.first.id %}">
+                                                            <img src="{% static 'assets/img/icons/card/cart.svg' %}"
+                                                                 alt="cart.svg"/>
+                                                        </a>
+                                                    {% else %}
+                                                        <span class="not-sale">Нет в продаже</span>
+                                                    {% endif %}
                                                     <a class="Card-btn" href="">
                                                         <form action="{% url 'compare:add_to_comparison' product.id %}"
                                                               method="get">

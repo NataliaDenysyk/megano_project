@@ -115,7 +115,7 @@
                                                            href="{% url 'store:product-detail' product.slug %}">
                                                             {{ product.name }}
                                                         </a>
-                                                        <div class="Cart-desc">{{ product.description }}
+                                                        <div class="Cart-desc">{{ product.description.card_text }}
                                                         </div>
                                                     </div>
                                                     <div class="Cart-block Cart-block_price">
