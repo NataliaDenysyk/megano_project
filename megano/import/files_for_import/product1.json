@@ -1,0 +1,50 @@
+[
+  {
+    "product": {
+      "name": "6.1\" Смартфон Apple iPhone 128г",
+      "category": "Телевизор",
+      "description": {
+        "title": "iPhone 15 Pro - выкован из Титана",
+        "card_text": [
+          "Передовая система камер",
+          "Новая кнопка «Action» — самый быстрый путь к любимой функции вашего iPhone.",
+          "Новый разъем USB-C"
+        ],
+        "text_bottom": "Смартфон Apple iPhone 15 привлекает внимание безрамочным дисплеем 6.1. Разрешение 2556x1179 dpi сохраняет четкость и насыщенность картинки, точную передачу цвета при любом освещении. 6-ядерный процессор Apple A16 Bionic с ОЗУ 6 ГБ гарантирует высокий уровень производительности. 2 тыловые камеры 48 +12 Мп позволяют делать эффектные фото и видео с углом обзора 120° и 4K-разрешением.",
+        "text_bottom_ul": [
+        ]
+      },
+      "preview": "https://ir.ozone.ru/s3/multimedia-u/wc1000/6015724686.jpg",
+      "limited_edition": false
+    },
+    "tags": [
+      "iphone",
+      "Смартфон"
+    ],
+    "images": [
+      "https://ir.ozone.ru/s3/multimedia-q/wc1000/6015724682.jpg",
+      "https://ir.ozone.ru/s3/multimedia-r/wc1000/6015724683.jpg",
+      "https://ir.ozone.ru/s3/multimedia-s/wc1000/6015724684.jpg"
+    ],
+    "feature": {
+      "made_in": "Вьетная",
+      "production_year": 2020,
+      "color": null,
+      "weight": null,
+      "name": "TVSet",
+      "screen": null,
+      "resolution": null,
+      "country": null,
+      "freq": null,
+      "wi_fi": "Нет",
+      "hdmi": "Нет",
+      "description": "блаблаблабла"
+    },
+    "seller": "test_admin",
+    "offer":
+      {
+        "unit_price": "3450.00",
+        "amount": 120
+      }
+  }
+]

@@ -9,6 +9,7 @@
 * [Установка PostrgreSQL](#установка-postrgresql)
 * [Подключение базы к Django](#подключение-базы-к-django)
 * [Установка Celery и Redis](#установка-и-подключение-celery-и-redis)
+* [Настройка отправки сообщений в консоль](#настройка-отправки-сообщений-в-консоль)
 * [Путеводитель](#getting-started)
 
 <hr>
@@ -315,7 +316,34 @@ REDIS_NAME=0
 celery -A megano worker --loglevel=INFO
 ```
 
+## Настройка отправки сообщений в консоль
 
+Сообщения администратору отправляются автоматически после проведения успешного/неуспешного импорта.
+Для этого используется модуль <b>django.core.mail</b>.
+
+В файле .env пропишите константы:
+- EMAIL_HOST – хост для отправки электронной почты;
+- EMAIL_PORT – порт для отправки электронной почты;
+- EMAIL_HOST_USER – username пользователя для прохождения аутентификации на SMTP-сервере; 
+- EMAIL_HOST_PASSWORD – пароль к указанному username;
+- DEFAULT_FROM_EMAIL – email, от кого будет отправка сообщений по умолчанию;
+- EMAIL_BACKEND – django.core.mail.backends.console.EmailBackend
+
+Стандартные настройки:
+```
+EMAIL_HOST = localhost
+EMAIL_PORT = 1025
+EMAIL_HOST_USER = None
+EMAIL_HOST_PASSWORD = None
+DEFAULT_FROM_EMAIL = admin@example.com
+EMAIL_BACKEND = django.core.mail.backends.console.EmailBackend
+```
+Если в EMAIL_HOST_USER и EMAIL_HOST_PASSWORD не переданы значения, то аутентификация проводиться не будет.
+
+Запустить работу почты с помощью встроенного SMTP-сервера Python:
+```
+python -m smtpd -n -c DebuggingServer localhost:1025
+```
 
 #### Поздравляем вы установили проект и базу данных!
 

@@ -1,6 +1,10 @@
-from django.contrib import admin
+import json
+from json import JSONDecodeError
 
-from django.shortcuts import reverse
+from django.contrib import admin, messages
+
+from django.shortcuts import reverse, render, redirect
+from django.urls import path
 from django.utils.html import format_html
 
 from django.core.cache import cache
@@ -8,9 +12,11 @@ from django.utils.safestring import mark_safe
 from django_mptt_admin.admin import DjangoMpttAdmin
 
 from django.db.models import QuerySet
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponse
 
 from cart.models import Cart
+from store.tasks import import_product
+from .forms import JSONImportForm
 from .models import (Banners,
                      Product,
                      Discount,
@@ -34,6 +40,7 @@ from compare.admin import (TVSetCharacteristicInline,
                            ElectroCharacteristicInline,)
 
 from authorization.models import Profile
+from .utils import busy_queues
 
 
 @admin.action(description='Архивировать')
@@ -241,6 +248,7 @@ class ProductInlineImages(admin.TabularInline):
 
 @admin.register(Product)
 class AdminProduct(admin.ModelAdmin):
+    change_list_template = 'store/products_changelist.html'
     actions = [
         mark_availability, mark_unavailability, reset_product_list_cache
     ]
@@ -323,6 +331,80 @@ class AdminProduct(admin.ModelAdmin):
         if 'delete_selected' in actions:
             del actions['delete_selected']
         return actions
+
+    def import_json(self, request: HttpRequest) -> HttpResponse:
+        if request.method == 'GET':
+            form = JSONImportForm()
+            context = {
+                'form': form,
+            }
+
+            return render(request, 'admin/json_import.html', context)
+
+        form = JSONImportForm(request.POST, request.FILES)
+
+        if not form.is_valid():
+            context = {
+                'form': form,
+            }
+            return render(request, 'admin/json_import.html', context, status=400)
+
+        try:
+            if busy_queues('json_import'):
+                self.message_user(
+                    request,
+                    'Ошибка: предыдущий импорт ещё не выполнен. Пожалуйста, дождитесь его окончания.',
+                    level=messages.ERROR,
+                )
+            else:
+                files = request.FILES.getlist('json_file')
+
+                for json_file in files:
+                    serialized_data = json.loads(json_file.file.read().decode('utf-8'))
+
+                    task_result = import_product.apply_async(
+                        kwargs={
+                            'file_data': serialized_data,
+                            'name': json_file.name,
+                            'email': form.cleaned_data.get('email'),
+                        },
+                        queue='json_import',
+                    )
+
+                    cache.set('task_id', task_result.id)
+
+                self.message_user(
+                    request,
+                    'Загрузка файлов началась. Результат будет отправлен на указанную почту.'
+                )
+
+        except JSONDecodeError:
+            self.message_user(
+                request,
+                f'Передан неправильный формат. Загрузить можно только файлы json.',
+                level=messages.ERROR,
+            )
+
+        # except Exception as e:
+        #     self.message_user(
+        #         request,
+        #         f'Случилась непредвиденная ошибка: {e}',
+        #         level=messages.ERROR,
+        #     )
+
+        return redirect('..')
+
+    def get_urls(self):
+        urls = super().get_urls()
+        new_urls = [
+            path(
+                'import-offers-json/',
+                self.import_json,
+                name='import_json_file',
+            ),
+        ]
+
+        return new_urls + urls
 
 
 @admin.register(Offer)
