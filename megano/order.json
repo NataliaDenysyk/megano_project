@@ -1,1 +1,0 @@
-[{"model": "store.orders", "pk": 1, "fields": {"delivery_type": 1, "payment": 1, "profile": 6, "created_at": "2023-12-26T01:34:17.764Z", "status": 1, "address": "Country\tUSA\r\nAddress\t1427 Twin House Lane\tCity\tSpringfield\r\nState\tMissouri\tZip Code\t  65802", "total_payment": "100.00", "status_exception": "", "archived": false, "products": [1]}}]
