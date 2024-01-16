@@ -324,6 +324,11 @@ REDIS_NAME=0
 celery -A megano worker -l info -Q json_import
 ```
 
+Запустить сразу оба воркера
+```
+celery -A megano worker -l info -Q payment,json_import
+```
+
 ## Настройка отправки сообщений в консоль
 
 Сообщения администратору отправляются автоматически после проведения успешного/неуспешного импорта.
