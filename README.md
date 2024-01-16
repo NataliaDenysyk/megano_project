@@ -311,9 +311,16 @@ REDIS_PORT=6379
 REDIS_NAME=0
 ```
 
-Запустите рабочий сервер Celery
+В проекте реализованы две очереди задач: на оплату и на импорт json-файлов.
+
+Команда для запуска очереди оплаты
 ```
-celery -A megano worker --loglevel=INFO
+ celery -A megano worker -l info -Q payment 
+```
+
+Команда для запуска очереди импорта
+```
+celery -A megano worker -l info -Q json_import
 ```
 
 ## Настройка отправки сообщений в консоль
