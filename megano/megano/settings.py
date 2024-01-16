@@ -171,39 +171,8 @@ REDIS_PORT = os.getenv('REDIS_PORT')
 REDIS_NAME = os.getenv('REDIS_NAME')
 
 CELERY_BROKER_URL = f'redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_NAME}'
+CELERY_RESULT_BACKEND = CELERY_BROKER_URL
 
-LOGFILE_NAME = BASE_DIR / 'logger.log'
-LOGFILE_SIZE = 1 * 1024 * 1024
-LOGFILE_COUNT = 3
-
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'verbose': {
-            'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s',
-        },
-    },
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-            'formatter': 'verbose',
-        },
-        'logfile': {
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': LOGFILE_NAME,
-            'maxBytes': LOGFILE_SIZE,
-            'backupCount': LOGFILE_COUNT,
-            'formatter': 'verbose',
-        }
-    },
-    'loggers': {
-        'services': {
-            'handlers': ['console', 'logfile',],
-            'level': 'INFO',
-        },
-    },
-}
 
 EMAIL_HOST = os.getenv("EMAIL_HOST")
 EMAIL_PORT = os.getenv("EMAIL_PORT")

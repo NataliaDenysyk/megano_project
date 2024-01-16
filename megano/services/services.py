@@ -1,7 +1,7 @@
+import copy
 import json
-import logging
-
-from json import JSONDecodeError
+import os
+import shutil
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.temp import NamedTemporaryFile
@@ -28,10 +28,8 @@ from django.shortcuts import get_object_or_404
 from authorization.forms import RegisterForm, LoginForm
 from authorization.models import Profile
 from store.models import Product, Offer, Category, Reviews, Discount, ProductImage, Tag, Orders
+from store.utils import import_logger
 from .slugify import slugify
-
-
-log = logging.getLogger(__name__)
 
 
 class AuthorizationService:
@@ -834,21 +832,37 @@ class MainService:
             return limited_cache
 
 
-class ImportJSONService:
+class ImportProductService:
     """
-    Сервис импорта JSON файлов
+    Сервис импорта продуктов из словаря.
+    Продукт возможно импортировать только при существовании категории в базе данных.
+    Имя продукта считается уникальным. Если такое имя уже существует в базе данных - будет взят
+    существующий продукт (без обновления полей модели Product). Связанные с данной моделью сущности
+    будут обновлены, если не будет выброшено исключение.
+    Данные будут сохранены или перемещены в зависимости от результата в папки import_successfully и import_failed.
     """
 
-    def import_json(self, file, file_name) -> str:
+    @import_logger()
+    def import_product(self, file_data: list, file_name: str, file_path=None, **kwargs) -> list[str]:
         """
-        Выполняет импорт продуктов
+        Выполняет импорт продуктов.
+
+        :param file_data: Данные файла, переданные в виде словаря.
+        :param file_name: Имя файла.
+        :param file_path: Путь файла, есть только, если файл передан командой и хранится в проекте,
+                         поэтому по умолчанию - None.
+
+        :return: Список, в котором содержатся сообщения о результате и/или ошибках.
         """
 
+        initial_data = copy.deepcopy(file_data)
+
+        log = kwargs.get('logger')
         error_message = []
-        try:
-            json_file = json.loads(file.read())
+        log.info(f"Импорт файла: {file_name}")
 
-            for info in json_file:
+        try:
+            for info in file_data:
                 category = None
 
                 try:
@@ -861,7 +875,7 @@ class ImportJSONService:
 
                 if category:
                     try:
-                        result = self.get_or_create_product(category, info)
+                        result = self.get_or_create_product(category, info, log)
 
                         if result:
                             error_message.append(result)
@@ -870,25 +884,35 @@ class ImportJSONService:
                         error_message += e
                         log.warning(f'Товар {info.get("product").get("name")} уже существует. Ошибка: {e}')
 
-        except JSONDecodeError as e:
-            error_message.append(e)
-            log.error(f'Передан неправильный формат файла')
-
         except KeyError as e:
             error_message.append(e)
-            log.error(f'Нет совпадения по ключу в переданном JSON')
+            log.error(f'Нет совпадений по ключам в переданных данных')
 
         if error_message:
+            directory_name = 'import_failed'
             message = f'Внимание! Данные {file_name} не импортированы, либо импортированы не полностью. '
-            log.info(message)
+            log.info(f"Результат импорта: {message}")
 
         else:
-            message = f'{file_name} импортирован успешно'
-            log.info(message)
+            directory_name = 'import_successfully'
+            message = f'{file_name} импортирован успешно. '
+            log.info(f"Результат импорта: {message}")
+
+        try:
+            if file_path:
+                FileMoveService(directory_name).move_file(file_path)
+            else:
+                FileMoveService(directory_name).save_file(initial_data, file_name)
+
+        except Exception as e:
+            log.error(f'Не удалось переместить файл {file_name} в другую директорию. {e}')
+            error_message.append(e)
+
+        log.info(f"Конец импорта файла: {file_name}")
 
         return [message, error_message]
 
-    def get_or_create_product(self, category: Category, info: dict) -> Product:
+    def get_or_create_product(self, category: Category, info: dict, log) -> Product:
         """
         Находит продукт по полю name, либо создает новый и создает связанные данные
         """
@@ -935,7 +959,8 @@ class ImportJSONService:
 
         except ValueError as e:
             error_message.append(e)
-            log.warning(f'Неправильно указан адрес для загрузки изображений продукта {product.name}. Ошибка: {e}')
+            log.warning(f'Неправильно указан адрес для загрузки изображений продукта {product.name}. '
+                        f'Ошибка: {e}')
 
         except HTTPError as e:
             error_message.append(e)
@@ -950,7 +975,8 @@ class ImportJSONService:
 
         except ValueError as e:
             error_message.append(e)
-            log.warning(f'Не удалось импортировать предложение от {info.get("seller")} для {product.name}. Ошибка: {e}')
+            log.warning(f'Не удалось импортировать предложение от {info.get("seller")} для {product.name}. '
+                        f'Ошибка: {e}')
 
         return error_message
 
@@ -1018,7 +1044,7 @@ class ImportJSONService:
             product.availability = True
             product.save()
 
-    def create_product_images(self, product: Product, img_data: list):
+    def create_product_images(self, product: Product, img_data: list) -> None:
         """
         Добавляет изображения продукта в базу данных
         """
@@ -1050,3 +1076,34 @@ class ImportJSONService:
         result = File(img_tmp, name=file_name)
 
         return result
+
+
+class FileMoveService:
+    """
+    Сервис для сохранения и перемещения файлов внутри проекта
+    """
+
+    def __init__(self, dir_name: str):
+        self.dir_name = dir_name
+
+    def save_file(self, data: dict, file_name: str) -> None:
+        """
+        Сохраняет файл в соответствующую результату импорта директорию
+        """
+
+        path = 'import/' + self.dir_name + '/' + file_name
+
+        file_path = os.path.abspath(path)
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+
+        with open(file_path, 'w', encoding='utf-8') as json_file:
+            json.dump(data, json_file, ensure_ascii=False)
+
+    def move_file(self, file_path: str) -> None:
+        """
+        Перемещает файл в указанную директорию
+        """
+
+        dir_path = os.path.abspath('import/' + self.dir_name)
+
+        shutil.move(file_path, dir_path)

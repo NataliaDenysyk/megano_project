@@ -1,6 +1,9 @@
 {% extends "admin/base_site.html" %}
+{% load get_import_status_tags %}
 
-{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} |
+  {{ site_title|default:_('Django site admin') }}{% endblock %}
 
 {% block content %}
   <div>
@@ -11,5 +14,11 @@
         <input type="submit" value="Загрузить JSON файл">
       </div>
     </form>
+  </div>
+  <br>
+  <div>
+    <p>
+      Статус выполнения импорта: {% get_import_status %}
+    </p>
   </div>
 {% endblock %}

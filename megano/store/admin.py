@@ -1,5 +1,7 @@
+import json
+from json import JSONDecodeError
+
 from django.contrib import admin, messages
-from django.core.mail import send_mail
 from django.shortcuts import reverse, render, redirect
 from django.urls import path
 from django.utils.html import format_html
@@ -12,7 +14,7 @@ from django.db.models import QuerySet
 from django.http import HttpRequest, HttpResponse
 
 from cart.models import Cart
-from services.services import ImportJSONService
+from store.tasks import import_product
 from .forms import JSONImportForm
 from .models import (
     Banners,
@@ -37,6 +39,7 @@ from compare.admin import (TVSetCharacteristicInline,
                            MobileCharacteristicInline)
 
 from authorization.models import Profile
+from .utils import busy_queues
 
 
 @admin.action(description='Архивировать')
@@ -329,7 +332,7 @@ class AdminProduct(admin.ModelAdmin):
                 'form': form,
             }
 
-            return render(request, 'admin/json_form.html', context)
+            return render(request, 'admin/json_import.html', context)
 
         form = JSONImportForm(request.POST, request.FILES)
 
@@ -337,14 +340,50 @@ class AdminProduct(admin.ModelAdmin):
             context = {
                 'form': form,
             }
-            return render(request, 'admin/json_form.html', context, status=400)
+            return render(request, 'admin/json_import.html', context, status=400)
 
-        result = ImportJSONService().import_json(
-            file=form.files['json_file'].file,
-            file_name=form.files['json_file'].name,
-        )
+        try:
+            if busy_queues('json_import'):
+                self.message_user(
+                    request,
+                    'Ошибка: предыдущий импорт ещё не выполнен. Пожалуйста, дождитесь его окончания.',
+                    level=messages.ERROR,
+                )
+            else:
+                files = request.FILES.getlist('json_file')
 
-        self.send_message(request, result, form.cleaned_data.get('email'))
+                for json_file in files:
+                    serialized_data = json.loads(json_file.file.read().decode('utf-8'))
+
+                    task_result = import_product.apply_async(
+                        kwargs={
+                            'file_data': serialized_data,
+                            'name': json_file.name,
+                            'email': form.cleaned_data.get('email'),
+                        },
+                        queue='json_import',
+                    )
+
+                    cache.set('task_id', task_result.id)
+
+                self.message_user(
+                    request,
+                    'Загрузка файлов началась. Результат будет отправлен на указанную почту.'
+                )
+
+        except JSONDecodeError:
+            self.message_user(
+                request,
+                f'Передан неправильный формат. Загрузить можно только файлы json.',
+                level=messages.ERROR,
+            )
+
+        # except Exception as e:
+        #     self.message_user(
+        #         request,
+        #         f'Случилась непредвиденная ошибка: {e}',
+        #         level=messages.ERROR,
+        #     )
 
         return redirect('..')
 
@@ -359,29 +398,6 @@ class AdminProduct(admin.ModelAdmin):
         ]
 
         return new_urls + urls
-
-    def send_message(self, request: HttpRequest, result: list, email: str) -> None:
-        """
-        Отправляет уведомление о результате импорта в админку и на указанную почту
-        """
-
-        if result[1]:
-            message = result[0] + str(result[1][0])
-            self.message_user(request, message, level=messages.ERROR)
-            send_mail(
-                subject='Import',
-                message=message,
-                from_email='admin@admin.test',
-                recipient_list=[email],
-            )
-
-        self.message_user(request, result[0])
-        send_mail(
-            subject='Import',
-            message=result[0],
-            from_email=None,
-            recipient_list=[email],
-        )
 
 
 @admin.register(Offer)

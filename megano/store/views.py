@@ -589,7 +589,8 @@ class PaymentFormView(FormView):
                 'order_id': self.kwargs['pk'],
                 'card': form.cleaned_data['bill']
             },
-            countdown=10
+            countdown=10,
+            queue='payment',
         )
 
         return redirect(reverse_lazy('store:payment-progress', kwargs={'pk': self.kwargs['pk']}))

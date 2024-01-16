@@ -1,10 +1,13 @@
-from django.core.management.base import BaseCommand
-from django.core.mail import send_mail
+import json
 
-from services.services import ImportJSONService
+from django.core.cache import cache
+from django.core.management.base import BaseCommand
+from store.tasks import import_product_from_command
 
 import os
 import re
+
+from store.utils import busy_queues
 
 
 class Command(BaseCommand):
@@ -29,22 +32,35 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         path_work_dir = os.path.abspath(os.path.join('import'))
         file_name = options.get('file')
-        addressee = options.get('email')
+        address = options.get('email')
         file = self.search_file(path_work_dir, file_name)
-        import_file = ImportJSONService()
 
-        for _file in file:
-            name_file = self.cleaned_name(_file)
-            with open(_file, 'r', encoding='utf-8') as file_json:
-                try:
-                    messages = import_file.import_json(file_json, name_file)
-                    send_mail(f'Загрузка файла "{name_file}"',
-                              f'Отчет по загрузке файла "{name_file}":\n'
-                              f'{[mes for mes in messages]}',
-                              f'{addressee}', ['root@qwe.ru'], fail_silently=False)
-                    self.stdout.write(f'Файл "{name_file}", успешно загружен!')
-                except Exception as err:
-                    self.stdout.write(f'Файл "{name_file}": Загружен с ошибкой.\nОШИБКА: {err}')
+        if busy_queues('json_import'):
+            self.stdout.write(f'Ошибка: предыдущий импорт ещё не выполнен. Пожалуйста, дождитесь его окончания.')
+        else:
+            for _file in file:
+                name_file = self.cleaned_name(_file)
+                with open(_file, 'r', encoding='utf-8') as file_json:
+                    try:
+                        file_content = file_json.read()
+                        data_list = json.loads(file_content)
+
+                        task_result = import_product_from_command.apply_async(
+                            kwargs={
+                                'file_data': data_list,
+                                'name': name_file,
+                                'email': address,
+                                'file_path': _file,
+                            },
+                            queue='json_import',
+                        )
+
+                        cache.set('task_id', task_result.id)
+                        self.stdout.write(f'{name_file} добавлен в загрузку.')
+
+                    except Exception as err:
+                        self.stdout.write(f'Команда "upload_file" для файла {name_file} завершилась с ошибкой.\n'
+                                          f'ОШИБКА: {err}')
 
     @staticmethod
     def search_file(path_work_dir, file_name):
