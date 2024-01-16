@@ -7,6 +7,8 @@ from django.core.cache import cache
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from urllib.parse import urlparse, parse_qs, urlencode
+
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Avg, Count, When, Case
 from django.db import transaction
 from django.http import HttpRequest
@@ -450,7 +452,11 @@ class ProductService:
         try:
             id_model_characteristics = self._product.feature.values()[0].get('id')
             general_characteristics = get_characteristic_from_common_info(self._product.feature.values()[0])
-            model_info = return_model(self._product, id_model_characteristics)
+            try:
+                model_info = return_model(self._product, id_model_characteristics)
+                print(model_info)
+            except ObjectDoesNotExist:
+                model_info = None
 
             feature = {
                 'characteristics': general_characteristics,
