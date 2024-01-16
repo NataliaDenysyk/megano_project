@@ -20,8 +20,10 @@
                   </div>
                   <div class="row-block">
                     <div class="Slider-img banner-img ">
-                      <img class="banner-img" src="{{ banner.product.preview.url }}"
-                           alt="{{ banner.title }}">
+                      {% if banner.product.preview %}
+                        <img class="banner-img" src="{{ banner.product.preview.url }}"
+                             alt="{{ banner.title }}">
+                      {% endif %}
                     </div>
                   </div>
                 </div>

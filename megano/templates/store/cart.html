@@ -14,10 +14,17 @@
                                     <div class="Cart-block Cart-block_row">
                                         <div class="Cart-block Cart-block_pict">
                                             <a class="Cart-pict" href="#">
+                                              {% if cart.preview %}
                                                 <img class="Cart-img"
                                                      src="{{ cart.preview.url }}"
                                                      width="120px"
                                                      alt="{{ cart.name }}"/>
+                                              {% else %}
+                                                <img class="Cart-img"
+                                                     src="{% static 'assets/img/content/home/placeholder.png' %}"
+                                                     width="120px"
+                                                     alt="empty_photo"/>
+                                              {% endif %}
                                             </a>
                                         </div>
                                         <div class="Cart-block Cart-block_info">
