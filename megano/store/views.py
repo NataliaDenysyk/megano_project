@@ -600,12 +600,15 @@ class PaymentFormView(FormView):
         Отправляет оплату в очередь, если форма прошла валидацию
         """
 
+        Orders.objects.filter(id=self.kwargs['pk']).update(status=3)
+
         pay_order.apply_async(
             kwargs={
                 'order_id': self.kwargs['pk'],
                 'card': form.cleaned_data['bill']
             },
-            countdown=10
+            countdown=10,
+            queue='payment',
         )
 
         return redirect(reverse_lazy('store:payment-progress', kwargs={'pk': self.kwargs['pk']}))

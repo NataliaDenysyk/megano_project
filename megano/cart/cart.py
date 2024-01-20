@@ -103,6 +103,7 @@ class Cart(object):
         for item in cart.values():
             item['price'] = Decimal(item['price'])
             item['total_price'] = item['price'] * item['quantity']
+
             yield item
 
     def get_total_price(self) -> [int, float]:

@@ -103,11 +103,18 @@
                                             <div class="Cart-product">
                                                 <div class="Cart-block Cart-block_row">
                                                     <div class="Cart-block Cart-block_pict">
-                                                        <a class="Cart-pict" href="#">
+                                                        <a class="Card-pict" href="#">
+                                                          {% if product.preview %}
                                                             <img
                                                                     class="Cart-img"
                                                                     src="{{ product.preview.url }}"
                                                                     alt="card.jpg"/>
+                                                          {% else %}
+                                                            <img
+                                                                    class="Cart-img"
+                                                                    src="{% static 'assets/img/content/home/placeholder.png' %}"
+                                                                    alt="empty_photo"/>
+                                                          {% endif %}
                                                         </a>
                                                     </div>
                                                     <div class="Cart-block Cart-block_info">

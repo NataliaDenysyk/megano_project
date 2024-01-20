@@ -1,8 +1,10 @@
 <div class="Tabs-block" id="description">
   <h2>{{ product.description.title }}</h2>
   <p>{% firstof product.description.text_bottom "Описания пока нет" %}</p>
+  {% if product.preview %}
   <img class="pict pict_right"
        src="{{ product.preview.url }}" alt="bigGoods.png"/>
+  {% endif %}
   <ul>
     {% for text in product.description.text_bottom_ul %}
       <li>{{ text }}</li>
