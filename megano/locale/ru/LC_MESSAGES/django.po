@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-21 14:17+0000\n"
+"POT-Creation-Date: 2024-01-21 14:43+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -98,11 +98,12 @@ msgstr "Такой логин уже существует"
 msgid "Данный email уже существует."
 msgstr "Данный email уже существует"
 
-#: authorization/mixins.py:15
+#: authorization/mixins.py:15 templates/base/header.html:167
 msgid "Личный кабинет"
 msgstr "Личный кабинет"
 
 #: authorization/mixins.py:16 authorization/models.py:91 store/models.py:387
+#: templates/base/footer.html:24
 msgid "Профиль"
 msgstr "Профиль"
 
@@ -766,7 +767,7 @@ msgstr "Теги"
 msgid "Скидка"
 msgstr "Скидка"
 
-#: store/admin.py:238 store/models.py:342
+#: store/admin.py:238 store/models.py:342 templates/base/header.html:143
 msgid "Скидки"
 msgstr "Скидки"
 
@@ -1327,7 +1328,7 @@ msgstr "Гарантия качества"
 msgid "Best guaranted items"
 msgstr "Товары с лучшей гарантией"
 
-#: templates/authorization/about-seller.html:78
+#: templates/authorization/about-seller.html:78 templates/base/footer.html:32
 msgid "Phone"
 msgstr "Телефон"
 
@@ -1351,7 +1352,7 @@ msgstr "Начать"
 msgid "Popular Products"
 msgstr "Популярные продукты"
 
-#: templates/authorization/account.html:14
+#: templates/authorization/account.html:14 templates/base/footer.html:14
 msgid "Навигация"
 msgstr "Навигация"
 
@@ -1467,11 +1468,57 @@ msgstr "Подробнее"
 msgid "Banners must"
 msgstr "Нет Баннера"
 
-#~ msgid "Все категории"
-#~ msgstr "Все категории"
+#: templates/base/footer.html:17 templates/base/header.html:141
+msgid "Главная"
+msgstr "Главная"
 
-#~ msgid "Поиск"
-#~ msgstr "Поиск"
+#: templates/base/footer.html:19 templates/base/header.html:146
+msgid "Каталог"
+msgstr "Каталог"
+
+#: templates/base/footer.html:21 templates/base/header.html:149
+msgid "Сравнение"
+msgstr "Сравнение"
+
+#: templates/base/footer.html:30
+msgid "Контакты"
+msgstr "Контакты"
+
+#: templates/base/header.html:27
+msgid "Описание страницы"
+msgstr "Описание страницы"
+
+#: templates/base/header.html:84
+msgid "Вход"
+msgstr "Вход"
+
+#: templates/base/header.html:85
+msgid "Регистрация "
+msgstr "Регистрация"
+
+#: templates/base/header.html:89
+msgid "Личный кабинет "
+msgstr "Личный кабинет"
+
+#: templates/base/header.html:90 templates/base/header.html:172
+msgid "Выход"
+msgstr "Выход"
+
+#: templates/base/header.html:170
+msgid "Административный раздел"
+msgstr "Административный раздел"
+
+#: templates/base/header.html:190
+msgid "Показать навигацию"
+msgstr "Показать навигацию"
+
+#: templates/base/header.html:208
+msgid "Все категории"
+msgstr "Все категории"
+
+#: templates/base/header.html:254
+msgid "Поиск"
+msgstr "Поиск"
 
 #~ msgid "Значение"
 #~ msgstr "Значение"
@@ -1493,9 +1540,6 @@ msgstr "Нет Баннера"
 
 #~ msgid "Забыли пароль"
 #~ msgstr "Забыли пароль"
-
-#~ msgid "Регистрация"
-#~ msgstr "Регистрация"
 
 #~ msgid "The password has been changed"
 #~ msgstr "Пароль был изменен"
@@ -1646,9 +1690,6 @@ msgstr "Нет Баннера"
 
 #~ msgid "Тэги"
 #~ msgstr "Тэги"
-
-#~ msgid "Показать ещё"
-#~ msgstr "Показать ещё"
 
 #~ msgid "Сейчас этот товар никто не продает"
 #~ msgstr "Сейчас этот товар никто не продает"
