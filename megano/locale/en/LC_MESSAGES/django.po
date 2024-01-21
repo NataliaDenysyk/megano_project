@@ -1,0 +1,1187 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-01-21 12:59+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: templates/admin/base.html:7
+msgid "Сегодня:"
+msgstr "Today"
+
+#: templates/admin/base.html:10
+msgid "Настройки"
+msgstr "Settings"
+
+#: templates/admin/base.html:13
+msgid "Привет,"
+msgstr "Hello,"
+
+#: templates/admin/base.html:18
+msgid "View site"
+msgstr "View site"
+
+#: templates/admin/base.html:23
+msgid "Documentation"
+msgstr "Documentation"
+
+#: templates/admin/base.html:27
+msgid "Change password"
+msgstr "Change password"
+
+#: templates/admin/base.html:31
+msgid "Log out"
+msgstr "Log out"
+
+#: templates/admin/base_site.html:3 templates/admin/json_import.html:6
+msgid "Django site admin"
+msgstr "Django site admin"
+
+#: templates/admin/base_site.html:7
+msgid "Django"
+msgstr "Django"
+
+#~ msgid "Archive"
+#~ msgstr "Unarchive"
+
+#~ msgid "Unarchive"
+#~ msgstr "Unarchive"
+
+#~ msgid "Настройки магазина"
+#~ msgstr "Store settings"
+
+#~ msgid "Extra options"
+#~ msgstr "Extra options"
+
+#~ msgid "Изображение"
+#~ msgstr "Image"
+
+#~ msgid "Тут можно изменить пароль"
+#~ msgstr "Here_you_can_change_your_password"
+
+#~ msgid "Введите пароль повторно"
+#~ msgstr "Re-enter_your_password"
+
+#~ msgid "Email адрес должен быть уникальным"
+#~ msgstr "Email must be unique"
+
+#~ msgid "Пароли не совпадают"
+#~ msgstr "Password mismatch"
+
+#~ msgid "Пароль должен содержать не менее 6 символов"
+#~ msgstr "The password must contain at least 8 characters"
+
+#~ msgid "Размер изображения слишком большой ( > 2.5mb )"
+#~ msgstr "Image size is too big ( > 2.5mb )"
+
+#~ msgid "Не удалось прочитать загруженное изображение"
+#~ msgstr "Failed to read uploaded images"
+
+#~ msgid "Телефон должен быть уникальным"
+#~ msgstr "The phone must be unique"
+
+#~ msgid "Имя"
+#~ msgstr "Login"
+
+#~ msgid "Пароль"
+#~ msgstr "Password"
+
+#~ msgid "Повтор Пароля"
+#~ msgstr "Repeat password"
+
+#~ msgid "Такой логин уже существует"
+#~ msgstr "This login already exists"
+
+#~ msgid "Данный email уже существует."
+#~ msgstr "This email already exists"
+
+#~ msgid "Личный кабинет"
+#~ msgstr "Personal account"
+
+#~ msgid "Профиль"
+#~ msgstr "Profile"
+
+#~ msgid "История заказов"
+#~ msgstr "History of orders"
+
+#~ msgid "История просмотров"
+#~ msgstr "Browsing history"
+
+#~ msgid "Пользователь"
+#~ msgstr "User"
+
+#~ msgid "Слаг"
+#~ msgstr "Slug"
+
+#~ msgid "Teleфон"
+#~ msgstr "Phone"
+
+#~ msgid "Описание"
+#~ msgstr "Description"
+
+#~ msgid "Фотография профиля"
+#~ msgstr "Avatar"
+
+#~ msgid "Архивация"
+#~ msgstr "Archive"
+
+#~ msgid "Имя магазина"
+#~ msgstr "Name store"
+
+#~ msgid "Адрес"
+#~ msgstr "Address"
+
+#~ msgid "Связанные заказы"
+#~ msgstr "Viewed orders"
+
+#~ msgid "Роль"
+#~ msgstr "Role"
+
+#~ msgid "Профили"
+#~ msgstr "Profiles"
+
+#~ msgid "Обычная доставка"
+#~ msgstr "Regular delivery"
+
+#~ msgid "Экспресс-доставка"
+#~ msgstr "Express delivery"
+
+#~ msgid "Выберите доставку"
+#~ msgstr "Select delivery"
+
+#~ msgid "Онлайн картой"
+#~ msgstr "Online card"
+
+#~ msgid "Онлайн со случайного счета"
+#~ msgstr "Online from a random account"
+
+#~ msgid "Выберите оплату"
+#~ msgstr "Select payment"
+
+#~ msgid "Способ доставки"
+#~ msgstr "Delivery method"
+
+#~ msgid "Способ оплаты"
+#~ msgstr "Payment method"
+
+#~ msgid "Страница пользователя"
+#~ msgstr "Profile page"
+
+#~ msgid "Редактирование страницы пользователя"
+#~ msgstr "Editing profile page"
+
+#~ msgid "Профиль успешно сохранен "
+#~ msgstr "The profile was successfully saved"
+
+#~ msgid "Некорректный ввод данных. Попробуйте еще раз."
+#~ msgstr "The data is incorrect, try agan"
+
+#~ msgid "Указанный email уже зарегистрирован"
+#~ msgstr "This email already exists"
+
+#~ msgid "Этот username уже используется, выберите другой"
+#~ msgstr "This username is already in use, please select another one"
+
+#~ msgid "Товары"
+#~ msgstr "Products"
+
+#~ msgid "Иконка"
+#~ msgstr "Image"
+
+#~ msgid "Заказ"
+#~ msgstr "Order"
+
+#~ msgid "Продукты"
+#~ msgstr "Products"
+
+#~ msgid "Количество"
+#~ msgstr "Quantity"
+
+#~ msgid "Дата создания"
+#~ msgstr "Date created"
+
+#~ msgid "Дата изменения"
+#~ msgstr "Date modified"
+
+#~ msgid "корзину"
+#~ msgstr "cart"
+
+#~ msgid "корзины"
+#~ msgstr "carts"
+
+#~ msgid "Сделан в "
+#~ msgstr "Made in"
+
+#~ msgid "В каком году произведен"
+#~ msgstr "Production Year"
+
+#~ msgid "Цвет"
+#~ msgstr "Color"
+
+#~ msgid "Вес"
+#~ msgstr "Weight"
+
+#~ msgid "Абстрактные характеристики"
+#~ msgstr "Abstract characteristic"
+
+#~ msgid "TVSet"
+#~ msgstr "TVSet"
+
+#~ msgid "Размер экрана"
+#~ msgstr "Screen size"
+
+#~ msgid "Разрешение экрана"
+#~ msgstr "Screen resolution"
+
+#~ msgid "Страна производитель"
+#~ msgstr "Manufacturer country"
+
+#~ msgid "Частота обновления"
+#~ msgstr "Update frequency"
+
+#~ msgid "Наличие Wi-Fi"
+#~ msgstr "Availability of Wi-Fi"
+
+#~ msgid "Нет"
+#~ msgstr "No"
+
+#~ msgid "Дополнительное описание"
+#~ msgstr "Additional description"
+
+#~ msgid "Характеристики телевизора"
+#~ msgstr "TV characteristics"
+
+#~ msgid "Характеристики телевизоров"
+#~ msgstr "TV characteristics"
+
+#~ msgid "Беспроводные"
+#~ msgstr "Wireless"
+
+#~ msgid "Микрофон"
+#~ msgstr "Microphone"
+
+#~ msgid "Как носить"
+#~ msgstr "How to wear"
+
+#~ msgid "Наличие Bluetooth"
+#~ msgstr "Availability of Bluetooth"
+
+#~ msgid "Сопротивление (Ом)"
+#~ msgstr "Resistance (Ohm)"
+
+#~ msgid "Характеристики наушников"
+#~ msgstr "Headphones characteristics"
+
+#~ msgid "Высота"
+#~ msgstr "Height"
+
+#~ msgid "Ширина"
+#~ msgstr "Width"
+
+#~ msgid "Глубина"
+#~ msgstr "Depth"
+
+#~ msgid "Тип загрузки"
+#~ msgstr "Download tipe"
+
+#~ msgid "Информации нет"
+#~ msgstr "No information"
+
+#~ msgid "Объём загрузки"
+#~ msgstr "Loading volume"
+
+#~ msgid "Характеристики стиральной машины"
+#~ msgstr "Characteristics of the Washing Machine"
+
+#~ msgid "Характеристики стиральных машин"
+#~ msgstr "Characteristics of the Washing Machines"
+
+#~ msgid "Тип мобильного телефона"
+#~ msgstr "Mobile phone type"
+
+#~ msgid "Размер экрана в дюймах"
+#~ msgstr "Screen size in inches"
+
+#~ msgid "Технология экрана"
+#~ msgstr "Screen technology"
+
+#~ msgid "Операционная система"
+#~ msgstr "Operating system"
+
+#~ msgid "Характеристики телефона"
+#~ msgstr "Phone characteristics"
+
+#~ msgid "Характеристики телефонов"
+#~ msgstr "Phones characteristics"
+
+#~ msgid "Тип фотоаппарата"
+#~ msgstr "Camera type"
+
+#~ msgid "Количество мегапикселей"
+#~ msgstr "Number of megapixels"
+
+#~ msgid "ISO максимальная"
+#~ msgstr "ISO max"
+
+#~ msgid "ISO минимальная"
+#~ msgstr "ISO min"
+
+#~ msgid "Видео разрешение"
+#~ msgstr "Video resolution"
+
+#~ msgid "Характеристики фотоаппарата"
+#~ msgstr "Camera characteristics"
+
+#~ msgid "Характеристики фотоаппаратов"
+#~ msgstr "Cameras characteristics"
+
+#~ msgid "Мощность Вт"
+#~ msgstr "Power in watts"
+
+#~ msgid "Характеристики микроволновой печи"
+#~ msgstr "Microwave oven characteristics"
+
+#~ msgid "Характеристики микроволновых печей"
+#~ msgstr "Characteristics of Microwave ovens"
+
+#~ msgid "Тип техники"
+#~ msgstr "Type equipment"
+
+#~ msgid "Характеристики кухонной техники"
+#~ msgstr "Characteristics of kitchen appliances"
+
+#~ msgid "Тип лампочки"
+#~ msgstr "Type of bulb"
+
+#~ msgid "Место расположения"
+#~ msgstr "Location"
+
+#~ msgid "Характеристики торшера"
+#~ msgstr "Characteristics of the floor lamp"
+
+#~ msgid "Характеристики торшеров"
+#~ msgstr "Characteristics of the floor lamps"
+
+#~ msgid "Тип ноутбука"
+#~ msgstr "Laptop type"
+
+#~ msgid "Плотность пикселей"
+#~ msgstr "Pixel density"
+
+#~ msgid "Версия операционной системы"
+#~ msgstr "Operating system version"
+
+#~ msgid "Характеристики ноутбука"
+#~ msgstr "Laptop characteristics"
+
+#~ msgid "Характеристики ноутбуков"
+#~ msgstr "Laptop characteristics"
+
+#~ msgid "Тип электроники"
+#~ msgstr "Electronics type"
+
+#~ msgid "Тип питания"
+#~ msgstr "Power type"
+
+#~ msgid "Характеристики электроники"
+#~ msgstr "Electronics characteristics"
+
+#~ msgid "Наличие микрофона"
+#~ msgstr "Microphone"
+
+#~ msgid "Ношение"
+#~ msgstr "Wearing"
+
+#~ msgid "Наличие bluetooth"
+#~ msgstr "Availability of Bluetooth"
+
+#~ msgid "Сомпротивление, Ом"
+#~ msgstr "Resistance (Ohm)"
+
+#~ msgid "Наличие HDMI"
+#~ msgstr "Availability of HDMI"
+
+#~ msgid "Название"
+#~ msgstr "Title"
+
+#~ msgid "Наличие Wi - Fi"
+#~ msgstr "Availability of Wi-Fi"
+
+#~ msgid "HDMI"
+#~ msgstr "HDMI"
+
+#~ msgid "Гриль"
+#~ msgstr "Grill"
+
+#~ msgid "Высота, мм"
+#~ msgstr "Height, mm"
+
+#~ msgid "Ширина, мм"
+#~ msgstr "Width, mm"
+
+#~ msgid "Глубина, мм"
+#~ msgstr "Depth, mm"
+
+#~ msgid "Страна производства"
+#~ msgstr "Manufacturer country"
+
+#~ msgid "Год производства"
+#~ msgstr "Production Year"
+
+#~ msgid ""
+#~ "Нельзя сравнивать несравнимое. Выберите товары из одной категории. Добавь "
+#~ "товары снова"
+#~ msgstr ""
+#~ "You cannot compare incomparables, select products from the same "
+#~ "category.  Add products again"
+
+#~ msgid "Тут пока ничего нет. Добавь товары к сравнению"
+#~ msgstr "There is nothing here yet, add products to compare"
+
+#~ msgid "English"
+#~ msgstr "English"
+
+#~ msgid "Russian"
+#~ msgstr "Russian"
+
+#~ msgid "Товара  доступно"
+#~ msgstr "Product available"
+
+#~ msgid "Больше"
+#~ msgstr "More"
+
+#~ msgid "нет на складе"
+#~ msgstr "not in stock"
+
+#~ msgid "Ошибка"
+#~ msgstr "Error"
+
+#~ msgid "Товар отсутствует на складе"
+#~ msgstr "Product is of stock"
+
+#, python-brace-format
+#~ msgid "{self.offer.amount} шт."
+#~ msgid_plural "{self.offer.amount}шт."
+#~ msgstr[0] "{self.offer.amount} piece"
+#~ msgstr[1] "{self.offer.amount} pieces"
+
+#~ msgid "Пароль и email не совпадают, проверьте ввод или зарегистрируйтесь"
+#~ msgstr "The password and email do not match, check your input or register"
+
+#~ msgid "Пользователь с таким email не найден"
+#~ msgstr "A user with this email was not found"
+
+#~ msgid "Банк недоступен"
+#~ msgstr "Bank unavailable"
+
+#~ msgid "На счете недостаточно средств"
+#~ msgstr "There are not enough funds in the account"
+
+#~ msgid "Введенный счет недействителен"
+#~ msgstr "The entered account is invalid"
+
+#~ msgid "Оплата не выполнена"
+#~ msgstr "Payment has been completed"
+
+#~ msgid "Оплачено"
+#~ msgstr "Paid"
+
+#~ msgid "Архивировать"
+#~ msgstr "Archive"
+
+#~ msgid "Разархивировать"
+#~ msgstr "Unarchive"
+
+#~ msgid "Доступен"
+#~ msgstr "Available"
+
+#~ msgid "Не доступен"
+#~ msgstr "Not available"
+
+#~ msgid "Сбросить кэш списка товаров"
+#~ msgstr "Reset product list cash"
+
+#~ msgid "кэш списка товаров сброшен."
+#~ msgstr "Product list cash cleared"
+
+#~ msgid "Продукт"
+#~ msgstr "Product"
+
+#~ msgid "Покупатель"
+#~ msgstr "Buyer"
+
+#~ msgid "Тег"
+#~ msgstr "Tag"
+
+#~ msgid "Теги"
+#~ msgstr "Tags"
+
+#~ msgid "Отзыв"
+#~ msgstr "Review"
+
+#~ msgid "Отзывы"
+#~ msgstr "Reviews"
+
+#~ msgid "Скидка"
+#~ msgstr "Discount"
+
+#~ msgid "Скидки"
+#~ msgstr "Discounts"
+
+#~ msgid "Заказы"
+#~ msgstr "Orders"
+
+#~ msgid "Главное фото"
+#~ msgstr "Main photo"
+
+#~ msgid "Другие опции"
+#~ msgstr "Extra options"
+
+#~ msgid "Создан"
+#~ msgstr "Created"
+
+#~ msgid "Отредактирован"
+#~ msgstr "Edited"
+
+#~ msgid "Категория"
+#~ msgstr "Category"
+
+#~ msgid "Товар"
+#~ msgstr "Product"
+
+#~ msgid "Категории"
+#~ msgstr "Categories"
+
+#~ msgid " мин."
+#~ msgstr " min."
+
+#~ msgid "ч."
+#~ msgstr " hr."
+
+#~ msgid "д."
+#~ msgstr " d."
+
+#~ msgid "Характеристика"
+#~ msgstr "Characteristic"
+
+#~ msgid "Да"
+#~ msgstr "Yes"
+
+#~ msgid "Не учитывать"
+#~ msgstr "Ignore"
+
+#~ msgid "Цена"
+#~ msgstr "Price"
+
+#~ msgid "Продавцы"
+#~ msgstr "Sellers"
+
+#~ msgid "Только товары в наличии"
+#~ msgstr "Only goods in stock"
+
+#~ msgid "С бесплатной доставкой"
+#~ msgstr "With free shipping"
+
+#~ msgid "Иванов Иван Иванович"
+#~ msgstr "Ivanov Ivan Ivanovich"
+
+#~ msgid "Город проживания"
+#~ msgstr "City of residence"
+
+#~ msgid "Адрес доставки"
+#~ msgstr "Delivery address"
+
+#~ msgid "Почта"
+#~ msgstr "Email"
+
+#~ msgid "Такой телефон уже существует"
+#~ msgstr "This phone already exists"
+
+#~ msgid "Позволяет загрузить файл в бд"
+#~ msgstr "upload file in BD format"
+
+#~ msgid "Указывает имя файла"
+#~ msgstr "Specifies the file name"
+
+#~ msgid "Указывает адресата для отправки сообщений на почту"
+#~ msgstr "Specifies the recipient for sending messages by mail"
+
+#~ msgid "Родительская категория"
+#~ msgstr "Parent category"
+
+#~ msgid "URL"
+#~ msgstr "Slug"
+
+#~ msgid "Активация"
+#~ msgstr "Archive"
+
+#~ msgid "Индекс сортировки"
+#~ msgstr "Sort index"
+
+#~ msgid "Название товара"
+#~ msgstr "Product name"
+
+#~ msgid "Основное фото"
+#~ msgstr "Main photo"
+
+#~ msgid "Доступность"
+#~ msgstr "Available"
+
+#~ msgid "Ограниченный тираж"
+#~ msgstr "Limited edition"
+
+#~ msgid "Фотография товара"
+#~ msgstr "Product photo"
+
+#~ msgid "Изображения"
+#~ msgstr "Images"
+
+#~ msgid "Предложение от"
+#~ msgstr "Offer from"
+
+#~ msgid "Продавец"
+#~ msgstr "Sellers"
+
+#~ msgid "Предложение"
+#~ msgstr "Offer"
+
+#~ msgid "Предложения"
+#~ msgstr "Offers"
+
+#~ msgid "Название баннера"
+#~ msgstr "Banner name"
+
+#~ msgid "Описание баннера"
+#~ msgstr "Banner description"
+
+#~ msgid "Ссылка"
+#~ msgstr "Link"
+
+#~ msgid "Модерация"
+#~ msgstr "Moderation"
+
+#~ msgid "баннер"
+#~ msgstr "banner"
+
+#~ msgid "баннеры"
+#~ msgstr "banners"
+
+#~ msgid " Отзыв"
+#~ msgstr "Review"
+
+#~ msgid "Автор"
+#~ msgstr "Author"
+
+#~ msgid "Скидки на товар"
+#~ msgstr "Discounts on products"
+
+#~ msgid "Скидки на наборы"
+#~ msgstr "Discounts on set"
+
+#~ msgid "Скидки на корзину"
+#~ msgstr "Discounts on cart"
+
+#~ msgid "Тип скидки"
+#~ msgstr "Discounts type"
+
+#~ msgid "Изображение скидки"
+#~ msgstr "Image"
+
+#~ msgid "Сумма скидки"
+#~ msgstr "Discounts amount"
+
+#~ msgid "Количество товаров"
+#~ msgstr "Quantity"
+
+#~ msgid "Сумма корзины"
+#~ msgstr "cart amount"
+
+#~ msgid "Приоритет"
+#~ msgstr "A priority"
+
+#~ msgid "Действует с"
+#~ msgstr "Valid from"
+
+#~ msgid "Действует до"
+#~ msgstr "Valid to"
+
+#~ msgid "Активно"
+#~ msgstr "Actively"
+
+#~ msgid "Создана"
+#~ msgstr "Created"
+
+#~ msgid "Order"
+#~ msgstr "Order"
+
+#~ msgid "Не оплачено"
+#~ msgstr "Not paid"
+
+#~ msgid "Доставляется"
+#~ msgstr "Delivered"
+
+#~ msgid "Статус заказа"
+#~ msgstr "Order status"
+
+#~ msgid "Стоимость заказа"
+#~ msgstr "Order cost"
+
+#~ msgid "Статус ошибки"
+#~ msgstr "Exception status"
+
+#~ msgid "Фото категории"
+#~ msgstr "Photo category"
+
+#~ msgid "Активный"
+#~ msgstr "Active"
+
+#~ msgid "Банер категории"
+#~ msgstr "Category banner"
+
+#~ msgid "Банеры категорий"
+#~ msgstr "Category banners"
+
+#~ msgid "Импорт файла"
+#~ msgstr "Import a file"
+
+#~ msgid "Выполнен успешно"
+#~ msgstr "Executed successfully"
+
+#~ msgid "Завершен с ошибкой"
+#~ msgstr "Completed with an error"
+
+#~ msgid "В процессе выполнения"
+#~ msgstr "In progress"
+
+#~ msgid "Не было ни одного импорта"
+#~ msgstr "There were no imports"
+
+#~ msgid "кэш полностью очищен."
+#~ msgstr "Cache is completely cleared"
+
+#~ msgid "кэш баннера очищен."
+#~ msgstr "Banner cache cleared"
+
+#~ msgid "кэш корзины очищен."
+#~ msgstr "Cart cache cleared"
+
+#~ msgid "кэш продукта очищен."
+#~ msgstr "Product cash cleared"
+
+#~ msgid "кэш продавца очищен."
+#~ msgstr "Seller cash cleared"
+
+#~ msgid "кэш каталога очищен."
+#~ msgstr "Catalog cache cleared"
+
+#~ msgid "Название магазина успешно изменено"
+#~ msgstr "Store name successfully changed"
+
+#~ msgid "Поле не должно быть пустым"
+#~ msgstr "Pauline should be empty"
+
+#~ msgid "Время кэширование Баннера установлено"
+#~ msgstr "The Banner caching time is set"
+
+#~ msgid "Поле не должно быть пустым или содержать только цифры"
+#~ msgstr "The field must not be empty or contain only numbers"
+
+#~ msgid "Время кэширование Корзины установлено"
+#~ msgstr "The Cart caching time is set"
+
+#~ msgid "Время кэширование детализации продукта установлено"
+#~ msgstr "Product details caching time is set"
+
+#~ msgid "Время кэширование детализации продавца установлено"
+#~ msgstr "Seller details caching time is set"
+
+#~ msgid "Заказ с номером"
+#~ msgstr "Order with number"
+
+#~ msgid "не найден"
+#~ msgstr "was not found"
+
+#~ msgid "Загрузить JSON файл"
+#~ msgstr "Upload JSON file"
+
+#~ msgid "Статус выполнения импорта"
+#~ msgstr "Import progress status"
+
+#~ msgid "Настройка времени кэширования"
+#~ msgstr "Cache time settings"
+
+#~ msgid "Название магазина"
+#~ msgstr "Name of shop"
+
+#~ msgid "Укажите новое название"
+#~ msgstr "Enter a new name"
+
+#~ msgid "Сменить"
+#~ msgstr "Change"
+
+#~ msgid "Время кэширование Баннера"
+#~ msgstr "Banner caching time"
+
+#~ msgid "Указывать в мин"
+#~ msgstr "Specify in min."
+
+#~ msgid "Задать"
+#~ msgstr "Set"
+
+#~ msgid "Время кэширование Корзины"
+#~ msgstr "Cart caching time"
+
+#~ msgid "Время кэширование деталей продукта"
+#~ msgstr "Product details caching time"
+
+#~ msgid "Время кэширование деталей Продавца"
+#~ msgstr "Seller details caching time"
+
+#~ msgid "Время кэширование Каталога"
+#~ msgstr "Product catalog caching time"
+
+#~ msgid "Очистка кэша"
+#~ msgstr "Clear cache"
+
+#~ msgid "Очистить весь кэш"
+#~ msgstr "Clear all cache"
+
+#~ msgid "Очистить"
+#~ msgstr "Clear"
+
+#~ msgid "Очистить кэш Баннера"
+#~ msgstr "Clear banner cache"
+
+#~ msgid "Очистить кэш Корзины"
+#~ msgstr "Clear cart cache"
+
+#~ msgid "Очистить кэш Детализации продукта"
+#~ msgstr "Clear product details cache"
+
+#~ msgid "Очистить кэш Продавца"
+#~ msgstr "Clear seller cache"
+
+#~ msgid "Очистить кэш Каталога продуктов"
+#~ msgstr "Clear product catalog cache"
+
+#~ msgid "Навигация"
+#~ msgstr "Navigation"
+
+#~ msgid "Пожалуйста, авторизуйтесь"
+#~ msgstr "Please log in"
+
+#~ msgid "Дата заказа"
+#~ msgstr "Order date"
+
+#~ msgid "ФИО"
+#~ msgstr "Full name"
+
+#~ msgid "Телефон"
+#~ msgstr "Phone"
+
+#~ msgid "E-mail"
+#~ msgstr "E-mail"
+
+#~ msgid "Тип доставки"
+#~ msgstr "Delivery type"
+
+#~ msgid "Город"
+#~ msgstr "City"
+
+#~ msgid "Оплата"
+#~ msgstr "Payment"
+
+#~ msgid "Статус"
+#~ msgstr "Order status"
+
+#~ msgid "Оплата не прошла"
+#~ msgstr "Payment failed"
+
+#~ msgid "шт"
+#~ msgstr "PCS"
+
+#~ msgid "Итого"
+#~ msgstr "Total"
+
+#~ msgid "Оплатить"
+#~ msgstr "Pay"
+
+#~ msgid "от"
+#~ msgstr "dated"
+
+#~ msgid "Общая стоимость"
+#~ msgstr "Total cost"
+
+#~ msgid "У вас нет заказов"
+#~ msgstr "You have no orders"
+
+#~ msgid "Просмотров в истории пока нет"
+#~ msgstr "There are no views in history yet"
+
+#~ msgid "Редактировать профиль"
+#~ msgstr "Edit profile"
+
+#~ msgid "Аватар"
+#~ msgstr "Avatar"
+
+#~ msgid "Загрузить фото"
+#~ msgstr "Upload a photo"
+
+#~ msgid "Тут_можно изменить пароль"
+#~ msgstr "Here_you_can_change_your_password"
+
+#~ msgid "Подтверждение пароля"
+#~ msgstr "Password confirmation"
+
+#~ msgid "Сохранить"
+#~ msgstr "Save"
+
+#~ msgid "Подробнее"
+#~ msgstr "Detailed"
+
+#~ msgid "Главная"
+#~ msgstr "Main"
+
+#~ msgid "Каталог"
+#~ msgstr "Catalog"
+
+#~ msgid "Сравнение"
+#~ msgstr "Comparison"
+
+#~ msgid "Контакты"
+#~ msgstr "Contacts"
+
+#~ msgid "Вход"
+#~ msgstr "Login"
+
+#~ msgid "Регистрация "
+#~ msgstr "Registration"
+
+#~ msgid "Личный кабинет "
+#~ msgstr "Personal account"
+
+#~ msgid "Выход"
+#~ msgstr "Out"
+
+#~ msgid "Административный раздел"
+#~ msgstr "Administrative section"
+
+#~ msgid "Показать навигацию"
+#~ msgstr "Show navigation"
+
+#~ msgid "Все категории"
+#~ msgstr "All category"
+
+#~ msgid "Поиск"
+#~ msgstr "Search"
+
+#~ msgid "Значение"
+#~ msgstr "Value"
+
+#~ msgid "Общие параметры"
+#~ msgstr "Common parameters"
+
+#~ msgid "Тип"
+#~ msgstr "Type"
+
+#~ msgid "Добавить в корзину"
+#~ msgstr "Add to cart"
+
+#~ msgid "Выход выполнен"
+#~ msgstr "Exit completed"
+
+#~ msgid "Нажмите сюда, чтобы войти снова"
+#~ msgstr "Click here to log in again"
+
+#~ msgid "Войти"
+#~ msgstr "In"
+
+#~ msgid "Забыли пароль"
+#~ msgstr "Forgot your password"
+
+#~ msgid "Регистрация"
+#~ msgstr "Registration"
+
+#~ msgid "The password has been changed"
+#~ msgstr "The password has been changed"
+
+#~ msgid "log in again"
+#~ msgstr "log in again"
+
+#~ msgid "Please enter (and confirm) your new password"
+#~ msgstr "Please enter (and confirm) your new password"
+
+#~ msgid "New password"
+#~ msgstr "New password"
+
+#~ msgid "Confirm password"
+#~ msgstr "Confirm password"
+
+#~ msgid "Change my password"
+#~ msgstr "Change my password"
+
+#~ msgid ""
+#~ "Мы отправили вам электронное письмо с инструкциями по установке пароля"
+#~ msgstr ""
+#~ "We've emailed you instructions for setting your password. If they haven't "
+#~ "arrived in a few minutes, check your spam folder"
+
+#~ msgid "Reset password"
+#~ msgstr "Reset password"
+
+#~ msgid "Зарегистрироваться"
+#~ msgstr "Зарегистрироваться"
+
+#~ msgid "Вы уже зарегистрированы и авторизованы"
+#~ msgstr "You are already registered and logged in"
+
+#~ msgid "Показать"
+#~ msgstr "Show"
+
+#~ msgid "Оформить заказ"
+#~ msgstr "Checkout"
+
+#~ msgid "Корзина пуста"
+#~ msgstr "Cart is empty"
+
+#~ msgid "Нет в продаже"
+#~ msgstr "Out of stock"
+
+#~ msgid "Фильтр"
+#~ msgstr "filter"
+
+#~ msgid "Популярные тэги"
+#~ msgstr "Popular tags"
+
+#~ msgid "Сортировать по"
+#~ msgstr "Sort by"
+
+#~ msgid "Популярности"
+#~ msgstr "Popularity"
+
+#~ msgid "Отзывам"
+#~ msgstr "Review"
+
+#~ msgid "Новизне"
+#~ msgstr "Novelty"
+
+#~ msgid "Блог"
+#~ msgstr "Blog"
+
+#~ msgid "Предложение дня"
+#~ msgstr "Offer of the day"
+
+#~ msgid "Часы"
+#~ msgstr "Hours"
+
+#~ msgid "Минуты"
+#~ msgstr "Minutes"
+
+#~ msgid "Секунды"
+#~ msgstr "Seconds"
+
+#~ msgid "Популярные товары"
+#~ msgstr "Popular products"
+
+#~ msgid "Горячие предложения"
+#~ msgstr "Hot deals"
+
+#~ msgid "Прогресс заполнения"
+#~ msgstr "Filling progress"
+
+#~ msgid "Шаг 1. Параметры пользователя"
+#~ msgstr "Step 1. User parameters"
+
+#~ msgid "Шаг 2. Способ доставки"
+#~ msgstr "Step 2. Delivery method"
+
+#~ msgid "Шаг 3. Способ оплаты"
+#~ msgstr "Step 3. Payment method"
+
+#~ msgid "Шаг 4. Подтверждение заказа"
+#~ msgstr "Step 4. Order confirmation"
+
+#~ msgid "Заказов пока нет"
+#~ msgstr "There are no orders yet"
+
+#~ msgid "Дальше"
+#~ msgstr "Further"
+
+#~ msgid "Назад"
+#~ msgstr "Further back"
+
+#~ msgid "Я уже зарегистрирован"
+#~ msgstr "I'm already registered"
+
+#~ msgid "уже оплачен"
+#~ msgstr "already paid"
+
+#~ msgid "Номер карты"
+#~ msgstr "Card number"
+
+#~ msgid "Номер счета"
+#~ msgstr "Account number"
+
+#~ msgid "Сгенерировать случайный счет"
+#~ msgstr "Generate random score"
+
+#~ msgid "Ожидание оплаты"
+#~ msgstr "Waiting for payment"
+
+#~ msgid "Ждем подтверждения оплаты платежной системой"
+#~ msgstr "We are waiting for payment confirmation from the payment system"
+
+#~ msgid "Описания пока нет"
+#~ msgstr "No description yet"
+
+#~ msgid "Характеристики отсутствуют"
+#~ msgstr "No characteristics"
+
+#~ msgid "Добавить отзыв"
+#~ msgstr "Add a review"
+
+#~ msgid "Отправить отзыв"
+#~ msgstr "Post a review"
+
+#~ msgid "Чтобы оставить отзыв, вам нужно авторизоваться"
+#~ msgstr "To leave a review you need to log in"
+
+#~ msgid "Купить"
+#~ msgstr "Buy"
+
+#~ msgid "Поздравляем"
+#~ msgstr "Congratulations"
+
+#~ msgid "Закрыть модальное окно"
+#~ msgstr "Close the modal window"
+
+#~ msgid "Товар успешно добавлен в корзину"
+#~ msgstr "The product has been successfully added to the cart"
+
+#~ msgid "Тэги"
+#~ msgstr "Tags"
+
+#~ msgid "Показать ещё"
+#~ msgstr "Show more"
+
+#~ msgid "Стоимость"
+#~ msgstr "Price"
+
+#~ msgid "Сейчас этот товар никто не продает"
+#~ msgstr "Now no one sells this product"
+
+#~ msgid "Загрузить товары"
+#~ msgstr "Upload products"
