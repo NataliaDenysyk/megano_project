@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-21 13:39+0000\n"
+"POT-Creation-Date: 2024-01-21 14:08+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -46,6 +46,7 @@ msgid "Тут можно изменить пароль"
 msgstr "Here you can change your password"
 
 #: authorization/forms.py:12
+#: templates/authorization/profile_update_form.html:75
 msgid "Введите пароль повторно"
 msgstr "Re-enter_your_password"
 
@@ -78,6 +79,7 @@ msgid "Имя"
 msgstr "Login"
 
 #: authorization/forms.py:168
+#: templates/authorization/profile_update_form.html:63
 msgid "Пароль"
 msgstr "Password"
 
@@ -101,7 +103,7 @@ msgstr "Personal account"
 msgid "Профиль"
 msgstr "Profile"
 
-#: authorization/mixins.py:17
+#: authorization/mixins.py:17 templates/authorization/profile_detail.html:43
 msgid "История заказов"
 msgstr "History of orders"
 
@@ -139,6 +141,7 @@ msgid "Имя магазина"
 msgstr "Name store"
 
 #: authorization/models.py:67 store/models.py:390
+#: templates/authorization/detailed_order_page.html:72
 msgid "Адрес"
 msgstr "Address"
 
@@ -215,6 +218,9 @@ msgid "Иконка"
 msgstr "Image"
 
 #: cart/models.py:16 cart/models.py:18 store/admin.py:244 store/models.py:413
+#: templates/authorization/detailed_order_page.html:11
+#: templates/authorization/history_orders.html:15
+#: templates/authorization/profile_detail.html:37
 msgid "Заказ"
 msgstr "Order"
 
@@ -1151,7 +1157,7 @@ msgstr "was not found"
 msgid "Сегодня:"
 msgstr "Today"
 
-#: templates/admin/base.html:10
+#: templates/admin/base.html:10 templates/admin/settings.html:13
 msgid "Настройки"
 msgstr "Settings"
 
@@ -1191,134 +1197,263 @@ msgstr "Upload JSON file"
 msgid "Статус выполнения импорта"
 msgstr "Import progress status"
 
-#~ msgid "Настройка времени кэширования"
-#~ msgstr "Cache time settings"
+#: templates/admin/settings.html:21
+msgid "Настройка времени кэширования"
+msgstr "Cache time settings"
 
-#~ msgid "Название магазина"
-#~ msgstr "Name of shop"
+#: templates/admin/settings.html:27
+msgid "Название магазина"
+msgstr "Name of shop"
 
-#~ msgid "Укажите новое название"
-#~ msgstr "Enter a new name"
+#: templates/admin/settings.html:33
+msgid "Укажите новое название"
+msgstr "Enter a new name"
 
-#~ msgid "Сменить"
-#~ msgstr "Change"
+#: templates/admin/settings.html:36
+msgid "Сменить"
+msgstr "Change"
 
-#~ msgid "Время кэширование Баннера"
-#~ msgstr "Banner caching time"
+#: templates/admin/settings.html:45
+msgid "Время кэширование Баннера"
+msgstr "Banner caching time"
 
-#~ msgid "Указывать в мин"
-#~ msgstr "Specify in min."
+#: templates/admin/settings.html:52 templates/admin/settings.html:71
+#: templates/admin/settings.html:90 templates/admin/settings.html:109
+#: templates/admin/settings.html:128
+msgid "Указывать в мин"
+msgstr "Specify in min."
 
-#~ msgid "Задать"
-#~ msgstr "Set"
+#: templates/admin/settings.html:55 templates/admin/settings.html:74
+#: templates/admin/settings.html:93 templates/admin/settings.html:112
+#: templates/admin/settings.html:131
+msgid "Задать"
+msgstr "Set"
 
-#~ msgid "Время кэширование Корзины"
-#~ msgstr "Cart caching time"
+#: templates/admin/settings.html:64
+msgid "Время кэширование Корзины"
+msgstr "Cart caching time"
 
-#~ msgid "Время кэширование деталей продукта"
-#~ msgstr "Product details caching time"
+#: templates/admin/settings.html:83
+msgid "Время кэширование деталей продукта"
+msgstr "Product details caching time"
 
-#~ msgid "Время кэширование деталей Продавца"
-#~ msgstr "Seller details caching time"
+#: templates/admin/settings.html:102
+msgid "Время кэширование деталей Продавца"
+msgstr "Seller details caching time"
 
-#~ msgid "Время кэширование Каталога"
-#~ msgstr "Product catalog caching time"
+#: templates/admin/settings.html:121
+msgid "Время кэширование Каталога"
+msgstr "Product catalog caching time"
 
-#~ msgid "Очистка кэша"
-#~ msgstr "Clear cache"
+#: templates/admin/settings.html:140
+msgid "Очистка кэша"
+msgstr "Clear cache"
 
-#~ msgid "Очистить весь кэш"
-#~ msgstr "Clear all cache"
+#: templates/admin/settings.html:143
+msgid "Очистить весь кэш"
+msgstr "Clear all cache"
 
-#~ msgid "Очистить"
-#~ msgstr "Clear"
+#: templates/admin/settings.html:146 templates/admin/settings.html:157
+#: templates/admin/settings.html:167 templates/admin/settings.html:177
+#: templates/admin/settings.html:187 templates/admin/settings.html:197
+msgid "Очистить"
+msgstr "Clear"
 
-#~ msgid "Очистить кэш Баннера"
-#~ msgstr "Clear banner cache"
+#: templates/admin/settings.html:153
+msgid "Очистить кэш Баннера"
+msgstr "Clear banner cache"
 
-#~ msgid "Очистить кэш Корзины"
-#~ msgstr "Clear cart cache"
+#: templates/admin/settings.html:163
+msgid "Очистить кэш Корзины"
+msgstr "Clear cart cache"
 
-#~ msgid "Очистить кэш Детализации продукта"
-#~ msgstr "Clear product details cache"
+#: templates/admin/settings.html:173
+msgid "Очистить кэш Детализации продукта"
+msgstr "Clear product details cache"
 
-#~ msgid "Очистить кэш Продавца"
-#~ msgstr "Clear seller cache"
+#: templates/admin/settings.html:183
+msgid "Очистить кэш Продавца"
+msgstr "Clear seller cache"
 
-#~ msgid "Очистить кэш Каталога продуктов"
-#~ msgstr "Clear product catalog cache"
+#: templates/admin/settings.html:193
+msgid "Очистить кэш Каталога продуктов"
+msgstr "Clear product catalog cache"
 
-#~ msgid "Навигация"
-#~ msgstr "Navigation"
+#: templates/authorization/about-seller.html:12
+msgid "About Megano"
+msgstr "About Megano"
 
-#~ msgid "Пожалуйста, авторизуйтесь"
-#~ msgstr "Please log in"
+#: templates/authorization/about-seller.html:15
+msgid "home"
+msgstr "home"
 
-#~ msgid "Дата заказа"
-#~ msgstr "Order date"
+#: templates/authorization/about-seller.html:17
+msgid "About Us"
+msgstr "About Us"
 
-#~ msgid "ФИО"
-#~ msgstr "Full name"
+#: templates/authorization/about-seller.html:32
+msgid "Shipping & Returns"
+msgstr "Shipping & Returns"
 
-#~ msgid "Телефон"
-#~ msgstr "Phone"
+#: templates/authorization/about-seller.html:33
+msgid "World wide shipping"
+msgstr "World wide shipping"
 
-#~ msgid "E-mail"
-#~ msgstr "E-mail"
+#: templates/authorization/about-seller.html:43
+msgid "Money Back"
+msgstr "Money Back"
 
-#~ msgid "Тип доставки"
-#~ msgstr "Delivery type"
+#: templates/authorization/about-seller.html:45
+msgid "Guaranted payments"
+msgstr "Guaranted payments"
 
-#~ msgid "Город"
-#~ msgstr "City"
+#: templates/authorization/about-seller.html:56
+msgid "Support Policy"
+msgstr "Support Policy"
 
-#~ msgid "Оплата"
-#~ msgstr "Payment"
+#: templates/authorization/about-seller.html:57
+msgid "Fast support team"
+msgstr "Fast support team"
 
-#~ msgid "Статус"
-#~ msgstr "Order status"
+#: templates/authorization/about-seller.html:67
+msgid "Quality Guarantee"
+msgstr "Quality Guarantee"
 
-#~ msgid "Оплата не прошла"
-#~ msgstr "Payment failed"
+#: templates/authorization/about-seller.html:68
+msgid "Best guaranted items"
+msgstr "Best guaranted items"
 
-#~ msgid "шт"
-#~ msgstr "PCS"
+#: templates/authorization/about-seller.html:78
+msgid "Phone"
+msgstr "Phone"
 
-#~ msgid "Итого"
-#~ msgstr "Total"
+#: templates/authorization/about-seller.html:109
+msgid "Follow Us"
+msgstr "Follow Us"
 
-#~ msgid "Оплатить"
-#~ msgstr "Pay"
+#: templates/authorization/about-seller.html:135
+msgid "Why Choose"
+msgstr "Why Choose"
 
-#~ msgid "от"
-#~ msgstr "dated"
+#: templates/authorization/about-seller.html:140
+msgid "Продавец пока не оставил описания"
+msgstr "The seller has not left a description yet"
 
-#~ msgid "Общая стоимость"
-#~ msgstr "Total cost"
+#: templates/authorization/about-seller.html:142
+msgid "Get Started"
+msgstr "Get Started"
 
-#~ msgid "У вас нет заказов"
-#~ msgstr "You have no orders"
+#: templates/authorization/about-seller.html:155
+msgid "Popular Products"
+msgstr "Popular Products"
 
-#~ msgid "Просмотров в истории пока нет"
-#~ msgstr "There are no views in history yet"
+#: templates/authorization/account.html:14
+msgid "Навигация"
+msgstr "Navigation"
 
-#~ msgid "Редактировать профиль"
-#~ msgstr "Edit profile"
+#: templates/authorization/account.html:34
+msgid "Пожалуйста, авторизуйтесь"
+msgstr "Please log in"
 
-#~ msgid "Аватар"
-#~ msgstr "Avatar"
+#: templates/authorization/detailed_order_page.html:27
+msgid "Дата заказа"
+msgstr "Order date"
 
-#~ msgid "Загрузить фото"
-#~ msgstr "Upload a photo"
+#: templates/authorization/detailed_order_page.html:33
+#: templates/authorization/profile_update_form.html:36
+msgid "ФИО"
+msgstr "Full name"
 
-#~ msgid "Тут_можно изменить пароль"
-#~ msgstr "Here_you_can_change_your_password"
+#: templates/authorization/detailed_order_page.html:44
+#: templates/authorization/profile_update_form.html:47
+msgid "Телефон"
+msgstr "Phone"
 
-#~ msgid "Подтверждение пароля"
-#~ msgstr "Password confirmation"
+#: templates/authorization/detailed_order_page.html:50
+msgid "E-mail"
+msgstr "E-mail"
 
-#~ msgid "Сохранить"
-#~ msgstr "Save"
+#: templates/authorization/detailed_order_page.html:58
+#: templates/authorization/history_orders.html:22
+#: templates/authorization/profile_detail.html:50
+msgid "Тип доставки"
+msgstr "Delivery type"
+
+#: templates/authorization/detailed_order_page.html:66
+msgid "Город"
+msgstr "City"
+
+#: templates/authorization/detailed_order_page.html:79
+#: templates/authorization/history_orders.html:28
+#: templates/authorization/profile_detail.html:56
+msgid "Оплата"
+msgstr "Payment"
+
+#: templates/authorization/detailed_order_page.html:85
+#: templates/authorization/history_orders.html:40
+#: templates/authorization/profile_detail.html:69
+msgid "Статус"
+msgstr "Order status"
+
+#: templates/authorization/detailed_order_page.html:92
+#: templates/authorization/history_orders.html:47
+msgid "Оплата не прошла"
+msgstr "Payment failed"
+
+#: templates/authorization/detailed_order_page.html:132
+msgid "шт"
+msgstr "PCS"
+
+#: templates/authorization/detailed_order_page.html:140
+msgid "Итого"
+msgstr "Total"
+
+#: templates/authorization/detailed_order_page.html:145
+msgid "Оплатить"
+msgstr "Pay"
+
+#: templates/authorization/history_orders.html:16
+#: templates/authorization/profile_detail.html:39
+msgid "от"
+msgstr "dated"
+
+#: templates/authorization/history_orders.html:34
+#: templates/authorization/profile_detail.html:63
+msgid "Общая стоимость"
+msgstr "Total cost"
+
+#: templates/authorization/history_orders.html:60
+#: templates/authorization/profile_detail.html:81
+msgid "У вас нет заказов"
+msgstr "You have no orders"
+
+#: templates/authorization/history_view.html:58
+msgid "Просмотров в истории пока нет"
+msgstr "There are no views in history yet"
+
+#: templates/authorization/profile_detail.html:23
+msgid "Редактировать профиль"
+msgstr "Edit profile"
+
+#: templates/authorization/profile_update_form.html:21
+msgid "Аватар"
+msgstr "Avatar"
+
+#: templates/authorization/profile_update_form.html:27
+msgid "Загрузить фото"
+msgstr "Upload a photo"
+
+#: templates/authorization/profile_update_form.html:67
+msgid "Тут_можно изменить пароль"
+msgstr "Here_you_can_change_your_password"
+
+#: templates/authorization/profile_update_form.html:70
+msgid "Подтверждение пароля"
+msgstr "Password confirmation"
+
+#: templates/authorization/profile_update_form.html:79
+msgid "Сохранить"
+msgstr "Save"
 
 #~ msgid "Подробнее"
 #~ msgstr "Detailed"

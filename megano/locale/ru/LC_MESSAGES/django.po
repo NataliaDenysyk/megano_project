@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-21 13:37+0000\n"
+"POT-Creation-Date: 2024-01-21 14:08+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -49,6 +49,7 @@ msgid "Тут можно изменить пароль"
 msgstr "Тут_можно_изменить_пароль"
 
 #: authorization/forms.py:12
+#: templates/authorization/profile_update_form.html:75
 msgid "Введите пароль повторно"
 msgstr "Введите_пароль_повторно"
 
@@ -81,6 +82,7 @@ msgid "Имя"
 msgstr "Логин"
 
 #: authorization/forms.py:168
+#: templates/authorization/profile_update_form.html:63
 msgid "Пароль"
 msgstr "Пароль"
 
@@ -104,7 +106,7 @@ msgstr "Личный кабинет"
 msgid "Профиль"
 msgstr "Профиль"
 
-#: authorization/mixins.py:17
+#: authorization/mixins.py:17 templates/authorization/profile_detail.html:43
 msgid "История заказов"
 msgstr "История заказов"
 
@@ -142,6 +144,7 @@ msgid "Имя магазина"
 msgstr "Имя магазина"
 
 #: authorization/models.py:67 store/models.py:390
+#: templates/authorization/detailed_order_page.html:72
 msgid "Адрес"
 msgstr "Адрес"
 
@@ -218,6 +221,9 @@ msgid "Иконка"
 msgstr "Иконка"
 
 #: cart/models.py:16 cart/models.py:18 store/admin.py:244 store/models.py:413
+#: templates/authorization/detailed_order_page.html:11
+#: templates/authorization/history_orders.html:15
+#: templates/authorization/profile_detail.html:37
 msgid "Заказ"
 msgstr "Заказ"
 
@@ -1155,7 +1161,7 @@ msgstr "не найден"
 msgid "Сегодня:"
 msgstr "Сегодня:"
 
-#: templates/admin/base.html:10
+#: templates/admin/base.html:10 templates/admin/settings.html:13
 msgid "Настройки"
 msgstr "Настройки"
 
@@ -1195,6 +1201,264 @@ msgstr "Загрузить JSON файл"
 msgid "Статус выполнения импорта"
 msgstr "Статус выполнения импорта"
 
+#: templates/admin/settings.html:21
+msgid "Настройка времени кэширования"
+msgstr "Настройка времени кэширования"
+
+#: templates/admin/settings.html:27
+msgid "Название магазина"
+msgstr "Название магазина"
+
+#: templates/admin/settings.html:33
+msgid "Укажите новое название"
+msgstr "Укажите новое название"
+
+#: templates/admin/settings.html:36
+msgid "Сменить"
+msgstr "Сменить"
+
+#: templates/admin/settings.html:45
+msgid "Время кэширование Баннера"
+msgstr "Время кэширование Баннера"
+
+#: templates/admin/settings.html:52 templates/admin/settings.html:71
+#: templates/admin/settings.html:90 templates/admin/settings.html:109
+#: templates/admin/settings.html:128
+msgid "Указывать в мин"
+msgstr "Указывать в мин"
+
+#: templates/admin/settings.html:55 templates/admin/settings.html:74
+#: templates/admin/settings.html:93 templates/admin/settings.html:112
+#: templates/admin/settings.html:131
+msgid "Задать"
+msgstr "Задать"
+
+#: templates/admin/settings.html:64
+msgid "Время кэширование Корзины"
+msgstr "Время кэширование Корзины"
+
+#: templates/admin/settings.html:83
+msgid "Время кэширование деталей продукта"
+msgstr "Время кэширование деталей продукта"
+
+#: templates/admin/settings.html:102
+msgid "Время кэширование деталей Продавца"
+msgstr "Время кэширование деталей Продавца"
+
+#: templates/admin/settings.html:121
+msgid "Время кэширование Каталога"
+msgstr "Время кэширование Каталога"
+
+#: templates/admin/settings.html:140
+msgid "Очистка кэша"
+msgstr "Очистка кэша"
+
+#: templates/admin/settings.html:143
+msgid "Очистить весь кэш"
+msgstr "Очистить весь кэш"
+
+#: templates/admin/settings.html:146 templates/admin/settings.html:157
+#: templates/admin/settings.html:167 templates/admin/settings.html:177
+#: templates/admin/settings.html:187 templates/admin/settings.html:197
+msgid "Очистить"
+msgstr "Очистить"
+
+#: templates/admin/settings.html:153
+msgid "Очистить кэш Баннера"
+msgstr "Очистить кэш Баннера"
+
+#: templates/admin/settings.html:163
+msgid "Очистить кэш Корзины"
+msgstr "Очистить кэш Корзины"
+
+#: templates/admin/settings.html:173
+msgid "Очистить кэш Детализации продукта"
+msgstr "Очистить кэш Детализации продукта"
+
+#: templates/admin/settings.html:183
+msgid "Очистить кэш Продавца"
+msgstr "Очистить кэш Продавца"
+
+#: templates/admin/settings.html:193
+msgid "Очистить кэш Каталога продуктов"
+msgstr "Очистить кэш Каталога продуктов"
+
+#: templates/authorization/about-seller.html:12
+msgid "About Megano"
+msgstr "О Мегано"
+
+#: templates/authorization/about-seller.html:15
+msgid "home"
+msgstr "домой"
+
+#: templates/authorization/about-seller.html:17
+msgid "About Us"
+msgstr "О нас"
+
+#: templates/authorization/about-seller.html:32
+msgid "Shipping & Returns"
+msgstr "Доставка и возврат"
+
+#: templates/authorization/about-seller.html:33
+msgid "World wide shipping"
+msgstr "Доставка по всему миру"
+
+#: templates/authorization/about-seller.html:43
+msgid "Money Back"
+msgstr "Возврат денег"
+
+#: templates/authorization/about-seller.html:45
+msgid "Guaranted payments"
+msgstr "Гарантированные выплаты"
+
+#: templates/authorization/about-seller.html:56
+msgid "Support Policy"
+msgstr "Политика поддержки"
+
+#: templates/authorization/about-seller.html:57
+msgid "Fast support team"
+msgstr "Быстрая команда поддержки"
+
+#: templates/authorization/about-seller.html:67
+msgid "Quality Guarantee"
+msgstr "Гарантия качества"
+
+#: templates/authorization/about-seller.html:68
+msgid "Best guaranted items"
+msgstr "Товары с лучшей гарантией"
+
+#: templates/authorization/about-seller.html:78
+msgid "Phone"
+msgstr "Телефон"
+
+#: templates/authorization/about-seller.html:109
+msgid "Follow Us"
+msgstr "Подписывайтесь на нас"
+
+#: templates/authorization/about-seller.html:135
+msgid "Why Choose"
+msgstr "Почему выбирают"
+
+#: templates/authorization/about-seller.html:140
+msgid "Продавец пока не оставил описания"
+msgstr "Продавец пока не оставил описания"
+
+#: templates/authorization/about-seller.html:142
+msgid "Get Started"
+msgstr "Начать"
+
+#: templates/authorization/about-seller.html:155
+msgid "Popular Products"
+msgstr "Популярные продукты"
+
+#: templates/authorization/account.html:14
+msgid "Навигация"
+msgstr "Навигация"
+
+#: templates/authorization/account.html:34
+msgid "Пожалуйста, авторизуйтесь"
+msgstr "Пожалуйста, авторизуйтесь"
+
+#: templates/authorization/detailed_order_page.html:27
+msgid "Дата заказа"
+msgstr "Дата заказа"
+
+#: templates/authorization/detailed_order_page.html:33
+#: templates/authorization/profile_update_form.html:36
+msgid "ФИО"
+msgstr "ФИО"
+
+#: templates/authorization/detailed_order_page.html:44
+#: templates/authorization/profile_update_form.html:47
+msgid "Телефон"
+msgstr "Телефон"
+
+#: templates/authorization/detailed_order_page.html:50
+msgid "E-mail"
+msgstr "E-mail"
+
+#: templates/authorization/detailed_order_page.html:58
+#: templates/authorization/history_orders.html:22
+#: templates/authorization/profile_detail.html:50
+msgid "Тип доставки"
+msgstr "Тип доставки"
+
+#: templates/authorization/detailed_order_page.html:66
+msgid "Город"
+msgstr "Город"
+
+#: templates/authorization/detailed_order_page.html:79
+#: templates/authorization/history_orders.html:28
+#: templates/authorization/profile_detail.html:56
+msgid "Оплата"
+msgstr "Оплата"
+
+#: templates/authorization/detailed_order_page.html:85
+#: templates/authorization/history_orders.html:40
+#: templates/authorization/profile_detail.html:69
+msgid "Статус"
+msgstr "Статус"
+
+#: templates/authorization/detailed_order_page.html:92
+#: templates/authorization/history_orders.html:47
+msgid "Оплата не прошла"
+msgstr "Оплата не прошла"
+
+#: templates/authorization/detailed_order_page.html:132
+msgid "шт"
+msgstr "шт"
+
+#: templates/authorization/detailed_order_page.html:140
+msgid "Итого"
+msgstr "Итого"
+
+#: templates/authorization/detailed_order_page.html:145
+msgid "Оплатить"
+msgstr "Оплатить"
+
+#: templates/authorization/history_orders.html:16
+#: templates/authorization/profile_detail.html:39
+msgid "от"
+msgstr "от"
+
+#: templates/authorization/history_orders.html:34
+#: templates/authorization/profile_detail.html:63
+msgid "Общая стоимость"
+msgstr "Общая стоимость"
+
+#: templates/authorization/history_orders.html:60
+#: templates/authorization/profile_detail.html:81
+msgid "У вас нет заказов"
+msgstr "У вас нет заказов"
+
+#: templates/authorization/history_view.html:58
+msgid "Просмотров в истории пока нет"
+msgstr "Просмотров в истории пока нет"
+
+#: templates/authorization/profile_detail.html:23
+msgid "Редактировать профиль"
+msgstr "Редактировать профиль"
+
+#: templates/authorization/profile_update_form.html:21
+msgid "Аватар"
+msgstr "Аватар"
+
+#: templates/authorization/profile_update_form.html:27"
+msgid "Загрузить фото"
+msgstr "Загрузить фото"
+
+#: templates/authorization/profile_update_form.html:67
+msgid "Тут_можно изменить пароль"
+msgstr "Тут_можно_изменить_пароль"
+
+#: templates/authorization/profile_update_form.html:70
+msgid "Подтверждение пароля"
+msgstr "Подтверждение пароля"
+
+#: templates/authorization/profile_update_form.html:79
+msgid "Сохранить"
+msgstr "Сохранить"
+
 #~ msgid "Все категории"
 #~ msgstr "Все категории"
 
@@ -1209,9 +1473,6 @@ msgstr "Статус выполнения импорта"
 
 #~ msgid "Тип"
 #~ msgstr "Тип"
-
-#~ msgid "Добавить в корзину"
-#~ msgstr "Добавить в корзину"
 
 #~ msgid "Выход выполнен"
 #~ msgstr "Выход выполнен"
@@ -1279,9 +1540,6 @@ msgstr "Статус выполнения импорта"
 #~ msgid "Популярные тэги"
 #~ msgstr "Популярные тэги"
 
-#~ msgid "Сортировать по"
-#~ msgstr "Сортировать по"
-
 #~ msgid "Популярности"
 #~ msgstr "Популярности"
 
@@ -1324,9 +1582,6 @@ msgstr "Статус выполнения импорта"
 #~ msgid "Шаг 3. Способ оплаты"
 #~ msgstr "Шаг 3. Способ оплаты"
 
-#~ msgid "Шаг 4. Подтверждение заказа"
-#~ msgstr "Шаг 4. Подтверждение заказа"
-
 #~ msgid "Заказов пока нет"
 #~ msgstr "Заказов пока нет"
 
@@ -1357,9 +1612,6 @@ msgstr "Статус выполнения импорта"
 #~ msgid "Ждем подтверждения оплаты платежной системой"
 #~ msgstr "Ждем подтверждения оплаты платежной системой"
 
-#~ msgid "Описания пока нет"
-#~ msgstr "Описания пока нет"
-
 #~ msgid "Характеристики отсутствуют"
 #~ msgstr "Характеристики отсутствуют"
 
@@ -1389,9 +1641,6 @@ msgstr "Статус выполнения импорта"
 
 #~ msgid "Показать ещё"
 #~ msgstr "Показать ещё"
-
-#~ msgid "Стоимость"
-#~ msgstr "Стоимость"
 
 #~ msgid "Сейчас этот товар никто не продает"
 #~ msgstr "Сейчас этот товар никто не продает"
