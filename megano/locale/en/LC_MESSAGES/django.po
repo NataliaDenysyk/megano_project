@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-21 12:44+0000\n"
+"POT-Creation-Date: 2024-01-21 13:09+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -53,11 +53,11 @@ msgstr "Re-enter_your_password"
 msgid "Email адрес должен быть уникальным"
 msgstr "Email must be unique"
 
-#: authorization/forms.py:73 authorization/forms.py:194 store/forms.py:128
+#: authorization/forms.py:73 authorization/forms.py:196 store/forms.py:128
 msgid "Пароли не совпадают"
 msgstr "Password mismatch"
 
-#: authorization/forms.py:75 authorization/forms.py:196 store/forms.py:130
+#: authorization/forms.py:75 authorization/forms.py:198 store/forms.py:130
 msgid "Пароль должен содержать не менее 6 символов"
 msgstr "The password must contain at least 8 characters"
 
@@ -89,7 +89,7 @@ msgstr "Repeat password"
 msgid "Такой логин уже существует"
 msgstr "This login already exists"
 
-#: authorization/forms.py:188 store/forms.py:122
+#: authorization/forms.py:190 store/forms.py:122
 msgid "Данный email уже существует."
 msgstr "This email already exists"
 
@@ -205,10 +205,6 @@ msgstr "The data is incorrect, try agan"
 #: authorization/views.py:241
 msgid "Указанный email уже зарегистрирован"
 msgstr "This email already exists"
-
-#: authorization/views.py:257
-msgid "Этот username уже используется, выберите другой"
-msgstr "This username is already in use, please select another one"
 
 #: cart/admin.py:39 store/admin.py:439 store/models.py:170 store/models.py:293
 msgid "Товары"
@@ -866,6 +862,14 @@ msgstr "Email"
 msgid "Такой телефон уже существует"
 msgstr "This phone already exists"
 
+#: store/forms.py:172
+msgid "json_file"
+msgstr "Json file"
+
+#: store/forms.py:173
+msgid "email"
+msgstr "E-mail"
+
 #: store/management/commands/upload_file.py:25
 msgid "Указывает имя файла"
 msgstr "Specifies the file name"
@@ -1082,64 +1086,64 @@ msgstr "In progress"
 msgid "Не было ни одного импорта"
 msgstr "There were no imports"
 
-#: store/views.py:155
+#: store/views.py:154
 msgid "кэш полностью очищен."
 msgstr "Cache is completely cleared"
 
-#: store/views.py:176
+#: store/views.py:175
 msgid "кэш баннера очищен."
 msgstr "Banner cache cleared"
 
-#: store/views.py:197
+#: store/views.py:196
 msgid "кэш корзины очищен."
 msgstr "Cart cache cleared"
 
-#: store/views.py:218
+#: store/views.py:217
 msgid "кэш продукта очищен."
 msgstr "Product cash cleared"
 
-#: store/views.py:238
+#: store/views.py:237
 msgid "кэш продавца очищен."
 msgstr "Seller cash cleared"
 
-#: store/views.py:259
+#: store/views.py:258
 msgid "кэш каталога очищен."
 msgstr "Catalog cache cleared"
 
-#: store/views.py:281
+#: store/views.py:280
 msgid "Название магазина успешно изменено"
 msgstr "Store name successfully changed"
 
-#: store/views.py:283
+#: store/views.py:282
 msgid "Поле не должно быть пустым"
 msgstr "Pauline should be empty"
 
-#: store/views.py:300
+#: store/views.py:299
 msgid "Время кэширование Баннера установлено"
 msgstr "The Banner caching time is set"
 
-#: store/views.py:302 store/views.py:321 store/views.py:340 store/views.py:359
-#: store/views.py:378
+#: store/views.py:301 store/views.py:320 store/views.py:339 store/views.py:358
+#: store/views.py:377
 msgid "Поле не должно быть пустым или содержать только цифры"
 msgstr "The field must not be empty or contain only numbers"
 
-#: store/views.py:319
+#: store/views.py:318
 msgid "Время кэширование Корзины установлено"
 msgstr "The Cart caching time is set"
 
-#: store/views.py:338
+#: store/views.py:337
 msgid "Время кэширование детализации продукта установлено"
 msgstr "Product details caching time is set"
 
-#: store/views.py:357 store/views.py:376
+#: store/views.py:356 store/views.py:375
 msgid "Время кэширование детализации продавца установлено"
 msgstr "Seller details caching time is set"
 
-#: store/views.py:622
+#: store/views.py:621
 msgid "Заказ с номером"
 msgstr "Order with number"
 
-#: store/views.py:623
+#: store/views.py:622
 msgid "не найден"
 msgstr "was not found"
 
@@ -1171,365 +1175,3 @@ msgstr "Django site admin"
 msgid "Django"
 msgstr "Django"
 
-#~ msgid "Сегодня:"
-#~ msgstr "Today"
-
-#~ msgid "Настройки"
-#~ msgstr "Settings"
-
-#~ msgid "Настройка времени кэширования"
-#~ msgstr "Cache time settings"
-
-#~ msgid "Название магазина"
-#~ msgstr "Name of shop"
-
-#~ msgid "Укажите новое название"
-#~ msgstr "Enter a new name"
-
-#~ msgid "Сменить"
-#~ msgstr "Change"
-
-#~ msgid "Время кэширование Баннера"
-#~ msgstr "Banner caching time"
-
-#~ msgid "Задать"
-#~ msgstr "Set"
-
-#~ msgid "Время кэширование Корзины"
-#~ msgstr "Cart caching time"
-
-#~ msgid "Время кэширование деталей продукта"
-#~ msgstr "Product details caching time"
-
-#~ msgid "Время кэширование деталей Продавца"
-#~ msgstr "Seller details caching time"
-
-#~ msgid "Время кэширование Каталога"
-#~ msgstr "Product catalog caching time"
-
-#~ msgid "Очистка кэша"
-#~ msgstr "Clear cache"
-
-#~ msgid "Очистить весь кэш"
-#~ msgstr "Clear all cache"
-
-#~ msgid "Очистить"
-#~ msgstr "Clear"
-
-#~ msgid "Очистить кэш Баннера"
-#~ msgstr "Clear banner cache"
-
-#~ msgid "Очистить кэш Корзины"
-#~ msgstr "Clear cart cache"
-
-#~ msgid "Очистить кэш Детализации продукта"
-#~ msgstr "Clear product details cache"
-
-#~ msgid "Очистить кэш Продавца"
-#~ msgstr "Clear seller cache"
-
-#~ msgid "Очистить кэш Каталога продуктов"
-#~ msgstr "Clear product catalog cache"
-
-#~ msgid "Навигация"
-#~ msgstr "Navigation"
-
-#~ msgid "Пожалуйста, авторизуйтесь"
-#~ msgstr "Please log in"
-
-#~ msgid "Дата заказа"
-#~ msgstr "Order date"
-
-#~ msgid "ФИО"
-#~ msgstr "Full name"
-
-#~ msgid "Телефон"
-#~ msgstr "Phone"
-
-#~ msgid "E-mail"
-#~ msgstr "E-mail"
-
-#~ msgid "Тип доставки"
-#~ msgstr "Delivery type"
-
-#~ msgid "Город"
-#~ msgstr "City"
-
-#~ msgid "Оплата"
-#~ msgstr "Payment"
-
-#~ msgid "Статус"
-#~ msgstr "Order status"
-
-#~ msgid "Оплата не прошла"
-#~ msgstr "Payment failed"
-
-#~ msgid "шт"
-#~ msgstr "PCS"
-
-#~ msgid "Итого"
-#~ msgstr "Total"
-
-#~ msgid "Оплатить"
-#~ msgstr "Pay"
-
-#~ msgid "от"
-#~ msgstr "dated"
-
-#~ msgid "Общая стоимость"
-#~ msgstr "Total cost"
-
-#~ msgid "У вас нет заказов"
-#~ msgstr "You have no orders"
-
-#~ msgid "Просмотров в истории пока нет"
-#~ msgstr "There are no views in history yet"
-
-#~ msgid "Редактировать профиль"
-#~ msgstr "Edit profile"
-
-#~ msgid "Аватар"
-#~ msgstr "Avatar"
-
-#~ msgid "Загрузить фото"
-#~ msgstr "Upload a photo"
-
-#~ msgid "Тут_можно изменить пароль"
-#~ msgstr "Here_you_can_change_your_password"
-
-#~ msgid "Подтверждение пароля"
-#~ msgstr "Password confirmation"
-
-#~ msgid "Сохранить"
-#~ msgstr "Save"
-
-#~ msgid "Подробнее"
-#~ msgstr "Detailed"
-
-#~ msgid "Главная"
-#~ msgstr "Main"
-
-#~ msgid "Каталог"
-#~ msgstr "Catalog"
-
-#~ msgid "Сравнение"
-#~ msgstr "Comparison"
-
-#~ msgid "Контакты"
-#~ msgstr "Contacts"
-
-#~ msgid "Описание страницы"
-#~ msgstr "Page description"
-
-#~ msgid "Вход"
-#~ msgstr "Login"
-
-#~ msgid "Регистрация "
-#~ msgstr "Registration"
-
-#~ msgid "Личный кабинет "
-#~ msgstr "Personal account"
-
-#~ msgid "Выход"
-#~ msgstr "Out"
-
-#~ msgid "Административный раздел"
-#~ msgstr "Administrative section"
-
-#~ msgid "Показать навигацию"
-#~ msgstr "Show navigation"
-
-#~ msgid "Все категории"
-#~ msgstr "All category"
-
-#~ msgid "Поиск"
-#~ msgstr "Search"
-
-#~ msgid "Значение"
-#~ msgstr "Value"
-
-#~ msgid "Общие параметры"
-#~ msgstr "Common parameters"
-
-#~ msgid "Тип"
-#~ msgstr "Type"
-
-#~ msgid "Добавить в корзину"
-#~ msgstr "Add to cart"
-
-#~ msgid "Выход выполнен"
-#~ msgstr "Exit completed"
-
-#~ msgid "Нажмите сюда, чтобы войти снова"
-#~ msgstr "Click here to log in again"
-
-#~ msgid "Войти"
-#~ msgstr "In"
-
-#~ msgid "Забыли пароль"
-#~ msgstr "Forgot your password"
-
-#~ msgid "Регистрация"
-#~ msgstr "Registration"
-
-#~ msgid "The password has been changed"
-#~ msgstr "The password has been changed"
-
-#~ msgid "log in again"
-#~ msgstr "log in again"
-
-#~ msgid "Please enter (and confirm) your new password"
-#~ msgstr "Please enter (and confirm) your new password"
-
-#~ msgid "New password"
-#~ msgstr "New password"
-
-#~ msgid "Confirm password"
-#~ msgstr "Confirm password"
-
-#~ msgid "Change my password"
-#~ msgstr "Change my password"
-
-#~ msgid ""
-#~ "Мы отправили вам электронное письмо с инструкциями по установке пароля"
-#~ msgstr ""
-#~ "We've emailed you instructions for setting your password. If they haven't "
-#~ "arrived in a few minutes, check your spam folder"
-
-#~ msgid "Reset password"
-#~ msgstr "Reset password"
-
-#~ msgid "Зарегистрироваться"
-#~ msgstr "Зарегистрироваться"
-
-#~ msgid "Вы уже зарегистрированы и авторизованы"
-#~ msgstr "You are already registered and logged in"
-
-#~ msgid "Показать"
-#~ msgstr "Show"
-
-#~ msgid "Оформить заказ"
-#~ msgstr "Checkout"
-
-#~ msgid "Корзина пуста"
-#~ msgstr "Cart is empty"
-
-#~ msgid "Не в продаже"
-#~ msgstr "Out of stock"
-
-#~ msgid "Фильтр"
-#~ msgstr "filter"
-
-#~ msgid "Популярные тэги"
-#~ msgstr "Popular tags"
-
-#~ msgid "Популярности"
-#~ msgstr "Popularity"
-
-#~ msgid "Отзывам"
-#~ msgstr "Review"
-
-#~ msgid "Новизне"
-#~ msgstr "Novelty"
-
-#~ msgid "Блог"
-#~ msgstr "Blog"
-
-#~ msgid "Предложение дня"
-#~ msgstr "Offer of the day"
-
-#~ msgid "Часы"
-#~ msgstr "Hours"
-
-#~ msgid "Минуты"
-#~ msgstr "Minutes"
-
-#~ msgid "Секунды"
-#~ msgstr "Seconds"
-
-#~ msgid "Популярные товары"
-#~ msgstr "Popular products"
-
-#~ msgid "Горячие предложения"
-#~ msgstr "Hot deals"
-
-#~ msgid "Шаг 1. Параметры пользователя"
-#~ msgstr "Step 1. User parameters"
-
-#~ msgid "Шаг 2. Способ доставки"
-#~ msgstr "Step 2. Delivery method"
-
-#~ msgid "Шаг 3. Способ оплаты"
-#~ msgstr "Step 3. Payment method"
-
-#~ msgid "Шаг 4. Подтверждение заказа"
-#~ msgstr "Step 4. Order confirmation"
-
-#~ msgid "Заказов пока нет"
-#~ msgstr "There are no orders yet"
-
-#~ msgid "Дальше"
-#~ msgstr "Further"
-
-#~ msgid "Назад"
-#~ msgstr "Further back"
-
-#~ msgid "Я уже зарегистрирован"
-#~ msgstr "I'm already registered"
-
-#~ msgid "уже оплачен"
-#~ msgstr "already paid"
-
-#~ msgid "Номер карты"
-#~ msgstr "Card number"
-
-#~ msgid "Номер счета"
-#~ msgstr "Account number"
-
-#~ msgid "Сгенерировать случайный счет"
-#~ msgstr "Generate random score"
-
-#~ msgid "Ожидание оплаты"
-#~ msgstr "Waiting for payment"
-
-#~ msgid "Ждем подтверждения оплаты платежной системой"
-#~ msgstr "We are waiting for payment confirmation from the payment system"
-
-#~ msgid "Описания пока нет"
-#~ msgstr "No description yet"
-
-#~ msgid "Характеристики отсутствуют"
-#~ msgstr "No characteristics"
-
-#~ msgid "Добавить отзыв"
-#~ msgstr "Add a review"
-
-#~ msgid "Отправить отзыв"
-#~ msgstr "Post a review"
-
-#~ msgid "Чтобы оставить отзыв, вам нужно авторизоваться"
-#~ msgstr "To leave a review you need to log in"
-
-#~ msgid "Купить"
-#~ msgstr "Buy"
-
-#~ msgid "Поздравляем"
-#~ msgstr "Congratulations"
-
-#~ msgid "Закрыть модальное окно"
-#~ msgstr "Close the modal window"
-
-#~ msgid "Товар успешно добавлен в корзину"
-#~ msgstr "The product has been successfully added to the cart"
-
-#~ msgid "Тэги"
-#~ msgstr "Tags"
-
-#~ msgid "Показать ещё"
-#~ msgstr "Show more"
-
-#~ msgid "Стоимость"
-#~ msgstr "Price"
-
-#~ msgid "Сейчас этот товар никто не продает"
-#~ msgstr "Now no one sells this product"

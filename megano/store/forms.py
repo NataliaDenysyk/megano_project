@@ -169,5 +169,5 @@ class JSONImportForm(forms.Form):
     Вьюшка импорта JSON файлов
     """
 
-    json_file = MultiFileField(min_num=1, max_num=10)
-    email = forms.EmailField()
+    json_file = MultiFileField(label=_('json_file'), min_num=1, max_num=10)
+    email = forms.EmailField(label=_('email'))
