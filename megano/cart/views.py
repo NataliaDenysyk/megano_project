@@ -18,6 +18,7 @@ class CartListView(TemplateView):
         context.update(
             {
                 'carts': Cart(self.request),
+                'offers': Offer.objects.all(),
                 'total_price': discount.get_priority_discount(cart=Cart(self.request))
             }
         )
