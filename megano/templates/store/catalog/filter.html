@@ -1,7 +1,10 @@
+{% load i18n static %}
 {% load get_param_tags %}
+
+
 <div class="Section-columnSection">
   <header class="Section-header">
-    <strong class="Section-title">Фильтр
+    <strong class="Section-title">{% translate 'Фильтр' %}
     </strong>
   </header>
   <div class="Section-columnContent">
@@ -9,7 +12,7 @@
       <div class="form-group">
         <div class="range Section-columnRange">
           {{ filter.range }}
-          <div class="range-price">Цена:&#32;
+          <div class="range-price">{% translate 'Цена' %}:&#32;
             <div class="rangePrice">
             </div>
           </div>
@@ -36,7 +39,7 @@
       <div class="form-group">
         <div class="buttons">
           <button type="submit" class="btn btn_square btn_dark btn_narrow">
-            Фильтр
+            {% translate 'Фильтр' %}
           </button>
         </div>
       </div>
@@ -45,7 +48,7 @@
 </div>
 <div class="Section-columnSection">
   <header class="Section-header">
-    <strong class="Section-title">Популярные тэги</strong>
+    <strong class="Section-title">{% translate 'Популярные тэги' %}</strong>
   </header>
   <div class="Section-columnContent">
     <div class="buttons">

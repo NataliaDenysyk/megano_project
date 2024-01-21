@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-21 15:01+0000\n"
+"POT-Creation-Date: 2024-01-21 15:07+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -836,6 +836,10 @@ msgid "Не учитывать"
 msgstr "Ignore"
 
 #: store/filters.py:35 store/models.py:203
+#: templates/store/catalog/filter.html:15
+#: templates/store/catalog/sorting.html:25
+#: templates/store/catalog/sorting.html:28
+#: templates/store/catalog/sorting.html:31
 msgid "Цена"
 msgstr "Price"
 
@@ -1601,6 +1605,41 @@ msgstr "Зарегистрироваться"
 msgid "Вы уже зарегистрированы и авторизованы"
 msgstr "You are already registered and logged in"
 
+#: templates/store/catalog/catalog.html:43
+#: templates/store/catalog/catalog.html:64
+msgid "Нет в продаже"
+msgstr "Out of stock"
+
+#: templates/store/catalog/filter.html:7 templates/store/catalog/filter.html:42
+msgid "Фильтр"
+msgstr "filter"
+
+#: templates/store/catalog/filter.html:51
+msgid "Популярные тэги"
+msgstr "Popular tags"
+
+#: templates/store/catalog/sorting.html:7
+msgid "Сортировать по"
+msgstr "Sort by"
+
+#: templates/store/catalog/sorting.html:14
+#: templates/store/catalog/sorting.html:17
+#: templates/store/catalog/sorting.html:20
+msgid "Популярности"
+msgstr "Popularity"
+
+#: templates/store/catalog/sorting.html:36
+#: templates/store/catalog/sorting.html:39
+#: templates/store/catalog/sorting.html:42
+msgid "Отзывам"
+msgstr "Review"
+
+#: templates/store/catalog/sorting.html:46
+#: templates/store/catalog/sorting.html:49
+#: templates/store/catalog/sorting.html:52
+msgid "Новизне"
+msgstr "Novelty"
+
 #~ msgid "Показать"
 #~ msgstr "Show"
 
@@ -1609,27 +1648,6 @@ msgstr "You are already registered and logged in"
 
 #~ msgid "Корзина пуста"
 #~ msgstr "Cart is empty"
-
-#~ msgid "Нет в продаже"
-#~ msgstr "Out of stock"
-
-#~ msgid "Фильтр"
-#~ msgstr "filter"
-
-#~ msgid "Популярные тэги"
-#~ msgstr "Popular tags"
-
-#~ msgid "Сортировать по"
-#~ msgstr "Sort by"
-
-#~ msgid "Популярности"
-#~ msgstr "Popularity"
-
-#~ msgid "Отзывам"
-#~ msgstr "Review"
-
-#~ msgid "Новизне"
-#~ msgstr "Novelty"
 
 #~ msgid "Блог"
 #~ msgstr "Blog"

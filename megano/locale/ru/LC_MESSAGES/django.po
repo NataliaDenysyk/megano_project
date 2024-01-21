@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-21 15:02+0000\n"
+"POT-Creation-Date: 2024-01-21 15:07+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -840,6 +840,10 @@ msgid "Не учитывать"
 msgstr "Не учитывать"
 
 #: store/filters.py:35 store/models.py:203
+#: templates/store/catalog/filter.html:15
+#: templates/store/catalog/sorting.html:25
+#: templates/store/catalog/sorting.html:28
+#: templates/store/catalog/sorting.html:31
 msgid "Цена"
 msgstr "Цена"
 
@@ -1595,7 +1599,7 @@ msgstr ""
 
 #: templates/registration/password_reset_form.html:9
 msgid "Reset password"
-msgstr "Сброс пароль"
+msgstr "Сбросить пароль"
 
 #: templates/registration/register.html:30
 msgid "Зарегистрироваться"
@@ -1605,6 +1609,41 @@ msgstr "Зарегистрироваться"
 msgid "Вы уже зарегистрированы и авторизованы"
 msgstr "Вы уже зарегистрированы и авторизованы"
 
+#: templates/store/catalog/catalog.html:43
+#: templates/store/catalog/catalog.html:64
+msgid "Нет в продаже"
+msgstr "Не в продаже"
+
+#: templates/store/catalog/filter.html:7 templates/store/catalog/filter.html:42
+msgid "Фильтр"
+msgstr "Фильтр"
+
+#: templates/store/catalog/filter.html:51
+msgid "Популярные тэги"
+msgstr "Популярные тэги"
+
+#: templates/store/catalog/sorting.html:7
+msgid "Сортировать по"
+msgstr "Сортировать по"
+
+#: templates/store/catalog/sorting.html:14
+#: templates/store/catalog/sorting.html:17
+#: templates/store/catalog/sorting.html:20
+msgid "Популярности"
+msgstr "Популярности"
+
+#: templates/store/catalog/sorting.html:36
+#: templates/store/catalog/sorting.html:39
+#: templates/store/catalog/sorting.html:42
+msgid "Отзывам"
+msgstr "Отзывам"
+
+#: templates/store/catalog/sorting.html:46
+#: templates/store/catalog/sorting.html:49
+#: templates/store/catalog/sorting.html:52
+msgid "Новизне"
+msgstr "Новизне"
+
 #~ msgid "Показать"
 #~ msgstr "Показать"
 
@@ -1613,24 +1652,6 @@ msgstr "Вы уже зарегистрированы и авторизованы
 
 #~ msgid "Корзина пуста"
 #~ msgstr "Корзина пуста"
-
-#~ msgid "Нет в продаже"
-#~ msgstr "Не в продаже"
-
-#~ msgid "Фильтр"
-#~ msgstr "Фильтр"
-
-#~ msgid "Популярные тэги"
-#~ msgstr "Популярные тэги"
-
-#~ msgid "Популярности"
-#~ msgstr "Популярности"
-
-#~ msgid "Отзывам"
-#~ msgstr "Отзыв"
-
-#~ msgid "Новизне"
-#~ msgstr "Новизне"
 
 #~ msgid "Блог"
 #~ msgstr "Блог"
