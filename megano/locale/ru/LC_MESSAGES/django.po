@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-21 14:43+0000\n"
+"POT-Creation-Date: 2024-01-21 14:56+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -590,6 +590,7 @@ msgstr "нет на складе"
 
 #: services/check_count_product.py:29 services/check_count_product.py:34
 #: services/check_count_product.py:46 services/services.py:867
+#: templates/compare/compare_error.html:6 templates/compare/compare_none.html:6
 msgid "Ошибка"
 msgstr "Ошибка"
 
@@ -826,6 +827,7 @@ msgid "д."
 msgstr " д."
 
 #: store/filters.py:16 store/filters.py:66
+#: templates/compare/compare_products.html:29
 msgid "Характеристика"
 msgstr "Характеристика"
 
@@ -1520,14 +1522,25 @@ msgstr "Все категории"
 msgid "Поиск"
 msgstr "Поиск"
 
-#~ msgid "Значение"
-#~ msgstr "Значение"
+#: templates/compare/compare_products.html:30
+msgid "Значение"
+msgstr "Значение"
 
-#~ msgid "Общие параметры"
-#~ msgstr "Общие параметры"
+#: templates/compare/compare_products.html:33
+msgid "Общие параметры"
+msgstr "Общие параметры"
 
-#~ msgid "Тип"
-#~ msgstr "Тип"
+#: templates/compare/compare_products.html:37
+msgid "Тип"
+msgstr "Тип"
+
+#: templates/compare/compare_products.html:71
+msgid "Добавить в корзину"
+msgstr "Добавить в корзину"
+
+#: templates/compare/compare_products.html:82
+msgid "Очистить сравнение"
+msgstr "Очистить сравнение"
 
 #~ msgid "Выход выполнен"
 #~ msgstr "Выход выполнен"
@@ -1666,9 +1679,6 @@ msgstr "Поиск"
 
 #~ msgid "Характеристики отсутствуют"
 #~ msgstr "Характеристики отсутствуют"
-
-#~ msgid "Добавить отзыв"
-#~ msgstr "Добавить отзыв"
 
 #~ msgid "Отправить отзыв"
 #~ msgstr "Отправить отзыв"

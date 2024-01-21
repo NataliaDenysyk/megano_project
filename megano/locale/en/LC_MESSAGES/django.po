@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-21 14:43+0000\n"
+"POT-Creation-Date: 2024-01-21 14:56+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -587,6 +587,7 @@ msgstr "not in stock"
 
 #: services/check_count_product.py:29 services/check_count_product.py:34
 #: services/check_count_product.py:46 services/services.py:867
+#: templates/compare/compare_error.html:6 templates/compare/compare_none.html:6
 msgid "Ошибка"
 msgstr "Error"
 
@@ -822,6 +823,7 @@ msgid "д."
 msgstr " d."
 
 #: store/filters.py:16 store/filters.py:66
+#: templates/compare/compare_products.html:29
 msgid "Характеристика"
 msgstr "Characteristic"
 
@@ -1516,17 +1518,25 @@ msgstr "All category"
 msgid "Поиск"
 msgstr "Search"
 
-#~ msgid "Значение"
-#~ msgstr "Value"
+#: templates/compare/compare_products.html:30
+msgid "Значение"
+msgstr "Value"
 
-#~ msgid "Общие параметры"
-#~ msgstr "Common parameters"
+#: templates/compare/compare_products.html:33
+msgid "Общие параметры"
+msgstr "Common parameters"
 
-#~ msgid "Тип"
-#~ msgstr "Type"
+#: templates/compare/compare_products.html:37
+msgid "Тип"
+msgstr "Type"
 
-#~ msgid "Добавить в корзину"
-#~ msgstr "Add to cart"
+#: templates/compare/compare_products.html:71
+msgid "Добавить в корзину"
+msgstr "Add to cart"
+
+#: templates/compare/compare_products.html:82
+msgid "Очистить сравнение"
+msgstr "Clear comparison"
 
 #~ msgid "Выход выполнен"
 #~ msgstr "Exit completed"

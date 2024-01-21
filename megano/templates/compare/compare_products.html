@@ -1,7 +1,5 @@
 {% include 'base/header.html' %}
-
-{% load static %}
-
+{% load i18n static %}
 {% block content %}
 
 
@@ -28,15 +26,15 @@
                                         <table>
                                             <tbody>
                                             <tr>
-                                                <th class="hed">Характеристика</th>
-                                                <th class="hed">Значение</th>
+                                                <th class="hed">{% translate 'Характеристика' %}</th>
+                                                <th class="hed">{% translate 'Значение' %}</th>
                                             </tr>
                                             <tr>
-                                                <td><b>Общие параметры</b></td>
+                                                <td><b>{% translate 'Общие параметры' %}</b></td>
                                                 <td></td>
                                             </tr>
                                             <tr>
-                                                <td class="comparis">Тип</td>
+                                                <td class="comparis">{% translate 'Тип' %}</td>
                                                 <td class="comparis">{{ details.product_category }}</td>
                                                 {% for key, value in details.characterisctics.items %}
 
@@ -70,7 +68,7 @@
                         <div class="ProductCard-cartElement"><a class="btn btn_primary"
                                                                 href="{% url 'cart:add_product_to_cart' details.product_offer_id %}"><img
                                 class="btn-icon" src="{% static 'assets/img/icons/card/cart_white.svg' %}"
-                                alt="cart_white.svg"><span class="btn-content">Добавить в корзину</span></a>
+                                alt="cart_white.svg"><span class="btn-content">{% translate 'Добавить в корзину' %}</span></a>
                         </div>
                     </div>
                 </div>
@@ -81,7 +79,7 @@
 </div>
 
 <form action="{% url 'compare:clear_comparison' %}" method="get">
-    <button type="submit">Очистить сравнение</button>
+    <button type="submit">{% translate 'Очистить сравнение' %}</button>
 </form>
 
 {% endblock %}
