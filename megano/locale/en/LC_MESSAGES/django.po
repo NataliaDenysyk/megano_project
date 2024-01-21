@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-21 15:07+0000\n"
+"POT-Creation-Date: 2024-01-21 15:12+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1471,6 +1471,7 @@ msgid "Banners must"
 msgstr "Not Banners"
 
 #: templates/base/footer.html:17 templates/base/header.html:141
+#: templates/store/discount/breadcrumbs.html:8
 msgid "Главная"
 msgstr "Main"
 
@@ -1640,6 +1641,10 @@ msgstr "Review"
 msgid "Новизне"
 msgstr "Novelty"
 
+#: templates/store/discount/breadcrumbs.html:10
+msgid "Блог"
+msgstr "Blog"
+
 #~ msgid "Показать"
 #~ msgstr "Show"
 
@@ -1648,9 +1653,6 @@ msgstr "Novelty"
 
 #~ msgid "Корзина пуста"
 #~ msgstr "Cart is empty"
-
-#~ msgid "Блог"
-#~ msgstr "Blog"
 
 #~ msgid "Предложение дня"
 #~ msgstr "Offer of the day"
