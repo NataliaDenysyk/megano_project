@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-21 15:12+0000\n"
+"POT-Creation-Date: 2024-01-21 15:17+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -143,6 +143,7 @@ msgstr "Name store"
 
 #: authorization/models.py:67 store/models.py:390
 #: templates/authorization/detailed_order_page.html:72
+#: templates/store/order/order_confirm.html:73
 msgid "Адрес"
 msgstr "Address"
 
@@ -222,6 +223,8 @@ msgstr "Image"
 #: templates/authorization/detailed_order_page.html:11
 #: templates/authorization/history_orders.html:15
 #: templates/authorization/profile_detail.html:37
+#: templates/store/order/order_confirm.html:13
+#: templates/store/order/payment.html:29
 msgid "Заказ"
 msgstr "Order"
 
@@ -622,7 +625,7 @@ msgstr "There are not enough funds in the account"
 msgid "Введенный счет недействителен"
 msgstr "The entered account is invalid"
 
-#: services/services.py:325
+#: services/services.py:325 templates/store/order/order_confirm.html:95
 msgid "Оплата не выполнена"
 msgstr "Payment has been completed"
 
@@ -1363,16 +1366,19 @@ msgid "Пожалуйста, авторизуйтесь"
 msgstr "Please log in"
 
 #: templates/authorization/detailed_order_page.html:27
+#: templates/store/order/order_confirm.html:29
 msgid "Дата заказа"
 msgstr "Order date"
 
 #: templates/authorization/detailed_order_page.html:33
 #: templates/authorization/profile_update_form.html:36
+#: templates/store/order/order_confirm.html:37
 msgid "ФИО"
 msgstr "Full name"
 
 #: templates/authorization/detailed_order_page.html:44
 #: templates/authorization/profile_update_form.html:47
+#: templates/store/order/order_confirm.html:45
 msgid "Телефон"
 msgstr "Phone"
 
@@ -1383,39 +1389,49 @@ msgstr "E-mail"
 #: templates/authorization/detailed_order_page.html:58
 #: templates/authorization/history_orders.html:22
 #: templates/authorization/profile_detail.html:50
+#: templates/store/order/order_confirm.html:60
 msgid "Тип доставки"
 msgstr "Delivery type"
 
 #: templates/authorization/detailed_order_page.html:66
+#: templates/store/order/order_confirm.html:67
 msgid "Город"
 msgstr "City"
 
 #: templates/authorization/detailed_order_page.html:79
 #: templates/authorization/history_orders.html:28
 #: templates/authorization/profile_detail.html:56
+#: templates/store/order/order_confirm.html:80
+#: templates/store/order/payment.html:10 templates/store/order/payment.html:15
 msgid "Оплата"
 msgstr "Payment"
 
 #: templates/authorization/detailed_order_page.html:85
 #: templates/authorization/history_orders.html:40
 #: templates/authorization/profile_detail.html:69
+#: templates/store/order/order_confirm.html:87
 msgid "Статус"
 msgstr "Order status"
 
 #: templates/authorization/detailed_order_page.html:92
 #: templates/authorization/history_orders.html:47
+#: templates/store/order/order_confirm.html:93
 msgid "Оплата не прошла"
 msgstr "Payment failed"
 
 #: templates/authorization/detailed_order_page.html:132
+#: templates/store/order/order_confirm.html:135
 msgid "шт"
 msgstr "PCS"
 
 #: templates/authorization/detailed_order_page.html:140
+#: templates/store/order/order_confirm.html:142
 msgid "Итого"
 msgstr "Total"
 
 #: templates/authorization/detailed_order_page.html:145
+#: templates/store/order/order_confirm.html:148
+#: templates/store/order/payment.html:51
 msgid "Оплатить"
 msgstr "Pay"
 
@@ -1645,6 +1661,75 @@ msgstr "Novelty"
 msgid "Блог"
 msgstr "Blog"
 
+#: templates/store/order/order.html:12
+msgid "Прогресс заполнения"
+msgstr "Filling progress"
+
+#: templates/store/order/order.html:19
+#: templates/store/order/order_create.html:11
+#: templates/store/order/order_register.html:7
+msgid "Шаг 1. Параметры пользователя"
+msgstr "Step 1. User parameters"
+
+#: templates/store/order/order.html:21
+#: templates/store/order/order_create.html:33
+msgid "Шаг 2. Способ доставки"
+msgstr "Step 2. Delivery method"
+
+#: templates/store/order/order.html:23
+#: templates/store/order/order_create.html:58
+msgid "Шаг 3. Способ оплаты"
+msgstr "Step 3. Payment method"
+
+#: templates/store/order/order.html:26
+msgid "Шаг 4. Подтверждение заказа"
+msgstr "Step 4. Order confirmation"
+
+#: templates/store/order/order_confirm.html:160
+msgid "Заказов пока нет"
+msgstr "There are no orders yet"
+
+#: templates/store/order/order_create.html:28
+#: templates/store/order/order_create.html:53
+#: templates/store/order/order_create.html:72
+#: templates/store/order/order_register.html:45
+msgid "Дальше"
+msgstr "Further"
+
+#: templates/store/order/order_create.html:52
+#: templates/store/order/order_create.html:71
+msgid "Назад"
+msgstr "Further back"
+
+#: templates/store/order/order_register.html:41
+msgid "Я уже зарегистрирован"
+msgstr "I'm already registered"
+
+#: templates/store/order/payment.html:29
+msgid "уже оплачен"
+msgstr "already paid"
+
+#: templates/store/order/payment.html:38
+msgid "Номер карты"
+msgstr "Card number"
+
+#: templates/store/order/payment.html:40
+msgid "Номер счета"
+msgstr "Account number"
+
+#: templates/store/order/payment.html:46
+msgid "Сгенерировать случайный счет"
+msgstr "Generate random score"
+
+#: templates/store/order/payment_progress.html:10
+#: templates/store/order/payment_progress.html:15
+msgid "Ожидание оплаты"
+msgstr "Waiting for payment"
+
+#: templates/store/order/payment_progress.html:24
+msgid "Ждем подтверждения оплаты платежной системой"
+msgstr "We are waiting for payment confirmation from the payment system"
+
 #~ msgid "Показать"
 #~ msgstr "Show"
 
@@ -1671,51 +1756,6 @@ msgstr "Blog"
 
 #~ msgid "Горячие предложения"
 #~ msgstr "Hot deals"
-
-#~ msgid "Прогресс заполнения"
-#~ msgstr "Filling progress"
-
-#~ msgid "Шаг 1. Параметры пользователя"
-#~ msgstr "Step 1. User parameters"
-
-#~ msgid "Шаг 2. Способ доставки"
-#~ msgstr "Step 2. Delivery method"
-
-#~ msgid "Шаг 3. Способ оплаты"
-#~ msgstr "Step 3. Payment method"
-
-#~ msgid "Шаг 4. Подтверждение заказа"
-#~ msgstr "Step 4. Order confirmation"
-
-#~ msgid "Заказов пока нет"
-#~ msgstr "There are no orders yet"
-
-#~ msgid "Дальше"
-#~ msgstr "Further"
-
-#~ msgid "Назад"
-#~ msgstr "Further back"
-
-#~ msgid "Я уже зарегистрирован"
-#~ msgstr "I'm already registered"
-
-#~ msgid "уже оплачен"
-#~ msgstr "already paid"
-
-#~ msgid "Номер карты"
-#~ msgstr "Card number"
-
-#~ msgid "Номер счета"
-#~ msgstr "Account number"
-
-#~ msgid "Сгенерировать случайный счет"
-#~ msgstr "Generate random score"
-
-#~ msgid "Ожидание оплаты"
-#~ msgstr "Waiting for payment"
-
-#~ msgid "Ждем подтверждения оплаты платежной системой"
-#~ msgstr "We are waiting for payment confirmation from the payment system"
 
 #~ msgid "Описания пока нет"
 #~ msgstr "No description yet"
