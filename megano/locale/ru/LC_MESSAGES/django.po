@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-21 15:25+0000\n"
+"POT-Creation-Date: 2024-01-21 15:46+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -928,7 +928,7 @@ msgstr "Основное фото"
 msgid "Доступность"
 msgstr "Доступность"
 
-#: store/models.py:112
+#: store/models.py:112 templates/store/index.html:207
 msgid "Ограниченный тираж"
 msgstr "Ограниченный тираж"
 
@@ -1435,7 +1435,7 @@ msgid "шт"
 msgstr "шт"
 
 #: templates/authorization/detailed_order_page.html:140
-#: templates/store/order/order_confirm.html:142
+#: templates/store/cart.html:102 templates/store/order/order_confirm.html:142
 msgid "Итого"
 msgstr "Итого"
 
@@ -1634,6 +1634,26 @@ msgstr "Зарегистрироваться"
 msgid "Вы уже зарегистрированы и авторизованы"
 msgstr "Вы уже зарегистрированы и авторизованы"
 
+#: templates/store/cart.html:59
+msgid "Показать"
+msgstr "Показать"
+
+#: templates/store/cart.html:80
+msgid "Товара нет на складе"
+msgstr "Товара нет на складе"
+
+#: templates/store/cart.html:81
+msgid "Выберите продавца"
+msgstr "Выберите продавца"
+
+#: templates/store/cart.html:113 templates/store/cart.html:117
+msgid "Оформить заказ"
+msgstr "Оформить заказ"
+
+#: templates/store/cart.html:125
+msgid "Корзина пуста"
+msgstr "Корзина пуста"
+
 #: templates/store/catalog/catalog.html:43
 #: templates/store/catalog/catalog.html:64
 #: templates/store/product/sellers.html:25
@@ -1673,6 +1693,30 @@ msgstr "Новизне"
 #: templates/store/discount/breadcrumbs.html:10
 msgid "Блог"
 msgstr "Блог"
+
+#: templates/store/index.html:40
+msgid "Предложение дня"
+msgstr "Предложение дня"
+
+#: templates/store/index.html:74
+msgid "Часы"
+msgstr "Часы"
+
+#: templates/store/index.html:81
+msgid "Минуты"
+msgstr "Минуты"
+
+#: templates/store/index.html:88
+msgid "Секунды"
+msgstr "Секунды"
+
+#: templates/store/index.html:99
+msgid "Популярные товары"
+msgstr "Популярные товары"
+
+#: templates/store/index.html:151
+msgid "Горячие предложения"
+msgstr "Горячие предложения"
 
 #: templates/store/order/order.html:12
 msgid "Прогресс заполнения"
@@ -1796,26 +1840,6 @@ msgstr "Стоимость"
 msgid "Сейчас этот товар никто не продает"
 msgstr "Сейчас этот товар никто не продает"
 
-#~ msgid "Оформить заказ"
-#~ msgstr "Оформить заказ"
-
-#~ msgid "Корзина пуста"
-#~ msgstr "Корзина пуста"
-
-#~ msgid "Предложение дня"
-#~ msgstr "Предложение дня"
-
-#~ msgid "Часы"
-#~ msgstr "Часы"
-
-#~ msgid "Минуты"
-#~ msgstr "Минуты"
-
-#~ msgid "Секунды"
-#~ msgstr "Секунды"
-
-#~ msgid "Популярные товары"
-#~ msgstr "Популярные товары"
-
-#~ msgid "Горячие предложения"
-#~ msgstr "Горячие предложения"
+#: templates/store/products_changelist.html:8
+msgid "Загрузить товары"
+msgstr "Загрузить товары"
