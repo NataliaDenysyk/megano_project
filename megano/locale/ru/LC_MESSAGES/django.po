@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-21 14:56+0000\n"
+"POT-Creation-Date: 2024-01-21 15:02+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1490,7 +1490,8 @@ msgstr "Контакты"
 msgid "Описание страницы"
 msgstr "Описание страницы"
 
-#: templates/base/header.html:84
+#: templates/base/header.html:84 templates/registration/login.html:11
+#: templates/registration/register.html:33
 msgid "Вход"
 msgstr "Вход"
 
@@ -1542,50 +1543,67 @@ msgstr "Добавить в корзину"
 msgid "Очистить сравнение"
 msgstr "Очистить сравнение"
 
-#~ msgid "Выход выполнен"
-#~ msgstr "Выход выполнен"
+#: templates/registration/logged_out.html:6
+msgid "Выход выполнен"
+msgstr "Выход выполнен"
 
-#~ msgid "Нажмите сюда, чтобы войти снова"
-#~ msgstr "Нажмите сюда, чтобы войти снова"
+#: templates/registration/logged_out.html:8
+msgid "Нажмите сюда, чтобы войти снова"
+msgstr "Нажмите сюда, чтобы войти снова"
 
-#~ msgid "Войти"
-#~ msgstr "Войти"
+#: templates/registration/login.html:23
+msgid "Войти"
+msgstr "Войти"
 
-#~ msgid "Забыли пароль"
-#~ msgstr "Забыли пароль"
+#: templates/registration/login.html:25
+msgid "Забыли пароль"
+msgstr "Забыли пароль"
 
-#~ msgid "The password has been changed"
-#~ msgstr "Пароль был изменен"
+#: templates/registration/login.html:27 templates/registration/register.html:9
+msgid "Регистрация"
+msgstr "Регистрация"
 
-#~ msgid "log in again"
-#~ msgstr "Войти снова"
+#: templates/registration/password_reset_complete.html:6
+msgid "The password has been changed"
+msgstr "Пароль был изменен"
 
-#~ msgid "Please enter (and confirm) your new password"
-#~ msgstr "Пожалуйста, введите (и подтвердите) ваш новый пароль"
+#: templates/registration/password_reset_complete.html:7
+msgid "log in again"
+msgstr "Войти снова"
 
-#~ msgid "New password"
-#~ msgstr "Новый пароль"
+#: templates/registration/password_reset_confirm.html:7
+msgid "Please enter (and confirm) your new password"
+msgstr "Пожалуйста, введите (и подтвердите) ваш новый пароль"
 
-#~ msgid "Confirm password"
-#~ msgstr "Подтвердите пароль"
+#: templates/registration/password_reset_confirm.html:14
+msgid "New password"
+msgstr "Новый пароль"
 
-#~ msgid "Change my password"
-#~ msgstr "Изменить пароль"
+#: templates/registration/password_reset_confirm.html:21
+msgid "Confirm password"
+msgstr "Подтвердите пароль"
 
-#~ msgid ""
-#~ "Мы отправили вам электронное письмо с инструкциями по установке пароля"
-#~ msgstr ""
-#~ "Мы отправили вам электронное письмо с инструкциями по установке "
-#~ "пароляЕсли вы его не получили в течение нескольких минут - проверьте спам"
+#: templates/registration/password_reset_confirm.html:27
+msgid "Change my password"
+msgstr "Изменить пароль"
 
-#~ msgid "Reset password"
-#~ msgstr "Сброс пароль"
+#: templates/registration/password_reset_done.html:7
+msgid "Мы отправили вам электронное письмо с инструкциями по установке пароля"
+msgstr ""
+"Мы отправили вам электронное письмо с инструкциями по установке пароляЕсли "
+"вы его не получили в течение нескольких минут - проверьте спам"
 
-#~ msgid "Зарегистрироваться"
-#~ msgstr "Зарегистрироваться"
+#: templates/registration/password_reset_form.html:9
+msgid "Reset password"
+msgstr "Сброс пароль"
 
-#~ msgid "Вы уже зарегистрированы и авторизованы"
-#~ msgstr "Вы уже зарегистрированы и авторизованы"
+#: templates/registration/register.html:30
+msgid "Зарегистрироваться"
+msgstr "Зарегистрироваться"
+
+#: templates/registration/register.html:38
+msgid "Вы уже зарегистрированы и авторизованы"
+msgstr "Вы уже зарегистрированы и авторизованы"
 
 #~ msgid "Показать"
 #~ msgstr "Показать"
