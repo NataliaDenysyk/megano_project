@@ -40,8 +40,15 @@
                 <strong class="Section-columnTitle">Предложение дня
                 </strong>
               </header>
-              <div class="Card"><a class="Card-picture" href="{% url 'store:product-detail' slug=limited_deals.slug %}"><img
-                      src="{{ limited_deals.preview.url }}"/></a>
+              <div class="Card">
+                <a class="Card-picture" href="{% url 'store:product-detail' slug=limited_deals.slug %}">
+                  {% if limited_deals.preview %}
+                    <img src="{{ limited_deals.preview.url }}"/>
+                  {% else %}
+                    <img src="{% static 'assets/img/content/home/placeholder.png' %}"
+                         alt="empty_photo"/>
+                  {% endif %}
+                </a>
                 <div class="Card-content">
 
                   <strong class="Card-title"><a
@@ -94,8 +101,15 @@
           </header>
           <div class="Cards">
             {% for product in object_list %}
-              <div class="Card"><a class="Card-picture" href="{% url 'store:product-detail' slug=product.slug %}"><img
-                      src="{% get_media_prefix %}{{ product.preview }}"/></a>
+              <div class="Card">
+                <a class="Card-picture" href="{% url 'store:product-detail' slug=product.slug %}">
+                  {% if product.preview %}
+                    <img src="{{ product.preview.url }}"/>
+                  {% else %}
+                    <img src="{% static 'assets/img/content/home/placeholder.png' %}"
+                         alt="empty_photo"/>
+                  {% endif %}
+                </a>
                 <div class="Card-content">
                   <strong class="Card-title"><a
                           href="{% url 'store:product-detail' slug=product.slug %}">{{ product.name }}</a>
@@ -145,8 +159,15 @@
               {% for product in hot_offers %}
                 <div class="Slider-item">
                   <div class="Slider-content">
-                    <div class="Card"><a class="Card-picture" href="{% url 'store:product-detail' slug=product.slug %}"><img
-                            src="{{ product.preview.url }}"/></a>
+                    <div class="Card">
+                      <a class="Card-picture" href="{% url 'store:product-detail' slug=product.slug %}">
+                        {% if product.preview %}
+                          <img src="{{ product.preview.url }}"/>
+                        {% else %}
+                          <img src="{% static 'assets/img/content/home/placeholder.png' %}"
+                               alt="empty_photo"/>
+                        {% endif %}
+                      </a>
                       <div class="Card-content">
                         <strong class="Card-title"><a
                                 href="{% url 'store:product-detail' slug=product.slug %}">{{ product.name }}</a>
@@ -194,8 +215,15 @@
               {% for product in limited_edition %}
                 <div class="Slider-item">
                   <div class="Slider-content">
-                    <div class="Card"><a class="Card-picture" href="{% url 'store:product-detail' slug=product.slug %}"><img
-                            src="{{ product.preview.url }}"/></a>
+                    <div class="Card">
+                      <a class="Card-picture" href="{% url 'store:product-detail' slug=product.slug %}">
+                        {% if product.preview %}
+                          <img src="{{ product.preview.url }}"/>
+                        {% else %}
+                          <img src="{% static 'assets/img/content/home/placeholder.png' %}"
+                               alt="empty_photo"/>
+                        {% endif %}
+                      </a>
                       <div class="Card-content">
                         <strong class="Card-title"><a
                                 href="{% url 'store:product-detail' slug=product.slug %}">{{ product.name }}</a>

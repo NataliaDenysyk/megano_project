@@ -1,5 +1,6 @@
 {% include 'base/header.html' %}
 {% load i18n static %}
+{% load converter %}
 
 {% block content %}
     <div class="Middle Middle_top">
@@ -14,10 +15,17 @@
                                     <div class="Cart-block Cart-block_row">
                                         <div class="Cart-block Cart-block_pict">
                                             <a class="Cart-pict" href="#">
-                                                <img class="Cart-img"
-                                                     src="{{ cart.preview.url }}"
-                                                     width="120px"
-                                                     alt="{{ cart.name }}"/>
+                                                {% if cart.preview %}
+                                                    <img class="Cart-img"
+                                                         src="{{ cart.preview.url }}"
+                                                         width="120px"
+                                                         alt="{{ cart.name }}"/>
+                                                {% else %}
+                                                    <img class="Cart-img"
+                                                         src="{% static 'assets/img/content/home/placeholder.png' %}"
+                                                         width="120px"
+                                                         alt="empty_photo"/>
+                                                {% endif %}
                                             </a>
                                         </div>
                                         <div class="Cart-block Cart-block_info">
@@ -53,17 +61,31 @@
                                             </div>
                                         </div>
                                         <div class="Cart-block Cart-block_amount">
-                                            <div class="Cart-amount">
-                                                <div class="Amount">
-                                                    <button class="button-visible take-product" type="button">
-                                                        <a href="{% url 'cart:take_product' cart.slug %}">—</a>
-                                                    </button>
-                                                    <label class="quantity-product">{{ item.quantity }}</label>
-                                                    <button class="button-visible add-product" type="button">
-                                                        <a href="{% url 'cart:add_product' cart.slug %}">+</a>
-                                                    </button>
-                                                </div>
-                                            </div>
+                                            {% for offer in offers %}
+                                                {% if offer.id  ==  item.offer_id|converter_to_int %}
+                                                    <div class="Cart-amount">
+                                                        <div class="Amount">
+                                                            {% if offer.amount > 0 %}
+                                                                <button class="button-visible take-product"
+                                                                        type="button">
+                                                                    <a href="{% url 'cart:take_product' cart.slug %}">—</a>
+                                                                </button>
+                                                                <label class="quantity-product">{{ item.quantity }}</label>
+                                                                <button class="button-visible add-product"
+                                                                        type="button">
+                                                                    <a href="{% url 'cart:add_product' cart.slug %}">+</a>
+                                                                </button>
+                                                            {% else %}
+                                                                <div>
+                                                                    <span>Товара нет на складе.</span>
+                                                                    <span>Выберите продавца.</span>
+                                                                </div>
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                            {% endfor %}
+
                                         </div>
                                         <div class="Cart-block Cart-block_delete">
                                             <a class="Cart-delete" href="{% url 'cart:delete_product' cart.slug %}">

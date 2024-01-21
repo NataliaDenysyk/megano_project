@@ -1,3 +1,16 @@
+import copy
+import json
+import os
+import shutil
+
+from django.core.exceptions import ObjectDoesNotExist
+from django.core.files.temp import NamedTemporaryFile
+from django.core.files import File
+from urllib.request import urlopen
+from urllib.error import HTTPError
+
+from compare.models import *
+
 from datetime import datetime, timedelta
 from decimal import Decimal
 from random import choice
@@ -11,6 +24,7 @@ from urllib.parse import urlparse, parse_qs, urlencode
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Avg, Count, When, Case
 from django.db import transaction
+from django.db import IntegrityError
 from django.http import HttpRequest
 from django.shortcuts import get_object_or_404, render
 
@@ -18,6 +32,7 @@ from services.check_full_name import check_name
 from authorization.forms import RegisterForm, LoginForm
 from authorization.models import Profile
 from store.models import Product, Offer, Category, Reviews, Discount, ProductImage, Tag, Orders
+from store.utils import import_logger
 from .slugify import slugify
 from store.models import Orders
 
@@ -288,7 +303,13 @@ class PaymentService:
         result = FakePaymentService(self._card).pay_order()
 
         if result == 'Оплачено':
-            Orders.objects.filter(id=self._order_id).update(status=1)
+            order = Orders.objects.get(id=self._order_id)
+            if order.status_exception:
+                order.status_exception = ''
+
+            order.status = 1
+            order.save()
+
         else:
             Orders.objects.filter(id=self._order_id).update(status=2, status_exception=result)
 
@@ -469,7 +490,7 @@ class ProductService:
             general_characteristics = get_characteristic_from_common_info(self._product.feature.values()[0])
             try:
                 model_info = return_model(self._product, id_model_characteristics)
-                print(model_info)
+
             except ObjectDoesNotExist:
                 model_info = None
 
@@ -833,3 +854,280 @@ class MainService:
                 return product_l_e
         else:
             return limited_cache
+
+
+class ImportProductService:
+    """
+    Сервис импорта продуктов из словаря.
+    Продукт возможно импортировать только при существовании категории в базе данных.
+    Имя продукта считается уникальным. Если такое имя уже существует в базе данных - будет взят
+    существующий продукт (без обновления полей модели Product). Связанные с данной моделью сущности
+    будут обновлены, если не будет выброшено исключение.
+    Данные будут сохранены или перемещены в зависимости от результата в папки import_successfully и import_failed.
+    """
+
+    @import_logger()
+    def import_product(self, file_data: list, file_name: str, file_path=None, **kwargs) -> list[str]:
+        """
+        Выполняет импорт продуктов.
+
+        :param file_data: Данные файла, переданные в виде словаря.
+        :param file_name: Имя файла.
+        :param file_path: Путь файла, есть только, если файл передан командой и хранится в проекте,
+                         поэтому по умолчанию - None.
+
+        :return: Список, в котором содержатся сообщения о результате и/или ошибках.
+        """
+
+        initial_data = copy.deepcopy(file_data)
+
+        log = kwargs.get('logger')
+        error_message = []
+        log.info(f"Импорт файла: {file_name}")
+
+        try:
+            for info in file_data:
+                category = None
+
+                try:
+                    if info['product'].get('category'):
+                        category = Category.objects.get(name=info['product'].get('category'))
+
+                except Category.DoesNotExist as e:
+                    error_message.append(e)
+                    log.warning(f'Категория {info["product"].get("category")} не найдена в базе данных. Ошибка: {e}')
+
+                if category:
+                    try:
+                        result = self.get_or_create_product(category, info, log)
+
+                        if result:
+                            error_message.append(result)
+
+                    except IntegrityError as e:
+                        error_message += e
+                        log.warning(f'Товар {info.get("product").get("name")} уже существует. Ошибка: {e}')
+
+        except KeyError as e:
+            error_message.append(e)
+            log.error(f'Нет совпадений по ключам в переданных данных')
+
+        if error_message:
+            directory_name = 'import_failed'
+            message = f'Внимание! Данные {file_name} не импортированы, либо импортированы не полностью. '
+            log.info(f"Результат импорта: {message}")
+
+        else:
+            directory_name = 'import_successfully'
+            message = f'{file_name} импортирован успешно. '
+            log.info(f"Результат импорта: {message}")
+
+        try:
+            if file_path:
+                FileMoveService(directory_name).move_file(file_path)
+            else:
+                FileMoveService(directory_name).save_file(initial_data, file_name)
+
+        except Exception as e:
+            log.error(f'Не удалось переместить файл {file_name} в другую директорию. {e}')
+            error_message.append(e)
+
+        log.info(f"Конец импорта файла: {file_name}")
+
+        return [message, error_message]
+
+    def get_or_create_product(self, category: Category, info: dict, log) -> Product:
+        """
+        Находит продукт по полю name, либо создает новый и создает связанные данные
+        """
+
+        error_message = []
+        product_data = info.get('product')
+        product_data['category'] = category
+        product_data['slug'] = slugify(product_data.get('name'))
+
+        try:
+            product_data['preview'] = self.get_img_from_url(product_data['preview'])
+
+        except ValueError as e:
+            error_message.append(e)
+            log.warning(f'Неправильно указан адрес для загрузки главного изображения '
+                        f'продукта {product_data.get("name")}. Ошибка: {e}')
+            product_data['preview'] = ''
+
+        except HTTPError as e:
+            error_message.append(e)
+            log.warning(f'Не удалось загрузить главное изображение для {product_data.get("name")}. Ошибка: {e}')
+            product_data['preview'] = ''
+
+        product, created = Product.objects.get_or_create(name=product_data['name'], defaults=product_data)
+
+        try:
+            if info.get('tags'):
+                tags = self.get_or_create_tags(info.get('tags'))
+                product.tags.set(tags)
+
+        except Exception as e:
+            error_message.append(e)
+            log.warning(f'Не удалось импортировать теги для {product.name}. Ошибка: {e}')
+
+        try:
+            self.create_feature(info.get('feature'), product, category)
+
+        except Exception as e:
+            error_message.append(e)
+            log.warning(f'Не удалось импортировать характеристики для {product.name}. Ошибка: {e}')
+
+        try:
+            self.create_product_images(product, info.get('images'))
+
+        except ValueError as e:
+            error_message.append(e)
+            log.warning(f'Неправильно указан адрес для загрузки изображений продукта {product.name}. '
+                        f'Ошибка: {e}')
+
+        except HTTPError as e:
+            error_message.append(e)
+            log.warning(f'Не удалось загрузить изображения для {product.name}. Ошибка: {e}')
+
+        try:
+            self.create_offer(info.get('offer'), info.get('seller'), product)
+
+        except Profile.DoesNotExist as e:
+            error_message.append(e)
+            log.warning(f'{info.get("seller")} не найден в базе данных. Ошибка: {e}')
+
+        except ValueError as e:
+            error_message.append(e)
+            log.warning(f'Не удалось импортировать предложение от {info.get("seller")} для {product.name}. '
+                        f'Ошибка: {e}')
+
+        return error_message
+
+    @staticmethod
+    def get_or_create_tags(tags_data: list) -> list[Tag]:
+        """
+        Находит в базе данных теги по полю name, если совпадений нет - создает новые,
+        и возвращает список Tag objects
+        """
+
+        result = [Tag.objects.get_or_create(name=tag) for tag in tags_data]
+        tags = [tag[0] for tag in result]
+
+        return tags
+
+    @staticmethod
+    def create_feature(feature_data: dict, product: Product, category: Category) -> None:
+        """
+        Создает характеристики продукта с учетом переданной категории
+        """
+
+        feature_data['object_id'] = product.id
+        feature_data['content_type_id'] = product.feature.core_filters.get('content_type__pk')
+        category_name = category.name.lower()
+
+        if category_name == 'телевизоры':
+            TVSetCharacteristic.objects.create(**feature_data)
+        elif category_name == 'наушники':
+            HeadphonesCharacteristic.objects.create(**feature_data)
+        elif category_name == 'мобильные телефоны':
+            MobileCharacteristic.objects.create(**feature_data)
+        elif category_name == 'стиральные машины':
+            WashMachineCharacteristic.objects.create(**feature_data)
+        elif category_name == 'фотоаппараты':
+            PhotoCamCharacteristic.objects.create(**feature_data)
+        elif category_name == 'ноутбуки':
+            NotebookCharacteristic.objects.create(**feature_data)
+        elif category_name == 'электроника':
+            ElectroCharacteristic.objects.create(**feature_data)
+        elif category_name == 'микроволновые печи':
+            MicrowaveOvenCharacteristic.objects.create(**feature_data)
+        elif category_name == 'кухонная техника':
+            KitchenCharacteristic.objects.create(**feature_data)
+        elif category_name == 'торшеры':
+            TorchereCharacteristic.objects.create(**feature_data)
+
+    @staticmethod
+    def create_offer(offer: dict, seller_name: str, product: Product) -> str:
+        """
+        Обновляет или создает предложение продавца на конкретный товар
+        """
+
+        seller = Profile.objects.get(name_store=seller_name)
+
+        Offer.objects.update_or_create(
+            seller=seller,
+            product=product,
+            defaults={
+                'unit_price': offer.get('unit_price'),
+                'amount': offer.get('amount'),
+            },
+        )
+
+        if not product.availability:
+            product.availability = True
+            product.save()
+
+    def create_product_images(self, product: Product, img_data: list) -> None:
+        """
+        Добавляет изображения продукта в базу данных
+        """
+
+        images = [self.get_img_from_url(img) for img in img_data]
+
+        [
+            ProductImage.objects.create(
+                product=product,
+                image=img,
+            )
+            for img in images
+        ]
+
+    @staticmethod
+    def get_img_from_url(image_url: str) -> File:
+        """
+        Возвращает изображение из переданного url
+        """
+
+        file_name = image_url.split('/')[-1]
+        img_tmp = NamedTemporaryFile(delete=True)
+
+        with urlopen(image_url) as uo:
+            assert uo.status == 200
+            img_tmp.write(uo.read())
+            img_tmp.flush()
+
+        result = File(img_tmp, name=file_name)
+
+        return result
+
+
+class FileMoveService:
+    """
+    Сервис для сохранения и перемещения файлов внутри проекта
+    """
+
+    def __init__(self, dir_name: str):
+        self.dir_name = dir_name
+
+    def save_file(self, data: dict, file_name: str) -> None:
+        """
+        Сохраняет файл в соответствующую результату импорта директорию
+        """
+
+        path = 'import/' + self.dir_name + '/' + file_name
+
+        file_path = os.path.abspath(path)
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+
+        with open(file_path, 'w', encoding='utf-8') as json_file:
+            json.dump(data, json_file, ensure_ascii=False)
+
+    def move_file(self, file_path: str) -> None:
+        """
+        Перемещает файл в указанную директорию
+        """
+
+        dir_path = os.path.abspath('import/' + self.dir_name)
+
+        shutil.move(file_path, dir_path)
