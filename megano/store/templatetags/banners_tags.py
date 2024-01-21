@@ -17,7 +17,7 @@ def banner_main_page() -> dict:
     Caching of random three banners is created.
     """
     try:
-        banners = cache.get_or_set('banners', choices(Banners.objects.all(), k=3), settings.get_cache_banner())
+        banners = cache.get_or_set('banners', choices(Banners.objects.filter(is_active=True), k=3), settings.get_cache_banner())
         return {'banners': banners}
     except Exception as err:
         HttpResponse(_('Not Banners'), err)  # TODO заменить заглушку на файл с логами

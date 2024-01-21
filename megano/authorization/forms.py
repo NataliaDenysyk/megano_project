@@ -182,6 +182,8 @@ class RegisterForm(forms.ModelForm):
         if User.objects.filter(username=username).exists():
             raise forms.ValidationError(_("Такой логин уже существует"))
 
+        return username
+
     def clean_email(self):
         email = self.cleaned_data['email']
         if User.objects.filter(email=email).exists():
