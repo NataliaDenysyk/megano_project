@@ -1,5 +1,7 @@
 {% extends 'base/base.html' %}
 {% load static %}
+{% load i18n %}
+
 
 {% block content %}
   <div class="Middle Middle_top">
@@ -10,16 +12,16 @@
           <div class="Tabs Tabs_default">
             <div class="Tabs-links">
               <a class="Tabs-link" href="#description">
-                <span>Описание</span>
+                <span>{% translate 'Описание' %}</span>
               </a>
               <a class="Tabs-link" href="#sellers">
-                <span>Продавцы</span>
+                <span>{% translate 'Продавцы' %}</span>
               </a>
               <a class="Tabs-link" href="#addit">
-                <span>Характеристика</span>
+                <span>{% translate 'Характеристика' %}</span>
               </a>
               <a class="Tabs-link" href="#reviews">
-                <span>Отзывы ({{ num_reviews }})</span>
+                <span>{% translate 'Отзывы' %} ({{ num_reviews }})</span>
               </a>
             </div>
             <div class="Tabs-wrap">

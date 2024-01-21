@@ -1,6 +1,9 @@
+{% load i18n %}
+
+
 <div  class="Tabs-block" id="reviews">
     <header class="Section-header">
-      <h3 class="Section-title">Отзывы
+      <h3 class="Section-title">{% translate 'Отзывы' %}
       </h3>
     </header>
     <div class="Comments">
@@ -23,7 +26,7 @@
     {% if reviews_all.3 %}
         </div>
         <a class="Tabs-link" href="#reviews_all">
-            <span>Показать ещё</span>
+            <span>{% translate 'Показать ещё' %}</span>
         </a>
     {% endif %}
     {% include "store/product/form-reviews.html" %}

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-21 15:17+0000\n"
+"POT-Creation-Date: 2024-01-21 15:25+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -125,7 +125,7 @@ msgid "Teleфон"
 msgstr "Phone"
 
 #: authorization/models.py:56 store/admin.py:325 store/models.py:92
-#: store/models.py:317
+#: store/models.py:317 templates/store/product/product-detail.html:15
 msgid "Описание"
 msgstr "Description"
 
@@ -827,6 +827,8 @@ msgstr " d."
 
 #: store/filters.py:16 store/filters.py:66
 #: templates/compare/compare_products.html:29
+#: templates/store/product/description.html:23
+#: templates/store/product/product-detail.html:21
 msgid "Характеристика"
 msgstr "Characteristic"
 
@@ -846,7 +848,7 @@ msgstr "Ignore"
 msgid "Цена"
 msgstr "Price"
 
-#: store/filters.py:48
+#: store/filters.py:48 templates/store/product/product-detail.html:18
 msgid "Продавцы"
 msgstr "Sellers"
 
@@ -982,11 +984,13 @@ msgstr "Review"
 msgid "Автор"
 msgstr "Author"
 
-#: store/models.py:300
+#: store/models.py:300 templates/store/product/form-reviews.html:16
 msgid "Отзыв"
 msgstr "Review"
 
-#: store/models.py:301
+#: store/models.py:301 templates/store/product/product-detail.html:24
+#: templates/store/product/product-reviews.html:6
+#: templates/store/product/reviews-all.html:6
 msgid "Отзывы"
 msgstr "Reviews"
 
@@ -1390,6 +1394,7 @@ msgstr "E-mail"
 #: templates/authorization/history_orders.html:22
 #: templates/authorization/profile_detail.html:50
 #: templates/store/order/order_confirm.html:60
+#: templates/store/product/sellers.html:31
 msgid "Тип доставки"
 msgstr "Delivery type"
 
@@ -1403,6 +1408,7 @@ msgstr "City"
 #: templates/authorization/profile_detail.html:56
 #: templates/store/order/order_confirm.html:80
 #: templates/store/order/payment.html:10 templates/store/order/payment.html:15
+#: templates/store/product/sellers.html:38
 msgid "Оплата"
 msgstr "Payment"
 
@@ -1509,6 +1515,7 @@ msgstr "Description of the page"
 
 #: templates/base/header.html:84 templates/registration/login.html:11
 #: templates/registration/register.html:33
+#: templates/store/product/form-reviews.html:29
 msgid "Вход"
 msgstr "Login"
 
@@ -1541,6 +1548,7 @@ msgid "Поиск"
 msgstr "Search"
 
 #: templates/compare/compare_products.html:30
+#: templates/store/product/description.html:24
 msgid "Значение"
 msgstr "Value"
 
@@ -1624,6 +1632,7 @@ msgstr "You are already registered and logged in"
 
 #: templates/store/catalog/catalog.html:43
 #: templates/store/catalog/catalog.html:64
+#: templates/store/product/sellers.html:25
 msgid "Нет в продаже"
 msgstr "Out of stock"
 
@@ -1730,6 +1739,59 @@ msgstr "Waiting for payment"
 msgid "Ждем подтверждения оплаты платежной системой"
 msgstr "We are waiting for payment confirmation from the payment system"
 
+#: templates/store/product/description.html:6
+msgid "Описания пока нет"
+msgstr "No description yet"
+
+#: templates/store/product/features.html:20
+msgid "Характеристики отсутствуют"
+msgstr "No characteristics"
+
+#: templates/store/product/form-reviews.html:7
+msgid "Добавить отзыв"
+msgstr "Add a review"
+
+#: templates/store/product/form-reviews.html:20
+msgid "Отправить отзыв"
+msgstr "Post a review"
+
+#: templates/store/product/form-reviews.html:28
+msgid "Чтобы оставить отзыв, вам нужно авторизоваться"
+msgstr "To leave a review you need to log in"
+
+#: templates/store/product/product-card.html:70
+#: templates/store/product/sellers.html:22
+msgid "Купить"
+msgstr "Buy"
+
+#: templates/store/product/product-card.html:78
+msgid "Поздравляем"
+msgstr "Congratulations"
+
+#: templates/store/product/product-card.html:79
+msgid "Закрыть модальное окно"
+msgstr "Close the modal window"
+
+#: templates/store/product/product-card.html:82
+msgid "Товар успешно добавлен в корзину"
+msgstr "The product has been successfully added to the cart"
+
+#: templates/store/product/product-card.html:92
+msgid "Тэги"
+msgstr "Tags"
+
+#: templates/store/product/product-reviews.html:29
+msgid "Показать ещё"
+msgstr "Show more"
+
+#: templates/store/product/sellers.html:47
+msgid "Стоимость"
+msgstr "Price"
+
+#: templates/store/product/sellers.html:64
+msgid "Сейчас этот товар никто не продает"
+msgstr "Now no one sells this product"
+
 #~ msgid "Показать"
 #~ msgstr "Show"
 
@@ -1756,45 +1818,6 @@ msgstr "We are waiting for payment confirmation from the payment system"
 
 #~ msgid "Горячие предложения"
 #~ msgstr "Hot deals"
-
-#~ msgid "Описания пока нет"
-#~ msgstr "No description yet"
-
-#~ msgid "Характеристики отсутствуют"
-#~ msgstr "No characteristics"
-
-#~ msgid "Добавить отзыв"
-#~ msgstr "Add a review"
-
-#~ msgid "Отправить отзыв"
-#~ msgstr "Post a review"
-
-#~ msgid "Чтобы оставить отзыв, вам нужно авторизоваться"
-#~ msgstr "To leave a review you need to log in"
-
-#~ msgid "Купить"
-#~ msgstr "Buy"
-
-#~ msgid "Поздравляем"
-#~ msgstr "Congratulations"
-
-#~ msgid "Закрыть модальное окно"
-#~ msgstr "Close the modal window"
-
-#~ msgid "Товар успешно добавлен в корзину"
-#~ msgstr "The product has been successfully added to the cart"
-
-#~ msgid "Тэги"
-#~ msgstr "Tags"
-
-#~ msgid "Показать ещё"
-#~ msgstr "Show more"
-
-#~ msgid "Стоимость"
-#~ msgstr "Price"
-
-#~ msgid "Сейчас этот товар никто не продает"
-#~ msgstr "Now no one sells this product"
 
 #~ msgid "Загрузить товары"
 #~ msgstr "Upload products"

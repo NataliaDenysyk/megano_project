@@ -1,6 +1,10 @@
+{% load i18n %}
+
+
 <div class="Tabs-block" id="description">
   <h2>{{ product.description.title }}</h2>
-  <p>{% firstof product.description.text_bottom "Описания пока нет" %}</p>
+{% translate 'Описания пока нет' as no_description %}
+  <p>{% firstof product.description.text_bottom no_description %}</p>
   {% if product.preview %}
   <img class="pict pict_right"
        src="{{ product.preview.url }}" alt="bigGoods.png"/>
@@ -16,8 +20,8 @@
     <div class="table">
       <table>
         <tr>
-          <th>Характеристика</th>
-          <th>Значение</th>
+          <th>{% translate 'Характеристика' %}</th>
+          <th>{% translate 'Значение' %}</th>
         </tr>
         {% for key, value in feature.characteristics.items %}
           <div class="Product-prop">

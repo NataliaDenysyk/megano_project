@@ -1,5 +1,6 @@
-{% load static %}
 {% load cache %}
+{% load i18n static %}
+
 
 <div class="ProductCard">
   <div class="ProductCard-look">
@@ -66,7 +67,7 @@
         <button class="btn btn_primary" form="amount">
           <img class="btn-icon" src="{% static 'assets/img/icons/card/cart_white.svg' %}"
                alt="cart_white.svg"/>
-          Купить
+          {% translate 'Купить' %}
         </button>
       </div>
       {% if not toast_message %}
@@ -74,12 +75,12 @@
           <div class="my_modal-dialog">
             <div class="my_modal-content">
               <div class="my_modal-header">
-                <p class="my_modal-title">Поздравляем!</p>
-                <a href="#" title="Закрыть модальное окно" class="close">×</a>
+                <p class="my_modal-title">{% translate 'Поздравляем' %}!</p>
+                <a href="#" title="{% translate 'Закрыть модальное окно' %} class="close">×</a>
               </div>
               <div class="my_modal-body">
-                <p>Товар успешно добавлен в корзину!</p>
-              </div>
+                <p>{% translate 'Товар успешно добавлен в корзину' %}!</p>
+                            </div>
             </div>
           </div>
         </div>
@@ -88,7 +89,7 @@
     <div class="ProductCard-footer">
       <div class="ProductCard-tags">
         {% if product.tags.all %}
-          <strong class="ProductCard-tagsTitle">Тэги:
+          <strong class="ProductCard-tagsTitle">{% translate 'Тэги' %}:
           </strong>
           {% for i_tag in product.tags.all %}
             {% if not forloop.last %}
