@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 
 from store.models import Product, Orders
 
@@ -12,11 +13,13 @@ class Cart(models.Model):
     Product - :model:`store.Product`
     """
 
-    order = models.ForeignKey(Orders, on_delete=models.CASCADE, verbose_name='Заказ')
-    products = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Продукты')
-    quantity = models.IntegerField(default=1, verbose_name='Количество')
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания', db_index=True)
-    updated_at = models.DateTimeField(auto_now=True, verbose_name='Дата изменения')
+    ordering = _('Заказ')
+
+    order = models.ForeignKey(Orders, on_delete=models.CASCADE, verbose_name=_('Заказ'))
+    products = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name=_('Продукты'))
+    quantity = models.IntegerField(default=1, verbose_name=_('Количество'))
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Дата создания'), db_index=True)
+    updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Дата изменения'))
 
     def __str__(self) -> str:
         """
@@ -24,7 +27,7 @@ class Cart(models.Model):
         username: product_name
         """
 
-        return f'Заказ №_{self.order.id}'
+        return f'({self.ordering} №_{self.order.id}'
 
     def get_absolute_url(self) -> str:
         """
@@ -36,5 +39,5 @@ class Cart(models.Model):
     class Meta:
         db_table = 'carts'
         ordering = ['-created_at']
-        verbose_name = 'корзину'
-        verbose_name_plural = 'корзины'
+        verbose_name = _('корзину')
+        verbose_name_plural = _('корзины')

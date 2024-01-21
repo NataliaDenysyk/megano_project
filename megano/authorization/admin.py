@@ -1,25 +1,26 @@
 from django.contrib import admin
 from django.utils.safestring import mark_safe
+from django.utils.translation import gettext_lazy as _
 
 from .models import Profile, StoreSettings
 
 from store.models import Orders
 
 
-@admin.action(description='Archive')
+@admin.action(description=_('Archive'))
 def mark_archived(modeladmin, request, queryset):#(modeladmin: admin.ModelAdmin, request: HttpRequest, queryset: QuerySet)
     queryset.update(archived=True)
 
 
-@admin.action(description='Unarchive')
+@admin.action(description=_('Unarchive'))
 def mark_unarchived(modeladmin, request, queryset):#(modeladmin: admin.ModelAdmin, request: HttpRequest, queryset: QuerySet)
     queryset.update(archived=False)
 
 
 class StoreSettingsInline(admin.TabularInline):
     model = StoreSettings
-    verbose_name = 'Настройки магазина'
-    verbose_name_plural = 'Настройки магазина'
+    verbose_name = _('Настройки магазина')
+    verbose_name_plural = _('Настройки магазина')
 
 
 @admin.register(Profile)
@@ -38,7 +39,7 @@ class AuthorAdmin(admin.ModelAdmin):
         (None, {
             'fields': ('user', 'avatar', 'address', 'phone', 'description', 'viewed_orders', 'role', 'name_store'),
         }),
-        ('Extra options', {
+        (_('Extra options'), {
             'fields': ('archived',),
             'classes': ("collapse",)
         })]
@@ -51,11 +52,12 @@ class AuthorAdmin(admin.ModelAdmin):
         if obj.avatar:
             return mark_safe(f'<img src="{obj.avatar.url}" alt=""width="50">')
 
-    get_html_avatar.short_description = 'Изображение'
+    get_html_avatar.short_description = _('Изображение')
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'viewed_orders':
-            kwargs['queryset'] = Orders.objects.filter(profile_id=request.resolver_match.kwargs['object_id'])
+            if 'object_id' in request.resolver_match.captured_kwargs:
+                kwargs['queryset'] = Orders.objects.filter(profile_id=request.resolver_match.captured_kwargs['object_id'])
         return super(AuthorAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
     def get_inlines(self, request, obj):

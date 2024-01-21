@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from django.utils.translation import gettext_lazy as _
 from multiupload.fields import MultiFileField
 
 from authorization.models import Profile
@@ -16,6 +17,8 @@ class OrderCreateForm(forms.ModelForm):
     Класс формы для оформления Заказа.
     """
 
+    name_placeholder = _("Иванов Иван Иванович")
+
     name = forms.CharField(
         max_length=100,
         label='ФИО',
@@ -24,7 +27,7 @@ class OrderCreateForm(forms.ModelForm):
             'id': "name",
             'name': "name",
             'type': "text",
-            'placeholder': "Иванов Иван Иванович",
+            'placeholder': name_placeholder,
         }),
     )
     phone = forms.CharField(
@@ -58,9 +61,9 @@ class OrderCreateForm(forms.ModelForm):
             'type': "radio",
         }),
     )
-    city = forms.CharField(max_length=100, label='Город', help_text='Город проживания')
-    address = forms.CharField(max_length=200, label='Адрес', help_text='Адрес доставки')
-    email = forms.EmailField(max_length=80, label='Почта', help_text='Почта')
+    city = forms.CharField(max_length=100, label='Город', help_text=_('Город проживания'))
+    address = forms.CharField(max_length=200, label='Адрес', help_text=_('Адрес доставки'))
+    email = forms.EmailField(max_length=80, label='Почта', help_text=_('Почта'))
 
     def clean_phone(self):
         """"
@@ -72,7 +75,7 @@ class OrderCreateForm(forms.ModelForm):
             phone_str = phone_str.replace(char, '')
         phone = phone_str[2:]
         if phone and Profile.objects.filter(phone=phone).exclude(id=self.instance.id).exists():
-            raise forms.ValidationError('Телефон должен быть уникальным')
+            raise forms.ValidationError(_('Телефон должен быть уникальным'))
         return phone
 
     class Meta:
@@ -106,25 +109,25 @@ class RegisterForm(UserCreationForm):
     def clean_phone(self):
         phone = self.cleaned_data['phone']
         if Profile.objects.filter(phone=phone).exists():
-            raise forms.ValidationError("Такой телефон уже существует")
+            raise forms.ValidationError(_("Такой телефон уже существует"))
 
     def clean_username(self):
         username = self.cleaned_data['username']
         if User.objects.filter(username=username).exists():
-            raise forms.ValidationError("Такой логин уже существует")
+            raise forms.ValidationError(_("Такой логин уже существует"))
 
     def clean_email(self):
         email = self.cleaned_data['email']
         if User.objects.filter(email=email).exists():
-            raise forms.ValidationError("Данный email уже существует.")
+            raise forms.ValidationError(_("Данный email уже существует."))
 
     def clean_password2(self):
         passw1 = self.cleaned_data['password1']
         passw2 = self.cleaned_data['password2']
         if passw1 != passw2:
-            raise forms.ValidationError("Пароли не совпадают")
+            raise forms.ValidationError(_("Пароли не совпадают"))
         if len(passw1) < 6:
-            raise forms.ValidationError("Пароль должен содержать не менее 6 символов")
+            raise forms.ValidationError(_("Пароль должен содержать не менее 6 символов"))
 
     class Meta:
         model = User
@@ -166,5 +169,5 @@ class JSONImportForm(forms.Form):
     Вьюшка импорта JSON файлов
     """
 
-    json_file = MultiFileField(min_num=1, max_num=10)
-    email = forms.EmailField()
+    json_file = MultiFileField(label=_('json_file'), min_num=1, max_num=10)
+    email = forms.EmailField(label=_('email'))

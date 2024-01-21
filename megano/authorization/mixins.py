@@ -1,3 +1,6 @@
+from django.utils.translation import gettext_lazy as _
+
+
 class MenuMixin:
 
     @staticmethod
@@ -9,10 +12,10 @@ class MenuMixin:
         """
 
         menu = [
-            {'name': 'Личный кабинет', 'url': 'profile:profile_details', 'id': '1', },
-            {'name': 'Профиль', 'url': 'profile:profile', 'id': '2', },
-            {'name': 'История заказов', 'url': 'profile:history_orders', 'id': '3', },
-            {'name': 'История просмотров', 'url': 'profile:history_view', 'id': '4', },
+            {'name': _('Личный кабинет'), 'url': 'profile:profile_details', 'id': '1', },
+            {'name': _('Профиль'), 'url': 'profile:profile', 'id': '2', },
+            {'name': _('История заказов'), 'url': 'profile:history_orders', 'id': '3', },
+            {'name': _('История просмотров'), 'url': 'profile:history_view', 'id': '4', },
         ]
 
         return menu

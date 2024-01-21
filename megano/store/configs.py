@@ -2,6 +2,7 @@
 Модуль с настройками сайта
 """
 from __future__ import annotations
+from django.utils.translation import gettext_lazy as _
 
 SECOND = 60
 HOURS = 60 * 60
@@ -30,21 +31,25 @@ class Settings:
         Расчет времени и вывод значений по минутам, часам и дням
         """
 
+        minute = _(' мин.')
+        hour = _('ч.')
+        day = _('д.')
+
         days = cache_time // DAYS
         hours = (cache_time // SECOND) // SECOND  # hours
         minutes = (cache_time // SECOND) % SECOND  # minutes
         if cache_time // SECOND < SECOND:
-            return f"{cache_time // SECOND} мин."
+            return f"{cache_time // SECOND} {minute}"
         elif 60 <= cache_time // SECOND < 1440:
-            return (f"{hours}ч. "
-                    f"{str(minutes) + ' мин.' if minutes != 0 else ''}"
+            return (f"{hours}{hour}. "
+                    f"{str(minutes) + {minute} if minutes != 0 else ''}"
                     )
         elif 1440 <= cache_time // SECOND:
             _hours = (cache_time % DAYS) // HOURS
             _minutes = ((cache_time % DAYS) % HOURS) // SECOND
-            return (f"{days}д. "
-                    f"{str(_hours) + 'ч.' if _hours != 0 else ''} "
-                    f"{str(_minutes) + ' мин.' if _minutes != 0 else ''}"
+            return (f"{days}{day} "
+                    f"{str(_hours) + {hour} if _hours != 0 else ''} "
+                    f"{str(_minutes) + {minute} if _minutes != 0 else ''}"
                     )
 
     def set_site_name(self, name: str) -> None:

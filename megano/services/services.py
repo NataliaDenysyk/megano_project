@@ -18,6 +18,7 @@ from typing import Dict
 
 from django.core.cache import cache
 from django.contrib.auth.models import User
+from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import authenticate, login
 from urllib.parse import urlparse, parse_qs, urlencode
 from django.db.models import Avg, Count, When, Case
@@ -92,10 +93,10 @@ class AuthorizationService:
                 login(request, user)
                 return True
 
-            return 'Пароль и email не совпадают, проверьте ввод или зарегистрируйтесь'
+            return _('Пароль и email не совпадают, проверьте ввод или зарегистрируйтесь')
 
         except User.DoesNotExist:
-            return "Пользователь с таким email не найден"
+            return _("Пользователь с таким email не найден")
 
 
 class GetAdminSettings:
@@ -318,10 +319,10 @@ class FakePaymentService:
     """
 
     EXCEPTIONS = [
-        'Банк недоступен',
-        'На счете недостаточно средств',
-        'Введенный счет недействителен',
-        'Оплата не выполнена'
+        _('Банк недоступен'),
+        _('На счете недостаточно средств'),
+        _('Введенный счет недействителен'),
+        _('Оплата не выполнена')
     ]
 
     def __init__(self, card: str) -> str:
@@ -337,7 +338,7 @@ class FakePaymentService:
         card_cleaned = int(self._card.replace(" ", ""))
 
         if card_cleaned % 2 == 0 and card_cleaned % 10 != 0:
-            return 'Оплачено'
+            return _('Оплачено')
         else:
             return choice(self.EXCEPTIONS)
 
@@ -786,10 +787,6 @@ class ReviewsProduct:
 
         return reviews[0:3], reviews
 
-    # def _get_discount_on_cart(self, cart: Cart) -> Discount:
-    #     # получить скидку на корзину
-    #     pass
-
     @staticmethod
     def get_number_of_reviews_for_product(product) -> int:
         # получить количество отзывов для товара
@@ -864,6 +861,30 @@ class ImportProductService:
     Данные будут сохранены или перемещены в зависимости от результата в папки import_successfully и import_failed.
     """
 
+    file = _('Импорт файла')
+    category_i = _('Категория')
+    not_db = _('не найдена в базе данных')
+    error = _('Ошибка')
+    prod = _('Товар')
+    exists_p = _('уже существует')
+    no_matches = _('Нет совпадений по ключам в переданных данных')
+    attention = _('Внимание')
+    data = _('Данные')
+    not_imported = _('не импортированы, либо импортированы не полностью')
+    result_import = _('Результат импорта')
+    imported_suc = _('импортирован успешно')
+    failed_import = _('Не удалось переместить файл')
+    directory = _('в другую директорию')
+    end_imports = _('Конец импорта файла')
+    error_address = _('Неправильно указан адрес для загрузки главного изображения продукта')
+    error_image = _('Не удалось загрузить главное изображение для')
+    failed_import_characteristics = _('Не удалось импортировать характеристики для')
+    failed_import_address_images = _('Неправильно указан адрес для загрузки изображений продукта')
+    failed_images = _('Не удалось загрузить изображения для')
+    not_db_p = _('не найден в базе данных')
+    failed_import_offer = _('Не удалось импортировать предложение от')
+    fo = _('для')
+
     @import_logger()
     def import_product(self, file_data: list, file_name: str, file_path=None, **kwargs) -> list[str]:
         """
@@ -881,7 +902,7 @@ class ImportProductService:
 
         log = kwargs.get('logger')
         error_message = []
-        log.info(f"Импорт файла: {file_name}")
+        log.info(f"{file}: {file_name}")
 
         try:
             for info in file_data:
@@ -893,7 +914,7 @@ class ImportProductService:
 
                 except Category.DoesNotExist as e:
                     error_message.append(e)
-                    log.warning(f'Категория {info["product"].get("category")} не найдена в базе данных. Ошибка: {e}')
+                    log.warning(f'{self.category_i} {info["product"].get("category")} {self.not_db}. {self.error}: {e}')
 
                 if category:
                     try:
@@ -904,21 +925,21 @@ class ImportProductService:
 
                     except IntegrityError as e:
                         error_message += e
-                        log.warning(f'Товар {info.get("product").get("name")} уже существует. Ошибка: {e}')
+                        log.warning(f'{self.prod} {info.get("product").get("name")} {self.exists_p}. {self.error}: {e}')
 
         except KeyError as e:
             error_message.append(e)
-            log.error(f'Нет совпадений по ключам в переданных данных')
+            log.error(f'{self.no_matches}')
 
         if error_message:
             directory_name = 'import_failed'
-            message = f'Внимание! Данные {file_name} не импортированы, либо импортированы не полностью. '
-            log.info(f"Результат импорта: {message}")
+            message = f'{self.attention}! {self.data} {file_name} {self.not_imported}. '
+            log.info(f"{self.result_import}: {message}")
 
         else:
             directory_name = 'import_successfully'
-            message = f'{file_name} импортирован успешно. '
-            log.info(f"Результат импорта: {message}")
+            message = f'{file_name} {self.imported_suc}. '
+            log.info(f"{self.result_import}: {message}")
 
         try:
             if file_path:
@@ -927,10 +948,10 @@ class ImportProductService:
                 FileMoveService(directory_name).save_file(initial_data, file_name)
 
         except Exception as e:
-            log.error(f'Не удалось переместить файл {file_name} в другую директорию. {e}')
+            log.error(f'{self.failed_import} {file_name} {self.directory}. {e}')
             error_message.append(e)
 
-        log.info(f"Конец импорта файла: {file_name}")
+        log.info(f"{self.end_imports}: {file_name}")
 
         return [message, error_message]
 
@@ -949,13 +970,12 @@ class ImportProductService:
 
         except ValueError as e:
             error_message.append(e)
-            log.warning(f'Неправильно указан адрес для загрузки главного изображения '
-                        f'продукта {product_data.get("name")}. Ошибка: {e}')
+            log.warning(f'{self.error_address} {product_data.get("name")}. {self.error}: {e}')
             product_data['preview'] = ''
 
         except HTTPError as e:
             error_message.append(e)
-            log.warning(f'Не удалось загрузить главное изображение для {product_data.get("name")}. Ошибка: {e}')
+            log.warning(f'{self.error_image} {product_data.get("name")}. {self.error}: {e}')
             product_data['preview'] = ''
 
         product, created = Product.objects.get_or_create(name=product_data['name'], defaults=product_data)
@@ -974,31 +994,31 @@ class ImportProductService:
 
         except Exception as e:
             error_message.append(e)
-            log.warning(f'Не удалось импортировать характеристики для {product.name}. Ошибка: {e}')
+            log.warning(f'{self.failed_import_characteristics} {product.name}. {self.error}: {e}')
 
         try:
             self.create_product_images(product, info.get('images'))
 
         except ValueError as e:
             error_message.append(e)
-            log.warning(f'Неправильно указан адрес для загрузки изображений продукта {product.name}. '
-                        f'Ошибка: {e}')
+            log.warning(f'{self.failed_import_address_images} {product.name}. '
+                        f'{self.error}: {e}')
 
         except HTTPError as e:
             error_message.append(e)
-            log.warning(f'Не удалось загрузить изображения для {product.name}. Ошибка: {e}')
+            log.warning(f'{self.failed_images} {product.name}. {self.error}: {e}')
 
         try:
             self.create_offer(info.get('offer'), info.get('seller'), product)
 
         except Profile.DoesNotExist as e:
             error_message.append(e)
-            log.warning(f'{info.get("seller")} не найден в базе данных. Ошибка: {e}')
+            log.warning(f'{info.get("seller")} {self.not_db_p}. {self.error}: {e}')
 
         except ValueError as e:
             error_message.append(e)
-            log.warning(f'Не удалось импортировать предложение от {info.get("seller")} для {product.name}. '
-                        f'Ошибка: {e}')
+            log.warning(f'{self.failed_import_offer} {info.get("seller")} {self.fo} {product.name}. '
+                        f'{self.error}: {e}')
 
         return error_message
 
