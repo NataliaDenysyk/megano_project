@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-21 14:08+0000\n"
+"POT-Creation-Date: 2024-01-21 14:17+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1443,7 +1443,7 @@ msgstr "Редактировать профиль"
 msgid "Аватар"
 msgstr "Аватар"
 
-#: templates/authorization/profile_update_form.html:27"
+#: templates/authorization/profile_update_form.html:27
 msgid "Загрузить фото"
 msgstr "Загрузить фото"
 
@@ -1458,6 +1458,14 @@ msgstr "Подтверждение пароля"
 #: templates/authorization/profile_update_form.html:79
 msgid "Сохранить"
 msgstr "Сохранить"
+
+#: templates/banner/banner_tpl_main.html:19
+msgid "Подробнее"
+msgstr "Подробнее"
+
+#: templates/banner/banner_tpl_main.html:41
+msgid "Banners must"
+msgstr "Нет Баннера"
 
 #~ msgid "Все категории"
 #~ msgstr "Все категории"
