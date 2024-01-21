@@ -1,6 +1,7 @@
 from celery.result import AsyncResult
 from django import template
 from django.core.cache import cache
+from django.utils.translation import gettext_lazy as _
 
 register = template.Library()
 
@@ -17,10 +18,10 @@ def get_import_status() -> str:
         result = AsyncResult(task_id)
         if result.ready():
             if result.successful():
-                return 'Выполнен успешно'
+                return _('Выполнен успешно')
 
-            return 'Завершен с ошибкой'
+            return _('Завершен с ошибкой')
 
-        return 'В процессе выполнения'
+        return _('В процессе выполнения')
 
-    return 'Не было ни одного импорта'
+    return _('Не было ни одного импорта')

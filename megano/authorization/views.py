@@ -1,5 +1,6 @@
 from django.contrib.auth.views import LogoutView
 from django.contrib.auth import authenticate, login
+from django.utils.translation import gettext_lazy as _
 from django.contrib import messages
 from django.shortcuts import reverse
 from django.http import HttpResponse
@@ -84,6 +85,8 @@ class ProfileDetailView(MenuMixin, DetailView):
     """
     Представление для просмотра профиля
     """
+    profile_page = _('Страница пользователя')
+
     model = Profile
     template_name = 'authorization/profile_detail.html'
 
@@ -109,7 +112,7 @@ class ProfileDetailView(MenuMixin, DetailView):
                 self.get_menu(id='1')
             )
             context['order'] = Orders.objects.filter(profile=self.request.user.profile.id).order_by('-created_at')[:1]
-            context['title'] = f'Страница пользователя: {self.request.user.username}'
+            context['title'] = f'{self.profile_page}: {self.request.user.username}'
             return context
 
 
@@ -117,6 +120,8 @@ class ProfileUpdateView(MenuMixin, UpdateView):
     """
    Представление для редактирования профиля
    """
+    update_profile_page = _('Редактирование страницы пользователя')
+
     model = Profile
     form_class = ProfileUpdateForm
     template_name = 'authorization/profile_update_form.html'
@@ -146,7 +151,7 @@ class ProfileUpdateView(MenuMixin, UpdateView):
                 return render(self.request, 'authorization/profile_update_form.html', context=context)
         user = authenticate(username=user.username, password=user.password)
         login(self.request, user)
-        messages.success(self.request, 'Профиль успешно сохранен ')
+        messages.success(self.request, _('Профиль успешно сохранен '))
         return super().form_valid(form)
 
     def form_invalid(self, form, *args, **kwargs):
@@ -155,7 +160,7 @@ class ProfileUpdateView(MenuMixin, UpdateView):
         """
         context = self.get_context_data()
         context.update(
-            {'error': "Некорректный ввод данных. Попробуйте еще раз."}
+            {'error': _("Некорректный ввод данных. Попробуйте еще раз.")}
         )
 
         return render(self.request, 'authorization/profile_update_form.html', context=context)
@@ -168,7 +173,7 @@ class ProfileUpdateView(MenuMixin, UpdateView):
         context.update(
             self.get_menu(id='2'),
         )
-        context['title'] = f'Редактирование страницы пользователя: {self.request.user.username}'
+        context['title'] = f'{self.update_profile_page}: {self.request.user.username}'
         if self.request.POST:
             context['user_form'] = UserUpdateForm(self.request.POST, instance=self.request.user)
         else:
@@ -233,7 +238,7 @@ class RegisterView(CreateView):
             return super().form_valid(form)
 
         context = {
-            'error': 'Указанный email уже зарегистрирован',
+            'error': _('Указанный email уже зарегистрирован'),
             'form': form,
         }
         return render(self.request, 'registration/register.html', context=context)
@@ -249,7 +254,7 @@ class RegisterView(CreateView):
 
         if form.errors.get('username'):
             context.update({
-                'error': 'Этот username уже используется, выберите другой',
+                'error': _('Этот username уже используется, выберите другой'),
             })
         else:
             context.update({

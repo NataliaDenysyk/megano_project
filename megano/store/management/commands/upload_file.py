@@ -1,5 +1,6 @@
 import json
 
+from django.utils.translation import gettext_lazy as _
 from django.core.cache import cache
 from django.core.management.base import BaseCommand
 from store.tasks import import_product_from_command
@@ -21,12 +22,12 @@ class Command(BaseCommand):
         parser.add_argument(
             'file',
             type=str,
-            help="Указывает имя файла"
+            help=_("Указывает имя файла")
         )
         parser.add_argument(
             'email',
             type=str,
-            help="Указывает адресата для отправки сообщений на почту"
+            help=_("Указывает адресата для отправки сообщений на почту")
         )
 
     def handle(self, *args, **options):

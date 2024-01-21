@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
+from django.utils.translation import gettext_lazy as _
 from django.views import View
 from django.views.generic import TemplateView
 
@@ -78,7 +79,7 @@ class ComparisonErrorView(TemplateView):
     template_name = 'compare/compare_error.html'
 
     def get(self, request, *args, **kwargs):
-        message = 'Нельзя сравнивать несравнимое. Выберите товары из одной категории. Добавь товары снова'
+        message = _('Нельзя сравнивать несравнимое. Выберите товары из одной категории. Добавь товары снова')
         if request.user.is_authenticated:
             # Если пользователь авторизован, используем сессии
             comparison_list = request.session.get('comparison_list', [])
@@ -98,5 +99,5 @@ class ComparisonNoneView(TemplateView):
     template_name = 'compare/compare_none.html'
 
     def get(self, request, *args, **kwargs):
-        message = 'Тут пока ничего нет. Добавь товары к сравнению'
+        message = _('Тут пока ничего нет. Добавь товары к сравнению')
         return render(request, self.template_name, context={'message': message})
