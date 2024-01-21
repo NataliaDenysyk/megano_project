@@ -238,26 +238,6 @@ class RegisterView(CreateView):
         }
         return render(self.request, 'registration/register.html', context=context)
 
-    def form_invalid(self, form: RegisterForm):
-        """
-        Когда форма невалидна, возвращает форму и ошибку
-        """
-
-        context = {
-            'form': form,
-        }
-
-        if form.errors.get('username'):
-            context.update({
-                'error': 'Этот username уже используется, выберите другой',
-            })
-        else:
-            context.update({
-                'error': form.errors,
-            })
-
-        return render(self.request, 'registration/register.html', context=context)
-
 
 class UserLoginView(FormView):
     """

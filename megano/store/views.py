@@ -61,11 +61,10 @@ class CatalogListView(ListView):
                 self.request.resolver_match.captured_kwargs['slug']
             )
 
-        self.filterset = ProductFilter(self.request.GET, queryset=queryset)
-        # ???? переопределение переменной
-        self.filterset = CatalogService().catalog_processing(self.request, self.filterset)
+        product_filter = ProductFilter(self.request.GET, queryset=queryset)
+        self.filtered_and_sorted = CatalogService().catalog_processing(self.request, product_filter)
 
-        return self.filterset.qs
+        return self.filtered_and_sorted.qs
 
     def get_context_data(self, **kwargs) -> HttpResponse:
         """
@@ -74,7 +73,7 @@ class CatalogListView(ListView):
 
         context = super().get_context_data(**kwargs)
 
-        context['filter'] = self.filterset.form
+        context['filter'] = self.filtered_and_sorted.form
         context['tags'] = CatalogService.get_popular_tags()
         context['full_path'] = GetParamService(self.request.get_full_path()).remove_param('sorting').get_url()
 

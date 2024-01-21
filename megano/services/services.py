@@ -469,7 +469,7 @@ class ProductService:
         Функция возвращает всех продавцов товара
         """
 
-        return Offer.objects.filter(product=self._product).exclude(amount=0)
+        return Offer.objects.filter(product=self._product)
 
     def get_popular_products(self, quantity):
         popular_products = self._product.objects.filter(orders__status=True). \
