@@ -53,3 +53,23 @@ input[type="email"] {
 .cart-empty-img {
     border-radius: 10px;
 }
+
+.flex {
+    display: flex;
+}
+
+.reset-input {
+    min-height: 0;
+    height: 0;
+}
+
+.select-language {
+    min-height: 0;
+    margin-right: 15px;
+}
+
+.btn-language {
+    padding: 5px 15px;
+    background: #0063d1;
+    border:0;
+}

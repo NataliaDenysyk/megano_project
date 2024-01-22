@@ -80,21 +80,11 @@ p.error-browser
         <nav class="row-block">
           <div class="row ControlPanel-rowSplit">
             <div class="row-block">
-              {% if not user.is_authenticated %}
-                <a class="ControlPanel-title" href="{% url 'profile:login' %}">{% translate 'Вход' %}</a>
-                <a class="ControlPanel-title" href="{% url 'profile:register' %}">{% translate 'Регистрация ' %}</a>
-              {% else %}
-                <a class="ControlPanel-title"
-                   href="{% url 'profile:profile_details' slug=user.profile.slug %}">
-                  {% translate 'Личный кабинет ' %}</a>
-                <a class="ControlPanel-title" href="{% url 'profile:logout' %}">{% translate 'Выход' %}</a>
-              {% endif %}
-            </div>
-            <div class="row-block hide_700">
-              <div class="row ControlPanel-rowSplit">
-                <form action="{% url 'set_language' %}" method="post">{% csrf_token %}
+              <form class="flex" action="{% url 'set_language' %}" method="post">
+                {% csrf_token %}
+                <div class="reset-input">
                   <input name="text" type="hidden" value="{{ redirect_to }}">
-                  <select name="language">
+                  <select class="select-language" name="language">
                     {% get_current_language as LANGUAGE_CODE %}
                     {% get_available_languages as LANGUAGES %}
                     {% get_language_info_list for LANGUAGES as languages %}
@@ -105,9 +95,20 @@ p.error-browser
                       </option>
                     {% endfor %}
                   </select>
-                  <input type="submit" value="Go">
-                </form>
-              </div>
+                </div>
+                <button class="btn-language" type="submit">Go</button>
+              </form>
+              {% if not user.is_authenticated %}
+                <a class="ControlPanel-title" href="{% url 'profile:login' %}">{% translate 'Вход' %}</a>
+                <a class="ControlPanel-title" href="{% url 'profile:register' %}">{% translate 'Регистрация ' %}</a>
+              {% else %}
+                <a class="ControlPanel-title"
+                   href="{% url 'profile:profile_details' slug=user.profile.slug %}">
+                  {% translate 'Личный кабинет ' %}</a>
+                <a class="ControlPanel-title" href="{% url 'profile:logout' %}">{% translate 'Выход' %}</a>
+              {% endif %}
+
+
             </div>
           </div>
         </nav>
