@@ -41,7 +41,6 @@ def _add_product_to_comparison(request: WSGIRequest, comparison_id) -> HttpRespo
     # Проверка, чтобы не было больше 4 продуктов для сравнения и не добавлять 1 товар несколько раз
     if len(set(comparison_list)) >= 4:
         comparison_list.pop(0)
-
     # Проверка, чтобы избежать добавления одного товара несколько раз
     if comparison_id not in comparison_list:
         comparison_list.append(comparison_id)

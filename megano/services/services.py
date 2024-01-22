@@ -21,6 +21,8 @@ from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import authenticate, login
 from urllib.parse import urlparse, parse_qs, urlencode
+
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Avg, Count, When, Case
 from django.db import transaction
 from django.db import IntegrityError
