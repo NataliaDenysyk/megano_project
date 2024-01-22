@@ -51,19 +51,26 @@ class CatalogListView(ListView):
 
     def get_queryset(self) -> Product.objects:
         """
-        Функция возвращает отфильтрованные продукты по категории, тегу, фильтру или сортировке
+        Функция возвращает отфильтрованные продукты по категории, тегу, фильтру или сортировке.
+        Если переданные GET параметры совпадают с кэшированными, то продукты берутся из кэша.
         """
 
         queryset = super().get_queryset()
-        queryset = cache.get_or_set('products', queryset, settings.get_cache_catalog())
+        get_params_for_queryset = cache.get('get_params')
 
-        if self.request.resolver_match.captured_kwargs.get('slug'):
-            queryset = CategoryServices.product_by_category(
-                self.request.resolver_match.captured_kwargs['slug']
-            )
+        if get_params_for_queryset == self.request.GET:
+            self.filtered_and_sorted = cache.get('products')
+        else:
+            if self.request.resolver_match.captured_kwargs.get('slug'):
+                queryset = CategoryServices.product_by_category(
+                    self.request.resolver_match.captured_kwargs['slug']
+                )
 
-        product_filter = ProductFilter(self.request.GET, queryset=queryset)
-        self.filtered_and_sorted = CatalogService().catalog_processing(self.request, product_filter)
+            product_filter = ProductFilter(self.request.GET, queryset=queryset)
+            self.filtered_and_sorted = CatalogService().catalog_processing(self.request, product_filter)
+
+            cache.set('get_params', self.request.GET, settings.get_cache_filter_params())
+            cache.set('products', self.filtered_and_sorted, settings.get_cache_catalog())
 
         return self.filtered_and_sorted.qs
 
@@ -247,15 +254,16 @@ class ClearCacheSeller(ChangeListMixin, TemplateView):
 
 class ClearCacheCatalog(ChangeListMixin, TemplateView):
     """
-    Класс ClearCacheCatalog позволяет очистить кэш детализации продуктов
+    Класс ClearCacheCatalog позволяет очистить кэш детализации продуктов и параметров фильтра
     """
 
     template_name = 'admin/settings.html'
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        cache.delete("catalog")
-        messages.success(self.request, _('кэш каталога очищен.'))
+        cache.delete("get_params")
+        cache.delete("products")
+        messages.success(self.request, 'кэш каталога очищен.')
 
         return context
 

@@ -24,6 +24,7 @@ class Settings:
         self.__cache_product = DAYS  # 1 day
         self.__cache_seller = DAYS  # 1 day
         self.__cache_catalog = DAYS  # 1 day
+        self.__get_filter_params = DAYS  # 1 day
 
     @staticmethod
     def time_calculate(cache_time) -> str:
@@ -100,9 +101,20 @@ class Settings:
     def set_cache_catalog(self, time_cache: int) -> None:
         """
         Устанавливает время кэширования каталога.
+
         :param time_cache:  int время в минутах
         """
+
         self.__cache_catalog = int(time_cache) * SECOND
+
+    def set_cache_filter_params(self, time_cache: int) -> None:
+        """
+        Устанавливает время кэширования параметров фильтра.
+
+        :param time_cache:  int время в минутах
+        """
+
+        self.__get_filter_params = int(time_cache) * SECOND
 
     def get_site_name(self) -> str:
         """
@@ -177,6 +189,19 @@ class Settings:
             return self.__cache_catalog
 
         return self.time_calculate(self.__cache_catalog)
+
+    def get_cache_filter_params(self, time: bool = True) -> int | str:
+        """
+        Возвращает время хранения кэша параметров фильтра
+
+        :time: bool Если time == True, то время возвращается как число, иначе как форматированный вывод.
+        :return: int или str время в минутах.
+        """
+
+        if time:
+            return self.__get_filter_params
+
+        return self.time_calculate(self.__get_filter_params)
 
     def set_popular_products_cache(self, time_cache):
         self.__cache_product = int(time_cache) * DAYS
