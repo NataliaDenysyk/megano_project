@@ -788,10 +788,6 @@ class ReviewsProduct:
 
         return reviews[0:3], reviews
 
-    # def _get_discount_on_cart(self, cart: Cart) -> Discount:
-    #     # получить скидку на корзину
-    #     pass
-
     @staticmethod
     def get_number_of_reviews_for_product(product) -> int:
         # получить количество отзывов для товара
