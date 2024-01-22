@@ -71,8 +71,6 @@ class OrderCreateForm(forms.ModelForm):
         for char in chars_to_remove:
             phone_str = phone_str.replace(char, '')
         phone = phone_str[2:]
-        if phone and Profile.objects.filter(phone=phone).exclude(id=self.instance.id).exists():
-            raise forms.ValidationError('Телефон должен быть уникальным')
         return phone
 
     class Meta:
