@@ -57,7 +57,8 @@ class AuthorAdmin(admin.ModelAdmin):
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'viewed_orders':
             if 'object_id' in request.resolver_match.captured_kwargs:
-                kwargs['queryset'] = Orders.objects.filter(profile_id=request.resolver_match.captured_kwargs['object_id'])
+                kwargs['queryset'] = Orders.objects.filter(
+                    profile_id=request.resolver_match.captured_kwargs['object_id'])
         return super(AuthorAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
     def get_inlines(self, request, obj):

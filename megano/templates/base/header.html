@@ -218,7 +218,7 @@ block
                                                                                   {% else %}href="{% url 'store:category' slug=node.slug %}"
                     {% endif %}>
                       <div class="CategoriesButton-icon">
-                        <img src="{% get_static_prefix %}assets/img/icons/departments/{{ node.id }}.svg"
+                        <img src="{% get_static_prefix %}assets/img/icons/departments/{{ node.sort_index }}.svg"
                              alt=""/>
                       </div>
                       <span class="CategoriesButton-text">{{ node.name }}</span>
