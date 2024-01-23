@@ -5,6 +5,7 @@ from django.shortcuts import redirect, get_object_or_404
 from django.views.generic import ListView, DetailView, TemplateView, UpdateView, CreateView, FormView
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
+from django.utils.translation import gettext_lazy as _
 from django.contrib import messages
 from django.core.cache import cache
 from django.contrib.auth.mixins import PermissionRequiredMixin
@@ -157,7 +158,7 @@ class ClearCacheAll(ChangeListMixin, TemplateView):
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
         cache.clear()
-        messages.success(self.request, 'кэш полностью очищен.')  # Добавление сообщения для действия
+        messages.success(self.request, _('кэш полностью очищен.'))  # Добавление сообщения для действия
 
         return context
 
@@ -178,7 +179,7 @@ class ClearCacheBanner(ChangeListMixin, TemplateView):
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
         cache.delete("banners")
-        messages.success(self.request, 'кэш баннера очищен.')
+        messages.success(self.request, _('кэш баннера очищен.'))
 
         return context
 
@@ -199,7 +200,7 @@ class ClearCacheCart(ChangeListMixin, TemplateView):
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
         cache.delete("cart")
-        messages.success(self.request, 'кэш корзины очищен.')
+        messages.success(self.request, _('кэш корзины очищен.'))
 
         return context
 
@@ -220,7 +221,7 @@ class ClearCacheProductDetail(ChangeListMixin, TemplateView):
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
         cache.delete("product_detail")
-        messages.success(self.request, 'кэш продукта очищен.')
+        messages.success(self.request, _('кэш продукта очищен.'))
 
         return context
 
@@ -240,7 +241,7 @@ class ClearCacheSeller(ChangeListMixin, TemplateView):
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
         cache.delete("seller")
-        messages.success(self.request, 'кэш продавца очищен.')
+        messages.success(self.request, _('кэш продавца очищен.'))
 
         return context
 
@@ -284,9 +285,9 @@ class SiteName(ChangeListMixin, TemplateView):
         title_site = request.POST.get('title_site')
         if title_site:
             settings.set_site_name(title_site)
-            messages.success(self.request, 'Название магазина успешно изменено')
+            messages.success(self.request, _('Название магазина успешно изменено'))
         else:
-            messages.warning(self.request, 'Поле не должно быть пустым')
+            messages.warning(self.request, _('Поле не должно быть пустым'))
 
         return HttpResponseRedirect(reverse_lazy('store:settings'))
 
@@ -303,9 +304,9 @@ class CacheSetupBannerView(ChangeListMixin, TemplateView):
         time_banner = re.findall(r'[0-9]+', cache_time_banner)
         if time_banner:
             settings.set_cache_banner(time_banner[0])
-            messages.success(self.request, 'Время кэширование Баннера установлено')
+            messages.success(self.request, _('Время кэширование Баннера установлено'))
         else:
-            messages.warning(self.request, 'Поле не должно быть пустым или содержать только цифры')
+            messages.warning(self.request, _('Поле не должно быть пустым или содержать только цифры'))
 
         return HttpResponseRedirect(reverse_lazy('store:settings'))
 
@@ -322,9 +323,9 @@ class CacheSetupCartView(ChangeListMixin, TemplateView):
         time_cart = re.findall(r'[0-9]+', cache_time_cart)
         if time_cart:
             settings.set_cache_cart(time_cart[0])
-            messages.success(self.request, 'Время кэширование Корзины установлено')
+            messages.success(self.request, _('Время кэширование Корзины установлено'))
         else:
-            messages.warning(self.request, 'Поле не должно быть пустым или содержать только цифры')
+            messages.warning(self.request, _('Поле не должно быть пустым или содержать только цифры'))
 
         return HttpResponseRedirect(reverse_lazy('store:settings'))
 
@@ -341,9 +342,9 @@ class CacheSetupProdDetailView(ChangeListMixin, TemplateView):
         time_prod_detail = re.findall(r'[0-9]+', cache_time_prod_detail)
         if time_prod_detail:
             settings.set_cache_product_detail(time_prod_detail[0])
-            messages.success(self.request, 'Время кэширование детализации продукта установлено')
+            messages.success(self.request, _('Время кэширование детализации продукта установлено'))
         else:
-            messages.warning(self.request, 'Поле не должно быть пустым или содержать только цифры')
+            messages.warning(self.request, _('Поле не должно быть пустым или содержать только цифры'))
 
         return HttpResponseRedirect(reverse_lazy('store:settings'))
 
@@ -360,9 +361,9 @@ class CacheSetupSellerView(ChangeListMixin, TemplateView):
         time_seller = re.findall(r'[0-9]+', cache_time_seller)
         if time_seller:
             settings.set_cache_seller(time_seller[0])
-            messages.success(self.request, 'Время кэширование детализации продавца установлено')
+            messages.success(self.request, _('Время кэширование детализации продавца установлено'))
         else:
-            messages.warning(self.request, 'Поле не должно быть пустым или содержать только цифры')
+            messages.warning(self.request, _('Поле не должно быть пустым или содержать только цифры'))
 
         return HttpResponseRedirect(reverse_lazy('store:settings'))
 
@@ -379,9 +380,9 @@ class CacheSetupCatalogView(ChangeListMixin, TemplateView):
         time_catalog = re.findall(r'[0-9]+', cache_time_catalog)
         if time_catalog:
             settings.set_cache_catalog(time_catalog[0])
-            messages.success(self.request, 'Время кэширование детализации продавца установлено')
+            messages.success(self.request, _('Время кэширование детализации продавца установлено'))
         else:
-            messages.warning(self.request, 'Поле не должно быть пустым или содержать только цифры')
+            messages.warning(self.request, _('Поле не должно быть пустым или содержать только цифры'))
 
         return HttpResponseRedirect(reverse_lazy('store:settings'))
 
@@ -625,6 +626,9 @@ class PaymentFormView(FormView):
         Передает в контекст тип оплаты по id заказа
         """
 
+        order_n = _('Заказ с номером')
+        not_found = _('не найден')
+
         context = super().get_context_data(**kwargs)
         try:
             order_status = Orders.objects.get(id=self.kwargs['pk']).status
@@ -647,7 +651,7 @@ class PaymentFormView(FormView):
         except ObjectDoesNotExist:
             context.update(
                 {
-                    'error': f'Заказ с номером {self.kwargs["pk"]} не найден',
+                    'error': f'{order_n} {self.kwargs["pk"]} {not_found}',
                 }
             )
             return context

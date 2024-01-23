@@ -2,6 +2,7 @@ from django.core.handlers.wsgi import WSGIRequest
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
+from django.utils.translation import gettext_lazy as _
 
 from compare.models import (HeadphonesCharacteristic,
                             TVSetCharacteristic,
@@ -144,12 +145,12 @@ def characteristic_headset(id_model_characteristics) -> dict:
     """
 
     model_info = HeadphonesCharacteristic.objects.get(id=id_model_characteristics)
-    characteristic = {'Беспроводные': model_info.wireless,
-                      'Наличие микрофона': model_info.mic,
-                      'Ношение': model_info.fit,
-                      'Наличие bluetooth': model_info.bluetooth,
-                      'Сомпротивление, Ом': model_info.resistance,
-                      'Наличие HDMI': model_info.hdmi,
+    characteristic = {_('Беспроводные'): model_info.wireless,
+                      _('Наличие микрофона'): model_info.mic,
+                      _('Ношение'): model_info.fit,
+                      _('Наличие bluetooth'): model_info.bluetooth,
+                      _('Сомпротивление, Ом'): model_info.resistance,
+                      _('Наличие HDMI'): model_info.hdmi,
                       }
     return characteristic
 
@@ -160,12 +161,12 @@ def characteristic_wm(id_model_characteristics) -> dict:
     """
 
     model_info = WashMachineCharacteristic.objects.get(id=id_model_characteristics)
-    characteristic = {'Высота': model_info.height,
-                      'Ширина': model_info.width,
-                      'Глубина': model_info.depth,
-                      'Тип загрузки': model_info.type_loading,
-                      'Объём загрузки': model_info.capacity,
-                      'Дополнительное описание': model_info.description,
+    characteristic = {_('Высота'): model_info.height,
+                      -('Ширина'): model_info.width,
+                      _('Глубина'): model_info.depth,
+                      _('Тип загрузки'): model_info.type_loading,
+                      _('Объём загрузки'): model_info.capacity,
+                      _('Дополнительное описание'): model_info.description,
                       }
     return characteristic
 
@@ -176,11 +177,11 @@ def characteristic_mobile(id_model_characteristics) -> dict:
     """
 
     model_info = MobileCharacteristic.objects.get(id=id_model_characteristics)
-    characteristic = {'Тип мобильного телефона': model_info.phone_type,
-                      'Размер экрана в дюймах': model_info.screen_size,
-                      'Разрешение экрана': model_info.screen_resolution,
-                      'Технология экрана': model_info.screen_technology,
-                      'Операционная система': model_info.op_system,
+    characteristic = {_('Тип мобильного телефона'): model_info.phone_type,
+                      _('Размер экрана в дюймах'): model_info.screen_size,
+                      _('Разрешение экрана'): model_info.screen_resolution,
+                      _('Технология экрана'): model_info.screen_technology,
+                      _('Операционная система'): model_info.op_system,
                       }
     return characteristic
 
@@ -191,14 +192,14 @@ def characteristic_tv(id_model_characteristics) -> dict:
     """
 
     model_info = TVSetCharacteristic.objects.get(id=id_model_characteristics)
-    characteristic = {'Название': model_info.name,
-                      'Размер экрана': model_info.screen,
-                      'Разрешение экрана': model_info.resolution,
-                      'Страна производитель': model_info.country,
-                      'Частота обновления': model_info.freq,
-                      'Наличие Wi - Fi': model_info.wi_fi,
-                      'HDMI': model_info.hdmi,
-                      'Дополнительное описание': model_info.description,
+    characteristic = {_('Название'): model_info.name,
+                      _('Размер экрана'): model_info.screen,
+                      _('Разрешение экрана'): model_info.resolution,
+                      _('Страна производитель'): model_info.country,
+                      _('Частота обновления'): model_info.freq,
+                      _('Наличие Wi - Fi'): model_info.wi_fi,
+                      _('HDMI'): model_info.hdmi,
+                      _('Дополнительное описание'): model_info.description,
                       }
     return characteristic
 
@@ -209,11 +210,11 @@ def characteristic_photo(id_model_characteristics) -> dict:
     """
 
     model_info = PhotoCamCharacteristic.objects.get(id=id_model_characteristics)
-    characteristic = {'Тип фотоаппарата': model_info.type,
-                      'Количество мегапикселей': model_info.mp,
-                      'ISO максимальная': model_info.max_iso,
-                      'ISO минимальная': model_info.min_iso,
-                      'Видео разрешение': model_info.video_resolution,
+    characteristic = {_('Тип фотоаппарата'): model_info.type,
+                      _('Количество мегапикселей'): model_info.mp,
+                      _('ISO максимальная'): model_info.max_iso,
+                      _('ISO минимальная'): model_info.min_iso,
+                      _('Видео разрешение'): model_info.video_resolution,
                       }
     return characteristic
 
@@ -224,24 +225,24 @@ def characteristic_nb(id_model_characteristics) -> dict:
     """
 
     model_info = NotebookCharacteristic.objects.get(id=id_model_characteristics)
-    characteristic = {'Тип ноутбука': model_info.laptop_type,
-                      'Размер экрана в дюймах': model_info.screen_size,
-                      'Разрешение экрана': model_info.screen_resolution,
-                      'Плотность пикселей': model_info.ppi,
-                      'Операционная система': model_info.op_system,
-                      'Версия операционной системы': model_info.op_version,
+    characteristic = {_('Тип ноутбука'): model_info.laptop_type,
+                      _('Размер экрана в дюймах'): model_info.screen_size,
+                      _('Разрешение экрана'): model_info.screen_resolution,
+                      _('Плотность пикселей'): model_info.ppi,
+                      _('Операционная система'): model_info.op_system,
+                      _('Версия операционной системы'): model_info.op_version,
                       }
     return characteristic
 
 
 def characteristic_mw(id_model_characteristics) -> dict:
     model_info = MicrowaveOvenCharacteristic.objects.get(id=id_model_characteristics)
-    characteristic = {'Объём загрузки': model_info.capacity,
-                      'Мощность Вт': model_info.power,
-                      'Гриль': model_info.grill,
-                      'Высота, мм': model_info.height,
-                      'Ширина, мм': model_info.width,
-                      'Глубина, мм': model_info.depth,
+    characteristic = {_('Объём загрузки'): model_info.capacity,
+                      _('Мощность Вт'): model_info.power,
+                      _('Гриль'): model_info.grill,
+                      _('Высота, мм'): model_info.height,
+                      _('Ширина, мм'): model_info.width,
+                      _('Глубина, мм'): model_info.depth,
                       }
     return characteristic
 
@@ -252,17 +253,17 @@ def characteristic_kitchen_technik(id_model_characteristics) -> dict:
     """
 
     model_info = KitchenCharacteristic.objects.get(id=id_model_characteristics)
-    characteristic = {'Тип техники': model_info.type,
-                      'Дополнительное описание': model_info.description,
+    characteristic = {_('Тип техники'): model_info.type,
+                      _('Дополнительное описание'): model_info.description,
                       }
     return characteristic
 
 
 def characteristic_electro(id_model_characteristics) -> dict:
     model_info = ElectroCharacteristic.objects.get(id=id_model_characteristics)
-    characteristic = {'Тип электроники': model_info.type_product,
-                      'Тип питания': model_info.power,
-                      'Дополнительное описание': model_info.description,
+    characteristic = {_('Тип электроники'): model_info.type_product,
+                      _('Тип питания'): model_info.power,
+                      _('Дополнительное описание'): model_info.description,
                       }
     return characteristic
 
@@ -273,9 +274,9 @@ def characteristic_torchere(id_model_characteristics) -> dict:
     """
 
     model_info = TorchereCharacteristic.objects.get(id=id_model_characteristics)
-    characteristic = {'Тип лампочки': model_info.led_type,
-                      'Высота': model_info.height,
-                      'Место расположения': model_info.place_type,
+    characteristic = {_('Тип лампочки'): model_info.led_type,
+                      _('Высота'): model_info.height,
+                      _('Место расположения'): model_info.place_type,
                       }
     return characteristic
 
@@ -285,9 +286,9 @@ def get_characteristic_from_common_info(data) -> dict:
     Подготовка данных для возврата на фронт
     """
 
-    characteristic_info = {'Страна производства': data.get('made_in'),
-                           'Год производства': data.get('production_year'),
-                           'Цвет': data.get('color'),
-                           'Вес': data.get('weight'),
+    characteristic_info = {_('Страна производства'): data.get('made_in'),
+                           _('Год производства'): data.get('production_year'),
+                           _('Цвет'): data.get('color'),
+                           _('Вес'): data.get('weight'),
                            }
     return characteristic_info

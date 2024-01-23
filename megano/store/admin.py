@@ -6,6 +6,7 @@ from django.contrib import admin, messages
 from django.shortcuts import reverse, render, redirect
 from django.urls import path
 from django.utils.html import format_html
+from django.utils.translation import gettext_lazy as _
 
 from django.core.cache import cache
 from django.utils.safestring import mark_safe
@@ -43,30 +44,30 @@ from authorization.models import Profile
 from .utils import busy_queues
 
 
-@admin.action(description='Архивировать')
+@admin.action(description=_('Архивировать'))
 def mark_archived(modeladmin: admin.ModelAdmin, request: HttpRequest, queryset: QuerySet):
     queryset.update(archived=True)
 
 
-@admin.action(description='Разархивировать')
+@admin.action(description=_('Разархивировать'))
 def mark_unarchived(modeladmin: admin.ModelAdmin, request: HttpRequest, queryset: QuerySet):
     queryset.update(archived=False)
 
 
-@admin.action(description='Доступен')
+@admin.action(description=_('Доступен'))
 def mark_availability(modeladmin: admin.ModelAdmin, request: HttpRequest, queryset: QuerySet):
     queryset.update(availability=True)
 
 
-@admin.action(description='Не доступен')
+@admin.action(description=_('Не доступен'))
 def mark_unavailability(modeladmin: admin.ModelAdmin, request: HttpRequest, queryset: QuerySet):
     queryset.update(availability=False)
 
 
-@admin.action(description="Сбросить кэш списка товаров")
+@admin.action(description=_("Сбросить кэш списка товаров"))
 def reset_product_list_cache(self, request, queryset):
     cache.clear()
-    self.message_user(request, "кэш списка товаров сброшен.")
+    self.message_user(request, _("кэш списка товаров сброшен."))
 
 
 class CartInline(admin.TabularInline):
@@ -93,7 +94,7 @@ class AdminBanner(admin.ModelAdmin):
         (None, {
             "fields": ('title', 'link', 'slug', 'product', 'description'),
         }),
-        ("Extra options", {
+        (_("Extra options"), {
             "fields": ("is_active",),
             "classes": ("collapse",),
         })
@@ -110,11 +111,13 @@ class AdminBanner(admin.ModelAdmin):
         else:
             return 'not url'
 
-    get_html_images.short_description = "Изображение"
+    get_html_images.short_description = _("Изображение")
 
 
 class ProductInline(admin.TabularInline):
     model = Orders.products.through
+    verbose_name = _('Продукт')
+    verbose_name_plural = _('Продукты')
     extra = 0
 
 
@@ -139,7 +142,7 @@ class AdminOrders(admin.ModelAdmin):
             "fields": ('profile', 'total_payment', 'delivery_type',
                        'payment', 'created_at', 'address', 'status', 'status_exception',),
         }),
-        ('Extra options', {
+        (_('Extra options'), {
             'fields': ('archived',),
             'classes': ('collapse',),
         })
@@ -162,7 +165,7 @@ class AdminOrders(admin.ModelAdmin):
         link = reverse('admin:authorization_profile_change', args=(obj.profile.id,))
         return format_html('<a href="{}">{}</a>', link, obj.profile.user.username)
 
-    profile_url.short_description = 'Покупатель'
+    profile_url.short_description = _('Покупатель')
 
 
 @admin.register(Category)
@@ -181,7 +184,7 @@ class AdminCategory(DjangoMpttAdmin):
         (None, {
             "fields": ('name', 'parent', 'sort_index', 'slug'),
         }),
-        ("Extra options", {
+        (_("Extra options"), {
             "fields": ("activity",),
             "classes": ("collapse",),
             "description": "Extra options. Field 'activity' is for soft delete",
@@ -201,8 +204,8 @@ class AdminCategory(DjangoMpttAdmin):
 
 class TagInline(admin.TabularInline):
     model = Product.tags.through
-    verbose_name = 'Тег'
-    verbose_name_plural = 'Теги'
+    verbose_name = _('Тег')
+    verbose_name_plural = _('Теги')
     extra = 0
 
 
@@ -231,13 +234,15 @@ class ReviewsInline(admin.TabularInline):
 
 class DiscountInline(admin.TabularInline):
     model = Product.discount.through
-    verbose_name = 'Скидка'
-    verbose_name_plural = 'Скидки'
+    verbose_name = _('Скидка')
+    verbose_name_plural = _('Скидки')
     extra = 0
 
 
 class OrderInline(admin.TabularInline):
     model = Product.orders.through
+    verbose_name = _('Заказ')
+    verbose_name_plural = _('Заказы')
     extra = 0
 
 
@@ -283,10 +288,10 @@ class AdminProduct(admin.ModelAdmin):
         (None, {
             'fields': ('name', 'description', 'category'),
         }),
-        ('Главное фото', {
+        (_('Главное фото'), {
             'fields': ('preview',),
         }),
-        ('Другие опции', {
+        (_('Другие опции'), {
             'fields': ('limited_edition', 'availability', 'slug',),
             "classes": ("collapse",),
         }),
@@ -317,10 +322,10 @@ class AdminProduct(admin.ModelAdmin):
         link = reverse('admin:store_category_change', args=(obj.category.id,))
         return format_html('<a href="{}">{}</a>', link, obj.category.name)
 
-    description_short.short_description = 'Описание'
-    created_time.short_description = 'Создан'
-    update_time.short_description = 'Отредактирован'
-    category_url.short_description = 'Категория'
+    description_short.short_description = _('Описание')
+    created_time.short_description = _('Создан')
+    update_time.short_description = _('Отредактирован')
+    category_url.short_description = _('Категория')
 
     def get_actions(self, request):
         """"
@@ -333,6 +338,8 @@ class AdminProduct(admin.ModelAdmin):
         return actions
 
     def import_json(self, request: HttpRequest) -> HttpResponse:
+        wrong_format = _('Передан неправильный формат. Загрузить можно только файлы json.')
+
         if request.method == 'GET':
             form = JSONImportForm()
             context = {
@@ -353,7 +360,7 @@ class AdminProduct(admin.ModelAdmin):
             if busy_queues('json_import'):
                 self.message_user(
                     request,
-                    'Ошибка: предыдущий импорт ещё не выполнен. Пожалуйста, дождитесь его окончания.',
+                    _('Ошибка: предыдущий импорт ещё не выполнен. Пожалуйста, дождитесь его окончания.'),
                     level=messages.ERROR,
                 )
             else:
@@ -375,13 +382,13 @@ class AdminProduct(admin.ModelAdmin):
 
                 self.message_user(
                     request,
-                    'Загрузка файлов началась. Результат будет отправлен на указанную почту.'
+                    _('Загрузка файлов началась. Результат будет отправлен на указанную почту.')
                 )
 
         except JSONDecodeError:
             self.message_user(
                 request,
-                f'Передан неправильный формат. Загрузить можно только файлы json.',
+                f'{wrong_format}',
                 level=messages.ERROR,
             )
 
@@ -423,13 +430,13 @@ class OfferAdmin(admin.ModelAdmin):
         link = reverse('admin:store_product_change', args=(obj.product.id,))
         return format_html('<a href="{}">{}</a>', link, obj.product.name)
 
-    product_url.short_description = 'Товар'
+    product_url.short_description = _('Товар')
 
 
 class ProductInline(admin.TabularInline):
     model = Discount.products.through
-    verbose_name = 'Товар'
-    verbose_name_plural = 'Товары'
+    verbose_name = _('Товар')
+    verbose_name_plural = _('Товары')
     extra = 0
 
 
@@ -443,8 +450,8 @@ class ReviewsProduct(admin.ModelAdmin):
 
 class CategoriesInline(admin.TabularInline):
     model = Discount.categories.through
-    verbose_name = 'Категория'
-    verbose_name_plural = 'Категории'
+    verbose_name = _('Категория')
+    verbose_name_plural = _('Категории')
     extra = 0
 
 
@@ -480,7 +487,7 @@ class DiscountAdmin(admin.ModelAdmin):
         if obj.image:
             return mark_safe(f'<img src="{obj.image.url}" alt=""width="50">')
 
-    get_html_images.short_description = "Изображение"
+    get_html_images.short_description = _("Изображение")
 
 
 @admin.register(BannersCategory)
@@ -500,4 +507,4 @@ class AdminBannerCategory(admin.ModelAdmin):
         else:
             return 'not url'
 
-    get_html_images.short_description = "Изображение"
+    get_html_images.short_description = _("Изображение")
