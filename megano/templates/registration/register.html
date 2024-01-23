@@ -27,7 +27,7 @@
                     {{ form.password2 }}
                 </div>
                 <div class="form-error">{{ form.password2.errors }}</div>
-                <input type="submit" value={% translate 'Зарегистрироваться' %}""/>
+                <input type="submit" value={% translate 'Зарегистрироваться' %}>
 
                 <a class="registr" href="{% url 'profile:login' %}">
                     {% translate 'Вход' %}
