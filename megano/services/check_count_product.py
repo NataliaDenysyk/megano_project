@@ -1,3 +1,4 @@
+from django.utils.translation import gettext_lazy as _, ngettext
 from services.message_toast import ToastMessage
 from store.models import Offer, Product
 
@@ -6,6 +7,10 @@ class CheckCountProduct:
     """
     Класс проверки стоимости продукта
     """
+
+    products = _('Товара  доступно')
+    more = _('Больше')
+    not_in_stock = _('нет на складе')
 
     def __init__(self, offer):
         self.offer = Offer.objects.get(id=offer)
@@ -18,11 +23,15 @@ class CheckCountProduct:
         """
 
         if self.offer.amount == 0:
-            self.message.toast_message('Ошибка', 'Товар отсутствует на складе')
+            product = Product.objects.get(id=self.offer.id)
+            product.availability = False
+            product.save()
+            self.message.toast_message(_('Ошибка'), _('Товар отсутствует на складе'))
             return False
         else:
             if quantity > self.offer.amount:
-                self.message.toast_message('Ошибка', f'Товара  доступно {self.offer.amount}шт.')
+                piece = ngettext('{self.offer.amount} шт.', '{self.offer.amount}шт.', self.offer.amount)
+                self.message.toast_message(_('Ошибка'), f'{self.products} {piece}')
                 return False
         return True
 
@@ -33,7 +42,8 @@ class CheckCountProduct:
         """
 
         if item['quantity'] >= self.offer.amount:
-            self.message.toast_message('Ошибка', f'Больше {self.offer.amount}шт. нет на складе')
+            piece = ngettext('{self.offer.amount} шт.', '{self.offer.amount}шт.', self.offer.amount)
+            self.message.toast_message(_('Ошибка'), f'{self.more} {piece} {self.not_in_stock}')
             return False
 
         return True

@@ -20,6 +20,7 @@ class ChangeListMixin:
             cache_cart=settings.get_cache_cart(time=False),
             cache_prod_detail=settings.get_cache_product_detail(time=False),
             cache_seller=settings.get_cache_seller(time=False),
-            cache_catalog=settings.get_cache_catalog(time=False)
+            cache_catalog=settings.get_cache_catalog(time=False),
+            cache_params=settings.get_cache_filter_params(time=False),
         )
         return context

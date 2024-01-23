@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.utils.safestring import mark_safe
+from django.utils.translation import gettext_lazy as _
 
 from .models import Cart
 
@@ -35,8 +36,8 @@ class CartAdmin(admin.ModelAdmin):
 
         return mark_safe(f"<img src='{obj.products.preview.url}' width=50>")
 
-    product_name.short_description = 'Товары'
-    icon_image.short_description = 'Иконка'
+    product_name.short_description = _('Товары')
+    icon_image.short_description = _('Иконка')
 
 
 admin.site.register(Cart, CartAdmin)
