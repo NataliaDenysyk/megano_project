@@ -904,7 +904,7 @@ class ImportProductService:
 
         log = kwargs.get('logger')
         error_message = []
-        log.info(f"{file}: {file_name}")
+        log.info(f"{self.file}: {file_name}")
 
         try:
             for info in file_data:
