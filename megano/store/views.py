@@ -57,15 +57,16 @@ class CatalogListView(ListView):
 
         queryset = super().get_queryset()
         get_params_for_queryset = cache.get('get_params')
+        category = self.request.resolver_match.captured_kwargs.get('slug')
 
-        if get_params_for_queryset == self.request.GET:
+        if category:
+            queryset = CategoryServices.product_by_category(
+                self.request.resolver_match.captured_kwargs['slug']
+            )
+
+        if self.request.GET and get_params_for_queryset == self.request.GET and not category:
             self.filtered_and_sorted = cache.get('products')
         else:
-            if self.request.resolver_match.captured_kwargs.get('slug'):
-                queryset = CategoryServices.product_by_category(
-                    self.request.resolver_match.captured_kwargs['slug']
-                )
-
             product_filter = ProductFilter(self.request.GET, queryset=queryset)
             self.filtered_and_sorted = CatalogService().catalog_processing(self.request, product_filter)
 
