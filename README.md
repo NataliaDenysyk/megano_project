@@ -326,7 +326,7 @@ celery -A megano worker -l info -Q json_import
 
 Запустить сразу оба воркера
 ```
-celery -A megano worker -l info -Q payment,json_import
+celery -A megano worker -l info -Q payment,json_import -c 1
 ```
 
 ## Настройка отправки сообщений в консоль

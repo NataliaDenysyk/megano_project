@@ -82,7 +82,11 @@ def import_logger(dir_name='logs/import_logs') -> Callable:
             logger.addHandler(file_handler)
 
             kwargs['logger'] = logger
-            result = func(*args, **kwargs)
+            try:
+                result = func(*args, **kwargs)
+            except Exception as e:
+                result = ['Неожиданная ошибка, импорт не удался', e]
+                logger.error(result)
 
             logger.removeHandler(file_handler)
             file_handler.close()

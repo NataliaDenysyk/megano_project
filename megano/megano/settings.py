@@ -141,7 +141,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru-ru'
 
 TIME_ZONE = 'UTC'
 
@@ -194,11 +194,3 @@ REDIS_NAME = os.getenv('REDIS_NAME')
 
 CELERY_BROKER_URL = f'redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_NAME}'
 CELERY_RESULT_BACKEND = CELERY_BROKER_URL
-
-
-EMAIL_HOST = os.getenv("EMAIL_HOST")
-EMAIL_PORT = os.getenv("EMAIL_PORT")
-EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
-EMAIL_BACKEND = os.getenv("EMAIL_BACKEND")
-DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL")

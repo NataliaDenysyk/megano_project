@@ -327,15 +327,15 @@ class AdminProduct(admin.ModelAdmin):
     update_time.short_description = _('Отредактирован')
     category_url.short_description = _('Категория')
 
-    def get_actions(self, request):
-        """"
-        Функкция удаляет 'delete_selected' из actions(действие) в панели администратора
-        """
-
-        actions = super(self.__class__, self).get_actions(request)
-        if 'delete_selected' in actions:
-            del actions['delete_selected']
-        return actions
+    # def get_actions(self, request):
+    #     """"
+    #     Функкция удаляет 'delete_selected' из actions(действие) в панели администратора
+    #     """
+    #
+    #     actions = super(self.__class__, self).get_actions(request)
+    #     if 'delete_selected' in actions:
+    #         del actions['delete_selected']
+    #     return actions
 
     def import_json(self, request: HttpRequest) -> HttpResponse:
         wrong_format = _('Передан неправильный формат. Загрузить можно только файлы json.')
@@ -391,13 +391,6 @@ class AdminProduct(admin.ModelAdmin):
                 f'{wrong_format}',
                 level=messages.ERROR,
             )
-
-        # except Exception as e:
-        #     self.message_user(
-        #         request,
-        #         f'Случилась непредвиденная ошибка: {e}',
-        #         level=messages.ERROR,
-        #     )
 
         return redirect('..')
 

@@ -857,9 +857,10 @@ class ImportProductService:
     """
     Сервис импорта продуктов из словаря.
     Продукт возможно импортировать только при существовании категории в базе данных.
-    Имя продукта считается уникальным. Если такое имя уже существует в базе данных - будет взят
-    существующий продукт (без обновления полей модели Product). Связанные с данной моделью сущности
-    будут обновлены, если не будет выброшено исключение.
+    Слаг продукта считается уникальным и создается по имени продукта.
+    Если такой слаг уже существует в базе данных - будет взят
+    существующий продукт (без обновления полей модели Product).
+    Связанные с данной моделью сущности будут обновлены, если не будет выброшено исключение.
     Данные будут сохранены или перемещены в зависимости от результата в папки import_successfully и import_failed.
     """
 
@@ -911,8 +912,7 @@ class ImportProductService:
                 category = None
 
                 try:
-                    if info['product'].get('category'):
-                        category = Category.objects.get(name=info['product'].get('category'))
+                    category = Category.objects.get(name_ru=info['product'].get('category'))
 
                 except Category.DoesNotExist as e:
                     error_message.append(e)
@@ -926,7 +926,7 @@ class ImportProductService:
                             error_message.append(result)
 
                     except IntegrityError as e:
-                        error_message += e
+                        error_message.append(e)
                         log.warning(f'{self.prod} {info.get("product").get("name")} {self.exists_p}. {self.error}: {e}')
 
         except KeyError as e:
@@ -959,7 +959,7 @@ class ImportProductService:
 
     def get_or_create_product(self, category: Category, info: dict, log) -> Product:
         """
-        Находит продукт по полю name, либо создает новый и создает связанные данные
+        Находит продукт по полю slug, либо создает новый и создает связанные сущности
         """
 
         error_message = []
@@ -980,7 +980,7 @@ class ImportProductService:
             log.warning(f'{self.error_image} {product_data.get("name")}. {self.error}: {e}')
             product_data['preview'] = ''
 
-        product, created = Product.objects.get_or_create(name=product_data['name'], defaults=product_data)
+        product, created = Product.objects.get_or_create(slug=product_data['slug'], defaults=product_data)
 
         try:
             if info.get('tags'):
