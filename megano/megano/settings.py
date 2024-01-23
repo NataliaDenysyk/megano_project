@@ -57,6 +57,7 @@ CACHES = {
 }
 
 INSTALLED_APPS = [
+    'modeltranslation',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -154,10 +155,17 @@ LOCALE_PATHS = [
     BASE_DIR / 'locale/'
 ]
 
+TRANSLATABLE_MODEL_MODULES = (
+    'compare.translation',
+    'store.translation',
+)
+
+gettext = lambda s: s
 LANGUAGES = [
-    ('en', _('English')),
-    ('ru', _('Russian')),
+    ('en', gettext('English')),
+    ('ru', gettext('Russian')),
 ]
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/

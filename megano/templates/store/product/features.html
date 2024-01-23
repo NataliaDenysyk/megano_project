@@ -1,3 +1,6 @@
+{% load i18n static %}
+
+
 <div class="Tabs-block" id="addit">
   <div class="Product-props">
     {% if feature %}
@@ -14,7 +17,7 @@
         </div>
       {% endfor %}
     {% else %}
-      <p>Характеристики отсутствуют</p>
+      <p>{% translate 'Характеристики отсутствуют' %}</p>
     {% endif %}
   </div>
 </div>

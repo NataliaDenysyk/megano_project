@@ -1,7 +1,9 @@
 {% extends 'base/base.html' %}
+{% load i18n static %}
+
 
 {% block content %}
-    <h1>Ошибка</h1>
+    <h1>{% translate 'Ошибка' %}</h1>
 
     <p>{{ message }}</p>
 

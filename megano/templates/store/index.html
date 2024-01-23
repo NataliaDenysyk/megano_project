@@ -1,6 +1,6 @@
 {% extends "base/base.html" %}
 {% load banners_tags %}
-{% load static %}
+{% load i18n static %}
 
 
 {% block content %}
@@ -37,7 +37,7 @@
           <div class="Section-column">
             <div class="Section-columnSection Section-columnSection_mark">
               <header class="Section-columnHeader">
-                <strong class="Section-columnTitle">Предложение дня
+                <strong class="Section-columnTitle">{% translate 'Предложение дня' %}
                 </strong>
               </header>
               <div class="Card">
@@ -71,21 +71,21 @@
                       <div class="CountDown-wrap">
                         <div class="CountDown-hours">
                         </div>
-                        <span class="CountDown-label">Часы</span>
+                        <span class="CountDown-label">{% translate 'Часы' %}</span>
                       </div>
                     </div>
                     <div class="CountDown-block">
                       <div class="CountDown-wrap">
                         <div class="CountDown-minutes">
                         </div>
-                        <span class="CountDown-label">Минуты</span>
+                        <span class="CountDown-label">{% translate 'Минуты' %}</span>
                       </div>
                     </div>
                     <div class="CountDown-block">
                       <div class="CountDown-wrap">
                         <div class="CountDown-secs">
                         </div>
-                        <span class="CountDown-label">Секунды</span>
+                        <span class="CountDown-label">{% translate 'Секунды' %}</span>
                       </div>
                     </div>
                   </div>
@@ -96,7 +96,7 @@
         {% endif %}
         <div class="Section-content">
           <header class="Section-header">
-            <h2 class="Section-title">Популярные товары
+            <h2 class="Section-title">{% translate 'Популярные товары' %}
             </h2>
           </header>
           <div class="Cards">
@@ -148,7 +148,7 @@
         <div class="Section-content">
           <div class="Slider Slider_carousel">
             <header class="Section-header">
-              <h2 class="Section-title">Горячие предложения
+              <h2 class="Section-title">{% translate 'Горячие предложения' %}
               </h2>
               <div class="Section-control">
                 <div class="Slider-navigate">
@@ -204,7 +204,7 @@
         <div class="Section-content">
           <div class="Slider Slider_carousel">
             <header class="Section-header Section-header_close">
-              <h2 class="Section-title">Ограниченный тираж
+              <h2 class="Section-title">{% translate 'Ограниченный тираж' %}
               </h2>
               <div class="Section-control">
                 <div class="Slider-navigate">

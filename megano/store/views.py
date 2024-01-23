@@ -263,7 +263,7 @@ class ClearCacheCatalog(ChangeListMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         cache.delete("get_params")
         cache.delete("products")
-        messages.success(self.request, 'кэш каталога очищен.')
+        messages.success(self.request, _('кэш каталога очищен.'))
 
         return context
 

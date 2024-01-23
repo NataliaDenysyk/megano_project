@@ -1,5 +1,6 @@
 {% extends 'authorization/account.html' %}
-{% load static %}
+{% load i18n static %}
+
 
 {% block content123 %}
   <div class="Section-content">
@@ -54,7 +55,7 @@
         {% endfor %}
       </div>
     {% else %}
-      <h3>Просмотров в истории пока нет</h3>
+      <h3>{% translate 'Просмотров в истории пока нет' %}</h3>
     {% endif %}
   </div>
 {% endblock %}

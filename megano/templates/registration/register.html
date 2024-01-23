@@ -1,10 +1,12 @@
 {% extends 'base/base.html' %}
+{% load i18n static %}
+
 
 {% block content %}
     <div class="wrapper">
         {% if not user.is_authenticated %}
             <div class="header">
-                <h3 class="sign-in">Регистрация</h3>
+                <h3 class="sign-in">{% translate 'Регистрация' %}</h3>
             </div>
             <div class="clear"></div>
             <form action="#" method="post">
@@ -25,15 +27,15 @@
                     {{ form.password2 }}
                 </div>
                 <div class="form-error">{{ form.password2.errors }}</div>
-                <input type="submit" value="Зарегистрироваться"/>
+                <input type="submit" value={% translate 'Зарегистрироваться' %}""/>
 
                 <a class="registr" href="{% url 'profile:login' %}">
-                    Вход
+                    {% translate 'Вход' %}
                 </a>
                 <div class="clear"></div>
             </form>
         {% else %}
-            <h2>Вы уже зарегистрированы и авторизованы :)</h2>
+            <h2>{% translate 'Вы уже зарегистрированы и авторизованы' %} :)</h2>
         {% endif %}
     </div>
 {% endblock %}

@@ -1,4 +1,6 @@
 {% extends "base/base.html" %}
+{% load i18n static %}
+
 
 {% block bottom_header %}
 {% endblock %}
@@ -6,7 +8,7 @@
 {% block content %}
   <div class="wrapper">
     <div class="header">
-      <h3 class="sign-in">Вход</h3>
+      <h3 class="sign-in">{% translate 'Вход' %}</h3>
     </div>
     <div class="clear"></div>
     <form action="" method="post">
@@ -18,11 +20,11 @@
         {{ form.password }}
       </div>
       <div>
-        <input type="submit" value="Войти"/>
+        <input type="submit" value={% translate "Войти" %}/>
       </div>
-      <a class="forgot-label" href="">Забыли пароль?</a>
+      <a class="forgot-label" href="">{% translate 'Забыли пароль' %}?</a>
       <a class="registr" href="{% url 'profile:register' %}">
-        Регистрация
+        {% translate 'Регистрация' %}
       </a>
     </form>
     {% if error %}

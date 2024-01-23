@@ -1,4 +1,5 @@
-{% load static %}
+{% load i18n static %}
+
 
 {% if banners %}
   <div class="Header-slider">
@@ -15,7 +16,7 @@
                     <div class="Slider-text">{{ banner.description }}
                     </div>
                     <div class="Slider-footer">
-                      <a class="btn btn_primary" href="{{ banner.link }}">Подробнее</a>
+                      <a class="btn btn_primary" href="{{ banner.link }}">{% translate 'Подробнее' %}</a>
                     </div>
                   </div>
                   <div class="row-block">
@@ -37,5 +38,5 @@
     </div>
   </div>
 {% else %}
-  Banners must  # TODO если нет баннера вставить изображение по умолчанию
+  {% translate 'Banners must' %}  # TODO если нет баннера вставить изображение по умолчанию
 {% endif %}
