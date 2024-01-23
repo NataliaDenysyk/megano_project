@@ -132,7 +132,13 @@
                         </a>
                       {% endif %}
                       <a class="Card-btn" href="">
-                        <img src="{% static 'assets/img/icons/card/change.svg' %}" alt="change.svg"/>
+                        <form action="{% url 'compare:add_to_comparison' product.id %}"
+                              method="get">
+                          <button type="submit">
+                            <img src="{% static 'assets/img/icons/card/change.svg' %}"
+                                 alt="change.svg"/>
+                          </button>
+                        </form>
                       </a>
                     </div>
                   </div>

@@ -25,7 +25,7 @@ class AddToComparisonView(View):
         # сервис по добавлению товара к сравнению
         _add_product_to_comparison(request, comparison_id)
 
-        return redirect(reverse('store:catalog'))
+        return redirect(request.META.get('HTTP_REFERER'))
 
 
 class ClearComparisonView(View):
