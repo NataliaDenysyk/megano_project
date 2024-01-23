@@ -1294,8 +1294,8 @@ msgid "Очистить кэш Каталога продуктов"
 msgstr "Clear product catalog cache"
 
 #: templates/authorization/about-seller.html:12
-msgid "About Megano"
-msgstr "About Megano"
+msgid "About "
+msgstr "About "
 
 #: templates/authorization/about-seller.html:15
 msgid "home"
