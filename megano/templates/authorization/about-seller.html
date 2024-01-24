@@ -188,7 +188,7 @@
                               <img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg"/>
                             </a>
                             <a class="Card-btn" href="">
-                              <form action="{% url 'compare:add_to_comparison' product.id %}"
+                              <form action="{% url 'compare:add_to_comparison' offer.product.id %}"
                                     method="get">
                                 <button type="submit">
                                   <img src="{% static 'assets/img/icons/card/change.svg' %}"
