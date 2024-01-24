@@ -38,7 +38,7 @@
           <div class="form-error">{{ form.password2.errors }}</div>
         </div>
         <div class="form-group">
-          <a class="btn btn_muted Order-btnReg" href="#">{% translate 'Я уже зарегистрирован' %}</a>
+          <a class="btn btn_muted Order-btnReg" href="{% url 'profile:login' %}">{% translate 'Я уже зарегистрирован' %}</a>
         </div>
       </div>
     </div>
