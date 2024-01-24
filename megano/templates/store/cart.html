@@ -100,7 +100,7 @@
             <div class="Cart-total">
               <div class="Cart-block Cart-block_total">
                 <strong class="Cart-title">{% translate 'Итого' %}:
-                  {% if total_price != item.total_price %}
+                  {% if total_price != cart.get_total_price %}
                     </strong><span class="Cart-price">{{ total_price }}$</span>
                     <span class="Cart-price_old">{{ cart.get_total_price }}$</span>
                   {% else %}
