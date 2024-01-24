@@ -25,4 +25,3 @@ class ProductTranslationOptions(TranslationOptions):
 @register(Banners)
 class BannersTranslationOptions(TranslationOptions):
     fields = ('title', 'description',)
-

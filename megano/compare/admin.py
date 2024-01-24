@@ -10,7 +10,8 @@ from .models import (
     TorchereCharacteristic,
     MicrowaveOvenCharacteristic,
     MobileCharacteristic,
-    ElectroCharacteristic, )
+    ElectroCharacteristic,
+    )
 
 
 class AbstractCharacteristicInline(GenericStackedInline):

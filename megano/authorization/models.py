@@ -12,6 +12,7 @@ class BaseModel(models.Model):
     """"
     Базовый класс модели
     """
+
     def delete(self, *arg, **kwargs):
         """"
         Функция, меняющая поведение delete на мягкое удаление

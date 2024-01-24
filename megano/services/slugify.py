@@ -75,4 +75,3 @@ def slugify(text: str) -> str:
         _res.append(ALPHABET[_char] if _char in ALPHABET.keys() else _char)
 
     return ''.join(_res)
-    

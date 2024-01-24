@@ -1,6 +1,6 @@
 
 from decimal import Decimal
-from django.db.models import Avg, Sum, F
+from django.db.models import Avg, F
 
 from django.contrib.contenttypes.fields import GenericRelation
 from imagekit.models import ProcessedImageField
@@ -19,8 +19,8 @@ from store.utils import (
     category_image_directory_path,
     jsonfield_default_description,
     product_images_directory_path,
-    discount_images_directory_path
-)
+    discount_images_directory_path,
+    )
 
 
 class Category(MPTTModel):

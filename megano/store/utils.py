@@ -65,6 +65,7 @@ def import_logger(dir_name='logs/import_logs') -> Callable:
     Декоратор, который создает логгер для переданной функции.
     Директория логов по умолчанию - logs/import_logs.
     """
+
     def decorator(func):
         def wrapper(*args, **kwargs):
             log_dir = os.path.abspath(dir_name)
@@ -92,7 +93,9 @@ def import_logger(dir_name='logs/import_logs') -> Callable:
             file_handler.close()
 
             return result
+
         return wrapper
+
     return decorator
 
 

@@ -3,7 +3,6 @@ import json
 import os
 import shutil
 
-from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.temp import NamedTemporaryFile
 from django.core.files import File
 from urllib.request import urlopen
@@ -24,15 +23,14 @@ from urllib.parse import urlparse, parse_qs, urlencode
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Avg, Count, When, Case
-from django.db import transaction
+
 from django.db import IntegrityError
 from django.http import HttpRequest
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404
 
-from services.check_full_name import check_name
 from authorization.forms import RegisterForm, LoginForm
 from authorization.models import Profile
-from store.models import Product, Offer, Category, Reviews, Discount, ProductImage, Tag, Orders
+from store.models import Product, Offer, Category, Reviews, Discount, ProductImage, Tag
 from store.utils import import_logger
 from .slugify import slugify
 from store.models import Orders

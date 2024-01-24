@@ -24,15 +24,14 @@ from authorization.models import Profile
 from cart.cart import Cart
 from cart.models import Cart as Basket
 from .models import Product, Orders, Offer, BannersCategory, Discount
-from services.services import (
-    ProductService,
-    CatalogService,
-    CategoryServices,
-    GetParamService,
-    ProductsViewService,
-    ReviewsProduct,
-    MainService,
-)
+from services.services import (ProductService,
+                               CatalogService,
+                               CategoryServices,
+                               GetParamService,
+                               ProductsViewService,
+                               ReviewsProduct,
+                               MainService,
+                               )
 
 import logging
 import re

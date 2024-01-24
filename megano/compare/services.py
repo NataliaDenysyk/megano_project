@@ -1,7 +1,7 @@
 from django.core.handlers.wsgi import WSGIRequest
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
 from compare.models import (HeadphonesCharacteristic,
@@ -13,7 +13,8 @@ from compare.models import (HeadphonesCharacteristic,
                             KitchenCharacteristic,
                             TorchereCharacteristic,
                             ElectroCharacteristic,
-                            MicrowaveOvenCharacteristic)
+                            MicrowaveOvenCharacteristic,
+                            )
 
 from store.models import Product
 
@@ -50,7 +51,7 @@ def _add_product_to_comparison(request: WSGIRequest, comparison_id) -> HttpRespo
             request.session['comparison_list'] = comparison_list
         else:
             # Если пользователь не авторизован, сохраняем в куки
-            response = redirect('store:catalog')
+            response = redirect(request.META.get('HTTP_REFERER'))
             response.set_cookie('comparison_list', ','.join(comparison_list))
 
             return response
@@ -69,7 +70,7 @@ def _remove_product_from_comparison(request):
         request.session['comparison_list'] = []
     else:
         # Если пользователь не авторизован, очищаем куки
-        response = redirect('store:catalog')
+        response = redirect(request.META.get('HTTP_REFERER'))
         response.delete_cookie('comparison_list')
         return response
 

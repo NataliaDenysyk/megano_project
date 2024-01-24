@@ -9,7 +9,8 @@ from compare.models import (AbstractCharacteristicModel,
                             KitchenCharacteristic,
                             TorchereCharacteristic,
                             NotebookCharacteristic,
-                            ElectroCharacteristic,)
+                            ElectroCharacteristic,
+                            )
 
 
 @register(AbstractCharacteristicModel)

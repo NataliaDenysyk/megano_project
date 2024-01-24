@@ -38,7 +38,8 @@ from compare.admin import (TVSetCharacteristicInline,
                            TorchereCharacteristicInline,
                            MicrowaveOvenCharacteristicInline,
                            MobileCharacteristicInline,
-                           ElectroCharacteristicInline,)
+                           ElectroCharacteristicInline,
+                           )
 
 from authorization.models import Profile
 from .utils import busy_queues

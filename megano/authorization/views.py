@@ -12,7 +12,7 @@ from django.urls import reverse_lazy
 from django.views.generic import DetailView, CreateView, FormView, ListView, UpdateView
 
 from services.check_full_name import check_name
-from services.services import AuthorizationService, ProductsViewService, ProductService
+from services.services import AuthorizationService, ProductsViewService
 from .mixins import MenuMixin
 
 from store.configs import settings
@@ -183,7 +183,6 @@ class ProfileUpdateView(MenuMixin, UpdateView):
 
 
 class ProfileOrderPage(DetailView):
-
     """
     Представление для просмотра детализации заказов профиля
     """
